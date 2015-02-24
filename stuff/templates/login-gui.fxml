@@ -6,40 +6,41 @@
 
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="427.20770263671875" minWidth="10.0" prefWidth="427.20770263671875" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="291.9658203125" minWidth="10.0" prefWidth="172.79229736328125" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.9658203125" minWidth="10.0" prefWidth="179.74371337890625" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="345.78326416015625" minWidth="10.0" prefWidth="300.25628662109375" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="420.0" minWidth="420.0" prefWidth="420.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="180.0" prefWidth="180.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="180.0" prefWidth="180.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="420.0" minWidth="420.0" prefWidth="420.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="198.6951446533203" minHeight="10.0" prefHeight="198.6951446533203" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="89.30487060546875" minHeight="9.0" prefHeight="42.33905029296875" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="74.96585083007812" minHeight="9.0" prefHeight="39.66094970703125" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="166.0" minHeight="9.0" prefHeight="40.339019775390625" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="219.66632080078125" minHeight="0.0" prefHeight="40.660980224609375" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="431.5322570800781" minHeight="10.0" prefHeight="405.2194519042969" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1" />
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
-            <TextField fx:id="username" layoutX="58.0" layoutY="7.0" prefHeight="30.0" prefWidth="172.0" />
+            <TextField fx:id="username" layoutX="3.0" layoutY="6.0" prefHeight="30.0" prefWidth="175.0" />
          </children>
       </Pane>
       <Pane prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <children>
-            <ChoiceBox fx:id="domain" layoutX="24.0" layoutY="7.0" prefHeight="30.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="domain" layoutX="3.0" layoutY="6.0" prefHeight="30.0" prefWidth="171.0" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
          <children>
-            <PasswordField fx:id="password" layoutX="58.0" layoutY="5.0" prefHeight="30.0" prefWidth="330.0" />
+            <PasswordField fx:id="password" layoutX="3.0" layoutY="6.0" prefHeight="30.0" prefWidth="350.0" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
          <children>
-            <Button fx:id="login" layoutX="58.0" layoutY="6.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="330.0" text="Logg inn" />
+            <Button fx:id="login" layoutX="3.0" layoutY="6.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="350.0" text="Logg inn" />
          </children>
       </Pane>
    </children>
