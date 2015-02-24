@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `nixo_fp`.`User` ;
 CREATE TABLE IF NOT EXISTS `nixo_fp`.`User` (
   `domene` VARCHAR(30) NOT NULL,
   `username` VARCHAR(30) NOT NULL,
-  `passwordHash` VARCHAR(32) NOT NULL,
+  `passwordHash` VARCHAR(100) NOT NULL,
   `firstName` VARCHAR(50) NOT NULL,
   `lastName` VARCHAR(60) NOT NULL,
   `phone` DECIMAL(10,0) NULL,
