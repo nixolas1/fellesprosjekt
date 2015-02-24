@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -12,6 +13,7 @@ import javafx.scene.control.TextField;
 public class Controller {
 
     @FXML private TextField username, firstName, lastName, phone;
+    @FXML private ChoiceBox domain;
 
     @FXML private PasswordField password, password2;
 
