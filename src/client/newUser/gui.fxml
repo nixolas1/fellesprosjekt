@@ -4,7 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" fx:controller="client.newUser.Controller" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="420.0" prefWidth="420.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="180.0" prefWidth="180.0" />
@@ -26,17 +26,17 @@
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1" />
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
-            <TextField id="firstName" fx:id="username" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="175.0" promptText="Fornavn" />
+            <TextField id="firstName" fx:id="firstName" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="175.0" promptText="Fornavn" />
          </children>
       </Pane>
       <Pane prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <children>
-            <TextField id="lastName" fx:id="username1" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="171.0" promptText="Etternavn" />
+            <TextField id="lastName" fx:id="lastName" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="171.0" promptText="Etternavn" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
-            <TextField id="username" fx:id="username2" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="175.0" promptText="Brukernavn" />
+            <TextField id="username" fx:id="username" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="175.0" promptText="Brukernavn" />
          </children></Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
          <children>
@@ -55,12 +55,12 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6">
          <children>
-            <TextField id="phone" layoutX="3.0" layoutY="3.0" prefHeight="30.0" prefWidth="350.0" promptText="Telefonnummer" />
+            <TextField id="phone" fx:id="phone" layoutX="3.0" layoutY="3.0" prefHeight="30.0" prefWidth="350.0" promptText="Telefonnummer" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
          <children>
-            <Button id="create" fx:id="login" layoutX="3.0" layoutY="5.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="350.0" text="Opprett bruker" />
+            <Button id="create" fx:id="create" onAction="#createUser" layoutX="3.0" layoutY="5.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="350.0" text="Opprett bruker" />
          </children>
       </Pane>
    </children>
