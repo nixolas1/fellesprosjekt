@@ -19,9 +19,10 @@ public class Controller {
 
     @FXML private Button create;
 
-    private String nameReg = "[^a-zA-Z0-9_.]*$";
-    private String userNameReg = "((\\b[A-Z,ü,ö,ä,æ,ø,å]{1}[a-z,ü,ö,ä,æ,ø,å]{2,}).){2,}";
-
+    private String nameReg = "";
+    private String userNameReg = "^[a-zA-Z0-9_.]*$";
+    private String passwordReg = "";
+    private String phoneReg = "";
 
     UserModel model = new UserModel();
 
@@ -49,6 +50,7 @@ public class Controller {
         model.setUsername(username.getText());
         model.setPassword(password.getText());
         model.setPhone(phone.getText());
+        model.setDomain(domain.getValue().toString());
     }
 
     @FXML
@@ -59,7 +61,7 @@ public class Controller {
     }
 
     public boolean validAll() {
-        if( valid(model.getFirstName(),nameReg,30) && valid(model.getLastName(),nameReg,30) && valid(model.getUsername(),userNameReg,30) && valid(model.getPassword(),passwordReg,30), && valid(model.getPhone(),8)){
+        if( valid(model.getFirstName(),nameReg,30) && valid(model.getLastName(),nameReg,30) && valid(model.getUsername(),userNameReg,30) && valid(model.getPassword(),passwordReg,30) && valid(model.getPhone(),phoneReg,8)){
             return true;
         }
         return false;

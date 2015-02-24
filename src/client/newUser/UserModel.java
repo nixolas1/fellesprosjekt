@@ -10,6 +10,7 @@ public class UserModel {
     private StringProperty lastName;
     private StringProperty phone;
     private StringProperty password;
+    private StringProperty domain;
 
 
     public String getUsername() {
@@ -26,6 +27,12 @@ public class UserModel {
     }
     public String getPassword() {
         return password.getValue();
+    }
+    public String getDomain() {
+        return domain.getValue();
+    }
+    public void setDomain(String domain) {
+        this.domain.setValue(domain);
     }
 
     public void setUsername(String username) {
