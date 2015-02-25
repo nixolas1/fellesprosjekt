@@ -61,12 +61,12 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
          <children>
-            <Button layoutX="3.0" layoutY="6.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="175.0" text="Ny bruker" />
+            <Button fx:id="newUser" layoutX="3.0" layoutY="6.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="175.0" text="Ny bruker" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
          <children>
-            <Button layoutX="3.0" layoutY="6.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="175.0" text="Glemt passord" />
+            <Button fx:id="forgottenPassword" layoutX="3.0" layoutY="6.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="175.0" text="Glemt passord" />
          </children>
       </Pane>
    </children>
