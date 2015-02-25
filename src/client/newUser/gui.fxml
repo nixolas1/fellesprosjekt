@@ -28,11 +28,6 @@
    <children>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
-            <Rectangle fill="#ebebeb" height="600.0" layoutX="-45.0" layoutY="-260.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="450.0">
-               <effect>
-                  <DropShadow color="#6b6b6b" height="10.35" offsetY="2.0" radius="4.5875" width="10.0" />
-               </effect>
-            </Rectangle>
             <TextField id="firstName" fx:id="firstName" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="175.0" promptText="Fornavn" />
          </children>
       </Pane>
@@ -43,6 +38,11 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
+            <Rectangle fill="#ebebeb" height="600.0" layoutX="-45.0" layoutY="-300.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="450.0">
+               <effect>
+                  <DropShadow color="#6b6b6b" height="10.35" offsetY="2.0" radius="4.5875" width="10.0" />
+               </effect>
+            </Rectangle>
             <TextField id="username" fx:id="username" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="175.0" promptText="Brukernavn" />
          </children></Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
