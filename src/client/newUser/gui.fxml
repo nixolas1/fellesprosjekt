@@ -4,7 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" fx:controller="client.newUser.Controller" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.newUser.Controller">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="420.0" prefWidth="420.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="180.0" prefWidth="180.0" />
@@ -45,7 +45,7 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
          <children>
-            <ChoiceBox id="domain" fx:id="domain" value="\@stud.ntnu.no" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="171.0" />
+            <ChoiceBox id="domain" fx:id="domain" focusTraversable="false" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="171.0" value="\@stud.ntnu.no" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5">
@@ -60,7 +60,7 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
          <children>
-            <Button id="create" fx:id="create" onAction="#createUser" layoutX="3.0" layoutY="5.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="350.0" text="Opprett bruker" />
+            <Button id="create" fx:id="create" layoutX="3.0" layoutY="5.0" mnemonicParsing="false" onAction="#createUser" prefHeight="30.0" prefWidth="350.0" text="Opprett bruker" />
          </children>
       </Pane>
    </children>

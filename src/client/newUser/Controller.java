@@ -27,7 +27,6 @@ public class Controller {
 
     UserModel model = new UserModel();
 
-
     @FXML
     void initialize() {
         domain.setItems(FXCollections.observableArrayList("@stud.ntnu.no"));
@@ -88,15 +87,26 @@ public class Controller {
 
     @FXML
     public void createUser(ActionEvent event) {
-        if (validAll()) {
+        if (validAllFields()) {
             // insert into DB from model
+            System.out.println("data insterted from model to database");
         }
     }
 
-    public boolean validAll() {
+    // validating model
+    public boolean validAllModel() {
         if( valid(model.getFirstName(),nameReg,30) && valid(model.getLastName(),nameReg,30) && valid(model.getUsername(),userNameReg,30)
                 && valid(model.getPassword(),passwordReg,30) && valid(model.getPhone(),phoneReg,8)){
-            System.out.println("validAll => true");
+            System.out.println("All fields in model are valid");
+            return true;
+        }
+        return false;
+    }
+
+    public boolean validAllFields() {
+        if ( valid(firstName.getText(),nameReg,30) && valid(lastName.getText(),nameReg,30) && valid(username.getText(),nameReg,30)
+                && valid(password1.getText(),passwordReg,50) && valid(password11.getText(),passwordReg,50) && valid(phone.getText(),phoneReg,8)) {
+            System.out.println("All fields are valid");
             return true;
         }
         return false;
