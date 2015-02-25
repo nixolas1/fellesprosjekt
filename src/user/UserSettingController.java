@@ -1,0 +1,142 @@
+package client.newUser;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+
+
+public class Controller {
+
+    @FXML private TextField username, firstName, lastName, phone, domain;
+
+    @FXML private PasswordField password1, password11;
+
+    @FXML private Button create, cancel;
+
+    private String nameReg = "[A-Za-z,æ,ø,å,Æ,Ø,Å,-]+";
+    private String userNameReg = "^[a-zA-Z0-9_.]*$";
+    private String passwordReg = "[a-zA-Z0-9]{6,50}$";
+    private String phoneReg = "[0-9]{8}";
+
+    UserSettingModel model = new UserSettingModel();
+
+
+//validerer feltene når programmet kjøres
+    @FXML
+    void initialize() {
+        createValidationListener(username, userNameReg, 30);
+        createValidationListener(firstName, nameReg, 30);
+        createValidationListener(lastName, nameReg, 30);
+        createValidationListener(phone, phoneReg, 8);
+        createValidationListener(password1, passwordReg, 50);
+        createPassListener(password11);
+    }
+
+//brukes i listeners
+    public boolean valid(String s, String match, int max) {
+        if (s.matches(match) && s.length() <= max) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean validPassword(String password) {
+        if (valid(password, passwordReg, 30)) {
+            if (password1.getText().equals(password11.getText())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void updateModel() {
+        if(txtFieldCheck(firstName)) {
+            model.setFirstName(firstName.getText());
+        }
+        if(txtFieldCheck(lastName)) {
+            model.setLastName(lastName.getText());
+        }
+        if(txtFieldCheck(username)) {
+            model.setUsername(username.getText());
+        }
+        if(txtFieldCheck(password1)) {
+            model.setPassword(password1.getText());
+        }
+        if(txtFieldCheck(phone)) {
+            model.setPhone(phone.getText());
+        }
+    }
+
+    public boolean txtFieldCheck(TextField field) {
+        if (field.getText() != null && !(field.getText().equals(""))) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /*@FXML
+    public void createUser(ActionEvent event) {
+        if (validAll()) {
+            // insert into DB from model
+        }
+    }*/
+
+    @FXML
+    public void saveChanges(ActionEvent event) {
+        if (validAll()) {
+            
+        }
+    }
+
+    @FXML
+    public void cancelChanges(ActionEvent event) {
+
+    }
+
+    public boolean validAll() {
+        if(valid(model.getFirstName(),nameReg,30) && valid(model.getLastName(),nameReg,30) && valid(model.getUsername(),userNameReg,30) && valid(model.getPassword(),passwordReg,30) && valid(model.getPhone(),phoneReg,8)){
+            return true;
+        }
+        return false;
+    }
+
+    public void createValidationListener(final TextField field, final String match, final int max){
+        field.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> arg0, String oldValue, String newValue) {
+                if (!valid(newValue, match, max)) {
+                    field.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
+                    System.out.println("Invalid:" + newValue);
+                }
+                else{
+                    System.out.println("VALID: " + newValue);
+                    field.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
+                    updateModel();
+                }
+            }
+        });
+    }
+
+    public void createPassListener(final PasswordField field) {
+        field.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!validPassword(field.getText())) {
+                    field.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
+                    System.out.println("invalid password");
+                } else {
+                    System.out.println("valid passwords");
+                    field.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
+                    updateModel();
+                }
+            }
+        });
+    }
+
+}
