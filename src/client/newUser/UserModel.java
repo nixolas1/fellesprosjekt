@@ -1,58 +1,63 @@
 package client.newUser;
 
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class UserModel {
 
-    private StringProperty username;
-    private StringProperty firstName;
-    private StringProperty lastName;
-    private StringProperty phone;
-    private StringProperty password;
-    private StringProperty domain;
+    private StringProperty usernameProperty = new SimpleStringProperty();
+    private StringProperty firstNameProperty = new SimpleStringProperty();
+    private StringProperty lastNameProperty = new SimpleStringProperty();
+    private StringProperty phoneProperty = new SimpleStringProperty();
+    private StringProperty passwordProperty = new SimpleStringProperty();
+    private StringProperty domainProperty = new SimpleStringProperty();
+
+    public Object getBean() {
+        return this;
+    }
 
 
     public String getUsername() {
-        return username.getValue();
+        return usernameProperty.getValue();
     }
     public String getFirstName() {
-        return firstName.getValue();
+        return firstNameProperty.getValue();
     }
     public String getLastName() {
-        return lastName.getValue();
+        return lastNameProperty.getValue();
     }
     public String getPhone() {
-        return phone.getValue();
+        return phoneProperty.getValue();
     }
     public String getPassword() {
-        return password.getValue();
+        return passwordProperty.getValue();
     }
     public String getDomain() {
-        return domain.getValue();
+        return domainProperty.getValue();
     }
     public void setDomain(String domain) {
-        this.domain.setValue(domain);
+        this.domainProperty.setValue(domain);
     }
 
     public void setUsername(String username) {
-        this.username.setValue(username);
+        this.usernameProperty.setValue(username);
     }
 
     public void setFirstName(String firstName) {
-        this.firstName.setValue(firstName);
+        this.firstNameProperty.setValue(firstName);
     }
 
     public void setLastName(String lastName) {
-        this.lastName.setValue(lastName);
+        this.lastNameProperty.setValue(lastName);
     }
 
     public void setPhone(String phone) {
-        this.phone.setValue(phone);
+        this.phoneProperty.setValue(phone);
     }
 
     public void setPassword(String password) {
-        this.phone.setValue(password);
+        this.phoneProperty.setValue(password);
     }
 
 }

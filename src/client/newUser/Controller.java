@@ -29,9 +29,15 @@ public class Controller {
 
     @FXML
     void initialize() {
+        System.out.println("initialized");
         createValidationListener(username, userNameReg, 30);
         createValidationListener(firstName, nameReg, 30);
         createValidationListener(lastName, nameReg, 30);
+        createValidationListener(phone, phoneReg, 8);
+        createPassListener(password1);
+        createPassListener(password11);
+
+
     }
 
 
@@ -44,21 +50,42 @@ public class Controller {
     }
 
     public boolean validPassword(String password) {
-        if(valid(password,passwordReg,30)){
-            if(password1.getText().equals(password11.getText())){
+        if (valid(password, passwordReg, 30)) {
+            if (password1.getText().equals(password11.getText())) {
                 return true;
             }
         }
+        return false;
     }
 
     public void updateModel() {
-        model.setFirstName(firstName.getText());
-        model.setLastName(lastName.getText());
-        model.setUsername(username.getText());
-        model.setPassword(password1.getText());
-        model.setPhone(phone.getText());
-        model.setDomain(domain.getValue().toString());
+        if(txtFieldCheck(firstName)) {
+            model.setFirstName(firstName.getText());
+        }
+        if(txtFieldCheck(lastName)) {
+            model.setLastName(lastName.getText());
+        }
+        if(txtFieldCheck(username)) {
+            model.setUsername(username.getText());
+        }
+        if(txtFieldCheck(password1)) {
+            model.setPassword(password1.getText());
+        }
+        if(txtFieldCheck(phone)) {
+            model.setPhone(phone.getText());
+        }
+        if(domain.getValue() != null) {
+            model.setDomain(domain.getValue().toString());
+        }
     }
+
+    public boolean txtFieldCheck(TextField field) {
+        if (field.getText() != null && !(field.getText().equals(""))) {
+            return true;
+        }
+        return false;
+    }
+
 
     @FXML
     public void createUser(ActionEvent event) {
