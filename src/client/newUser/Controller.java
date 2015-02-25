@@ -2,6 +2,7 @@ package client.newUser;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -19,9 +20,9 @@ public class Controller {
 
     @FXML private Button create;
 
-    private String nameReg = "[A-Za-z,æ,ø,å,Æ,Ø,Å,-]+";
+    private String nameReg = "[A-Za-z,æ,ø,å,Æ,Ø,Å,-, ]+";
     private String userNameReg = "^[a-zA-Z0-9_.]*$";
-    private String passwordReg = "[a-zA-Z0-9]{6,50}$";
+    private String passwordReg = "[\\S ]{6,50}$";
     private String phoneReg = "[0-9]{8}";
 
     UserModel model = new UserModel();
@@ -29,6 +30,7 @@ public class Controller {
 
     @FXML
     void initialize() {
+        domain.setItems(FXCollections.observableArrayList("@stud.ntnu.no"));
         createValidationListener(username, userNameReg, 30);
         createValidationListener(firstName, nameReg, 30);
         createValidationListener(lastName, nameReg, 30);
@@ -93,7 +95,8 @@ public class Controller {
     }
 
     public boolean validAll() {
-        if( valid(model.getFirstName(),nameReg,30) && valid(model.getLastName(),nameReg,30) && valid(model.getUsername(),userNameReg,30) && valid(model.getPassword(),passwordReg,30) && valid(model.getPhone(),phoneReg,8)){
+        if( valid(model.getFirstName(),nameReg,30) && valid(model.getLastName(),nameReg,30) && valid(model.getUsername(),userNameReg,30)
+                && valid(model.getPassword(),passwordReg,30) && valid(model.getPhone(),phoneReg,8)){
             return true;
         }
         return false;
