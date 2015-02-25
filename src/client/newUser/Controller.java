@@ -18,7 +18,7 @@ public class Controller {
 
     @FXML private PasswordField password1, password11;
 
-    @FXML private Button create;
+    @FXML private Button create, cancel;
 
     private String nameReg = "[A-Za-z,æ,ø,å,Æ,Ø,Å,-, ]+";
     private String userNameReg = "^[a-zA-Z0-9_.]*$";
@@ -91,6 +91,11 @@ public class Controller {
             // insert into DB from model
             System.out.println("data insterted from model to database");
         }
+    }
+
+    @FXML
+    public void cancelNewUser(ActionEvent event) {
+
     }
 
     // validating model

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -13,7 +16,7 @@
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="400.0" minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="300.0" minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
@@ -23,9 +26,13 @@
       <RowConstraints maxHeight="431.5322570800781" minHeight="10.0" prefHeight="367.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1" />
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
+            <Rectangle fill="#ebebeb" height="600.0" layoutX="-45.0" layoutY="-260.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="450.0">
+               <effect>
+                  <DropShadow color="#6b6b6b" height="10.35" offsetY="2.0" radius="4.5875" width="10.0" />
+               </effect>
+            </Rectangle>
             <TextField id="firstName" fx:id="firstName" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="175.0" promptText="Fornavn" />
          </children>
       </Pane>
@@ -60,7 +67,21 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
          <children>
-            <Button id="create" fx:id="create" layoutX="3.0" layoutY="5.0" mnemonicParsing="false" onAction="#createUser" prefHeight="30.0" prefWidth="350.0" text="Opprett bruker" />
+            <Button id="create" fx:id="create" layoutX="3.0" layoutY="5.0" mnemonicParsing="false" onAction="#createUser" prefHeight="30.0" prefWidth="265.0" stylesheets="@gui.css" text="Opprett bruker" textFill="WHITE" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="105.0" layoutY="73.0">
+               <image>
+                  <Image url="@placeholder.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
+         <children>
+            <Button fx:id="cancel" layoutX="93.0" layoutY="5.0" mnemonicParsing="false" onAction="#cancelNewUser" prefHeight="30.0" prefWidth="80.0" text="Avbryt" />
          </children>
       </Pane>
    </children>
