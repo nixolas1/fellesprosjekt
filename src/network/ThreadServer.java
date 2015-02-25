@@ -2,6 +2,7 @@ package network;
 
 import java.io.*;
 import java.net.*;
+import server.Logic;
 
 public class ThreadServer {
     public static void main(String args[]) {
@@ -28,9 +29,6 @@ public class ThreadServer {
     }
 
     public void startServer() {
-        // Try to open a server socket on the given port
-        // Note that we can't choose a port less than 1024 if we are not
-        // privileged users (root)
 
         try {
             echoServer = new ServerSocket(port);
@@ -39,9 +37,6 @@ public class ThreadServer {
             System.out.println(e);
         }
 
-        System.out.println( "Server is started and is waiting for connections." );
-        System.out.println( "With multi-threading, multiple connections are allowed." );
-        System.out.println( "Any client can send -1 to stop the server." );
 
         // Whenever a connection is received, start a new thread to process the connection
         // and wait for the next connection.
@@ -80,21 +75,21 @@ class ServerConnection implements Runnable {
         }
     }
 
+
     public void run() {
-        String line;
+        String request;
+        String ret;
         try {
             boolean serverStop = false;
 
             while (true) {
-                line = is.readLine();
-                System.out.println( "Received " + line + " from Connection " + id + "." );
-                int n = Integer.parseInt(line);
-                if ( n == -1 ) {
-                    serverStop = true;
-                    break;
-                }
-                if ( n == 0 ) break;
-                os.println("" + n*n );
+                request = is.readLine();
+
+                System.out.println( "Received " + request + " from Connection " + id + "." );
+                String reply = Logic.process(request);
+                os.println(reply);
+
+                if(reply==null)break;
             }
 
             System.out.println( "Connection " + id + " closed." );
@@ -102,7 +97,6 @@ class ServerConnection implements Runnable {
             os.close();
             clientSocket.close();
 
-            if ( serverStop ) server.stopServer();
         } catch (IOException e) {
             System.out.println(e);
         }
