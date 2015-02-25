@@ -28,7 +28,7 @@
    <children>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
          <children>
-            <Rectangle fill="#ebebeb" height="450.0" layoutX="-45.0" layoutY="-300.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="450.0">
+            <Rectangle fill="#ebebeb" height="600.0" layoutX="-45.0" layoutY="-300.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="450.0">
                <effect>
                   <DropShadow color="#6b6b6b" height="10.69" offsetY="2.0" radius="4.672499999999999" width="10.0" />
                </effect>
