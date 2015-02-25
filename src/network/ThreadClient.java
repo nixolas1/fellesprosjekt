@@ -6,8 +6,8 @@ import java.net.*;
 public class ThreadClient {
     public static void main(String[] args) {
 
-        String hostname = "localhost";
-        int port = 6789;
+        String hostname = "vsop.online.ntnu.no";
+        int port = 7777;
 
         // declaration section:
         // clientSocket: our client socket
@@ -27,7 +27,7 @@ public class ThreadClient {
             os = new DataOutputStream(clientSocket.getOutputStream());
             is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (UnknownHostException e) {
-            System.err.println("Don't know about host: " + hostname);
+            System.err.println("Unknown host: " + hostname);
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to: " + hostname);
         }
@@ -41,6 +41,8 @@ public class ThreadClient {
         }
 
         try {
+
+
             while ( true ) {
                 System.out.print( "Enter an integer (0 to stop connection, -1 to stop server): " );
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
