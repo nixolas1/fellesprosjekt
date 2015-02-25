@@ -29,14 +29,12 @@ public class Controller {
 
     @FXML
     void initialize() {
-        System.out.println("initialized");
         createValidationListener(username, userNameReg, 30);
         createValidationListener(firstName, nameReg, 30);
         createValidationListener(lastName, nameReg, 30);
         createValidationListener(phone, phoneReg, 8);
-        createPassListener(password1);
+        createValidationListener(password1, passwordReg, 50);
         createPassListener(password11);
-
 
     }
 
@@ -123,7 +121,7 @@ public class Controller {
         field.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!validPassword(newValue)) {
+                if (!validPassword(field.getText())) {
                     field.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
                     System.out.println("invalid password");
                 } else {
