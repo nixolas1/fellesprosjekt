@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.forgottenPassword.Controller">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="420.0" minWidth="420.0" prefWidth="420.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="180.0" prefWidth="180.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="180.0" prefWidth="180.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="420.0" minWidth="420.0" prefWidth="420.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="300.0" minHeight="300.0" prefHeight="300.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="431.5322570800781" minHeight="10.0" prefHeight="405.2194519042969" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+         <children>
+            <Rectangle fill="#ebebeb" height="450.0" layoutX="-45.0" layoutY="-300.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="450.0">
+               <effect>
+                  <DropShadow color="#6b6b6b" height="10.69" offsetY="2.0" radius="4.672499999999999" width="10.0" />
+               </effect>
+            </Rectangle>
+            <Line endX="348.0" layoutX="4.0" layoutY="20.0" stroke="#aeaeae" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <children>
+            <TextField fx:id="username" layoutX="3.0" layoutY="6.0" prefHeight="30.0" prefWidth="175.0" promptText="Brukernavn" />
+         </children>
+      </Pane>
+      <Pane prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+         <children>
+            <ChoiceBox fx:id="domain" layoutX="3.0" layoutY="6.0" prefHeight="30.0" prefWidth="171.0" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
+         <children>
+            <Button fx:id="cancel" layoutX="183.0" layoutY="6.0" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="83.0" text="Avbryt" />
+            <Button fx:id="sendPassword" layoutX="271.0" layoutY="6.0" mnemonicParsing="false" onAction="#sendNewPassword" prefHeight="30.0" prefWidth="83.0" stylesheets="@gui.css" text="Send" textFill="WHITE" />
+         </children>
+      </Pane>
+      <Pane minHeight="200.0" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
+         <children>
+            <Text layoutX="2.0" layoutY="280.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Skriv inn ditt brukernavn for å få tilsendt nytt passord.">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="105.0" layoutY="73.0">
+               <image>
+                  <Image url="@placeholder.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+   </children>
+</GridPane>
