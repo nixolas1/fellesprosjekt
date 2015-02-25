@@ -2,10 +2,13 @@ package network;
 
 import java.io.*;
 import java.net.*;
+import java.util.Hashtable;
+
+import server.Logic;
 
 public class ThreadServer {
     public static void main(String args[]) {
-        int port = 6789;
+        int port = 7777;
         ThreadServer server = new ThreadServer( port );
         server.startServer();
     }
@@ -28,10 +31,7 @@ public class ThreadServer {
     }
 
     public void startServer() {
-        // Try to open a server socket on the given port
-        // Note that we can't choose a port less than 1024 if we are not
-        // privileged users (root)
-
+        System.out.println( "Server starting" );
         try {
             echoServer = new ServerSocket(port);
         }
@@ -39,9 +39,6 @@ public class ThreadServer {
             System.out.println(e);
         }
 
-        System.out.println( "Server is started and is waiting for connections." );
-        System.out.println( "With multi-threading, multiple connections are allowed." );
-        System.out.println( "Any client can send -1 to stop the server." );
 
         // Whenever a connection is received, start a new thread to process the connection
         // and wait for the next connection.
@@ -61,8 +58,8 @@ public class ThreadServer {
 }
 
 class ServerConnection implements Runnable {
-    BufferedReader is;
-    PrintStream os;
+    InputStream is;
+    OutputStream os;
     Socket clientSocket;
     int id;
     ThreadServer server;
@@ -73,28 +70,40 @@ class ServerConnection implements Runnable {
         this.server = server;
         System.out.println( "Connection " + id + " established with: " + clientSocket );
         try {
-            is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            os = new PrintStream(clientSocket.getOutputStream());
+            is = clientSocket.getInputStream();
+            os = clientSocket.getOutputStream();
         } catch (IOException e) {
             System.out.println(e);
         }
     }
 
+
     public void run() {
-        String line;
+        String function;
+
         try {
             boolean serverStop = false;
 
             while (true) {
-                line = is.readLine();
-                System.out.println( "Received " + line + " from Connection " + id + "." );
-                int n = Integer.parseInt(line);
-                if ( n == -1 ) {
-                    serverStop = true;
-                    break;
-                }
-                if ( n == 0 ) break;
-                os.println("" + n*n );
+
+                //convert input stream from socket to Query object
+                ObjectInputStream ois = new ObjectInputStream(is);
+                Query query = (Query)ois.readObject();
+                function = query.function;
+                Hashtable data = query.data;
+
+                System.out.println( "Received " + function + " query from Connection " + id + "." );
+
+                //Send function request and data to Server logic processing
+                Query reply = Logic.process(function, data);
+
+                //reply to client
+
+                ObjectOutputStream oos = new ObjectOutputStream(os);
+                oos.writeObject(reply);
+                System.out.println( "Replied '" + reply.function+", "+reply.data.toString() + "' to query from Connection " + id + "." );
+
+                if(reply==null)break;
             }
 
             System.out.println( "Connection " + id + " closed." );
@@ -102,9 +111,10 @@ class ServerConnection implements Runnable {
             os.close();
             clientSocket.close();
 
-            if ( serverStop ) server.stopServer();
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println("Recieve Object Fail: "+e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

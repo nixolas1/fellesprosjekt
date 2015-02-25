@@ -2,30 +2,33 @@ package network;
 
 import java.io.*;
 import java.net.*;
+import java.util.Hashtable;
 
 public class ThreadClient {
+
+
+    static String hostname = "localhost";
+    static int port = 7777;
+
+    // declaration section:
+    // clientSocket: our client socket
+    // os: output stream
+    // is: input stream
+    static Socket clientSocket = null;
+    static OutputStream os = null;
+    static InputStream is = null;
+
     public static void main(String[] args) {
-
-        String hostname = "vsop.online.ntnu.no";
-        int port = 7777;
-
-        // declaration section:
-        // clientSocket: our client socket
-        // os: output stream
-        // is: input stream
-
-        Socket clientSocket = null;
-        DataOutputStream os = null;
-        BufferedReader is = null;
 
         // Initialization section:
         // Try to open a socket on the given port
         // Try to open input and output streams
+        System.out.print("Starting client socket... ");
 
         try {
             clientSocket = new Socket(hostname, port);
-            os = new DataOutputStream(clientSocket.getOutputStream());
-            is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            os = clientSocket.getOutputStream();
+            is = clientSocket.getInputStream();
         } catch (UnknownHostException e) {
             System.err.println("Unknown host: " + hostname);
         } catch (IOException e) {
@@ -36,40 +39,56 @@ public class ThreadClient {
         // to the socket we have opened a connection to on the given port
 
         if (clientSocket == null || os == null || is == null) {
-            System.err.println( "Something is wrong. One variable is null." );
+            System.err.println( "Connection setup error. A var is null." );
             return;
         }
+        System.out.println("started!");
 
+        Hashtable data = new Hashtable<String, String>(){{
+            put("username","nicolaat");
+            put("pass", "hello");
+            put("domain", "stud.ntnu.no");
+        }};
+
+        send(new Query("login", data));
+
+    }
+
+    public static Query send(Query query){
         try {
 
+            System.out.println("Sent "+query.function);
 
-            while ( true ) {
-                System.out.print( "Enter an integer (0 to stop connection, -1 to stop server): " );
-                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                String keyboardInput = br.readLine();
-                os.writeBytes( keyboardInput + "\n" );
+            //os.writeBytes();
 
-                int n = Integer.parseInt( keyboardInput );
-                if ( n == 0 || n == -1 ) {
-                    break;
-                }
+            ObjectOutputStream oos = new ObjectOutputStream(os);
+            oos.writeObject(query);
 
-                String responseLine = is.readLine();
-                System.out.println("Server returns its square as: " + responseLine);
-            }
+            ObjectInputStream ois = new ObjectInputStream(is);
+            Query response = (Query)ois.readObject();
+            System.out.println("Server replied: "+response.function+", "+response.data.toString());
+            return response;
 
-            // clean up:
-            // close the output stream
-            // close the input stream
-            // close the socket
-
-            os.close();
-            is.close();
-            clientSocket.close();
         } catch (UnknownHostException e) {
             System.err.println("Trying to connect to unknown host: " + e);
         } catch (IOException e) {
             System.err.println("IOException:  " + e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return new Query("error", false);
+    }
+
+    public static boolean close(){
+        try {
+            os.close();
+            is.close();
+            clientSocket.close();
+            return true;
+        } catch (IOException e) {
+            System.err.println("IOException:  " + e);
+            return false;
         }
     }
 }
