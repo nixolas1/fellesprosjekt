@@ -41,7 +41,6 @@ public class Controller {
     }
 
 
-
     public boolean valid(String s, String match, int max) {
         if (s.matches(match) && s.length() <= max) {
             return true;
@@ -68,7 +67,7 @@ public class Controller {
         if(txtFieldCheck(username)) {
             model.setUsername(username.getText());
         }
-        if(txtFieldCheck(password1)) {
+        if(txtFieldCheck(password1) && password1.getText().equals(password11.getText())) {
             model.setPassword(password1.getText());
         }
         if(txtFieldCheck(phone)) {
@@ -97,6 +96,7 @@ public class Controller {
     public boolean validAll() {
         if( valid(model.getFirstName(),nameReg,30) && valid(model.getLastName(),nameReg,30) && valid(model.getUsername(),userNameReg,30)
                 && valid(model.getPassword(),passwordReg,30) && valid(model.getPhone(),phoneReg,8)){
+            System.out.println("validAll => true");
             return true;
         }
         return false;

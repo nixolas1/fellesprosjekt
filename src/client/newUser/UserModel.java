@@ -13,6 +13,7 @@ public class UserModel {
     private StringProperty passwordProperty = new SimpleStringProperty();
     private StringProperty domainProperty = new SimpleStringProperty();
 
+
     public Object getBean() {
         return this;
     }
@@ -36,6 +37,7 @@ public class UserModel {
     public String getDomain() {
         return domainProperty.getValue();
     }
+
     public void setDomain(String domain) {
         this.domainProperty.setValue(domain);
     }
@@ -57,7 +59,7 @@ public class UserModel {
     }
 
     public void setPassword(String password) {
-        this.phoneProperty.setValue(password);
+        this.passwordProperty.setValue(password);
     }
 
 }
