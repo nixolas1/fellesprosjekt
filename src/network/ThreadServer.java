@@ -2,11 +2,13 @@ package network;
 
 import java.io.*;
 import java.net.*;
+import java.util.Hashtable;
+
 import server.Logic;
 
 public class ThreadServer {
     public static void main(String args[]) {
-        int port = 6789;
+        int port = 7777;
         ThreadServer server = new ThreadServer( port );
         server.startServer();
     }
@@ -29,7 +31,7 @@ public class ThreadServer {
     }
 
     public void startServer() {
-
+        System.out.println( "Server starting" );
         try {
             echoServer = new ServerSocket(port);
         }
@@ -56,8 +58,8 @@ public class ThreadServer {
 }
 
 class ServerConnection implements Runnable {
-    BufferedReader is;
-    PrintStream os;
+    InputStream is;
+    OutputStream os;
     Socket clientSocket;
     int id;
     ThreadServer server;
@@ -68,8 +70,8 @@ class ServerConnection implements Runnable {
         this.server = server;
         System.out.println( "Connection " + id + " established with: " + clientSocket );
         try {
-            is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            os = new PrintStream(clientSocket.getOutputStream());
+            is = clientSocket.getInputStream();
+            os = clientSocket.getOutputStream();
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -77,17 +79,29 @@ class ServerConnection implements Runnable {
 
 
     public void run() {
-        String request;
-        String ret;
+        String function;
+
         try {
             boolean serverStop = false;
 
             while (true) {
-                request = is.readLine();
 
-                System.out.println( "Received " + request + " from Connection " + id + "." );
-                String reply = Logic.process(request);
-                os.println(reply);
+                //convert input stream from socket to Query object
+                ObjectInputStream ois = new ObjectInputStream(is);
+                Query query = (Query)ois.readObject();
+                function = query.function;
+                Hashtable data = query.data;
+
+                System.out.println( "Received " + function + " query from Connection " + id + "." );
+
+                //Send function request and data to Server logic processing
+                Query reply = Logic.process(function, data);
+
+                //reply to client
+
+                ObjectOutputStream oos = new ObjectOutputStream(os);
+                oos.writeObject(reply);
+                System.out.println( "Replied '" + reply.function+", "+reply.data.toString() + "' to query from Connection " + id + "." );
 
                 if(reply==null)break;
             }
@@ -98,7 +112,9 @@ class ServerConnection implements Runnable {
             clientSocket.close();
 
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println("Recieve Object Fail: "+e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

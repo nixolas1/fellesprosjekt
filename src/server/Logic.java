@@ -1,17 +1,24 @@
 package server;
 
-/**
- * Created by nixo on 2/23/15.
- */
+import network.Query;
+
+import java.util.Hashtable;
+
+import static security.Login.validLogin;
+
+
 public class Logic {
 
-    public static String process(String request){
+    public static Query process(String request, Hashtable data){
         switch (request){
             case "end": return null;
-            case "login": return "yes";
-            case "create": return "yes";
+            case "login": return validLogin(data);
+            case "create": return new Query("create", true); //createUser(data);
         }
-        return "Error: No function could process that query.";
+        return new Query("Error: No function could process that query.");
     }
+
+
+
 
 }

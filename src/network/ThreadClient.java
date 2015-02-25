@@ -2,6 +2,7 @@ package network;
 
 import java.io.*;
 import java.net.*;
+import java.util.Hashtable;
 
 public class ThreadClient {
 
@@ -14,19 +15,20 @@ public class ThreadClient {
     // os: output stream
     // is: input stream
     static Socket clientSocket = null;
-    static DataOutputStream os = null;
-    static BufferedReader is = null;
+    static OutputStream os = null;
+    static InputStream is = null;
 
     public static void main(String[] args) {
 
         // Initialization section:
         // Try to open a socket on the given port
         // Try to open input and output streams
+        System.out.print("Starting client socket... ");
 
         try {
             clientSocket = new Socket(hostname, port);
-            os = new DataOutputStream(clientSocket.getOutputStream());
-            is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            os = clientSocket.getOutputStream();
+            is = clientSocket.getInputStream();
         } catch (UnknownHostException e) {
             System.err.println("Unknown host: " + hostname);
         } catch (IOException e) {
@@ -37,39 +39,45 @@ public class ThreadClient {
         // to the socket we have opened a connection to on the given port
 
         if (clientSocket == null || os == null || is == null) {
-            System.err.println( "Something is wrong. One variable is null." );
+            System.err.println( "Connection setup error. A var is null." );
             return;
         }
+        System.out.println("started!");
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String data = null;
-        try {
-            data = br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String response = send(data);
-        System.out.println(response);
+        Hashtable data = new Hashtable<String, String>(){{
+            put("username","nicolaat");
+            put("pass", "hello");
+            put("domain", "stud.ntnu.no");
+        }};
 
+        send(new Query("login", data));
 
     }
 
-    public static String send(String data){
+    public static Query send(Query query){
         try {
 
-            //System.out.print( "Enter an integer (0 to stop connection, -1 to stop server): " );
-            os.writeBytes( data + "\n" );
+            System.out.println("Sent "+query.function);
 
-            String responseLine = is.readLine();
-            return responseLine;
+            //os.writeBytes();
+
+            ObjectOutputStream oos = new ObjectOutputStream(os);
+            oos.writeObject(query);
+
+            ObjectInputStream ois = new ObjectInputStream(is);
+            Query response = (Query)ois.readObject();
+            System.out.println("Server replied: "+response.function+", "+response.data.toString());
+            return response;
 
         } catch (UnknownHostException e) {
             System.err.println("Trying to connect to unknown host: " + e);
         } catch (IOException e) {
             System.err.println("IOException:  " + e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
-        return "";
+        return new Query("error", false);
     }
 
     public static boolean close(){
