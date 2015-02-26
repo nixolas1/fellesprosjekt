@@ -1,6 +1,7 @@
 package server;
 
 import network.Query;
+import security.Login;
 
 import java.util.Hashtable;
 
@@ -12,10 +13,10 @@ public class Logic {
     public static Query process(String request, Hashtable data){
         switch (request){
             case "end": return null;
-            case "login": return validLogin(data);
-            case "create": return new Query("create", true); //createUser(data);
+            case "login": return Login.validLogin(data);
+            case "create": return CreateUser.createUser(data); //createUser(data);
         }
-        return new Query("Error: No function could process that query.");
+        return new Query("error");
     }
 
 
