@@ -21,7 +21,16 @@ public class CreateUser {
             user.setLastName(data.get("lastName"));
             user.setPhone(data.get("phone"));
             user.setEmail(user.username+"@"+user.domain);
-            return new Query("create", true);
+
+
+            /*if(Database.createUser(user)){
+                return new Query("create", true);
+            }
+
+
+            */
+
+
 
         }
         catch(Exception e){
