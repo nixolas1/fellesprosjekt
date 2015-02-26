@@ -50,7 +50,18 @@ public class ThreadClient {
             put("domain", "stud.ntnu.no");
         }};
 
-        send(new Query("login", data));
+        Query reply = send(new Query("login", data));
+        Hashtable<String, Boolean> response = reply.data;
+        if(response.get("reply")){
+            //success
+        }
+        else{
+            if(response.get("data")){
+                //wrong username or domain
+            }else{
+                //wrong password
+            }
+        }
 
     }
 

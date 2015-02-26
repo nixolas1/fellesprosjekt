@@ -9,13 +9,26 @@ public class Query implements Serializable{
 
     public Query(String function){
         this.function = function;
-        this.data = new Hashtable<String, Boolean>(){{}};
+        this.data = new Hashtable<String, String>(){{}};
+    }
+
+    public Query(String function, final String data){
+        this.function = function;
+        this.data = new Hashtable<String, String>(){{put("reply", data);}};
     }
 
     public Query(String function, final Boolean valid){
         this.function = function;
         this.data = new Hashtable<String, Boolean>(){{
             put("reply", valid);
+        }};
+    }
+
+    public Query(String function, final Boolean valid, final Boolean data){
+        this.function = function;
+        this.data = new Hashtable<String, Boolean>(){{
+            put("reply", valid);
+            put("data", data);
         }};
     }
 

@@ -111,6 +111,7 @@ class ServerConnection implements Runnable {
             os.close();
             clientSocket.close();
 
+
         } catch (IOException e) {
             System.out.println("Recieve Object Fail: "+e);
         } catch (ClassNotFoundException e) {

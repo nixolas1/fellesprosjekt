@@ -15,15 +15,27 @@ public class Login {
             String pass_hash = data.get("pass");
             String domain = data.get("domain");
 
-            //if username in inTable("nixolas1", "User", "username");
 
-            if(username!="" && pass_hash!="" && domain!="")
-                return new Query("login", true);
+            if(username!=null && pass_hash!=null && domain!=null) {
+                return new Query("login", true);    //accept all
+
+               /* if (inDatabase(username+"@"+domain, "User", "username")){
+                    User user = new User(username);
+                    if(user.hash == pass_hash){
+                        return new Query("login", true);    //correct login
+                    }else{
+                        return new Query("login", false, false); //false, false = wrong password
+                    }
+                }else{
+                    return new Query("login", false, true); //false, true = wrong user/domain
+                }
+            */}
 
         }
         catch(Exception e){
             System.out.println("Invalid login-data given.");
         }
+
         return new Query("login", false);
     }
 }
