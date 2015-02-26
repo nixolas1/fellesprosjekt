@@ -9,6 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
 
+import java.util.Hashtable;
+
 public class Controller {
 
     @FXML private TextField username;
@@ -39,8 +41,19 @@ public class Controller {
     @FXML
     public void sendNewPassword(ActionEvent event) {
         if (valid(username.getText(), userNameReg, 30)) {
-            // Sjekk om brukernavnet er i databasen,
-            // Generer nytt passord og send
+            // Sjekk om brukernavnet er i databasen
+            Hashtable<String, String> data = new Hashtable<String, String>(){{
+                put("username",username.getText());
+                put("domain", domain.getValue().toString());
+            }};
+
+            Query reply = socket.send(new Query("login", data));
+            Hashtable<String, Boolean> response = reply.data;
+
+            if(response.get("reply")){
+                System.out.println("success");
+            }
+            // Server generer nytt passord og send
             System.out.println("Send email");
             errorText.setText("Nytt passord sendt på epost");
             errorText.setTextFill(Color.GREEN);
