@@ -1,5 +1,6 @@
 package server;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 /**
@@ -7,11 +8,14 @@ import java.sql.SQLException;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         ConnectDB connectDB = new ConnectDB();
         connectDB.connect();
-        connectDB.getName("nicolaat");
-        connectDB.inDatabase("nicolaat", "User", "username");
+        //connectDB.getUser("nicolaat");
+        //connectDB.getRow("User", "username", "nicolaat");
+        connectDB.getRow("Room", "roomid", "2");
+        String[] asda = {"asdasd", "asdasd"};
+        //connectDB.inDatabase("username", "User", "nikolaat");
 
     }
 
