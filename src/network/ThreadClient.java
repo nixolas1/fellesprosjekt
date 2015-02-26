@@ -14,12 +14,11 @@ public class ThreadClient {
     // clientSocket: our client socket
     // os: output stream
     // is: input stream
-    static Socket clientSocket = null;
-    static OutputStream os = null;
-    static InputStream is = null;
+    Socket clientSocket = null;
+    OutputStream os = null;
+    InputStream is = null;
 
-    public static void main(String[] args) {
-
+    public ThreadClient(){
         // Initialization section:
         // Try to open a socket on the given port
         // Try to open input and output streams
@@ -43,34 +42,16 @@ public class ThreadClient {
             return;
         }
         System.out.println("started!");
+    }
 
-        Hashtable data = new Hashtable<String, String>(){{
-            put("username","nicolaat");
-            put("pass", "hello");
-            put("domain", "stud.ntnu.no");
-        }};
-
-        Query reply = send(new Query("login", data));
-        Hashtable<String, Boolean> response = reply.data;
-        if(response.get("reply")){
-            //success
-        }
-        else{
-            if(response.get("data")){
-                //wrong username or domain
-            }else{
-                //wrong password
-            }
-        }
+    public static void main(String[] args) {
 
     }
 
-    public static Query send(Query query){
+    public Query send(Query query){
         try {
 
-            System.out.println("Sent "+query.function);
-
-            //os.writeBytes();
+            System.out.println("Sending "+query.function);
 
             ObjectOutputStream oos = new ObjectOutputStream(os);
             oos.writeObject(query);
@@ -91,7 +72,7 @@ public class ThreadClient {
         return new Query("error", false);
     }
 
-    public static boolean close(){
+    public boolean close(){
         try {
             os.close();
             is.close();
