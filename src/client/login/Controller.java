@@ -29,13 +29,6 @@ public class Controller {
     void initialize() {
         loginErrorText.setText("");
         domain.setItems(FXCollections.observableArrayList("@stud.ntnu.no"));
-       /* createValidationListener(username, userNameReg, 30);
-        createValidationListener(firstName, nameReg, 30);
-        createValidationListener(lastName, nameReg, 30);
-        createValidationListener(phone, phoneReg, 8);
-        createValidationListener(password1, passwordReg, 50);
-        createPassListener(password11);
-    */
     }
 
 
@@ -77,6 +70,16 @@ public class Controller {
         // sjekk database
         System.out.println("Sjekk databasen");
 
+    }
+
+    @FXML
+    public void newUser(ActionEvent event) {
+        // go to newUser stage
+    }
+
+    @FXML
+    public void forgottenPass(ActionEvent event) {
+        // go to forgottenPassword stage
     }
 
 
