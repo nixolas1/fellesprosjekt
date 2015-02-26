@@ -1,4 +1,4 @@
-package server;
+package server.database;
 
 /**
  * Created by Sondre on 25.02.15.
@@ -24,8 +24,7 @@ public class ConnectDB {
         this.password = "kapteinsabeltann";
         this.serverName = "vsop.online.ntnu.no";
         this.dbms = "mysql";
-        this.portNumber = 3306  ;
-
+        this.portNumber = 3306;
     }
 
 

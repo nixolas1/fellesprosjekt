@@ -1,7 +1,6 @@
 package server;
 
-import java.io.IOException;
-import java.sql.SQLException;
+import server.database.ConnectDB;
 
 /**
  * Created by nixo on 2/24/15.
@@ -14,7 +13,7 @@ public class Main {
         //connectDB.getUser("nicolaat");
         //connectDB.getRow("User", "username", "nicolaat");
         connectDB.getRow("Room", "roomid", "2");
-        String[] asda = {"asdasd", "asdasd"};
+        //String[] asda = {"asdasd", "asdasd"};
         //connectDB.inDatabase("username", "User", "nikolaat");
 
     }
