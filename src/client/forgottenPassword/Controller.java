@@ -4,17 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
-
-import java.awt.event.ActionEvent;
+import javafx.event.ActionEvent;
+import javafx.scene.paint.Color;
 
 public class Controller {
 
     @FXML private TextField username;
     @FXML private ChoiceBox domain;
-    @FXML private Text errorText;
+    @FXML private Label errorText;
 
     @FXML private Button sendPassword, cancel;
 
@@ -43,8 +42,11 @@ public class Controller {
             // Sjekk om brukernavnet er i databasen,
             // Generer nytt passord og send
             System.out.println("Send email");
+            errorText.setText("Nytt passord sendt på epost");
+            errorText.setTextFill(Color.GREEN);
         } else {
             errorText.setText("Brukernavn inneholder ulovlige tegn");
+            System.out.println("Brukernavnet inneholder ulovlige tegn");
 
         }
 
@@ -52,7 +54,8 @@ public class Controller {
 
     @FXML
     public void cancel(ActionEvent event) {
-        // go back to login
+        // go back to login stage
+        System.out.println("Canceling");
     }
 
 

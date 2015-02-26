@@ -54,7 +54,7 @@
       </Pane>
       <Pane minHeight="200.0" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
          <children>
-            <Text layoutX="2.0" layoutY="280.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Skriv inn ditt brukernavn for å få tilsendt nytt passord.">
+            <Text layoutX="2.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Skriv inn ditt brukernavn for å få tilsendt nytt passord.">
                <font>
                   <Font size="14.0" />
                </font>
@@ -64,6 +64,7 @@
                   <Image url="@placeholder.png" />
                </image>
             </ImageView>
+            <Label fx:id="errorText" layoutX="2.0" layoutY="278.0" prefHeight="16.0" prefWidth="341.0" text="Brukernavnet inneholder ulovlige tegn" textFill="RED" />
          </children>
       </Pane>
    </children>
