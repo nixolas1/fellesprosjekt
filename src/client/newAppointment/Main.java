@@ -13,7 +13,7 @@ public class Main extends Application {
 		try {
 			GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("view.fxml"));;
 			Scene scene = new Scene(root,500,475);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			/*scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());*/
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
