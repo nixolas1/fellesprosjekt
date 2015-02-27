@@ -6,11 +6,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import network.ThreadClient;
+import network.Query;
+import security.Crypto;
 
 import java.util.Hashtable;
 
@@ -19,7 +19,7 @@ public class Controller {
 
     @FXML private TextField username, firstName, lastName, phone;
     @FXML private ChoiceBox domain;
-
+    @FXML private Label errorTxt;
     @FXML private PasswordField password1, password11;
 
     @FXML private Button create, cancel;
@@ -34,6 +34,7 @@ public class Controller {
     @FXML
     void initialize() {
         domain.setItems(FXCollections.observableArrayList("@stud.ntnu.no"));
+        errorTxt.setText("");
         createValidationListener(username, userNameReg, 30);
         createValidationListener(firstName, nameReg, 30);
         createValidationListener(lastName, nameReg, 30);
@@ -93,22 +94,49 @@ public class Controller {
     public void createUser(ActionEvent event) {
         if (validAllFields()) {
             // insert into DB from model
-            Hashtable<String, String> data = new Hashtable<String, String>(){{
+            /*Hashtable<String, String> data = new Hashtable<String, String>(){{
                 put("user",model.getUsername());
                 put("pass",model.getPassword());
                 put("firstName",model.getFirstName());
                 put("lastName",model.getLastName());
                 put("phone",model.getPhone());
             }};
-           // network.Query reply = socket.send(new Query("create",data));
-           // Hashtable<String, Boolean> response =
-            System.out.println("data insterted from model to database");
+
+            Hashtable<String, String> data = new Hashtable<String, String>(){{
+                put("username","test");
+                put("pass", Crypto.hash("test"));
+                put("domain", "stud.ntnu.no");
+            }};
+            ThreadClient socket = new ThreadClient();
+            Query reply = socket.send(new Query("create",data));
+            Hashtable<String, Boolean> response = reply.data;*/
+            //create socket to server
+            ThreadClient socket = new ThreadClient();
+
+            Hashtable<String, String> data = new Hashtable<String, String>(){{
+                put("username","test");
+                put("pass", Crypto.hash("test"));
+                put("domain", "stud.ntnu.no");
+            }};
+
+            Query reply = socket.send(new Query("login", data));
+            Hashtable<String, Boolean> response = reply.data;
+
+            if(response.get("reply")) {
+                System.out.println("User created");
+                errorTxt.setTextFill(Color.GREEN);
+                errorTxt.setText("Bruker opprettet!");
+            } else {
+                System.out.println("User NOT created");
+                errorTxt.setTextFill(Color.RED);
+                errorTxt.setText("En feil oppstod");
+            }
         }
     }
 
     @FXML
     public void cancelNewUser(ActionEvent event) {
-
+        // go to login scene
     }
 
     // validating model
