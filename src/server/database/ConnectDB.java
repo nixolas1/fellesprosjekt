@@ -116,7 +116,7 @@ public class ConnectDB {
                         row[i] = result.getString(i + 1);
                         System.out.println("row[" + i + "]: " + row[i]);
                     }
-                } else throw new NullPointerException(identifyingValue + " has no entry in " + table);
+                } else throw new NullPointerException(identifyingAttribute + ": " + identifyingValue + " has no entry in table " + table);
             } catch (SQLException e){
                 System.out.println("SQLException triggered in getRow(), 2. try block: " + e);
             }
@@ -183,22 +183,10 @@ public class ConnectDB {
         }
             try {
                 if (result2.next()) {
-                    //numberOfColumns = result2.getString(1);
                     numberOfColumns = result2.getInt(1);
                     System.out.println("result2:");
                     System.out.println(numberOfColumns);
-                    /*name[0] = result.getString(1);
-                    name[1] = result.getString(2);
-                    name[2] = result.getString(3);
-                    name[3] = result.getString(4);
-                    name[4] = result.getString(5);
-                    name[5] = result.getString(6);
-                    System.out.println(name[0]);
-                    System.out.println(name[1]);
-                    System.out.println(name[2]);
-                    System.out.println(name[3]);
-                    System.out.println(name[4]);
-                    System.out.println(name[5]);*/
+
                 } else {
                     throw new NullPointerException("User has no entry");
                 }
