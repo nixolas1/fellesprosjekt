@@ -25,7 +25,7 @@ public class Main extends Application {
         }
     }
 
-    public static boolean checkLogin(final String user, final String pass, final String domain){
+    public static Hashtable<String, Boolean> checkLogin(final String user, final String pass, final String domain){
 
         System.out.println("Sjekk login: "+user+", "+pass+", "+domain);
         Hashtable<String, String> data = new Hashtable<String, String>(){{
@@ -38,11 +38,7 @@ public class Main extends Application {
         Query reply = socket.send(new Query("login", data));
         Hashtable<String, Boolean> response = reply.data;
 
-        if(response.get("reply")){
-            System.out.println("success");
-        }
-
-        return response.get("reply");
+        return response;
     }
 
     public static void main(String[] args) {
