@@ -14,6 +14,12 @@ public class ConnectDB {
 
     /*DriverManager.getConnection();*/
 
+    /*/connectDB.getUser("nicolaat");
+        //connectDB.getRow("User", "username", "nicolaat");
+        connectDB.getRow("Room", "roomid", "2");
+        //String[] asda = {"asdasd", "asdasd"};
+        //connectDB.inDatabase("username", "User", "nikolaat");*/
+
     private String userName, password, serverName, dbName, dbms;
     private Integer portNumber;
     Connection conn;

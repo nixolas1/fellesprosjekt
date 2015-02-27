@@ -113,7 +113,7 @@ class ServerConnection implements Runnable {
 
 
         } catch (IOException e) {
-            System.out.println("Recieve Object Fail: "+e);
+            System.out.println("Connection to client killed: "+e);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

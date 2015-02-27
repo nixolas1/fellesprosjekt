@@ -1,6 +1,8 @@
 package security;
 
+import calendar.UserModel;
 import network.Query;
+import server.database.ConnectDB;
 
 import java.util.Hashtable;
 
@@ -15,13 +17,15 @@ public class Login {
             String pass_hash = data.get("pass");
             String domain = data.get("domain");
 
-
             if(username!=null && pass_hash!=null && domain!=null) {
-                return new Query("login", true);    //accept all
 
-               /* if (inDatabase(username+"@"+domain, "User", "username")){
-                    User user = new User(username);
-                    if(user.hash == pass_hash){
+                //if (ConnectDB.inDatabase(username+"@"+domain, "User", "username")){
+                //get user from db as UserModel
+                UserModel user = new UserModel("test@stud.ntnu.no", "n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=");
+                if(username.equals(user.getUsername())){
+                    if(pass_hash.equals(user.getPassword())){
+                        //handle new login here
+
                         return new Query("login", true);    //correct login
                     }else{
                         return new Query("login", false, false); //false, false = wrong password
@@ -29,7 +33,7 @@ public class Login {
                 }else{
                     return new Query("login", false, true); //false, true = wrong user/domain
                 }
-            */}
+            }
 
         }
         catch(Exception e){

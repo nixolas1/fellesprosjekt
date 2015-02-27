@@ -13,8 +13,7 @@ public class UserSettings {
     public static Query setSettings(Hashtable<String, String> data){
         try {
             UserModel user = new UserModel();
-            user.setUsername(data.get("username"));
-            user.setEmail(user.username+"@"+user.domain);
+            //user.setUsername(data.get("username"));
             return new Query("settings", true);
 
         }
@@ -28,7 +27,6 @@ public class UserSettings {
         try {
             UserModel user = new UserModel();
             user.setUsername(data.get("username"));
-            user.setEmail(user.username+"@"+user.domain);
             return new Query("settings", true);
 
         }

@@ -1,5 +1,6 @@
 package server;
 
+import network.ThreadServer;
 import server.database.ConnectDB;
 
 /**
@@ -10,11 +11,10 @@ public class Main {
     public static void main(String[] args){
         ConnectDB connectDB = new ConnectDB();
         connectDB.connect();
-        //connectDB.getUser("nicolaat");
-        //connectDB.getRow("User", "username", "nicolaat");
-        connectDB.getRow("Room", "roomid", "2");
-        //String[] asda = {"asdasd", "asdasd"};
-        //connectDB.inDatabase("username", "User", "nikolaat");
+
+        ThreadServer socket = new ThreadServer(7777);
+        socket.startServer();
+
 
     }
 
