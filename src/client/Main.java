@@ -2,6 +2,7 @@ package client;
 
 import network.Query;
 import network.ThreadClient;
+import security.Crypto;
 
 import java.util.Hashtable;
 
@@ -16,8 +17,8 @@ public class Main {
         ThreadClient socket = new ThreadClient();
 
         Hashtable<String, String> data = new Hashtable<String, String>(){{
-           // put("username","nicolaat");
-            put("pass", "hello");
+            put("username","test");
+            put("pass", Crypto.hash("test"));
             put("domain", "stud.ntnu.no");
         }};
 

@@ -13,15 +13,21 @@ public class CreateUser {
 
     public static Query createUser(Hashtable<String, String> data){
         try {
-            UserModel user = new UserModel();
-            user.setUsername(data.get("username"));
-            user.setPassword(data.get("pass"));
-            user.setDomain(data.get("domain"));
+            UserModel user = new UserModel(data.get("email"), data.get("pass"));
             user.setFirstName(data.get("firstName"));
             user.setLastName(data.get("lastName"));
             user.setPhone(data.get("phone"));
-            user.setEmail(user.username+"@"+user.domain);
-            return new Query("create", true);
+
+
+
+            /*if(Database.createUser(user)){
+                return new Query("create", true);
+            }
+
+
+            */
+
+
 
         }
         catch(Exception e){

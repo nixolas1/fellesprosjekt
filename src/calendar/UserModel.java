@@ -2,15 +2,20 @@ package calendar;
 
 public class UserModel {
 
-    public String username = "";
-    public String firstName = "";
-    public String lastName = "";
-    public String phone = "";
-    public String password = "";
-    public String domain = "";
-    public String email = "";
+    private String username = "";
+    private String firstName = "";
+    private String lastName = "";
+    private String phone = "";
+    private String password = "";
+    private String domain = "";
+    private String email = "";
 
+    public UserModel(){};
 
+    public UserModel(String email, String password){
+        setEmail(email);
+        setPassword(password);
+    }
 
     public String getUsername() {
         return username;
@@ -36,14 +41,18 @@ public class UserModel {
 
     public void setDomain(String domain) {
         this.domain = domain;
+        if(!this.username.equals(""))this.email=this.username+"@"+this.domain;
     }
 
     public void setEmail(String email) {
         this.email = email;
+        this.username = email.split("@")[0];
+        this.domain = email.split("@")[1];
     }
 
     public void setUsername(String username) {
         this.username = username;
+        if(!this.domain.equals(""))this.email=this.username+"@"+this.domain;
     }
 
     public void setFirstName(String firstName) {
