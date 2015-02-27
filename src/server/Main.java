@@ -1,5 +1,6 @@
 package server;
 
+import calendar.UserModel;
 import network.ThreadServer;
 import server.database.*;
 import server.database.Logic;
@@ -13,6 +14,9 @@ public class Main {
         ConnectDB connectDB = new ConnectDB();
         server.database.Logic.setConn(connectDB.connect());
         server.database.Logic.getRow("User", "username", "sondrejw");
+
+        UserModel user = new UserModel("testesen@stud.ntnu.no", "asdasdasdasd", "testesen", "stud.ntnu.no", "Test", "Testesen", "12345678");
+
 
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
