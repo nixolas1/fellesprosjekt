@@ -12,11 +12,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import network.Query;
 import network.ThreadClient;
+import security.Crypto;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 
 
-public class Controller {
+public class Controller{
 
     @FXML private TextField username;
     @FXML private ChoiceBox domain;
@@ -26,7 +28,7 @@ public class Controller {
     @FXML private Button login, newUser, forgottenPassword;
 
     private String userNameReg = "^[a-zA-Z0-9_.]*$";
-    private String passwordReg = "[\\S ]{6,50}$";
+    private String passwordReg = "[\\S ]{4,50}$";
 
 
     @FXML
@@ -48,6 +50,7 @@ public class Controller {
     public void login(ActionEvent event) {
         final String user = username.getText();
         final String pass = password.getText();
+        final String domainText = domain.getValue().toString();
         if (!(valid(user, userNameReg, 30))) {
             // brukernavn ulovlig tegn
             loginErrorText.setText("Brukernavn inneholder ulovlige tegn");
@@ -56,28 +59,20 @@ public class Controller {
         }
         if (!(valid(pass,passwordReg,50))) {
             password.setText("");
-            if(pass.length() < 6) {
+            if(pass.length() < 4) {
                 loginErrorText.setText("Passordet er for kort");
             } else {
                 loginErrorText.setText("Feil passord");
             }
             return;
         }
-        // sjekk database
-        System.out.println("Sjekk databasen");
-        Hashtable<String, String> data = new Hashtable<String, String>(){{
-            put("username",user);
-            put("pass", pass);
-            put("domain", domain.getValue().toString());
-        }};
-        ThreadClient socket = new ThreadClient();
 
-        Query reply = socket.send(new Query("login", data));
-        Hashtable<String, Boolean> response = reply.data;
-
-        if(response.get("reply")){
-            System.out.println("success");
-            // go to another stage
+        if(Main.checkLogin(user, pass, domainText)){
+            //riktig!
+            System.out.println("Successful login!");
+        }
+        else{
+            System.out.println("Wrong username or pass.");
         }
 
     }

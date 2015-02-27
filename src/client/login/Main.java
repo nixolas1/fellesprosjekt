@@ -5,6 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import network.Query;
+import network.ThreadClient;
+import security.Crypto;
+
+import java.util.Hashtable;
 
 public class Main extends Application {
     @Override
@@ -18,6 +23,26 @@ public class Main extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean checkLogin(final String user, final String pass, final String domain){
+
+        System.out.println("Sjekk login: "+user+", "+pass+", "+domain);
+        Hashtable<String, String> data = new Hashtable<String, String>(){{
+            put("username",user);
+            put("pass", pass);
+            put("domain", domain);
+        }};
+        ThreadClient socket = new ThreadClient();
+
+        Query reply = socket.send(new Query("login", data));
+        Hashtable<String, Boolean> response = reply.data;
+
+        if(response.get("reply")){
+            System.out.println("success");
+        }
+
+        return response.get("reply");
     }
 
     public static void main(String[] args) {
