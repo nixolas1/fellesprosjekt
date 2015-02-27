@@ -164,7 +164,6 @@ public class Logic {
         String query = "SELECT * FROM User WHERE username = '" + mail + "';";
         Statement stmt = null;
         ResultSet result = null;
-        int numberOfColumns = 0;
         String email = null, passwordHash = null, username = null, domain = null, firstName = null, lastName = null, phone = null;
 
         try {
