@@ -17,6 +17,16 @@ public class UserModel {
         setPassword(password);
     }
 
+    public UserModel(String email, String password, String username, String domain, String firstName, String lastName, String phone){
+        setEmail(email);
+        setPassword(password);
+        setUsername(username);
+        setDomain(domain);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setPhone(phone);
+    }
+
     public String getUsername() {
         return username;
     }
