@@ -10,6 +10,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import network.ThreadClient;
+
+import java.util.Hashtable;
 
 
 public class Controller {
@@ -90,6 +93,15 @@ public class Controller {
     public void createUser(ActionEvent event) {
         if (validAllFields()) {
             // insert into DB from model
+            Hashtable<String, String> data = new Hashtable<String, String>(){{
+                put("user",model.getUsername());
+                put("pass",model.getPassword());
+                put("firstName",model.getFirstName());
+                put("lastName",model.getLastName());
+                put("phone",model.getPhone());
+            }};
+           // network.Query reply = socket.send(new Query("create",data));
+           // Hashtable<String, Boolean> response =
             System.out.println("data insterted from model to database");
         }
     }
