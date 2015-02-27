@@ -21,8 +21,10 @@ public class Login {
 
                 //if (ConnectDB.inDatabase(username+"@"+domain, "User", "username")){
                 //get user from db as UserModel
-                UserModel user = new UserModel("test@stud.ntnu.no", "n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=");
-                if(username.equals(user.getUsername())){
+                String email = username+"@"+domain;
+                UserModel user = server.database.Logic.getUser(email); //new UserModel("test@stud.ntnu.no", "n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=");
+                System.out.println(user.getEmail()+" "+user.getPassword());
+                if(email.equals(user.getEmail())){
                     if(pass_hash.equals(user.getPassword())){
                         //handle new login here
 

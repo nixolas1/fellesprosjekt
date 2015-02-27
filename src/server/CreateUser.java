@@ -27,6 +27,7 @@ public class CreateUser {
                                             data.get("firstName"),
                                             data.get("lastName"),
                                             data.get("phone"));
+
             /*user.setFirstName(data.get("firstName"));
             user.setLastName(data.get("lastName"));
             user.setPhone(data.get("phone"));*/
