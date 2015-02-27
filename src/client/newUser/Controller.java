@@ -94,38 +94,12 @@ public class Controller {
     public void createUser(ActionEvent event) {
         if (validAllFields()) {
             // insert into DB from model
-            /*Hashtable<String, String> data = new Hashtable<String, String>(){{
-                put("user",model.getUsername());
-                put("pass",model.getPassword());
-                put("firstName",model.getFirstName());
-                put("lastName",model.getLastName());
-                put("phone",model.getPhone());
-            }};
+          Boolean response = Main.createUser(model.getUsername(), model.getPassword(), model.getDomain());
 
-            Hashtable<String, String> data = new Hashtable<String, String>(){{
-                put("username","test");
-                put("pass", Crypto.hash("test"));
-                put("domain", "stud.ntnu.no");
-            }};
-            ThreadClient socket = new ThreadClient();
-            Query reply = socket.send(new Query("create",data));
-            Hashtable<String, Boolean> response = reply.data;*/
-            //create socket to server
-            ThreadClient socket = new ThreadClient();
-
-            Hashtable<String, String> data = new Hashtable<String, String>(){{
-                put("username","test");
-                put("pass", Crypto.hash("test"));
-                put("domain", "stud.ntnu.no");
-            }};
-
-            Query reply = socket.send(new Query("login", data));
-            Hashtable<String, Boolean> response = reply.data;
-
-            if(response.get("reply")) {
-                System.out.println("User created");
+            if(response) {
+                System.out.println("User " + model.getUsername() + " created");
                 errorTxt.setTextFill(Color.GREEN);
-                errorTxt.setText("Bruker opprettet!");
+                errorTxt.setText("Bruker opprettet " + model.getUsername() + "!");
             } else {
                 System.out.println("User NOT created");
                 errorTxt.setTextFill(Color.RED);
