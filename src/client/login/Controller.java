@@ -67,15 +67,27 @@ public class Controller{
             return;
         }
 
-        if(Main.checkLogin(user, pass, domainText)){
+        Hashtable<String, Boolean> response = Main.checkLogin(user, pass, domainText);
+
+        if(response.get("reply")){
             //riktig!
             System.out.println("Successful login!");
+            loginErrorText.setText("Riktig! Du blir nå sendt til kalenderen din.");
         }
         else{
-            System.out.println("Wrong username or pass.");
+            if(response.get("data")) {
+                System.out.println("Wrong username or domain.");
+                loginErrorText.setText("Feil brukernavn eller domene");
+            }else{
+                System.out.println("Wrong password");
+                loginErrorText.setText("Feil passord");
+            }
+            password.setText("");
         }
 
     }
+
+
 
     @FXML
     public void newUser(ActionEvent event) {
