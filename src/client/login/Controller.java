@@ -10,6 +10,10 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import network.Query;
+import network.ThreadClient;
+
+import java.util.Hashtable;
 
 
 public class Controller {
@@ -40,18 +44,10 @@ public class Controller {
     }
 
 
-
-    public boolean txtFieldCheck(TextField field) {
-        if (field.getText() != null && !(field.getText().equals(""))) {
-            return true;
-        }
-        return false;
-    }
-
     @FXML
     public void login(ActionEvent event) {
-        String user = username.getText();
-        String pass = password.getText();
+        final String user = username.getText();
+        final String pass = password.getText();
         if (!(valid(user, userNameReg, 30))) {
             // brukernavn ulovlig tegn
             loginErrorText.setText("Brukernavn inneholder ulovlige tegn");
@@ -69,12 +65,28 @@ public class Controller {
         }
         // sjekk database
         System.out.println("Sjekk databasen");
+        Hashtable<String, String> data = new Hashtable<String, String>(){{
+            put("username",user);
+            put("pass", pass);
+            put("domain", domain.getValue().toString());
+        }};
+        ThreadClient socket = new ThreadClient();
+
+        Query reply = socket.send(new Query("login", data));
+        Hashtable<String, Boolean> response = reply.data;
+
+        if(response.get("reply")){
+            System.out.println("success");
+            // go to another stage
+        }
 
     }
 
     @FXML
     public void newUser(ActionEvent event) {
         // go to newUser stage
+
+
     }
 
     @FXML
