@@ -14,7 +14,7 @@ public class Login {
     public static Query validLogin(Hashtable<String, String> data){
         try {
             String username = data.get("username");
-            String pass_hash = data.get("pass");
+            String pass_hash = Crypto.hash(data.get("pass"));
             String domain = data.get("domain");
 
             if(username!=null && pass_hash!=null && domain!=null) {
