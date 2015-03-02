@@ -76,12 +76,12 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
          <children>
-            <Button id="create" fx:id="create" layoutX="3.0" layoutY="5.0" mnemonicParsing="false" onAction="#createUser" prefHeight="30.0" prefWidth="265.0" stylesheets="@gui.css" text="Opprett bruker" textFill="WHITE" />
+            <Button fx:id="cancel" layoutX="3.0" layoutY="5.0" mnemonicParsing="false" onAction="#cancelNewUser" prefHeight="30.0" prefWidth="80.0" text="Avbryt" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
          <children>
-            <Button fx:id="cancel" layoutX="93.0" layoutY="5.0" mnemonicParsing="false" onAction="#cancelNewUser" prefHeight="30.0" prefWidth="80.0" text="Avbryt" />
+            <Button id="create" fx:id="create" layoutX="-92.0" layoutY="5.0" mnemonicParsing="false" onAction="#createUser" prefHeight="30.0" prefWidth="265.0" stylesheets="@gui.css" text="Opprett bruker" textFill="WHITE" />
          </children>
       </Pane>
    </children>
