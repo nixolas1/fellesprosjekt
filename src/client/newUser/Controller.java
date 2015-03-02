@@ -55,7 +55,7 @@ public class Controller {
     }
 
     public boolean validPassword(String password) {
-        if (valid(password, passwordReg, 30)) {
+        if (valid(password, passwordReg, 50)) {
             if (password1.getText().equals(password11.getText())) {
                 return true;
             }
@@ -135,7 +135,7 @@ public class Controller {
 
     public boolean validAllFields() {
         if ( valid(firstName.getText(),nameReg,30) && valid(lastName.getText(),nameReg,30) && valid(username.getText(),nameReg,30)
-                && valid(password1.getText(),passwordReg,50) && valid(password11.getText(),passwordReg,50) && valid(phone.getText(),phoneReg,8)) {
+                && valid(password1.getText(),passwordReg,50) && valid(password11.getText(),passwordReg,50) && password1.getText().equals(password11.getText()) && valid(phone.getText(),phoneReg,8)) {
             System.out.println("All fields are valid");
             return true;
         }
