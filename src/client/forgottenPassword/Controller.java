@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import java.awt.event.ActionEvent;
+import javafx.event.ActionEvent;
 
 
 /**
@@ -12,22 +12,18 @@ import java.awt.event.ActionEvent;
  */
 public class Controller {
 
-    @FXML
-    private TextField username;
+    @FXML private TextField username;
 
-    @FXML
-    private ChoiceBox domain;
+    @FXML private ChoiceBox domain;
 
-    @FXML
-    private Button sendPassword, cancel;
+    @FXML private Button sendPassword, cancel;
 
 
-    public void sendNewPassword(ActionEvent event) {
-
+    @FXML public void sendNewPassword(ActionEvent event) {
+        //Sender nytt passord på mail og går tilbake til LoginView
     }
 
-    public void cancel(ActionEvent event) {
-
+    @FXML public void cancelNewPass(ActionEvent event) {
+        //Går tilbake til LoginView
     }
-
 }
