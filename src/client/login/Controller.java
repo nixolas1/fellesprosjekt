@@ -77,12 +77,18 @@ public class Controller{
             loginErrorText.setText("Riktig! Du blir nå sendt til kalenderen din.");
         }
         else{
-            if(response.get("data")) {
-                System.out.println("Wrong username or domain.");
-                loginErrorText.setText("Feil brukernavn eller domene");
-            }else{
-                System.out.println("Wrong password");
-                loginErrorText.setText("Feil passord");
+            try {
+                if (response.get("data")) {
+                    System.out.println("Wrong username or domain.");
+                    loginErrorText.setText("Feil brukernavn eller domene");
+                } else {
+                    System.out.println("Wrong password");
+                    loginErrorText.setText("Feil passord");
+                }
+            }
+            catch(NullPointerException e){
+                System.out.println("Invalid data");
+                loginErrorText.setText("ERROR");
             }
             password.setText("");
         }

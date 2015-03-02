@@ -30,7 +30,7 @@ public class Main extends Application {
         System.out.println("Sjekk login: "+user+", "+pass+", "+domain);
         Hashtable<String, String> data = new Hashtable<String, String>(){{
             put("username",user);
-            put("pass", pass);
+            put("pass", Crypto.hash(pass));
             put("domain", domain);
         }};
         ThreadClient socket = new ThreadClient();
