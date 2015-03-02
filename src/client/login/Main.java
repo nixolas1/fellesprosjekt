@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 import network.Query;
 import network.ThreadClient;
 import security.Crypto;
+import server.database.ConnectDB;
+import server.database.Logic;
 
 import java.util.Hashtable;
 
@@ -20,6 +22,8 @@ public class Main extends Application {
             //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.show();
+            ConnectDB connectDB = new ConnectDB();
+            Logic dblogic = new Logic(connectDB.connect());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -30,7 +34,7 @@ public class Main extends Application {
         System.out.println("Sjekk login: "+user+", "+pass+", "+domain);
         Hashtable<String, String> data = new Hashtable<String, String>(){{
             put("username",user);
-            put("pass", pass);
+            put("pass", Crypto.hash(pass));
             put("domain", domain);
         }};
         ThreadClient socket = new ThreadClient();
