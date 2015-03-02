@@ -81,4 +81,9 @@ public class UserModel {
         this.password = password;
     }
 
+    public String toString(){
+        return "Bruker: "+getUsername()+" passord: "+getPassword()+" fornavn: "+getFirstName()+" etternavn: "+
+                getLastName()+" telefon: "+getPhone()+" domene: "+getDomain()+" email: "+getEmail();
+    }
+
 }
