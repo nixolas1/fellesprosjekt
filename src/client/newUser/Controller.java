@@ -95,7 +95,7 @@ public class Controller {
     public void createUser(ActionEvent event) {
         if (validAllFields()) {
             // insert into DB from model
-          Boolean response = Main.createUser(model.getUsername(), model.getPassword(), model.getDomain());
+          Boolean response = Main.createUser(model.getUsername(), model.getPassword(), model.getDomain(), model.getFirstName(), model.getLastName(), model.getPhone());
 
             if(response) {
                 System.out.println("User " + model.getUsername() + " created");
