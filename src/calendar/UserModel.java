@@ -51,7 +51,7 @@ public class UserModel {
 
     public void setDomain(String domain) {
         this.domain = domain;
-        if(!this.username.equals(""))this.email=this.username+this.domain;
+        if(!this.username.equals(""))this.email=this.username+"@"+this.domain;
     }
 
     public void setEmail(String email) {
@@ -62,7 +62,7 @@ public class UserModel {
 
     public void setUsername(String username) {
         this.username = username;
-        if(!this.domain.equals(""))this.email=this.username+this.domain;
+        if(!this.domain.equals(""))this.email=this.username+"@"+this.domain;
     }
 
     public void setFirstName(String firstName) {
