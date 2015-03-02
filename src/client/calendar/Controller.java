@@ -14,8 +14,7 @@ public class Controller {
 
     @FXML
     void initialize() {
-        chooseCalendar.setItems(FXCollections.observableArrayList("Hei"));
-        //chooseCalendar.setValue("Finn kalender");
+        chooseCalendar.setItems(FXCollections.observableArrayList(""));
 
     }
 }

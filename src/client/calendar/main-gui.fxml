@@ -31,10 +31,10 @@
                <children>
                   <Rectangle height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1030.0">
                      <fill>
-                        <LinearGradient endX="0.46153846153846156" startX="0.46153846153846156" startY="1.0">
+                        <LinearGradient endX="0.46153846153846156" startX="0.46153846153846156">
                            <stops>
-                              <Stop color="#a1a1a1" />
-                              <Stop color="#d7d7d7" offset="1.0" />
+                              <Stop color="#d6d6d6" />
+                              <Stop color="#a1a1a1" offset="1.0" />
                            </stops>
                         </LinearGradient>
                      </fill>
@@ -496,10 +496,10 @@
                <children>
                   <Rectangle height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="170.0">
                      <fill>
-                        <LinearGradient endX="0.46153846153846156" startX="0.46153846153846156" startY="1.0">
+                        <LinearGradient endX="0.46153846153846156" endY="1.0" startX="0.46153846153846156">
                            <stops>
-                              <Stop color="#a1a1a1" />
-                              <Stop color="#d7d7d7" offset="1.0" />
+                              <Stop color="#d6d6d6" />
+                              <Stop color="#a1a1a1" offset="1.0" />
                            </stops>
                         </LinearGradient>
                      </fill>
