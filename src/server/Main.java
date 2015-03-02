@@ -18,11 +18,11 @@ public class Main {
         //UserModel user = new UserModel("morratilnixo", "passordhashgårinnher", "stud.ntnu.no", "nixo", "stygg", "12345678");
 
         // SÅNN HER BRUKER OPPDATERER MAN BRUKERINFO
-        UserModel sondre = server.database.Logic.getUser("sondrejw@stud.ntnu.no");
-        sondre.setFirstName("Sondre");
-        sondre.setPassword(Crypto.hash("passord"));
-        server.database.Logic.updateUser(sondre);
-        Logic.getUser("sondrejw@stud.ntnu.no");
+        //UserModel sondre = server.database.Logic.getUser("sondrejw@stud.ntnu.no");
+        //sondre.setFirstName("Sondre");
+        //sondre.setPassword(Crypto.hash("passord"));
+        //server.database.Logic.updateUser(sondre);
+        //Logic.getUser("sondrejw@stud.ntnu.no");
 
 
         ThreadServer socket = new ThreadServer(7777);
