@@ -18,6 +18,8 @@ public class CreateUser {
 
     public static Query createUser(Hashtable<String, String> data){
         try {
+
+            System.out.println(data.toString());
             UserModel user = new UserModel(data.get("username"),
                                             data.get("pass"),
                                             data.get("domain"),
@@ -25,7 +27,7 @@ public class CreateUser {
                                             data.get("lastName"),
                                             data.get("phone"));
 
-
+            System.out.println(user.toString());
             Boolean createdUser = server.database.Logic.createUser(user);
             if(createdUser){
                 return new Query("create", true);
@@ -34,7 +36,8 @@ public class CreateUser {
 
         }
         catch(Exception e){
-            System.out.println("Invalid login-data given.");
+            System.out.print("Invalid create-user data given: ");
+            System.err.println(e);
         }
         return new Query("create", false);
     }
