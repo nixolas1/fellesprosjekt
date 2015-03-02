@@ -103,12 +103,14 @@ public class Controller {
            // network.Query reply = socket.send(new Query("create",data));
            // Hashtable<String, Boolean> response =
             System.out.println("data insterted from model to database");
+            client.login.Main.show(Main.stage);
         }
     }
 
     @FXML
     public void cancelNewUser(ActionEvent event) {
-
+        //go back to login
+        client.login.Main.show(Main.stage);
     }
 
     // validating model

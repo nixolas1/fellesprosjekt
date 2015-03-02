@@ -25,7 +25,7 @@ public class Login {
                 //server.database.Logic.getUser(email);
                 System.out.println("Getting user: "+email+ " with pass: "+pass_hash);
                 UserModel user = server.database.Logic.getUser(email);//new UserModel(email, "n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=");
-                System.out.println(user.getEmail()+", "+user.getPassword());
+                System.out.println("Got user: "+user.getEmail()+", "+user.getPassword());
                 if(email.equals(user.getEmail())){
                     if(pass_hash.equals(user.getPassword())){
                         //handle new login here

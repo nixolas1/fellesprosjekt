@@ -100,13 +100,13 @@ public class Controller{
     @FXML
     public void newUser(ActionEvent event) {
         // go to newUser stage
-
-
+        client.newUser.Main.show(Main.stage);
     }
 
     @FXML
     public void forgottenPass(ActionEvent event) {
         // go to forgottenPassword stage
+        client.forgottenPassword.Main.show(Main.stage);
     }
 
 

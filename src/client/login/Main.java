@@ -8,22 +8,31 @@ import javafx.stage.Stage;
 import network.Query;
 import network.ThreadClient;
 import security.Crypto;
-import server.database.ConnectDB;
-import server.database.Logic;
 
 import java.util.Hashtable;
 
 public class Main extends Application {
+    static Stage stage;
     @Override
     public void start(Stage primaryStage) {
         try {
-            GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("login-gui.fxml"));
+            GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));
             Scene scene = new Scene(root, 1200, 800);
             //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.show();
-            ConnectDB connectDB = new ConnectDB();
-            Logic dblogic = new Logic(connectDB.connect());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void show(Stage primaryStage) {
+        try {
+            stage = primaryStage;
+            GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));
+            Scene scene = new Scene(root, 1200, 800);
+            primaryStage.setScene(scene);
+            primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
