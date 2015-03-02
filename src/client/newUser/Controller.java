@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import network.Query;
 import network.ThreadClient;
 
 import java.util.Hashtable;
@@ -95,13 +96,14 @@ public class Controller {
             // insert into DB from model
             Hashtable<String, String> data = new Hashtable<String, String>(){{
                 put("user",model.getUsername());
+                put("domain", model.getDomain());
                 put("pass",model.getPassword());
                 put("firstName",model.getFirstName());
                 put("lastName",model.getLastName());
                 put("phone",model.getPhone());
             }};
-           // network.Query reply = socket.send(new Query("create",data));
-           // Hashtable<String, Boolean> response =
+            //Query reply = socket.send(new Query("create",data));
+            // response = (Hashtable<String, Boolean>)reply.data.get("reply");
             System.out.println("data insterted from model to database");
             client.login.Main.show(Main.stage, "Bruker ble opprettet");
         }
