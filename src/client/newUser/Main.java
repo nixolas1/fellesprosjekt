@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
+    static Stage stage;
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -20,6 +21,18 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
+
+    public static void show(Stage primaryStage) {
+        try {
+            stage = primaryStage;
+            GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));
+            Scene scene = new Scene(root, 1200, 800);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 	
 	public static void main(String[] args) {
 		launch(args);

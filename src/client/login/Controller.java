@@ -4,11 +4,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import network.Query;
 import network.ThreadClient;
@@ -75,12 +77,18 @@ public class Controller{
             loginErrorText.setText("Riktig! Du blir nå sendt til kalenderen din.");
         }
         else{
-            if(response.get("data")) {
-                System.out.println("Wrong username or domain.");
-                loginErrorText.setText("Feil brukernavn eller domene");
-            }else{
-                System.out.println("Wrong password");
-                loginErrorText.setText("Feil passord");
+            try {
+                if (response.get("data")) {
+                    System.out.println("Wrong username or domain.");
+                    loginErrorText.setText("Feil brukernavn eller domene");
+                } else {
+                    System.out.println("Wrong password");
+                    loginErrorText.setText("Feil passord");
+                }
+            }
+            catch(NullPointerException e){
+                System.out.println("Invalid data");
+                loginErrorText.setText("ERROR");
             }
             password.setText("");
         }
@@ -92,13 +100,13 @@ public class Controller{
     @FXML
     public void newUser(ActionEvent event) {
         // go to newUser stage
-
-
+        client.newUser.Main.show(Main.stage);
     }
 
     @FXML
     public void forgottenPass(ActionEvent event) {
         // go to forgottenPassword stage
+        client.forgottenPassword.Main.show(Main.stage);
     }
 
 

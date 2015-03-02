@@ -9,7 +9,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.calendar.Controller">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1030.0" minWidth="1030.0" prefWidth="1030.0" />
@@ -504,6 +504,7 @@
                         </LinearGradient>
                      </fill>
                   </Rectangle>
+                  <ComboBox fx:id="chooseCalendar" layoutX="10.0" layoutY="6.0" prefWidth="150.0" promptText="Finn kalender" />
                </children></Pane>
          </children>
       </GridPane>
