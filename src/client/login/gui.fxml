@@ -48,7 +48,7 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <children>
-            <ChoiceBox fx:id="domain" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="174.0" value="\@stud.ntnu.no" />
+            <ChoiceBox fx:id="domain" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="174.0" value="stud.ntnu.no" />
          </children>
       </Pane>
       <Pane prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">

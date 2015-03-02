@@ -46,7 +46,7 @@ public class Main extends Application {
 
     public static Hashtable<String, Boolean> checkLogin(final String user, final String pass, final String domain){
 
-        System.out.println("Sjekk login: "+user+", "+pass+", "+domain);
+        System.out.println("Sjekk login: "+user+", "+Crypto.hash(pass)+", "+domain);
         Hashtable<String, String> data = new Hashtable<String, String>(){{
             put("username",user);
             put("pass", Crypto.hash(pass));
