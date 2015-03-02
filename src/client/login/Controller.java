@@ -11,13 +11,16 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.*;
 import javafx.scene.text.Text;
 import network.Query;
 import network.ThreadClient;
 import security.Crypto;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.Hashtable;
+import javafx.scene.paint.Color;
 
 
 public class Controller{
@@ -39,6 +42,7 @@ public class Controller{
         domain.setItems(FXCollections.observableArrayList("stud.ntnu.no"));
         if(Main.message != null){
             //print message to user here
+            loginErrorText.setFill(Color.GREEN);
             loginErrorText.setText(Main.message);
         }
     }

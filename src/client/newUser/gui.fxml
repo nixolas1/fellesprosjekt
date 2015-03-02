@@ -38,7 +38,6 @@
                   <Image url="@placeholder.png" />
                </image>
             </ImageView>
-            <Label fx:id="errorTxt" layoutX="3.0" layoutY="275.0" text="Label" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -57,7 +56,7 @@
          </children></Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
          <children>
-            <ChoiceBox id="domain" fx:id="domain" focusTraversable="false" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="171.0" value="stud.ntnu.no" />
+            <ChoiceBox id="domain" fx:id="domain" focusTraversable="false" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="175.0" value="stud.ntnu.no" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">

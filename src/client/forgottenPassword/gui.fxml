@@ -33,7 +33,7 @@
                   <DropShadow color="#6b6b6b" height="10.69" offsetY="2.0" radius="4.672499999999999" width="10.0" />
                </effect>
             </Rectangle>
-            <Text layoutX="2.0" layoutY="280.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Skriv inn ditt brukernavn for å få tilsendt nytt passord.">
+            <Text layoutX="3.0" layoutY="280.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Skriv inn ditt brukernavn for å få tilsendt nytt passord.">
                <font>
                   <Font size="14.0" />
                </font>
@@ -43,7 +43,7 @@
                   <Image url="@placeholder.png" />
                </image>
             </ImageView>
-            <Line endX="348.0" layoutY="360.0" stroke="#aeaeae" />
+            <Line endX="354.0" layoutX="3.0" layoutY="360.0" stroke="#aeaeae" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
@@ -54,13 +54,13 @@
       </Pane>
       <Pane prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <children>
-            <ChoiceBox fx:id="domain" layoutX="3.0" layoutY="6.0" prefHeight="30.0" prefWidth="171.0" />
+            <ChoiceBox fx:id="domain" layoutX="3.0" layoutY="6.0" prefHeight="30.0" prefWidth="175.0" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
          <children>
-            <Button fx:id="cancel" layoutX="183.0" layoutY="6.0" mnemonicParsing="false" onAction="#cancelNewPass" prefHeight="30.0" prefWidth="83.0" text="Avbryt" />
-            <Button fx:id="sendPassword" layoutX="271.0" layoutY="6.0" mnemonicParsing="false" onAction="#sendNewPassword" prefHeight="30.0" prefWidth="83.0" stylesheets="@gui.css" text="Send" textFill="WHITE" />
+            <Button fx:id="cancel" layoutX="183.0" layoutY="6.0" mnemonicParsing="false" onAction="#cancelNewPass" prefHeight="30.0" prefWidth="85.0" text="Avbryt" />
+            <Button fx:id="sendPassword" layoutX="273.0" layoutY="6.0" mnemonicParsing="false" onAction="#sendNewPassword" prefHeight="30.0" prefWidth="85.0" stylesheets="@gui.css" text="Send" textFill="WHITE" />
          </children>
       </Pane>
    </children>
