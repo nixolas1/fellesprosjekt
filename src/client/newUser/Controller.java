@@ -99,7 +99,7 @@ public class Controller {
             if(response) {
                 System.out.println("User " + model.getUsername() + " created");
                 errorTxt.setTextFill(Color.GREEN);
-                errorTxt.setText("Bruker opprettet " + model.getUsername() + "!");
+                errorTxt.setText("Bruker " + model.getUsername() + " opprettet.");
             } else {
                 System.out.println("User NOT created");
                 errorTxt.setTextFill(Color.RED);
