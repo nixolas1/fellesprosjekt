@@ -103,7 +103,7 @@ public class Controller {
            // network.Query reply = socket.send(new Query("create",data));
            // Hashtable<String, Boolean> response =
             System.out.println("data insterted from model to database");
-            client.login.Main.show(Main.stage);
+            client.login.Main.show(Main.stage, "Bruker ble opprettet");
         }
     }
 

@@ -13,6 +13,7 @@ import java.util.Hashtable;
 
 public class Main extends Application {
     static Stage stage;
+    static String message = null;
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -27,8 +28,13 @@ public class Main extends Application {
     }
 
     public static void show(Stage primaryStage) {
+        show(primaryStage, null);
+    }
+
+    public static void show(Stage primaryStage, String msg) {
         try {
             stage = primaryStage;
+            message = msg;
             GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));
             Scene scene = new Scene(root, 1200, 800);
             primaryStage.setScene(scene);

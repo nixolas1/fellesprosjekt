@@ -12,7 +12,7 @@ import javafx.scene.layout.GridPane;
 
 
 public class Main extends Application {
-    static Stage stage;
+
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -25,7 +25,7 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-
+    static Stage stage;
     public static void show(Stage primaryStage) {
         try {
             stage = primaryStage;
