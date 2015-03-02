@@ -9,8 +9,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import network.ThreadClient;
-import network.Query;
-import security.Crypto;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 
 import java.util.Hashtable;
 
@@ -34,7 +36,6 @@ public class Controller {
     @FXML
     void initialize() {
         domain.setItems(FXCollections.observableArrayList("@stud.ntnu.no"));
-        errorTxt.setText("");
         createValidationListener(username, userNameReg, 30);
         createValidationListener(firstName, nameReg, 30);
         createValidationListener(lastName, nameReg, 30);
@@ -100,6 +101,10 @@ public class Controller {
                 System.out.println("User " + model.getUsername() + " created");
                 errorTxt.setTextFill(Color.GREEN);
                 errorTxt.setText("Bruker " + model.getUsername() + " opprettet.");
+                client.login.Main.show(Main.stage, "Bruker ble opprettet");
+
+
+
             } else {
                 System.out.println("User NOT created");
                 errorTxt.setTextFill(Color.RED);
@@ -113,7 +118,8 @@ public class Controller {
 
     @FXML
     public void cancelNewUser(ActionEvent event) {
-        // go to login scene
+        //go back to login
+        client.login.Main.show(Main.stage);
     }
 
     // validating model

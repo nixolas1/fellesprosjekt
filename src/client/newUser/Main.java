@@ -44,6 +44,19 @@ public class Main extends Application {
 
     }
 
+    static Stage stage;
+    public static void show(Stage primaryStage) {
+        try {
+            stage = primaryStage;
+            GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));
+            Scene scene = new Scene(root, 1200, 800);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+	
 	public static void main(String[] args) {
 		launch(args);
 	}

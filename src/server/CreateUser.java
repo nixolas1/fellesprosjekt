@@ -20,9 +20,8 @@ public class CreateUser {
 
     public static Query createUser(Hashtable<String, String> data){
         try {
-            UserModel user = new UserModel(data.get("email"),
+            UserModel user = new UserModel(data.get("username"),
                                             data.get("pass"),
-                                            data.get("username"),
                                             data.get("domain"),
                                             data.get("firstName"),
                                             data.get("lastName"),
