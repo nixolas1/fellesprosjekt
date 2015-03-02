@@ -39,7 +39,7 @@ public class Controller{
     @FXML
     void initialize() {
         loginErrorText.setText("");
-        domain.setItems(FXCollections.observableArrayList("@stud.ntnu.no"));
+        domain.setItems(FXCollections.observableArrayList("stud.ntnu.no"));
         if(Main.message != null){
             //print message to user here
             loginErrorText.setFill(Color.GREEN);

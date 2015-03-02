@@ -5,14 +5,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import network.Query;
+import network.ThreadClient;
+
+import java.util.Hashtable;
 
 
 public class Main extends Application {
-    static Stage stage;
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));;
+			GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));
 			Scene scene = new Scene(root,1200,800);
 			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
@@ -22,6 +25,29 @@ public class Main extends Application {
 		}
 	}
 
+	public static boolean createUser(final String user, final String pass, final String domain, final String firstName, final String lastName, final String phone) {
+        Hashtable<String, String> data = new Hashtable<String, String>() {{
+            put("username",user);
+            put("pass", pass);
+            put("domain", domain);
+            put("firstName", firstName);
+            put("lastName", lastName);
+            put("phone", phone);
+        }};
+        ThreadClient socket = new ThreadClient();
+
+        Query reply = socket.send(new Query("create", data));
+        Hashtable<String, Boolean> response = reply.data;
+
+        if(response.get("reply")){
+            System.out.println("success");
+        }
+
+        return response.get("reply");
+
+    }
+
+    static Stage stage;
     public static void show(Stage primaryStage) {
         try {
             stage = primaryStage;
