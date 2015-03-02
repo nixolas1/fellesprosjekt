@@ -15,7 +15,7 @@ public class Main {
         server.database.Logic.setConn(connectDB.connect());
         //server.database.Logic.getRow("User", "username", "sondrejw");
 
-        UserModel user = new UserModel("testesen@stud.ntnu.no", "asdasdasdasd", "testesen", "stud.ntnu.no", "Test", "Testesen", "12345678");
+        //UserModel user = new UserModel("testesen@stud.ntnu.no", "asdasdasdasd", "testesen", "stud.ntnu.no", "Test", "Testesen", "12345678");
 
         //Logic.createUser(user);
         UserModel sondre = Logic.getUser("sondrejw@stud.ntnu.no");
