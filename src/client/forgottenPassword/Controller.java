@@ -20,10 +20,11 @@ public class Controller {
 
 
     @FXML public void sendNewPassword(ActionEvent event) {
-        //Sender nytt passord på mail og går tilbake til LoginView
+        client.login.Main.show(Main.stage, "Nytt passord er sendt på mail");
     }
 
     @FXML public void cancelNewPass(ActionEvent event) {
-        //Går tilbake til LoginView
+        //go back to login
+        client.login.Main.show(Main.stage);
     }
 }

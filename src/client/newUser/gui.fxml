@@ -47,7 +47,7 @@
       </Pane>
       <Pane prefHeight="100.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <children>
-            <TextField id="lastName" fx:id="lastName" layoutX="3.0" layoutY="5.0" onAction="#createUser" prefHeight="30.0" prefWidth="171.0" promptText="Etternavn" />
+            <TextField id="lastName" fx:id="lastName" layoutX="3.0" layoutY="5.0" onAction="#createUser" prefHeight="30.0" prefWidth="175.0" promptText="Etternavn" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
@@ -56,22 +56,22 @@
          </children></Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
          <children>
-            <ChoiceBox id="domain" fx:id="domain" focusTraversable="false" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="171.0" value="\@stud.ntnu.no" />
+            <ChoiceBox id="domain" fx:id="domain" focusTraversable="false" layoutX="3.0" layoutY="5.0" prefHeight="30.0" prefWidth="175.0" value="\@stud.ntnu.no" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
          <children>
-            <PasswordField id="password" fx:id="password1" layoutX="3.0" layoutY="5.0" onAction="#createUser" prefHeight="30.0" prefWidth="350.0" promptText="Passord" />
+            <PasswordField id="password" fx:id="password1" layoutX="3.0" layoutY="5.0" onAction="#createUser" prefHeight="30.0" prefWidth="354.0" promptText="Passord" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5">
          <children>
-            <PasswordField id="password2" fx:id="password11" layoutX="3.0" layoutY="3.0" onAction="#createUser" prefHeight="30.0" prefWidth="350.0" promptText="Bekreft passord" />
+            <PasswordField id="password2" fx:id="password11" layoutX="3.0" layoutY="3.0" onAction="#createUser" prefHeight="30.0" prefWidth="354.0" promptText="Bekreft passord" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6">
          <children>
-            <TextField id="phone" fx:id="phone" layoutX="3.0" layoutY="3.0" onAction="#createUser" prefHeight="30.0" prefWidth="350.0" promptText="Telefonnummer" />
+            <TextField id="phone" fx:id="phone" layoutX="3.0" layoutY="3.0" onAction="#createUser" prefHeight="30.0" prefWidth="354.0" promptText="Telefonnummer" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
@@ -81,7 +81,7 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
          <children>
-            <Button id="create" fx:id="create" layoutX="-92.0" layoutY="5.0" mnemonicParsing="false" onAction="#createUser" prefHeight="30.0" prefWidth="265.0" stylesheets="@gui.css" text="Opprett bruker" textFill="WHITE" />
+            <Button id="create" fx:id="create" layoutX="-92.0" layoutY="5.0" mnemonicParsing="false" onAction="#createUser" prefHeight="30.0" prefWidth="269.0" stylesheets="@gui.css" text="Opprett bruker" textFill="WHITE" />
          </children>
       </Pane>
    </children>

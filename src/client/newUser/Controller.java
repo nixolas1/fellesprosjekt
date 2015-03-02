@@ -105,7 +105,7 @@ public class Controller {
             //Query reply = socket.send(new Query("create",data));
             // response = (Hashtable<String, Boolean>)reply.data.get("reply");
             System.out.println("data insterted from model to database");
-            client.login.Main.show(Main.stage, "Bruker ble opprettet");
+            client.login.Main.show(Main.stage, "Brukeren ble opprettet");
         }
     }
 
