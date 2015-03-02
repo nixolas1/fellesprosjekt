@@ -105,6 +105,9 @@ public class Controller {
                 errorTxt.setTextFill(Color.RED);
                 errorTxt.setText("En feil oppstod");
             }
+        } else {
+            errorTxt.setTextFill(Color.RED);
+            errorTxt.setText("Du må fylle ut alle feltene");
         }
     }
 
