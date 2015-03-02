@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Logic {
 
-    static Connection conn;
+    private static Connection conn;
 
     public Logic(Connection connection){
         conn = connection;
@@ -47,13 +47,7 @@ public class Logic {
             System.out.println("SQLException triggered in getRow(), 2. try block: " + e);
         }
         finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            }   catch (SQLException f){
-                System.out.println("SQLExeption triggered in getUsername(), 3. try block: " + f);
-            }
+            closeDB(stmt);
         } return row;
     }
 
@@ -77,13 +71,7 @@ public class Logic {
         } catch (SQLException e) {
             System.out.println("SQLExeption triggered in getNumberOfColumns(), 2. try block: " + e);
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException f) {
-                System.out.println("SQLExeption triggered in getUsername(), 3. try block: " + f);
-            }
+            closeDB(stmt);
         } return numberOfColumns;
     }
 
@@ -104,13 +92,7 @@ public class Logic {
         /*} catch (NullPointerException e){
             return false;*/
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            }   catch (SQLException f){
-                System.out.println("SQLExeption triggered in inDatabase(), 2. try block: " + f);
-            }
+            closeDB(stmt);
         }
 
         if (queryResult.equalsIgnoreCase(attribute)){
@@ -172,13 +154,7 @@ public class Logic {
                 System.out.println("Exeption triggered in createUser(): " + g);
             } finally {
                 System.out.println("User '" + user.getEmail() + "' successfully created in database");
-                try {
-                    if (stmt != null) {
-                        stmt.close();
-                    }
-                } catch (SQLException ef){
-                    System.out.println("SQLException triggered in createUser(), in last try block");
-                }
+                closeDB(stmt);
             }
         } return true;
 
@@ -213,13 +189,7 @@ public class Logic {
                 System.out.println("Exeption triggered in createUser(): " + g);
             } finally {
                 System.out.println("User '" + user.getEmail() + "' successfully created in database");
-                try {
-                    if (stmt != null) {
-                        stmt.close();
-                    }
-                } catch (SQLException ef){
-                    System.out.println("SQLException triggered in updateUser(), in last try block");
-                }
+                closeDB(stmt);
             }
         } return true;
 
