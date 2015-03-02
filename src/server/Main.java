@@ -17,12 +17,12 @@ public class Main {
         UserModel user = new UserModel("morratilnixo", "passordhashgårinnher", "stud.ntnu.no", "nixo", "stygg", "12345678");
 
         System.out.println(Logic.createUser(user));
-        //UserModel sondre = Logic.getUser("sondrejw@stud.ntnu.no");
+        UserModel sondre = Logic.getUser("sondrejw@stud.ntnu.no");
         //System.out.println(sondre.getEmail());
 
 
-        ThreadServer socket = new ThreadServer(7777);
-        socket.startServer();
+        //ThreadServer socket = new ThreadServer(7777);
+        //socket.startServer();
 
 
     }

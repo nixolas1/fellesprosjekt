@@ -172,6 +172,54 @@ public class Logic {
                 System.out.println("Exeption triggered in createUser(): " + g);
             } finally {
                 System.out.println("User '" + user.getEmail() + "' successfully created in database");
+                try {
+                    if (stmt != null) {
+                        stmt.close();
+                    }
+                } catch (SQLException ef){
+                    System.out.println("SQLException triggered in createUser(), in last try block");
+                }
+            }
+        } return true;
+
+    }
+
+    public static boolean updateUser(UserModel user){
+        System.out.println("updateUser()");
+        //String UserTable = "email, domain, username, passwordHash, firstName, lastName, phone";
+        String query = "UPDATE User SET passwordHash = '" + user.getPassword() + "', " +
+                                                      "firstName = '" + user.getFirstName() + "', " +
+                                                      "lastName = '" + user.getLastName() + "', " +
+                                                      "phone = '" + user.getPhone() + "' WHERE " +
+                                                        "email = '" + user.getEmail() + "';";
+        System.out.println("query: " + query);
+        Statement stmt = null;
+        System.out.println("\nCHECKING IF USER ALREADY EXISTS IN DATABASE: ");
+        try {
+            if (inDatabase("email", user.getEmail(), "User")) {
+                System.out.println("User '" + user.getEmail() + "' already exists in database");
+                return false;
+            }
+        } catch (NullPointerException e){
+            // THIS EXCEPTION IS INTENTIONAL AND NECESSARY
+            // TRIGGERING IT COMFIRMES THERE ALREADY IS A USER WITH THAT EMAIL
+            //System.out.println("NullPointerException triggered in createUser()");
+            try {
+                stmt = conn.createStatement();
+                stmt.executeUpdate(query);
+            } catch (SQLException f) {
+                System.out.println("SQLExecption triggered in createUser(): " + f);
+            } catch (Exception g) {
+                System.out.println("Exeption triggered in createUser(): " + g);
+            } finally {
+                System.out.println("User '" + user.getEmail() + "' successfully created in database");
+                try {
+                    if (stmt != null) {
+                        stmt.close();
+                    }
+                } catch (SQLException ef){
+                    System.out.println("SQLException triggered in updateUser(), in last try block");
+                }
             }
         } return true;
 
@@ -216,13 +264,7 @@ public class Logic {
             System.out.println("SQLExeption triggered in getUsername(), 2. try block: " + e);
         }
         finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            }   catch (SQLException f){
-                System.out.println("SQLExeption triggered in getUsername(), 3. try block: " + f);
-            }
+            closeDB(stmt);
         }
 
         return new UserModel(username, passwordHash, domain, firstName, lastName, phone);
@@ -252,6 +294,15 @@ public class Logic {
     //System.out.println("Command executed:");
     //System.out.println(ex);
 
+    public static void closeDB(Statement stmt){
+        try {
+            if (stmt != null) {
+                stmt.close();
+            }
+        } catch (SQLException ef){
+            System.out.println("SQLException triggered in closeDB(), in last try block");
+        }
+    }
 
 
 
