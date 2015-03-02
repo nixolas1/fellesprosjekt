@@ -14,8 +14,6 @@ public class CreateUser {
 
     public CreateUser(){
         System.out.println("CreateUser()");
-        //server.database.Logic.getRow("User", "username", "sondrejw");
-        System.out.println("THE END");
     }
 
     public static Query createUser(Hashtable<String, String> data){
@@ -27,21 +25,11 @@ public class CreateUser {
                                             data.get("lastName"),
                                             data.get("phone"));
 
-            /*user.setFirstName(data.get("firstName"));
-            user.setLastName(data.get("lastName"));
-            user.setPhone(data.get("phone"));*/
 
-            server.database.Logic.createUser(user);
-
-
-
-            /*if(Database.createUser(user)){
+            Boolean createdUser = server.database.Logic.createUser(user);
+            if(createdUser){
                 return new Query("create", true);
             }
-
-
-            */
-
 
 
         }
