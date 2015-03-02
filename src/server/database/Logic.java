@@ -136,6 +136,7 @@ public class Logic {
 
 
     public static void createUser(UserModel user){
+        System.out.println("createUser()");
         //String UserTable = "email, domain, username, passwordHash, firstName, lastName, phone";
         String query = "INSERT INTO User VALUES (" + user.getEmail() + ", " +
                                                      user.getDomain() + ", " +
@@ -144,10 +145,11 @@ public class Logic {
                                                      user.getFirstName() + ", " +
                                                      user.getLastName() + ", " +
                                                      user.getPhone() + ");";
+        System.out.println("query: " + query);
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
-            stmt.executeQuery(query);
+            stmt.executeUpdate(query);
         } catch (SQLException e){
             System.out.println("SQLExecption triggered in createUser(): " + e);
         } catch (Exception e){
@@ -161,7 +163,7 @@ public class Logic {
 
 
     public static UserModel getUser(String mail) {
-        String query = "SELECT * FROM User WHERE username = '" + mail + "';";
+        String query = "SELECT * FROM User WHERE email = '" + mail + "';";
         Statement stmt = null;
         ResultSet result = null;
         String email = null, passwordHash = null, username = null, domain = null, firstName = null, lastName = null, phone = null;
@@ -181,14 +183,14 @@ public class Logic {
                 firstName = result.getString("firstName");
                 lastName = result.getString("lastName");
                 phone = result.getString("phone");
-                System.out.println("FROM DATABASE: ");
+                System.out.println("\nFROM DATABASE: ");
                 System.out.println(email);
                 System.out.println(passwordHash);
                 System.out.println(username);
                 System.out.println(domain);
                 System.out.println(firstName);
                 System.out.println(lastName);
-                System.out.println(phone);
+                System.out.println(phone + "\n");
 
             } else {
                 throw new NullPointerException("User has no entry");
