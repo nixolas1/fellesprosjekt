@@ -2,6 +2,7 @@ package server;
 
 import calendar.UserModel;
 import network.Query;
+import security.Crypto;
 import server.database.*;
 import server.database.Logic;
 
@@ -21,7 +22,7 @@ public class CreateUser {
 
             System.out.println(data.toString());
             UserModel user = new UserModel(data.get("username"),
-                                            data.get("pass"),
+                                            Crypto.hash(data.get("pass")),
                                             data.get("domain"),
                                             data.get("firstName"),
                                             data.get("lastName"),

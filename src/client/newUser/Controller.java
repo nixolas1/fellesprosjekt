@@ -35,7 +35,7 @@ public class Controller {
 
     @FXML
     void initialize() {
-        domain.setItems(FXCollections.observableArrayList("@stud.ntnu.no"));
+        domain.setItems(FXCollections.observableArrayList("stud.ntnu.no"));
         errorTxt.setText("");
         createValidationListener(username, userNameReg, 30);
         createValidationListener(firstName, nameReg, 30);

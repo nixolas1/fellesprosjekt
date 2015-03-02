@@ -16,7 +16,7 @@ public class Login {
             String username = data.get("username");
             String pass_hash = data.get("pass");
             String domain = data.get("domain");
-            String email = username+domain;
+            String email = username+"@"+domain;
 
             if(username!=null && pass_hash!=null && domain!=null) {
 
