@@ -38,6 +38,7 @@
                   <Image url="@placeholder.png" />
                </image>
             </ImageView>
+             <Label fx:id="errorTxt" layoutX="3.0" layoutY="275.0" text="Label" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">

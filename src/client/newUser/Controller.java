@@ -6,10 +6,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import network.Query;
 import network.ThreadClient;
 
@@ -122,19 +120,9 @@ public class Controller {
         client.login.Main.show(Main.stage);
     }
 
-    // validating model
-    public boolean validAllModel() {
-        if( valid(model.getFirstName(),nameReg,30) && valid(model.getLastName(),nameReg,30) && valid(model.getUsername(),userNameReg,30)
-                && valid(model.getPassword(),passwordReg,30) && valid(model.getPhone(),phoneReg,8)){
-            System.out.println("All fields in model are valid");
-            return true;
-        }
-        return false;
-    }
-
     public boolean validAllFields() {
         if ( valid(firstName.getText(),nameReg,30) && valid(lastName.getText(),nameReg,30) && valid(username.getText(),nameReg,30)
-                && valid(password1.getText(),passwordReg,50) && valid(password11.getText(),passwordReg,50) && valid(phone.getText(),phoneReg,8)) {
+                && valid(password1.getText(),passwordReg,50) && valid(password11.getText(),passwordReg,50) && password1.getText().equals(password11.getText()) && valid(phone.getText(),phoneReg,8)) {
             System.out.println("All fields are valid");
             return true;
         }
