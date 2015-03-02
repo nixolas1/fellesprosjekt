@@ -36,6 +36,7 @@ public class Controller {
     @FXML
     void initialize() {
         domain.setItems(FXCollections.observableArrayList("@stud.ntnu.no"));
+        errorTxt.setText("");
         createValidationListener(username, userNameReg, 30);
         createValidationListener(firstName, nameReg, 30);
         createValidationListener(lastName, nameReg, 30);
@@ -95,7 +96,7 @@ public class Controller {
     public void createUser(ActionEvent event) {
         if (validAllFields()) {
             // insert into DB from model
-          Boolean response = Main.createUser(model.getUsername(), model.getPassword(), model.getDomain(), model.getFirstName(), model.getLastName(), model.getPhone());
+            Boolean response = Main.createUser(model.getUsername(), model.getPassword(), model.getDomain(), model.getFirstName(), model.getLastName(), model.getPhone());
 
             if(response) {
                 System.out.println("User " + model.getUsername() + " created");
