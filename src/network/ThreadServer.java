@@ -31,14 +31,14 @@ public class ThreadServer {
     }
 
     public void startServer() {
-        System.out.println( "Server starting" );
+        System.out.print("Server start");
         try {
             echoServer = new ServerSocket(port);
         }
         catch (IOException e) {
             System.out.println(e);
         }
-
+        System.out.println( "ed" );
 
         // Whenever a connection is received, start a new thread to process the connection
         // and wait for the next connection.
