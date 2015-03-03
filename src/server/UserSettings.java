@@ -10,7 +10,7 @@ import java.util.Hashtable;
  */
 public class UserSettings {
 
-    public static Query setSettings(Hashtable<String, UserModel>){
+    public static Query setSettings(Hashtable<String, UserModel> data){
         try {
             UserModel user = new UserModel();
             //user.setUsername(data.get("username"));

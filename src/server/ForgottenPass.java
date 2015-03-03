@@ -23,13 +23,16 @@ public class ForgottenPass {
             user.setUsername(data.get("username"));
             user.setDomain(data.get("domain"));
             System.out.println(user.getEmail());
-            if(server.database.Logic.inDatabase("email", user.getEmail(),  "User")){
+            if(server.database.Logic.inDatabase("User", "email", user.getEmail())){
 
                 String pass = Crypto.generatePass(7);
 
                 //set new pass in db
                 String hash = Crypto.hash(pass);
-                //TODO store in server
+
+                UserModel serverUser = server.database.Logic.getUser(user.getEmail());
+                serverUser.setPassword(hash);
+                server.database.Logic.updateUser(serverUser);
 
                 //send pass to email
                 String subject = "TimeTo password reset";
@@ -40,11 +43,10 @@ public class ForgottenPass {
             }
 
 
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch(Exception e){
-            System.out.println("Invalid data given: "+e);
 
-        }
         return new Query("reset", false);
     }
 

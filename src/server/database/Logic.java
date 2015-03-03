@@ -1,7 +1,7 @@
 package server.database;
 
 import calendar.UserModel;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+//import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -186,7 +186,7 @@ public class Logic {
             closeDB(stmt);
         }
 
-        if (queryResult.equalsIgnoreCase(identifyingValue)){
+        if (queryResult != null && queryResult.equalsIgnoreCase(identifyingValue)){
             System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' already exists in table '" + table + "'");
             return true;
         } else {
@@ -226,7 +226,7 @@ public class Logic {
         Statement stmt = null;
         System.out.println("\nCHECKING IF USER ALREADY EXISTS IN DATABASE: ");
         try {
-            if (inDatabase("email", user.getEmail(), "User")) {
+            if (inDatabase("User", "email", user.getEmail())) {
                 System.out.println("User '" + user.getEmail() + "' already exists in database");
                 return false;
             }
@@ -257,7 +257,7 @@ public class Logic {
         Statement stmt = null;
         System.out.println("\nCHECKING IF USER ALREADY EXISTS IN DATABASE: ");
 
-        if (inDatabase("email", user.getEmail(), "User")) {
+        if (inDatabase("User",  "email",  user.getEmail())) {
             try {
                 stmt = conn.createStatement();
                 stmt.executeUpdate(query);
