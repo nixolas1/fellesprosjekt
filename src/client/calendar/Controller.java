@@ -9,6 +9,8 @@ import javafx.scene.control.ComboBox;
  */
 public class Controller {
 
+
+
     @FXML
     private ComboBox chooseCalendar;
 
@@ -19,9 +21,9 @@ public class Controller {
     }
 
     /*public void onBtnShowNewAppointment(ActionEvent event) {
-        MessageBoxController msgBox = new MessageBoxController();
+        client.newAppointment.Controller newApp = new client.newAppointment.Controller();
         try {
-            msgBox.showMessageBox(primaryStage);
+            newApp.showNewAppointment(primaryStage);
         } catch (Exception e) {
             e.printStackTrace();
         }
