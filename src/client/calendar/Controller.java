@@ -14,7 +14,16 @@ public class Controller {
 
     @FXML
     void initialize() {
-        chooseCalendar.setItems(FXCollections.observableArrayList(""));
+        chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
 
     }
+
+    /*public void onBtnShowNewAppointment(ActionEvent event) {
+        MessageBoxController msgBox = new MessageBoxController();
+        try {
+            msgBox.showMessageBox(primaryStage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
 }

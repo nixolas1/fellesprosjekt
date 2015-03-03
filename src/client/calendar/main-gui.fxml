@@ -47,6 +47,11 @@
                      <font>
                         <Font name="Helvetica Neue" size="13.0" />
                      </font></Button>
+                  <Button layoutY="6.0" mnemonicParsing="false" text="Din kalender">
+                     <font>
+                        <Font name="Helvetica Neue" size="13.0" />
+                     </font>
+                  </Button>
                </children>
             </Pane>
             <GridPane GridPane.rowIndex="1">
