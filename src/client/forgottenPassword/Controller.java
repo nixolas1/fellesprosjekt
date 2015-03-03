@@ -50,7 +50,7 @@ public class Controller {
         }
         else{
             //error tekst her
-            System.out.println("Errorxzz");
+            System.out.println("Failed to reset user password.");
         }
         } else {
             errorText.setText("Brukernavn inneholder ulovlige tegn");
