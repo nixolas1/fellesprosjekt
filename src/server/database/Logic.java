@@ -224,7 +224,7 @@ public class Logic {
                                                      user.getPhone() + "');";
         System.out.println("query: " + query);
         Statement stmt = null;
-        System.out.println("\nCHECKING IF USER ALREADY EXISTS IN DATABASE: ");
+        System.out.print("\nChecking if user in db: ");
         try {
             if (inDatabase("User", "email", user.getEmail())) {
                 System.out.println("User '" + user.getEmail() + "' already exists in database");
