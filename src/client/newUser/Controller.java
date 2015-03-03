@@ -85,14 +85,14 @@ public class Controller {
                 System.out.println("User " + model.getUsername() + " created");
                 errorTxt.setTextFill(Color.GREEN);
                 errorTxt.setText("Bruker " + model.getUsername() + " opprettet.");
-                client.login.Main.show(Main.stage, "Bruker ble opprettet");
+                client.login.Main.show(Main.stage, "Bruker ble opprettet. Passord er sendt på epost.");
 
 
 
             } else {
                 System.out.println("User NOT created");
                 errorTxt.setTextFill(Color.RED);
-                errorTxt.setText("En feil oppstod");
+                errorTxt.setText("En feil oppstod. Brukeren finnes allerede i databasen.");
             }
         } else {
             errorTxt.setTextFill(Color.RED);
