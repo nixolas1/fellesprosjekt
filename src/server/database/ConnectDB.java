@@ -4,6 +4,8 @@ package server.database;
  * Created by Sondre on 25.02.15.
  */
 
+import javax.xml.transform.Result;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
@@ -38,7 +40,7 @@ public class ConnectDB {
         Statement stmt = null;
         this.conn = null;
         Properties connectionProps = new Properties();
-        connectionProps.put("client/user", this.userName);
+        connectionProps.put("user", this.userName);
         connectionProps.put("password", this.password);
         try {
             if (this.dbms.equals("mysql")) {

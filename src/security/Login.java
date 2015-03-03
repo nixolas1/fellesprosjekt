@@ -21,11 +21,11 @@ public class Login {
             if(username!=null && pass_hash!=null && domain!=null) {
 
                 //if (ConnectDB.inDatabase(username+"@"+domain, "User", "username")){
-                //get client.user from db as UserModel
+                //get user from db as UserModel
                 //server.database.Logic.getUser(email);
-                System.out.println("Getting client.user: "+email+ " with pass: "+pass_hash);
+                System.out.println("Getting user: "+email+ " with pass: "+pass_hash);
                 UserModel user = server.database.Logic.getUser(email);//new UserModel(email, "n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=");
-                System.out.println("Got client.user: "+user.getEmail()+", "+user.getPassword());
+                System.out.println("Got user: "+user.getEmail()+", "+user.getPassword());
                 if(email.equals(user.getEmail())){
                     if(pass_hash.equals(user.getPassword())){
                         //handle new login here
@@ -35,7 +35,7 @@ public class Login {
                         return new Query("login", false, false); //false, false = wrong password
                     }
                 }else{
-                    return new Query("login", false, true); //false, true = wrong client.user/domain
+                    return new Query("login", false, true); //false, true = wrong user/domain
                 }
             }
 
