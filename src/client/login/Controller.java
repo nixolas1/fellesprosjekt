@@ -77,7 +77,14 @@ public class Controller{
             return;
         }
 
-        Hashtable<String, Boolean> response = Main.checkLogin(user, pass, domainText);
+        Hashtable<String, Boolean> response = new Query("reply", false).data;
+        try {
+            response = Main.checkLogin(user, pass, domainText);
+        }
+        catch (NullPointerException e){
+            System.out.println("Unable to connect to socket");
+            loginErrorText.setText("En tilkoblingsfeil oppstod.");
+        }
 
         if(response.get("reply")){
             //riktig!

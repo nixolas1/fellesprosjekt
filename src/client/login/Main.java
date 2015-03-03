@@ -52,9 +52,8 @@ public class Main extends Application {
             put("pass", Crypto.hash(pass));
             put("domain", domain);
         }};
-        ThreadClient socket = new ThreadClient();
 
-        Query reply = socket.send(new Query("login", data));
+        Query reply = client.Main.socket.send(new Query("login", data));
         Hashtable<String, Boolean> response = reply.data;
 
         return response;
