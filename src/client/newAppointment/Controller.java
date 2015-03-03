@@ -103,6 +103,7 @@ public class Controller {
         return users;
     }
 
+
     @FXML
     public void addUser(ActionEvent event) {
         String usr = (String) FxUtil.getComboBoxValue(usersComboBox);
