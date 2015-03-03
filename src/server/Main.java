@@ -32,8 +32,8 @@ public class Main {
         */
 
         //server.database.Logic.getNumberOfRows("User");
-        server.database.Logic.geAlltRows("User");
-        ArrayList<UserModel> hore = server.database.Logic.getAllUsers();
+        //server.database.Logic.getAllRows("User");
+        //ArrayList<UserModel> hore = server.database.Logic.getAllUsers();
 
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
