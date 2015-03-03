@@ -212,40 +212,46 @@ public class Logic {
 
 
 
-    public static boolean createUser(UserModel user){
+    public static boolean createUser(UserModel user) {
         System.out.println("createUser()");
         //String UserTable = "email, domain, username, passwordHash, firstName, lastName, phone";
         String query = "INSERT INTO User VALUES ('" + user.getEmail() + "', '" +
-                                                     user.getDomain() + "', '" +
-                                                     user.getUsername() + "', '" +
-                                                     user.getPassword() + "', '" +
-                                                     user.getFirstName() + "', '" +
-                                                     user.getLastName() + "', '" +
-                                                     user.getPhone() + "');";
+                user.getDomain() + "', '" +
+                user.getUsername() + "', '" +
+                user.getPassword() + "', '" +
+                user.getFirstName() + "', '" +
+                user.getLastName() + "', '" +
+                user.getPhone() + "');";
         System.out.println("query: " + query);
         Statement stmt = null;
-        System.out.println("\nCHECKING IF USER ALREADY EXISTS IN DATABASE: ");
+        System.out.println("\nChecking if user in db: ");
         try {
             if (inDatabase("User", "email", user.getEmail())) {
                 System.out.println("User '" + user.getEmail() + "' already exists in database");
                 return false;
+            } else {
+                try {
+                    stmt = conn.createStatement();
+                    stmt.executeUpdate(query);
+                } catch (SQLException f) {
+                    System.out.println("SQLException triggered in createUser(): " + f);
+                } finally {
+                    System.out.println("User '" + user.getEmail() + "' successfully created in database");
+                    closeDB(stmt);
+                    return true;
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Exception triggered in createUser(): " + e);
+        } return false;
+    }
+        /*
         } catch (NullPointerException e){
             // THIS EXCEPTION IS INTENTIONAL AND NECESSARY
             // TRIGGERING IT COMFIRMES THERE ALREADY IS A USER WITH THAT EMAIL
             // System.out.println("NullPointerException triggered in createUser()");
-            try {
-                stmt = conn.createStatement();
-                stmt.executeUpdate(query);
-            } catch (SQLException f) {
-                System.out.println("SQLExecption triggered in createUser(): " + f);
-            } finally {
-                System.out.println("User '" + user.getEmail() + "' successfully created in database");
-                closeDB(stmt);
-            }
-        } return true;
+            */
 
-    }
 
     public static boolean updateUser(UserModel user){
         String query = "UPDATE User SET passwordHash = '" + user.getPassword() + "', " +
