@@ -6,6 +6,8 @@ import security.Crypto;
 import server.database.*;
 import server.database.Logic;
 
+import java.util.ArrayList;
+
 /**
  * Created by Sondre on 2/24/15.
  */
@@ -28,6 +30,10 @@ public class Main {
         server.database.Logic.updateUser(sondre);
         Logic.getUser("sondrejw@stud.ntnu.no");
         */
+
+        //server.database.Logic.getNumberOfRows("User");
+        server.database.Logic.geAlltRows("User");
+        ArrayList<UserModel> hore = server.database.Logic.getAllUsers();
 
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
