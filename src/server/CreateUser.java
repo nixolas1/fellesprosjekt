@@ -27,15 +27,15 @@ public class CreateUser {
                                             data.get("lastName"),
                                             data.get("phone"));
 
-            /*user.setFirstName(data.get("firstName"));
-            user.setLastName(data.get("lastName"));
-            user.setPhone(data.get("phone"));*/
+            /*client.user.setFirstName(data.get("firstName"));
+            client.user.setLastName(data.get("lastName"));
+            client.user.setPhone(data.get("phone"));*/
 
             server.database.Logic.createUser(user);
 
 
 
-            /*if(Database.createUser(user)){
+            /*if(Database.createUser(client.user)){
                 return new Query("create", true);
             }
 

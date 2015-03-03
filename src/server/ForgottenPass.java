@@ -14,7 +14,7 @@ public class ForgottenPass {
             UserModel user = new UserModel();
             user.setUsername(data.get("username"));
             user.setDomain(data.get("domain"));
-           // user.setEmail(user.username+"@"+user.domain);
+           // client.user.setEmail(client.user.username+"@"+client.user.domain);
 
             return new Query("reset", true);
 

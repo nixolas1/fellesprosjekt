@@ -38,7 +38,7 @@ public class Controller{
         loginErrorText.setText("");
         domain.setItems(FXCollections.observableArrayList("@stud.ntnu.no"));
         if(Main.message != null){
-            //print message to user here
+            //print message to client.user here
             loginErrorText.setText(Main.message);
         }
     }
