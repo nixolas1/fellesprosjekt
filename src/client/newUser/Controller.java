@@ -19,7 +19,6 @@ public class Controller {
     @FXML private TextField username, firstName, lastName, phone;
     @FXML private ChoiceBox domain;
     @FXML private Label errorTxt;
-    @FXML private PasswordField password1, password11;
 
     @FXML private Button create, cancel;
 
@@ -38,8 +37,6 @@ public class Controller {
         createValidationListener(firstName, nameReg, 30);
         createValidationListener(lastName, nameReg, 30);
         createValidationListener(phone, phoneReg, 8);
-        createValidationListener(password1, passwordReg, 50);
-        createPassListener(password11);
 
     }
 
@@ -51,14 +48,6 @@ public class Controller {
         return false;
     }
 
-    public boolean validPassword(String password) {
-        if (valid(password, passwordReg, 50)) {
-            if (password1.getText().equals(password11.getText())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public void updateModel() {
         if(txtFieldCheck(firstName)) {
@@ -69,9 +58,6 @@ public class Controller {
         }
         if(txtFieldCheck(username)) {
             model.setUsername(username.getText());
-        }
-        if(txtFieldCheck(password1) && password1.getText().equals(password11.getText())) {
-            model.setPassword(password1.getText());
         }
         if(txtFieldCheck(phone)) {
             model.setPhone(phone.getText());
@@ -93,20 +79,20 @@ public class Controller {
     public void createUser(ActionEvent event) {
         if (validAllFields()) {
             // insert into DB from model
-            Boolean response = Main.createUser(model.getUsername(), model.getPassword(), model.getDomain(), model.getFirstName(), model.getLastName(), model.getPhone());
+            Boolean response = Main.createUser(model.getUsername(), model.getDomain(), model.getFirstName(), model.getLastName(), model.getPhone());
 
             if(response) {
                 System.out.println("User " + model.getUsername() + " created");
                 errorTxt.setTextFill(Color.GREEN);
                 errorTxt.setText("Bruker " + model.getUsername() + " opprettet.");
-                client.login.Main.show(Main.stage, "Bruker ble opprettet");
+                client.login.Main.show(Main.stage, "Bruker ble opprettet. Passord er sendt på epost.");
 
 
 
             } else {
                 System.out.println("User NOT created");
                 errorTxt.setTextFill(Color.RED);
-                errorTxt.setText("En feil oppstod");
+                errorTxt.setText("En feil oppstod. Brukeren finnes allerede i databasen.");
             }
         } else {
             errorTxt.setTextFill(Color.RED);
@@ -122,7 +108,7 @@ public class Controller {
 
     public boolean validAllFields() {
         if ( valid(firstName.getText(),nameReg,30) && valid(lastName.getText(),nameReg,30) && valid(username.getText(),nameReg,30)
-                && valid(password1.getText(),passwordReg,50) && valid(password11.getText(),passwordReg,50) && password1.getText().equals(password11.getText()) && valid(phone.getText(),phoneReg,8)) {
+                && valid(phone.getText(),phoneReg,8)) {
             System.out.println("All fields are valid");
             return true;
         }
@@ -140,22 +126,6 @@ public class Controller {
                 }
                 else{
                     System.out.println("VALID: " + newValue);
-                    updateModel();
-                    field.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
-                }
-            }
-        });
-    }
-
-    public void createPassListener(final PasswordField field) {
-        field.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!validPassword(field.getText())) {
-                    field.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
-                    System.out.println("invalid password");
-                } else {
-                    System.out.println("valid passwords");
                     updateModel();
                     field.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
                 }

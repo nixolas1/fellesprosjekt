@@ -33,11 +33,6 @@
                   <DropShadow color="#6b6b6b" height="10.69" offsetY="2.0" radius="4.672499999999999" width="10.0" />
                </effect>
             </Rectangle>
-            <Text layoutX="3.0" layoutY="280.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Skriv inn ditt brukernavn for å få tilsendt nytt passord.">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Text>
             <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="105.0" layoutY="73.0">
                <image>
                   <Image url="@placeholder.png" />

@@ -50,7 +50,7 @@ public class ThreadClient {
 
     }
 
-    public Query send(Query query){
+    public Query send(Query query) {
         try {
 
             System.out.println("Sending "+query.function);
@@ -66,7 +66,8 @@ public class ThreadClient {
         } catch (UnknownHostException e) {
             System.err.println("Trying to connect to unknown host: " + e);
         } catch (IOException e) {
-            System.err.println("IOException:  " + e);
+            System.err.println("ThreadClient IOException: " + e);
+            //throw new IOException("IO Exception: Lost connection to server");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
