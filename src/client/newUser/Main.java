@@ -34,9 +34,8 @@ public class Main extends Application {
             put("lastName", lastName);
             put("phone", phone);
         }};
-        ThreadClient socket = new ThreadClient();
 
-        Query reply = socket.send(new Query("create", data));
+        Query reply = client.Main.socket.send(new Query("create", data));
         Hashtable<String, Boolean> response = reply.data;
 
         if(response.get("reply")){
