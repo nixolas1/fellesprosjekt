@@ -25,10 +25,9 @@ public class Main extends Application {
 		}
 	}
 
-	public static boolean createUser(final String user, final String pass, final String domain, final String firstName, final String lastName, final String phone) {
+	public static boolean createUser(final String user, final String domain, final String firstName, final String lastName, final String phone) {
         Hashtable<String, String> data = new Hashtable<String, String>() {{
             put("username",user);
-            put("pass", pass);
             put("domain", domain);
             put("firstName", firstName);
             put("lastName", lastName);
