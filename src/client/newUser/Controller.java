@@ -6,10 +6,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import network.Query;
+import network.ThreadClient;
 
 import java.util.Hashtable;
 
@@ -18,7 +18,7 @@ public class Controller {
 
     @FXML private TextField username, firstName, lastName, phone;
     @FXML private ChoiceBox domain;
-
+    @FXML private Label errorTxt;
     @FXML private PasswordField password1, password11;
 
     @FXML private Button create, cancel;
@@ -32,7 +32,8 @@ public class Controller {
 
     @FXML
     void initialize() {
-        domain.setItems(FXCollections.observableArrayList("@stud.ntnu.no"));
+        domain.setItems(FXCollections.observableArrayList("stud.ntnu.no"));
+        errorTxt.setText("");
         createValidationListener(username, userNameReg, 30);
         createValidationListener(firstName, nameReg, 30);
         createValidationListener(lastName, nameReg, 30);
@@ -51,7 +52,7 @@ public class Controller {
     }
 
     public boolean validPassword(String password) {
-        if (valid(password, passwordReg, 30)) {
+        if (valid(password, passwordReg, 50)) {
             if (password1.getText().equals(password11.getText())) {
                 return true;
             }
@@ -92,18 +93,24 @@ public class Controller {
     public void createUser(ActionEvent event) {
         if (validAllFields()) {
             // insert into DB from model
-            Hashtable<String, String> data = new Hashtable<String, String>(){{
-                put("client/user",model.getUsername());
-                put("domain", model.getDomain());
-                put("pass",model.getPassword());
-                put("firstName",model.getFirstName());
-                put("lastName",model.getLastName());
-                put("phone",model.getPhone());
-            }};
-            //Query reply = socket.send(new Query("create",data));
-            // response = (Hashtable<String, Boolean>)reply.data.get("reply");
-            System.out.println("data insterted from model to database");
-            client.login.Main.show(Main.stage, "Bruker ble opprettet");
+            Boolean response = Main.createUser(model.getUsername(), model.getPassword(), model.getDomain(), model.getFirstName(), model.getLastName(), model.getPhone());
+
+            if(response) {
+                System.out.println("User " + model.getUsername() + " created");
+                errorTxt.setTextFill(Color.GREEN);
+                errorTxt.setText("Bruker " + model.getUsername() + " opprettet.");
+                client.login.Main.show(Main.stage, "Bruker ble opprettet");
+
+
+
+            } else {
+                System.out.println("User NOT created");
+                errorTxt.setTextFill(Color.RED);
+                errorTxt.setText("En feil oppstod");
+            }
+        } else {
+            errorTxt.setTextFill(Color.RED);
+            errorTxt.setText("Du må fylle ut alle feltene");
         }
     }
 
@@ -113,19 +120,9 @@ public class Controller {
         client.login.Main.show(Main.stage);
     }
 
-    // validating model
-    public boolean validAllModel() {
-        if( valid(model.getFirstName(),nameReg,30) && valid(model.getLastName(),nameReg,30) && valid(model.getUsername(),userNameReg,30)
-                && valid(model.getPassword(),passwordReg,30) && valid(model.getPhone(),phoneReg,8)){
-            System.out.println("All fields in model are valid");
-            return true;
-        }
-        return false;
-    }
-
     public boolean validAllFields() {
         if ( valid(firstName.getText(),nameReg,30) && valid(lastName.getText(),nameReg,30) && valid(username.getText(),nameReg,30)
-                && valid(password1.getText(),passwordReg,50) && valid(password11.getText(),passwordReg,50) && valid(phone.getText(),phoneReg,8)) {
+                && valid(password1.getText(),passwordReg,50) && valid(password11.getText(),passwordReg,50) && password1.getText().equals(password11.getText()) && valid(phone.getText(),phoneReg,8)) {
             System.out.println("All fields are valid");
             return true;
         }

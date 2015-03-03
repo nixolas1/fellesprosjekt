@@ -15,7 +15,7 @@ public class Logic {
             case "end": return null;
             case "login": return Login.validLogin(data);
             case "create": return CreateUser.createUser(data);
-            case "forgotten": return ForgottenPass.resetPassword(data);
+            case "reset": return ForgottenPass.resetPassword(data);
             case "getSettings": return UserSettings.getSettings(data);
             case "setSettings": return UserSettings.setSettings(data);
 

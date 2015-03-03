@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
+import network.Query;
 
 import java.util.Hashtable;
 
@@ -28,6 +29,12 @@ public class Controller {
     private String userNameReg = "^[a-zA-Z0-9_.]*$";
     private String passwordReg = "[\\S ]{6,50}$";
     private String phoneReg = "[0-9]{8}";
+    private String email;
+    UserModel user;
+
+    public Controller(String email){
+        this.email = email;
+    }
 
 
     @FXML
@@ -44,13 +51,10 @@ public class Controller {
         password11.setText("");*/
         //client.user.setEmail();
         //client.user.setFirstName();
+        user = server.database.Logic.getUser(email);
 
-        Hashtable<String, String> response = Main.getData(email);
-        final String username = response.get("username");
-        final String domain = response.get("domain");
-        String firstName = response.get("firstName");
-        String lastName = response.get("lastName");
-        String phone = response.get("phone");
+        username.setText(user.getUsername());
+
 
 
     }
@@ -75,15 +79,16 @@ public class Controller {
     public void saveChanges() {
         if (validAllFields()) {
             Hashtable<String, String> data = new Hashtable<String, String>(){{
-                put("user",model.getUsername());
-                put("domain", model.getDomain());
-                put("pass",model.getPassword());
-                put("firstName",model.getFirstName());
-                put("lastName",model.getLastName());
-                put("phone",model.getPhone());
+                put("user",user.getUsername());
+                put("domain", user.getDomain());
+                put("pass",user.getPassword());
+                put("firstName",user.getFirstName());
+                put("lastName",user.getLastName());
+                put("phone", user.getPhone());
             }};
-            //Query reply = socket.send(new Query("create",data));
-            // response = (Hashtable<String, Boolean>)reply.data.get("reply");
+            user.setUsername(username.getText());
+            Query reply = socket.send(new Query("create",data));
+            response = (Hashtable<String, Boolean>)reply.data.get("reply");
             System.out.println("data insterted from model to database");
         }
     }

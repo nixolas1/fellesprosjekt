@@ -14,9 +14,14 @@ public class ForgottenPass {
             UserModel user = new UserModel();
             user.setUsername(data.get("username"));
             user.setDomain(data.get("domain"));
-           // client.user.setEmail(client.user.username+"@"+client.user.domain);
+           // user.setEmail(user.username+"@"+user.domain);
+            System.out.println(user.getEmail());
+            if(server.database.Logic.inDatabase("email", user.getEmail(),  "User")){
+                //reset pass logic here
 
-            return new Query("reset", true);
+                return new Query("reset", true);
+            }
+
 
         }
         catch(Exception e){

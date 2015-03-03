@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Logic {
 
-    static Connection conn;
+    private static Connection conn;
 
     public Logic(Connection connection){
         conn = connection;
@@ -47,13 +47,7 @@ public class Logic {
             System.out.println("SQLException triggered in getRow(), 2. try block: " + e);
         }
         finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            }   catch (SQLException f){
-                System.out.println("SQLExeption triggered in getUsername(), 3. try block: " + f);
-            }
+            closeDB(stmt);
         } return row;
     }
 
@@ -77,13 +71,7 @@ public class Logic {
         } catch (SQLException e) {
             System.out.println("SQLExeption triggered in getNumberOfColumns(), 2. try block: " + e);
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException f) {
-                System.out.println("SQLExeption triggered in getUsername(), 3. try block: " + f);
-            }
+            closeDB(stmt);
         } return numberOfColumns;
     }
 
@@ -96,31 +84,17 @@ public class Logic {
         try {
             stmt = conn.createStatement();
             result = stmt.executeQuery(query);
-            //System.out.println("QUERY RESULT: " + result);
             queryResult = getResult(result);
-            //System.out.println("queryResult: " + queryResult);
         } catch (SQLException e) {
             System.out.println("SQLExeption triggered in inDatabase(), 1. try block: " + e);
-        /*} catch (NullPointerException e){
-            return false;*/
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            }   catch (SQLException f){
-                System.out.println("SQLExeption triggered in inDatabase(), 2. try block: " + f);
-            }
+            closeDB(stmt);
         }
 
         if (queryResult.equalsIgnoreCase(attribute)){
-            //System.out.println("queryResult == attribute");
-            //System.out.println(queryResult + " == " + attribute);
             System.out.println("'" + whatToFind + "' = '" + attribute + "' already exists in table '" + table + "'");
             return true;
         } else {
-            //System.out.println("queryResult != attribute");
-            //System.out.println(queryResult + " != " + attribute);
             System.out.println("'" + whatToFind + "' = '" + attribute + "' does not exist in table '" + table + "'");
             return false;
         }
@@ -168,13 +142,38 @@ public class Logic {
                 stmt.executeUpdate(query);
             } catch (SQLException f) {
                 System.out.println("SQLExecption triggered in createUser(): " + f);
-            } catch (Exception g) {
-                System.out.println("Exeption triggered in createUser(): " + g);
             } finally {
                 System.out.println("User '" + user.getEmail() + "' successfully created in database");
+                closeDB(stmt);
             }
         } return true;
 
+    }
+
+    public static boolean updateUser(UserModel user){
+        String query = "UPDATE User SET passwordHash = '" + user.getPassword() + "', " +
+                                                      "firstName = '" + user.getFirstName() + "', " +
+                                                      "lastName = '" + user.getLastName() + "', " +
+                                                      "phone = '" + user.getPhone() + "' WHERE " +
+                                                        "email = '" + user.getEmail() + "';";
+        System.out.println("query: " + query);
+        Statement stmt = null;
+        System.out.println("\nCHECKING IF USER ALREADY EXISTS IN DATABASE: ");
+
+        if (inDatabase("email", user.getEmail(), "User")) {
+            try {
+                stmt = conn.createStatement();
+                stmt.executeUpdate(query);
+            } catch (SQLException f) {
+                System.out.println("SQLException triggered in updateUser(): " + f);
+            } finally {
+                System.out.println("User '" + user.getEmail() + "' successfully created in database");
+                closeDB(stmt);
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 
 
@@ -201,13 +200,13 @@ public class Logic {
                 lastName = result.getString("lastName");
                 phone = result.getString("phone");
                 System.out.println("\nFROM DATABASE: ");
-                System.out.println(email);
-                System.out.println(passwordHash);
-                System.out.println(username);
-                System.out.println(domain);
-                System.out.println(firstName);
-                System.out.println(lastName);
-                System.out.println(phone + "\n");
+                System.out.println("email: + '" + email + "'");
+                System.out.println("passwordHash: '" + passwordHash + "'");
+                System.out.println("username: '" + username + "'");
+                System.out.println("domain: '" + domain + "'");
+                System.out.println("firstName: '" + firstName + "'");
+                System.out.println("lastName: '" + lastName + "'");
+                System.out.println("phone: '" + phone + "'\n");
 
             } else {
                 throw new NullPointerException("User has no entry");
@@ -216,13 +215,7 @@ public class Logic {
             System.out.println("SQLExeption triggered in getUsername(), 2. try block: " + e);
         }
         finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            }   catch (SQLException f){
-                System.out.println("SQLExeption triggered in getUsername(), 3. try block: " + f);
-            }
+            closeDB(stmt);
         }
 
         return new UserModel(username, passwordHash, domain, firstName, lastName, phone);
@@ -252,6 +245,15 @@ public class Logic {
     //System.out.println("Command executed:");
     //System.out.println(ex);
 
+    public static void closeDB(Statement stmt){
+        try {
+            if (stmt != null) {
+                stmt.close();
+            }
+        } catch (SQLException ef){
+            System.out.println("SQLException triggered in closeDB(), in last try block");
+        }
+    }
 
 
 
