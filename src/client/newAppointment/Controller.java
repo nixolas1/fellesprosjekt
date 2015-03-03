@@ -39,8 +39,6 @@ public class Controller {
     @FXML
     private Button create, add;
 
-
-
     @FXML
     private ResourceBundle resources;
 
@@ -49,11 +47,12 @@ public class Controller {
 
     private ArrayList<UserModel> allUsers;
     private ArrayList<UserModel> addedUsers;
+    private ArrayList<String> userInfo;
 
     @FXML
     void initialize() {
 
-        addedUsers = new ArrayList<UserModel>();
+        addedUsers = new ArrayList<>();
 
         createValidationListener(room, 0,   "[\\w- ]+ [\\d]+", 50);
         createValidationListener(from, 0,   "[\\d]{2}:[\\d]{2}", 5);
@@ -83,18 +82,18 @@ public class Controller {
 
         create.setDisable(true);
 
-
         allUsers = getUsersFromDB();
 
+        userInfo = displayUserInfo(allUsers);
 
-        usersComboBox.setItems(FXCollections.observableArrayList(displayUserInfo(allUsers)));
+        usersComboBox.setItems(FXCollections.observableArrayList(userInfo));
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
 
     }
 
     public ArrayList<UserModel> getUsersFromDB() {
         // Testing
-        ArrayList<UserModel> users = new ArrayList<UserModel>();
+        ArrayList<UserModel> users = new ArrayList<>();
         UserModel user1 = new UserModel("User1","passord123","stud.ntnu.no","Fornavn1","Etternavn1","12345678");
         UserModel user2 = new UserModel("User2","passord321","stud.ntnu.no","Fornavn2","Etternavn2","87654321");
         UserModel user3 = new UserModel("User3","passord111","stud.ntnu.no","Fornavn3","Etternavn3","91919191");
@@ -107,23 +106,30 @@ public class Controller {
     @FXML
     public void addUser(ActionEvent event) {
         String usr = (String) FxUtil.getComboBoxValue(usersComboBox);
-        String email = usr.split(",")[1].trim();
-        addedUsers.add(getUserModel(email));
+        // validate
+        if (userInfo.contains(usr)) {
+            String email = usr.split(",")[1].trim();
+            UserModel user = getUserModel(email);
+            if (!(addedUsers.contains(user))) {
+                addedUsers.add(user);
+            }
+        }
         FxUtil.resetSelection(usersComboBox);
+        System.out.println(addedUsers);
     }
 
     // Get UserModel from email
     public UserModel getUserModel(String email) {
-        for (int i=0; i < allUsers.size(); i++) {
-            if(allUsers.get(i).getEmail().equals(email)) {
-                return allUsers.get(i);
+        for (UserModel user : allUsers) {
+            if(user.getEmail().equals(email)) {
+                return user;
             }
         }
         return null;
     }
 
     public ArrayList<String> displayUserInfo(ArrayList<UserModel> users) {
-        ArrayList<String> userInfo = new ArrayList<String>();
+        ArrayList<String> userInfo = new ArrayList<>();
         for (UserModel user : users) {
             userInfo.add(user.displayInfo());
         }
