@@ -92,4 +92,8 @@ public class UserModel {
                 getLastName()+" telefon: "+getPhone()+" domene: "+getDomain()+" email: "+getEmail();
     }
 
+    public String displayInfo() {
+        return getFirstName() + " " + getLastName() + ", " + getEmail();
+    }
+
 }
