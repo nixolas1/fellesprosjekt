@@ -56,9 +56,11 @@ public class Controller implements Initializable{
     private ArrayList<UserModel> allUsers;
     private ObservableList<String> userInfo;
     private ObservableList<String> attendees;
+    private UserModel loggedUser;
 
-    public void showNewAppointment(Stage parentStage) {
+    public void showNewAppointment(Stage parentStage, UserModel loggedUser) {
         this.myParent = parentStage;
+        this.loggedUser = loggedUser;
 
         try {
             newAppointmentStage = new Stage();
