@@ -1,18 +1,14 @@
 package client.newAppointment;
 
-//import client.newAppointment.Main;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
+import calendar.Appointment;
 import calendar.UserModel;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,10 +23,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
-import network.ThreadClient;
-
-
-
 import static java.lang.Integer.parseInt;
 
 public class Controller implements Initializable{
@@ -59,7 +51,6 @@ public class Controller implements Initializable{
 
     @FXML private ListView attendeeList;
 
-
     private Stage myParent;
     private Stage newAppointmentStage;
     private ArrayList<UserModel> allUsers;
@@ -83,8 +74,6 @@ public class Controller implements Initializable{
             ex.printStackTrace();
         }
     }
-
-
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
@@ -116,14 +105,12 @@ public class Controller implements Initializable{
         createValidationListener(to,   2,   "[\\d]{2}:[\\d]{2}", 5);
         createValidationListener(purpose, 1, ".*", 50);
         createValidationListener(repeat,  3, "[0-9]*", 3);
-
         dateValidation(date);
         dateValidation(stoprepeat);
-
         stoprepeat.setVisible(false);
         stoplabel.setVisible(false);
 
-        create.setOnAction(new EventHandler<ActionEvent>() {
+       /* create.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if(checkIfAllValid()) {
@@ -135,20 +122,15 @@ public class Controller implements Initializable{
                 else
                     System.out.println("Some fields are invalid");
             }
-        });
-
-
+        });*/
 
         create.setDisable(true);
         attendees = FXCollections.observableArrayList(); // Listview items
-        attendeeList.setItems(attendees);
-
-
+        attendeeList.setItems(attendees); // Adding items to ListView
         allUsers = getUsersFromDB();
-
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
-        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
+        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH); // AutoCompleteMode ON
 
     }
 
@@ -156,18 +138,18 @@ public class Controller implements Initializable{
         return Main.getAllUsers();
     }
 
-
     @FXML
     public void addUser(ActionEvent event) {
         String usr = (String) FxUtil.getComboBoxValue(usersComboBox);
-        // validate
+        // validating
         if (userInfo.contains(usr)) {
            // String email = usr.split(",")[1].trim();
            // UserModel user = getUserModel(email);
             attendees.add(usr);
             userInfo.remove(usr);
             }
-        FxUtil.resetSelection(usersComboBox);
+        //FxUtil.resetSelection(usersComboBox);
+        usersComboBox.getEditor().setText("");
         System.out.println(attendees);
     }
 
@@ -191,6 +173,12 @@ public class Controller implements Initializable{
         }
     }
 
+    @FXML
+    public void createAppointment(ActionEvent event) {
+        Appointment app = new Appointment();
+
+    }
+
     public ObservableList<String> displayUserInfo(ArrayList<UserModel> users) {
         ObservableList<String> userInfo = FXCollections.observableArrayList();
         for (UserModel user : users) {
@@ -198,8 +186,6 @@ public class Controller implements Initializable{
         }
         return userInfo;
     }
-
-
 
     public boolean checkIfAllValid(){
         Boolean ret = true;
@@ -262,10 +248,8 @@ public class Controller implements Initializable{
         });
     }
 
-
-
     public void updateRepeatVisibility(TextField field){
-        if("".equals(field.getText())) {
+        if("".equals(field.getText()) || field.getText().equals("0")) {
             stoprepeat.setVisible(false);
             stoplabel.setVisible(false);
         }else{

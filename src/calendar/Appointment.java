@@ -2,13 +2,14 @@ package calendar;
 
 import server.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by nixo on 2/23/15.
  */
-public class Appointment {
+public class Appointment implements Serializable {
 
     String title;
     String purpose;
@@ -18,6 +19,9 @@ public class Appointment {
     UserModel owner;
     Calendar cal;
     public ArrayList<Attendee> attendees = new ArrayList<Attendee>();
+
+    public Appointment() {
+    }
 
     public Appointment(String title, String purpose, Date startDate, Date endDate, Room room, UserModel owner, Calendar cal){
         this.title=title;
