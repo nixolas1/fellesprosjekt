@@ -41,10 +41,9 @@ public class Controller {
     }
 
     public void logOff(ActionEvent event) {
-        //client.login.Main.show(Main.stage);
+        client.login.Main.show(Main.stage);
     }
 
     public void showUserSettings(ActionEvent event) {
-
     }
 }
