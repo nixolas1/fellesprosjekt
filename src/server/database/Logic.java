@@ -341,11 +341,6 @@ public class Logic {
         return name;
     }
 
-    // HVIS DU SKAL INSERTE ELLER UPDATE
-    // stmt.executeUpdate(createString);
-    //System.out.println("Command executed:");
-    //System.out.println(ex);
-
     public static void closeDB(Statement stmt){
         try {
             if (stmt != null) {
