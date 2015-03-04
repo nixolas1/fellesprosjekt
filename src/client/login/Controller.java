@@ -90,6 +90,7 @@ public class Controller{
             //riktig!
             System.out.println("Successful login!");
             loginErrorText.setText("Riktig! Du blir nå sendt til kalenderen din.");
+            client.calendar.Main.show(Main.stage);
         }
         else{
             try {
