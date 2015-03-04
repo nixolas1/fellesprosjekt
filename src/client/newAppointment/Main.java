@@ -19,7 +19,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("view.fxml"));;
-			Scene scene = new Scene(root,500,475);
+			Scene scene = new Scene(root,500,600);
 			/*scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());*/
 			primaryStage.setScene(scene);
 			primaryStage.show();

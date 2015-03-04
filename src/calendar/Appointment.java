@@ -1,5 +1,7 @@
 package calendar;
 
+import server.User;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -24,6 +26,55 @@ public class Appointment {
         this.endDate=endDate;
         this.room=room;
         this.owner=owner;
+        this.cal = cal;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    public String getPurpose() {
+        return purpose;
+    }
+    public Date getStartDate() {
+        return startDate;
+    }
+    public Date getEndDate() {
+        return endDate;
+    }
+    public Room getRoom() {
+        return room;
+    }
+    public UserModel getOwner() {
+        return owner;
+    }
+    public Calendar getCal() {
+        return cal;
+    }
+    public ArrayList<Attendee> getAttendees() {
+        return attendees;
+    }
+    public void addAttendee(Attendee attendee) {
+        attendees.add(attendee);
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+    public void setOwner(UserModel owner) {
+        this.owner = owner;
+    }
+    public void setCal(Calendar cal) {
         this.cal = cal;
     }
 

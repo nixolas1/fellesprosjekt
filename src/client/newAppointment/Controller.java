@@ -13,6 +13,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -48,7 +49,7 @@ public class Controller implements Initializable{
     private Label stoplabel;
 
     @FXML
-    private Button create, add;
+    private Button create, add, remove;
 
     @FXML
     private ResourceBundle resources;
@@ -56,9 +57,14 @@ public class Controller implements Initializable{
     @FXML
     private URL location;
 
+    @FXML private ListView attendeeList;
+
 
     private Stage myParent;
     private Stage newAppointmentStage;
+    private ArrayList<UserModel> allUsers;
+    private ObservableList<String> userInfo;
+    private ObservableList<String> attendees;
 
     public void showNewAppointment(Stage parentStage) {
         this.myParent = parentStage;
@@ -78,16 +84,34 @@ public class Controller implements Initializable{
         }
     }
 
-    private ArrayList<UserModel> allUsers;
-    private ArrayList<UserModel> addedUsers;
-    private ArrayList<String> userInfo;
+
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
 
-        addedUsers = new ArrayList<>();
+        add.setDisable(true);
+        remove.setDisable(true);
 
-        createValidationListener(room, 0,   "[\\w- ]+ [\\d]+", 50);
+        usersComboBox.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (usersComboBox.isFocused()) {
+                    add.setDisable(false);
+                }
+            }
+        });
+
+        attendeeList.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (attendeeList.isFocused()) {
+                    remove.setDisable(false);
+                }
+            }
+        });
+
+
+        createValidationListener(room, 0, "[\\w- ]+ [\\d]+", 50);
         createValidationListener(from, 0,   "[\\d]{2}:[\\d]{2}", 5);
         createValidationListener(to,   2,   "[\\d]{2}:[\\d]{2}", 5);
         createValidationListener(purpose, 1, ".*", 50);
@@ -113,13 +137,17 @@ public class Controller implements Initializable{
             }
         });
 
+
+
         create.setDisable(true);
+        attendees = FXCollections.observableArrayList(); // Listview items
+        attendeeList.setItems(attendees);
+
 
         allUsers = getUsersFromDB();
 
-        userInfo = displayUserInfo(allUsers);
-
-        usersComboBox.setItems(FXCollections.observableArrayList(userInfo));
+        userInfo = displayUserInfo(allUsers); // ComboBox items
+        usersComboBox.setItems(userInfo);
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
 
     }
@@ -134,16 +162,13 @@ public class Controller implements Initializable{
         String usr = (String) FxUtil.getComboBoxValue(usersComboBox);
         // validate
         if (userInfo.contains(usr)) {
-            String email = usr.split(",")[1].trim();
-            UserModel user = getUserModel(email);
-            if (!(addedUsers.contains(user))) {
-                addedUsers.add(user);
-                //userInfo.remove(usr);
-                //usersComboBox.setItems(FXCollections.observableArrayList(userInfo));
+           // String email = usr.split(",")[1].trim();
+           // UserModel user = getUserModel(email);
+            attendees.add(usr);
+            userInfo.remove(usr);
             }
-        }
         FxUtil.resetSelection(usersComboBox);
-        System.out.println(addedUsers);
+        System.out.println(attendees);
     }
 
     // Get UserModel from email
@@ -156,8 +181,18 @@ public class Controller implements Initializable{
         return null;
     }
 
-    public ArrayList<String> displayUserInfo(ArrayList<UserModel> users) {
-        ArrayList<String> userInfo = new ArrayList<>();
+    @FXML
+    public void removeUser(ActionEvent event) {
+        String usr = attendeeList.getSelectionModel().getSelectedItem().toString();
+        System.out.println(usr);
+        if (attendees.contains(usr)) {
+            attendees.remove(usr);
+            userInfo.add(usr);
+        }
+    }
+
+    public ObservableList<String> displayUserInfo(ArrayList<UserModel> users) {
+        ObservableList<String> userInfo = FXCollections.observableArrayList();
         for (UserModel user : users) {
             userInfo.add(user.displayInfo());
         }
