@@ -1,5 +1,6 @@
 package client.calendar;
 
+import calendar.UserModel;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -26,7 +27,7 @@ public class Controller {
     public void onBtnShowNewAppointment(ActionEvent event) {
         client.newAppointment.Controller newApp = new client.newAppointment.Controller();
         try {
-            newApp.showNewAppointment(primaryStage);
+            newApp.showNewAppointment(primaryStage, new UserModel("balle","okpwqeropgkr","stud.ntnu.no","balle","svin","911"));
         } catch (Exception e) {
             e.printStackTrace();
         }

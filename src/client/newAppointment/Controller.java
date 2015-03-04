@@ -1,11 +1,14 @@
 package client.newAppointment;
 
+//import client.newAppointment.Main;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import calendar.Appointment;
 import calendar.UserModel;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,6 +26,9 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
+
+
+
 import static java.lang.Integer.parseInt;
 
 public class Controller implements Initializable{
@@ -107,8 +113,10 @@ public class Controller implements Initializable{
         createValidationListener(to,   2,   "[\\d]{2}:[\\d]{2}", 5);
         createValidationListener(purpose, 1, ".*", 50);
         createValidationListener(repeat,  3, "[0-9]*", 3);
+
         dateValidation(date);
         dateValidation(stoprepeat);
+
         stoprepeat.setVisible(false);
         stoplabel.setVisible(false);
 
@@ -129,16 +137,18 @@ public class Controller implements Initializable{
         create.setDisable(true);
         attendees = FXCollections.observableArrayList(); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
-        allUsers = getUsersFromDB();
+        allUsers = calendar.UserModel.getUsersFromDB();
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH); // AutoCompleteMode ON
 
+
+        usersComboBox.setItems(FXCollections.observableArrayList(userInfo));
+        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
+
     }
 
-    public ArrayList<UserModel> getUsersFromDB() {
-        return Main.getAllUsers();
-    }
+
 
     @FXML
     public void addUser(ActionEvent event) {
@@ -188,6 +198,8 @@ public class Controller implements Initializable{
         }
         return userInfo;
     }
+
+
 
     public boolean checkIfAllValid(){
         Boolean ret = true;
@@ -249,6 +261,8 @@ public class Controller implements Initializable{
             }
         });
     }
+
+
 
     public void updateRepeatVisibility(TextField field){
         if("".equals(field.getText()) || field.getText().equals("0")) {

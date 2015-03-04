@@ -1,5 +1,7 @@
 package calendar;
 
+import client.newAppointment.Main;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -96,6 +98,10 @@ public class UserModel implements Serializable {
 
     public String displayInfo() {
         return getFirstName() + " " + getLastName() + ", " + getEmail();
+    }
+
+    public static ArrayList<UserModel> getUsersFromDB() {
+        return Main.getAllUsers();
     }
 
 }
