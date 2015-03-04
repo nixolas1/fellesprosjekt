@@ -1,8 +1,10 @@
 package calendar;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.io.Serializable;
 
-public class UserModel implements Serializable{
+public class UserModel implements Serializable {
 
     private String username = "";
     private String firstName = "";
@@ -11,6 +13,7 @@ public class UserModel implements Serializable{
     private String password = "";
     private String domain = "";
     private String email = "";
+    private ArrayList<Calendar> calendar = new ArrayList<Calendar>();
 
     public UserModel(){};
 
@@ -49,6 +52,9 @@ public class UserModel implements Serializable{
     public String getDomain() {
         return domain;
     }
+
+    public void setCalendars(ArrayList<Calendar> cal){this.calendar=cal;}
+    public void addCalendar(Calendar cal){this.calendar.add(cal);}
 
     public void setDomain(String domain) {
         this.domain = domain;
