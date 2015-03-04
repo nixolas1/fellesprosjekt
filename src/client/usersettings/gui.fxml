@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<GridPane prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.user.Controller">
+<GridPane prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.userSettings.Controller">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="1030.0" minWidth="1030.0" prefWidth="1030.0" />

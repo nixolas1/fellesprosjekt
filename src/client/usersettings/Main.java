@@ -1,4 +1,4 @@
-package client.usersettings;
+package client.userSettings;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,9 +22,11 @@ public class Main extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (Exception e) {
+            System.out.println("EXCEPTION FFS");
             e.printStackTrace();
         }
     }
+    /*
 
     public static void show(Stage primaryStage) {
         show(primaryStage, null);
@@ -42,4 +44,5 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
+    */
 }
