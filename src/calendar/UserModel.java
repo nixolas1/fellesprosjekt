@@ -1,8 +1,12 @@
 package calendar;
 
-import java.util.ArrayList;
+import client.newAppointment.Main;
 
-public class UserModel {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.io.Serializable;
+
+public class UserModel implements Serializable {
 
     private String username = "";
     private String firstName = "";
@@ -88,12 +92,16 @@ public class UserModel {
     }
 
     public String toString(){
-        return "Bruker: "+getUsername()+" passord: "+getPassword()+" fornavn: "+getFirstName()+" etternavn: "+
-                getLastName()+" telefon: "+getPhone()+" domene: "+getDomain()+" email: "+getEmail();
+        return "[Bruker: "+getUsername()+" passord: "+getPassword()+" fornavn: "+getFirstName()+" etternavn: "+
+                getLastName()+" telefon: "+getPhone()+" domene: "+getDomain()+" email: "+getEmail() + "]";
     }
 
     public String displayInfo() {
         return getFirstName() + " " + getLastName() + ", " + getEmail();
+    }
+
+    public static ArrayList<UserModel> getUsersFromDB() {
+        return Main.getAllUsers();
     }
 
 }
