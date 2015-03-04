@@ -44,7 +44,7 @@ public class Main extends Application {
         }
     }
 
-    public static boolean createUser(final String username, final String password, final String domain, final String firstName, final String lastName, final String phone) {
+    public static boolean updateUser(final String username, final String password, final String domain, final String firstName, final String lastName, final String phone) {
         // username, password, domain, firstName, lastName, phone
         Hashtable<String, String> data = new Hashtable<String, String>() {{
             put("username",username);

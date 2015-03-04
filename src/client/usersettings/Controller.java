@@ -69,12 +69,16 @@ public class Controller{
     }
 
     public void saveChanges(){
-        System.out.println("saveChanges()");
+        updateUser();
     }
 
     public boolean hasChangedPassword(){
-        if (password1.getText().length() > 0 && password11.getText().length() > 0) return true;
-        else return true;
+        System.out.println("hasChangedPassword()");
+        if (password1.getText().length() > 0 && password11.getText().length() > 0) {
+            System.out.println("password1.getText().length():" + password1.getText().length());
+            System.out.println("password11.getText().length():" + password11.getText().length());
+            return true;
+        } else return false;
     }
 
     public boolean validatePasswordFields() {
@@ -86,42 +90,43 @@ public class Controller{
 
 
     @FXML
-    public void updateUser(ActionEvent event) {
+    public void updateUser() {
+        System.out.println("updateUser()");
         // TODO  -->   username, password, domain, firstName, lastName, phone
         if (hasChangedPassword()){
             if (validAllFields() && validatePasswordFields()){
-                Boolean response = client.userSettings.Main.createUser(
+                Boolean response = client.userSettings.Main.updateUser(
                                     model.getUsername(),
                                     Crypto.hash(password1.getText()),
                                     model.getDomain(),
                                     firstName.getText(),
                                     lastName.getText(),
                                     phone.getText());
-            }
-        } else {
-
-        }
-
-        if (validAllFields()) {
-            // insert into DB from model
-            Boolean response = client.newUser.Main.createUser(model.getUsername(), model.getDomain(), model.getFirstName(), model.getLastName(), model.getPhone());
-
-            if(response) {
-                System.out.println("User " + model.getUsername() + " created");
-                errorTxt.setTextFill(Color.GREEN);
-                errorTxt.setText("Bruker " + model.getUsername() + " opprettet.");
-                client.login.Main.show(client.newUser.Main.stage, "Bruker ble opprettet. Passord er sendt på epost.");
-
-
-
+                if (response) {
+                    System.out.println("User settings updated");
+                } else {
+                    System.out.println("Something wrong happened in updating user settings");
+                }
             } else {
-                System.out.println("User NOT created");
-                errorTxt.setTextFill(Color.RED);
-                errorTxt.setText("En feil oppstod. Brukeren finnes allerede i databasen.");
+                System.out.println("One og more fields are not correct");
             }
         } else {
-            errorTxt.setTextFill(Color.RED);
-            errorTxt.setText("Du må fylle ut alle feltene");
+            if (validAllFields()){
+                Boolean response = client.userSettings.Main.updateUser(
+                        model.getUsername(),
+                        model.getPassword(),
+                        model.getDomain(),
+                        firstName.getText(),
+                        lastName.getText(),
+                        phone.getText());
+                if (response) {
+                    System.out.println("User settings updated");
+                } else {
+                    System.out.println("Something wrong happened in updating user settings");
+                }
+            } else {
+                System.out.println("One og more fields are not correct");
+            }
         }
     }
 
