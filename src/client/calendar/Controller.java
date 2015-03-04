@@ -45,5 +45,6 @@ public class Controller {
     }
 
     public void showUserSettings(ActionEvent event) {
+        client.usersettings.Main.show(Main.stage);
     }
 }
