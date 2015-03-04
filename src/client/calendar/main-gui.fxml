@@ -31,10 +31,10 @@
                <children>
                   <Rectangle height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1030.0">
                      <fill>
-                        <LinearGradient endX="0.46153846153846156" startX="0.46153846153846156" startY="1.0">
+                        <LinearGradient endX="0.46153846153846156" startX="0.46153846153846156">
                            <stops>
-                              <Stop color="#a1a1a1" />
-                              <Stop color="#d7d7d7" offset="1.0" />
+                              <Stop color="#d6d6d6" />
+                              <Stop color="#a1a1a1" offset="1.0" />
                            </stops>
                         </LinearGradient>
                      </fill>
@@ -47,6 +47,11 @@
                      <font>
                         <Font name="Helvetica Neue" size="13.0" />
                      </font></Button>
+                  <Button layoutY="6.0" mnemonicParsing="false" text="Din kalender">
+                     <font>
+                        <Font name="Helvetica Neue" size="13.0" />
+                     </font>
+                  </Button>
                </children>
             </Pane>
             <GridPane GridPane.rowIndex="1">
@@ -477,7 +482,7 @@
             </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
                <children>
-                  <Button layoutX="10.0" layoutY="7.0" mnemonicParsing="false" text="Opprett hendelse">
+                  <Button fx:id="createApp" layoutX="10.0" layoutY="7.0" mnemonicParsing="false" onAction="#onBtnShowNewAppointment" text="Opprett hendelse">
                      <font>
                         <Font name="Helvetica Neue" size="13.0" />
                      </font></Button>
@@ -496,10 +501,10 @@
                <children>
                   <Rectangle height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="170.0">
                      <fill>
-                        <LinearGradient endX="0.46153846153846156" startX="0.46153846153846156" startY="1.0">
+                        <LinearGradient endX="0.46153846153846156" endY="1.0" startX="0.46153846153846156">
                            <stops>
-                              <Stop color="#a1a1a1" />
-                              <Stop color="#d7d7d7" offset="1.0" />
+                              <Stop color="#d6d6d6" />
+                              <Stop color="#a1a1a1" offset="1.0" />
                            </stops>
                         </LinearGradient>
                      </fill>
