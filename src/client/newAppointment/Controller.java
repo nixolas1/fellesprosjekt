@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import calendar.UserModel;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
