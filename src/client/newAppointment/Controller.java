@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import calendar.UserModel;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import network.ThreadClient;
 
 import static java.lang.Integer.parseInt;
 
@@ -92,15 +92,7 @@ public class Controller {
     }
 
     public ArrayList<UserModel> getUsersFromDB() {
-        // Testing
-        ArrayList<UserModel> users = new ArrayList<>();
-        UserModel user1 = new UserModel("User1","passord123","stud.ntnu.no","Fornavn1","Etternavn1","12345678");
-        UserModel user2 = new UserModel("User2","passord321","stud.ntnu.no","Fornavn2","Etternavn2","87654321");
-        UserModel user3 = new UserModel("User3","passord111","stud.ntnu.no","Fornavn3","Etternavn3","91919191");
-        users.add(user1);
-        users.add(user2);
-        users.add(user3);
-        return users;
+        return Main.getAllUsers();
     }
 
 
@@ -113,6 +105,8 @@ public class Controller {
             UserModel user = getUserModel(email);
             if (!(addedUsers.contains(user))) {
                 addedUsers.add(user);
+                //userInfo.remove(usr);
+                //usersComboBox.setItems(FXCollections.observableArrayList(userInfo));
             }
         }
         FxUtil.resetSelection(usersComboBox);

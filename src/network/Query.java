@@ -1,6 +1,9 @@
 package network;
 
+import calendar.UserModel;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class Query implements Serializable{
@@ -15,6 +18,11 @@ public class Query implements Serializable{
     public Query(String function, final String data){
         this.function = function;
         this.data = new Hashtable<String, String>(){{put("reply", data);}};
+    }
+
+    public Query(String function, final ArrayList<UserModel> data) {
+        this.function = function;
+        this.data = new Hashtable<String, ArrayList<UserModel>>(){{put("reply",data);}};
     }
 
     public Query(String function, final Boolean valid){

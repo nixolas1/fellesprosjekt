@@ -18,6 +18,7 @@ public class Logic {
             case "reset": return ForgottenPass.resetPassword(data);
             case "getSettings": return UserSettings.getSettings(data);
             case "setSettings": return UserSettings.setSettings(data);
+            case "getAllUsers": return User.getAllUsers();
 
 
         }
