@@ -1,6 +1,7 @@
 package client.userSettings;
 
 import calendar.UserModel;
+import client.newUser.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,7 +25,6 @@ public class Controller{
     @FXML private Button cancel, save;
 
     private String nameReg = "[A-Za-z,æ,ø,å,Æ,Ø,Å,-, ]+";
-    private String userNameReg = "^[a-zA-Z0-9_.]*$";
     private String passwordReg = "[\\S ]{6,50}$";
     private String phoneReg = "[0-9]{8}";
 
@@ -35,15 +35,8 @@ public class Controller{
     @FXML
     void initialize() {
         //model = client.userSettings.Main.user;
-        // TODO username, password, domain, firstName, lastName, phone
+        // username, password, domain, firstName, lastName, phone
         model = new UserModel("sondreheiho", Crypto.hash("morra"), "stud.ntnu.no", "Sondre", "Den Beste", "12345678");
-        /*
-        username = new TextField();
-        domain = new TextField();
-        firstName = new TextField();
-        lastName = new TextField();
-        phone = new TextField();
-        */
         createValidationListener(password1, passwordReg, 50);
         createPasswordValidationListener(password11, passwordReg, 50);
         createValidationListener(firstName, nameReg, 30);
@@ -77,6 +70,69 @@ public class Controller{
 
     public void saveChanges(){
         System.out.println("saveChanges()");
+    }
+
+    public boolean hasChangedPassword(){
+        if (password1.getText().length() > 0 && password11.getText().length() > 0) return true;
+        else return true;
+    }
+
+    public boolean validatePasswordFields() {
+        if (valid(password1.getText(), passwordReg,50) && valid(password11.getText(),passwordReg,50)) {
+            System.out.println("All fields are valid");
+            return true;
+        } return false;
+    }
+
+
+    @FXML
+    public void updateUser(ActionEvent event) {
+        // TODO  -->   username, password, domain, firstName, lastName, phone
+        if (hasChangedPassword()){
+            if (validAllFields() && validatePasswordFields()){
+                Boolean response = client.userSettings.Main.createUser(
+                                    model.getUsername(),
+                                    Crypto.hash(password1.getText()),
+                                    model.getDomain(),
+                                    firstName.getText(),
+                                    lastName.getText(),
+                                    phone.getText());
+            }
+        } else {
+
+        }
+
+        if (validAllFields()) {
+            // insert into DB from model
+            Boolean response = client.newUser.Main.createUser(model.getUsername(), model.getDomain(), model.getFirstName(), model.getLastName(), model.getPhone());
+
+            if(response) {
+                System.out.println("User " + model.getUsername() + " created");
+                errorTxt.setTextFill(Color.GREEN);
+                errorTxt.setText("Bruker " + model.getUsername() + " opprettet.");
+                client.login.Main.show(client.newUser.Main.stage, "Bruker ble opprettet. Passord er sendt på epost.");
+
+
+
+            } else {
+                System.out.println("User NOT created");
+                errorTxt.setTextFill(Color.RED);
+                errorTxt.setText("En feil oppstod. Brukeren finnes allerede i databasen.");
+            }
+        } else {
+            errorTxt.setTextFill(Color.RED);
+            errorTxt.setText("Du må fylle ut alle feltene");
+        }
+    }
+
+
+    public boolean validAllFields() {
+        if ( valid(firstName.getText(),nameReg,30) && valid(lastName.getText(),nameReg,30) && valid(username.getText(),nameReg,30)
+                && valid(phone.getText(),phoneReg,8)) {
+            System.out.println("All fields are valid");
+            return true;
+        }
+        return false;
     }
 
     public void createValidationListener(final TextField field, final String match, final int max){
