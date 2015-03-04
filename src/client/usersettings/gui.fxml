@@ -8,7 +8,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <GridPane prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.userSettings.Controller">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" />
@@ -38,7 +37,7 @@
             <children>
                 <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
-                        <TextField fx:id="username" layoutY="24.0" maxHeight="40.0" maxWidth="170.0" minHeight="40.0" minWidth="175.0" prefHeight="40.0" prefWidth="170.0" promptText="Brukernavn">
+                        <TextField fx:id="username" layoutY="24.0" maxHeight="40.0" maxWidth="175.0" minHeight="40.0" minWidth="175.0" prefHeight="40.0" prefWidth="175.0" promptText="Brukernavn">
                             <font>
                                 <Font name="Helvetica Neue" size="13.0" />
                             </font>
@@ -73,13 +72,9 @@
                     </children>
                 </Pane>
                 <Pane prefHeight="60.0" prefWidth="293.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                    <children>
-                        <TextField fx:id="domain" layoutX="5.0" layoutY="24.0" maxHeight="40.0" maxWidth="170.0" minHeight="40.0" minWidth="175.0" prefHeight="40.0" prefWidth="170.0" promptText="Domene">
-                            <font>
-                                <Font name="Helvetica Neue" size="13.0" />
-                            </font>
-                        </TextField>
-                    </children>
+               <children>
+                  <ChoiceBox fx:id="domain" layoutX="5.0" layoutY="24.0" maxHeight="40.0" maxWidth="175.0" minHeight="40.0" minWidth="175.0" prefHeight="40.0" prefWidth="175.0" />
+               </children>
                 </Pane>
                 <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                     <children>

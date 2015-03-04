@@ -16,7 +16,7 @@ import javafx.scene.paint.Color;
 public class Controller{
 
     @FXML private TextField username;
-    @FXML private TextField domain;
+    @FXML private ChoiceBox domain;
     @FXML private Text loginErrorText;
     @FXML private PasswordField password;
 
