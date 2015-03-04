@@ -4,6 +4,7 @@ import network.Query;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.io.Serializable;
 
 public class UserModel {
 
@@ -91,12 +92,16 @@ public class UserModel {
     }
 
     public String toString(){
-        return "Bruker: "+getUsername()+" passord: "+getPassword()+" fornavn: "+getFirstName()+" etternavn: "+
-                getLastName()+" telefon: "+getPhone()+" domene: "+getDomain()+" email: "+getEmail();
+        return "[Bruker: "+getUsername()+" passord: "+getPassword()+" fornavn: "+getFirstName()+" etternavn: "+
+                getLastName()+" telefon: "+getPhone()+" domene: "+getDomain()+" email: "+getEmail() + "]";
     }
 
     public String displayInfo() {
         return getFirstName() + " " + getLastName() + ", " + getEmail();
+    }
+
+    public static ArrayList<UserModel> getUsersFromDB() {
+        return client.newAppointment.Main.getAllUsers();
     }
 
     public static UserModel getUserFromServer(final String user, final String domain){

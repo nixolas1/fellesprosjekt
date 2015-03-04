@@ -6,13 +6,13 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
+import calendar.Appointment;
 import calendar.UserModel;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -47,7 +47,7 @@ public class Controller implements Initializable{
     private Label stoplabel;
 
     @FXML
-    private Button create, add;
+    private Button create, add, remove;
 
     @FXML
     private ResourceBundle resources;
@@ -55,14 +55,20 @@ public class Controller implements Initializable{
     @FXML
     private URL location;
 
+    @FXML private ListView attendeeList;
 
     private Stage myParent;
     private Stage newAppointmentStage;
+    private ArrayList<UserModel> allUsers;
+    private ObservableList<String> userInfo;
+    private ObservableList<String> attendees;
+    private UserModel loggedUser;
     UserModel user = new UserModel();
 
     public void showNewAppointment(Stage parentStage, UserModel loggedUser) {
         this.myParent = parentStage;
-        user=loggedUser;
+        this.loggedUser = loggedUser;
+
         try {
             newAppointmentStage = new Stage();
             GridPane pane = (GridPane) FXMLLoader.load(Controller.class.getResource("view.fxml"));
@@ -78,16 +84,32 @@ public class Controller implements Initializable{
         }
     }
 
-    private ArrayList<UserModel> allUsers;
-    private ArrayList<UserModel> addedUsers;
-    private ArrayList<String> userInfo;
-
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
 
-        addedUsers = new ArrayList<>();
+        add.setDisable(true);
+        remove.setDisable(true);
 
-        createValidationListener(room, 0,   "[\\w- ]+ [\\d]+", 50);
+        usersComboBox.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (usersComboBox.isFocused()) {
+                    add.setDisable(false);
+                }
+            }
+        });
+
+        attendeeList.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (attendeeList.isFocused()) {
+                    remove.setDisable(false);
+                }
+            }
+        });
+
+
+        createValidationListener(room, 0, "[\\w- ]+ [\\d]+", 50);
         createValidationListener(from, 0,   "[\\d]{2}:[\\d]{2}", 5);
         createValidationListener(to,   2,   "[\\d]{2}:[\\d]{2}", 5);
         createValidationListener(purpose, 1, ".*", 50);
@@ -99,7 +121,7 @@ public class Controller implements Initializable{
         stoprepeat.setVisible(false);
         stoplabel.setVisible(false);
 
-        create.setOnAction(new EventHandler<ActionEvent>() {
+       /* create.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if(checkIfAllValid()) {
@@ -111,45 +133,37 @@ public class Controller implements Initializable{
                 else
                     System.out.println("Some fields are invalid");
             }
-        });
+        });*/
 
         create.setDisable(true);
+        attendees = FXCollections.observableArrayList(); // Listview items
+        attendeeList.setItems(attendees); // Adding items to ListView
+        allUsers = calendar.UserModel.getUsersFromDB();
+        userInfo = displayUserInfo(allUsers); // ComboBox items
+        usersComboBox.setItems(userInfo);
+        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH); // AutoCompleteMode ON
 
-        allUsers = getUsersFromDB();
-
-        userInfo = displayUserInfo(allUsers);
 
         usersComboBox.setItems(FXCollections.observableArrayList(userInfo));
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
 
     }
 
-    public ArrayList<UserModel> getUsersFromDB() {
-        // Testing
-        ArrayList<UserModel> users = new ArrayList<>();
-        UserModel user1 = new UserModel("User1","passord123","stud.ntnu.no","Fornavn1","Etternavn1","12345678");
-        UserModel user2 = new UserModel("User2","passord321","stud.ntnu.no","Fornavn2","Etternavn2","87654321");
-        UserModel user3 = new UserModel("User3","passord111","stud.ntnu.no","Fornavn3","Etternavn3","91919191");
-        users.add(user1);
-        users.add(user2);
-        users.add(user3);
-        return users;
-    }
 
 
     @FXML
     public void addUser(ActionEvent event) {
         String usr = (String) FxUtil.getComboBoxValue(usersComboBox);
-        // validate
+        // validating
         if (userInfo.contains(usr)) {
-            String email = usr.split(",")[1].trim();
-            UserModel user = getUserModel(email);
-            if (!(addedUsers.contains(user))) {
-                addedUsers.add(user);
+           // String email = usr.split(",")[1].trim();
+           // UserModel user = getUserModel(email);
+            attendees.add(usr);
+            userInfo.remove(usr);
             }
-        }
-        FxUtil.resetSelection(usersComboBox);
-        System.out.println(addedUsers);
+        //FxUtil.resetSelection(usersComboBox);
+        usersComboBox.getEditor().setText("");
+        System.out.println(attendees);
     }
 
     // Get UserModel from email
@@ -162,8 +176,24 @@ public class Controller implements Initializable{
         return null;
     }
 
-    public ArrayList<String> displayUserInfo(ArrayList<UserModel> users) {
-        ArrayList<String> userInfo = new ArrayList<>();
+    @FXML
+    public void removeUser(ActionEvent event) {
+        String usr = attendeeList.getSelectionModel().getSelectedItem().toString();
+        System.out.println(usr);
+        if (attendees.contains(usr)) {
+            attendees.remove(usr);
+            userInfo.add(usr);
+        }
+    }
+
+    @FXML
+    public void createAppointment(ActionEvent event) {
+        Appointment app = new Appointment();
+
+    }
+
+    public ObservableList<String> displayUserInfo(ArrayList<UserModel> users) {
+        ObservableList<String> userInfo = FXCollections.observableArrayList();
         for (UserModel user : users) {
             userInfo.add(user.displayInfo());
         }
@@ -236,7 +266,7 @@ public class Controller implements Initializable{
 
 
     public void updateRepeatVisibility(TextField field){
-        if("".equals(field.getText())) {
+        if("".equals(field.getText()) || field.getText().equals("0")) {
             stoprepeat.setVisible(false);
             stoplabel.setVisible(false);
         }else{
