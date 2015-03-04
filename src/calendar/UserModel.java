@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.io.Serializable;
 
-public class UserModel {
+public class UserModel implements Serializable{
 
     private String username = "";
     private String firstName = "";
@@ -114,7 +114,6 @@ public class UserModel {
 
         Query reply = client.Main.socket.send(new Query("getUser", data));
         Hashtable<String, UserModel> response = reply.data;
-
         return response.get("reply");
     }
 
