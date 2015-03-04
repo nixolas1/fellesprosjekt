@@ -1,5 +1,6 @@
 package client.userSettings;
 
+import calendar.UserModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,7 +12,8 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
     static Stage stage;
-    static String message = null;
+    static UserModel user;
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -22,20 +24,14 @@ public class Main extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (Exception e) {
-            System.out.println("EXCEPTION FFS");
             e.printStackTrace();
         }
     }
-    /*
 
-    public static void show(Stage primaryStage) {
-        show(primaryStage, null);
-    }
-
-    public static void show(Stage primaryStage, String msg) {
+    public static void show(Stage primaryStage, UserModel model) {
         try {
             stage = primaryStage;
-            message = msg;
+            user = model;
             GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));
             Scene scene = new Scene(root, 1200, 800);
             primaryStage.setScene(scene);
@@ -44,5 +40,5 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-    */
+
 }

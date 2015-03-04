@@ -56,7 +56,7 @@
                 </Pane>
                 <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
                     <children>
-                        <Button fx:id="create" layoutX="-90.0" layoutY="10.0" maxHeight="40.0" maxWidth="270.0" minHeight="40.0" minWidth="270.0" mnemonicParsing="false" onAction="#saveChanges" prefHeight="40.0" prefWidth="270.0" stylesheets="@gui.css" text="Lagre endringer" textFill="WHITE">
+                        <Button fx:id="save" layoutX="-90.0" layoutY="10.0" maxHeight="40.0" maxWidth="270.0" minHeight="40.0" minWidth="270.0" mnemonicParsing="false" onAction="#saveChanges" prefHeight="40.0" prefWidth="270.0" stylesheets="@gui.css" text="Lagre endringer" textFill="WHITE">
                             <font>
                                 <Font name="Helvetica Neue" size="13.0" />
                             </font>
