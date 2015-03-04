@@ -72,10 +72,8 @@ public class Logic {
                 for (int i = 0; i < row.length; i++) {
                     allRows.get(count).add(result.getString(i + 1));
                     System.out.println(table + "[" + count + "][" + i + "]: " + result.getString(i + 1));
-                    /*row[i] = result.getString(i + 1);
-                    System.out.println("row[" + i + "]: " + row[i]);*/
                 } count ++;
-                System.out.println("\n");
+                System.out.println("");
             }
         } catch (SQLException e){
             System.out.println("SQLException triggered in getRows(), 2. try block: " + e);
