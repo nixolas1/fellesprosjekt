@@ -11,14 +11,21 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.*;
+import javafx.scene.layout.GridPane;
+import javafx.stage.*;
+import javafx.fxml.*;
+
+
 
 import static java.lang.Integer.parseInt;
 
-public class Controller {
+public class Controller implements Initializable{
 
 
     @FXML
@@ -39,8 +46,30 @@ public class Controller {
     @FXML
     private URL location;
 
+
+    private Stage myParent;
+    private Stage newAppointmentStage;
+
+    public void showNewAppointment(Stage parentStage) {
+        this.myParent = parentStage;
+
+        try {
+            newAppointmentStage = new Stage();
+            GridPane pane = (GridPane) FXMLLoader.load(Controller.class.getResource("view.fxml"));
+            Scene scene = new Scene(pane);
+            newAppointmentStage.setScene(scene);
+            newAppointmentStage.setTitle("Ny avtale");
+            newAppointmentStage.initOwner(this.myParent);
+            newAppointmentStage.initModality(Modality.WINDOW_MODAL);
+            newAppointmentStage.show();
+        } catch (Exception ex) {
+            System.out.println("Exception found in newAppointment");
+            ex.printStackTrace();
+        }
+    }
+
     @FXML
-    void initialize() {
+    public void initialize(URL location, ResourceBundle resources) {
 
         createValidationListener(room, 0,   "[\\w- ]+ [\\d]+", 50);
         createValidationListener(from, 0,   "[\\d]{2}:[\\d]{2}", 5);
