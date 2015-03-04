@@ -58,10 +58,11 @@ public class Controller implements Initializable{
 
     private Stage myParent;
     private Stage newAppointmentStage;
+    UserModel user = new UserModel();
 
-    public void showNewAppointment(Stage parentStage) {
+    public void showNewAppointment(Stage parentStage, UserModel loggedUser) {
         this.myParent = parentStage;
-
+        user=loggedUser;
         try {
             newAppointmentStage = new Stage();
             GridPane pane = (GridPane) FXMLLoader.load(Controller.class.getResource("view.fxml"));

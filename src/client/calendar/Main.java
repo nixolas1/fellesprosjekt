@@ -1,5 +1,6 @@
 package client.calendar;
 
+import calendar.UserModel;
 import client.newAppointment.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -28,9 +29,11 @@ public class Main extends Application {
     }
 
     static Stage stage;
-    public static void show(Stage primaryStage) {
+    static UserModel user;
+    public static void show(Stage primaryStage, UserModel loggedUser) {
         try {
             stage = primaryStage;
+            user = loggedUser;
             GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("main-gui.fxml"));
             Scene scene = new Scene(root, 1200, 800);
             primaryStage.setScene(scene);

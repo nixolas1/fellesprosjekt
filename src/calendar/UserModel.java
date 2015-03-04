@@ -1,6 +1,9 @@
 package calendar;
 
+import network.Query;
+
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class UserModel {
 
@@ -95,5 +98,20 @@ public class UserModel {
     public String displayInfo() {
         return getFirstName() + " " + getLastName() + ", " + getEmail();
     }
+
+    public static UserModel getUserFromServer(final String user, final String domain){
+
+        System.out.println("Getting user: "+user+", "+domain);
+        Hashtable<String, String> data = new Hashtable<String, String>(){{
+            put("username",user);
+            put("domain", domain);
+        }};
+
+        Query reply = client.Main.socket.send(new Query("getUser", data));
+        Hashtable<String, UserModel> response = reply.data;
+
+        return response.get("reply");
+    }
+
 
 }
