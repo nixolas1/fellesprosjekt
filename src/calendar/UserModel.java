@@ -1,5 +1,7 @@
 package calendar;
 
+import java.util.ArrayList;
+
 public class UserModel {
 
     private String username = "";
@@ -9,6 +11,7 @@ public class UserModel {
     private String password = "";
     private String domain = "";
     private String email = "";
+    private ArrayList<Calendar> calendar = new ArrayList<Calendar>();
 
     public UserModel(){};
 
@@ -47,6 +50,9 @@ public class UserModel {
     public String getDomain() {
         return domain;
     }
+
+    public void setCalendars(ArrayList<Calendar> cal){this.calendar=cal;}
+    public void addCalendar(Calendar cal){this.calendar.add(cal);}
 
     public void setDomain(String domain) {
         this.domain = domain;

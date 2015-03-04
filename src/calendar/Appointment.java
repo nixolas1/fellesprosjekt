@@ -1,5 +1,6 @@
 package calendar;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -14,6 +15,8 @@ public class Appointment {
     Room room;
     UserModel owner;
     Calendar cal;
+    public ArrayList<Attendee> attendees = new ArrayList<Attendee>();
+
     public Appointment(String title, String purpose, Date startDate, Date endDate, Room room, UserModel owner, Calendar cal){
         this.title=title;
         this.purpose=purpose;
@@ -23,4 +26,5 @@ public class Appointment {
         this.owner=owner;
         this.cal = cal;
     }
+
 }
