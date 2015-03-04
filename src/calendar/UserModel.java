@@ -17,8 +17,7 @@ public class UserModel {
         setPassword(password);
     }
 
-    public UserModel(String email, String password, String username, String domain, String firstName, String lastName, String phone){
-        setEmail(email);
+    public UserModel(String username, String password, String domain, String firstName, String lastName, String phone){
         setPassword(password);
         setUsername(username);
         setDomain(domain);
@@ -51,7 +50,8 @@ public class UserModel {
 
     public void setDomain(String domain) {
         this.domain = domain;
-        if(!this.username.equals(""))this.email=this.username+"@"+this.domain;
+        if (!this.username.equals(""))
+            this.email = this.username + "@" + this.domain;
     }
 
     public void setEmail(String email) {
@@ -79,6 +79,15 @@ public class UserModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String toString(){
+        return "Bruker: "+getUsername()+" passord: "+getPassword()+" fornavn: "+getFirstName()+" etternavn: "+
+                getLastName()+" telefon: "+getPhone()+" domene: "+getDomain()+" email: "+getEmail();
+    }
+
+    public String displayInfo() {
+        return getFirstName() + " " + getLastName() + ", " + getEmail();
     }
 
 }

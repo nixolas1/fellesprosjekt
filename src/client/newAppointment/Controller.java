@@ -1,13 +1,19 @@
 package client.newAppointment;
 
 //import client.newAppointment.Main;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import calendar.UserModel;
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,6 +26,7 @@ import javafx.scene.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.*;
 import javafx.fxml.*;
+import javafx.scene.control.*;
 
 
 
@@ -35,10 +42,13 @@ public class Controller implements Initializable{
     private DatePicker date, stoprepeat;
 
     @FXML
+    private ComboBox usersComboBox;
+
+    @FXML
     private Label stoplabel;
 
     @FXML
-    private Button create;
+    private Button create, add;
 
     @FXML
     private ResourceBundle resources;
@@ -68,8 +78,14 @@ public class Controller implements Initializable{
         }
     }
 
+    private ArrayList<UserModel> allUsers;
+    private ArrayList<UserModel> addedUsers;
+    private ArrayList<String> userInfo;
+
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
+
+        addedUsers = new ArrayList<>();
 
         createValidationListener(room, 0,   "[\\w- ]+ [\\d]+", 50);
         createValidationListener(from, 0,   "[\\d]{2}:[\\d]{2}", 5);
@@ -99,7 +115,62 @@ public class Controller implements Initializable{
 
         create.setDisable(true);
 
+        allUsers = getUsersFromDB();
+
+        userInfo = displayUserInfo(allUsers);
+
+        usersComboBox.setItems(FXCollections.observableArrayList(userInfo));
+        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
+
     }
+
+    public ArrayList<UserModel> getUsersFromDB() {
+        // Testing
+        ArrayList<UserModel> users = new ArrayList<>();
+        UserModel user1 = new UserModel("User1","passord123","stud.ntnu.no","Fornavn1","Etternavn1","12345678");
+        UserModel user2 = new UserModel("User2","passord321","stud.ntnu.no","Fornavn2","Etternavn2","87654321");
+        UserModel user3 = new UserModel("User3","passord111","stud.ntnu.no","Fornavn3","Etternavn3","91919191");
+        users.add(user1);
+        users.add(user2);
+        users.add(user3);
+        return users;
+    }
+
+
+    @FXML
+    public void addUser(ActionEvent event) {
+        String usr = (String) FxUtil.getComboBoxValue(usersComboBox);
+        // validate
+        if (userInfo.contains(usr)) {
+            String email = usr.split(",")[1].trim();
+            UserModel user = getUserModel(email);
+            if (!(addedUsers.contains(user))) {
+                addedUsers.add(user);
+            }
+        }
+        FxUtil.resetSelection(usersComboBox);
+        System.out.println(addedUsers);
+    }
+
+    // Get UserModel from email
+    public UserModel getUserModel(String email) {
+        for (UserModel user : allUsers) {
+            if(user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<String> displayUserInfo(ArrayList<UserModel> users) {
+        ArrayList<String> userInfo = new ArrayList<>();
+        for (UserModel user : users) {
+            userInfo.add(user.displayInfo());
+        }
+        return userInfo;
+    }
+
+
 
     public boolean checkIfAllValid(){
         Boolean ret = true;

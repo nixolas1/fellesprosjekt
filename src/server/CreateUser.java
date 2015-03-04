@@ -2,6 +2,7 @@ package server;
 
 import calendar.UserModel;
 import network.Query;
+import security.Crypto;
 import server.database.*;
 import server.database.Logic;
 
@@ -14,40 +15,30 @@ public class CreateUser {
 
     public CreateUser(){
         System.out.println("CreateUser()");
-        //server.database.Logic.getRow("User", "username", "sondrejw");
-        System.out.println("THE END");
     }
 
     public static Query createUser(Hashtable<String, String> data){
         try {
-            UserModel user = new UserModel(data.get("email"),
-                                            data.get("pass"),
-                                            data.get("username"),
+
+            System.out.println(data.toString());
+            UserModel user = new UserModel(data.get("username"),
+                                            Crypto.hash(data.get("pass")),
                                             data.get("domain"),
                                             data.get("firstName"),
                                             data.get("lastName"),
                                             data.get("phone"));
 
-            /*user.setFirstName(data.get("firstName"));
-            user.setLastName(data.get("lastName"));
-            user.setPhone(data.get("phone"));*/
-
-            server.database.Logic.createUser(user);
-
-
-
-            /*if(Database.createUser(user)){
+            System.out.println(user.toString());
+            Boolean createdUser = server.database.Logic.createUser(user);
+            if(createdUser){
                 return new Query("create", true);
             }
 
 
-            */
-
-
-
         }
         catch(Exception e){
-            System.out.println("Invalid login-data given.");
+            System.out.print("Invalid create-user data given: ");
+            System.err.println(e);
         }
         return new Query("create", false);
     }
