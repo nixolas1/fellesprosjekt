@@ -1,12 +1,14 @@
 package server.database;
 
 import calendar.UserModel;
+//import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sondre on 26.02.15.
@@ -51,6 +53,97 @@ public class Logic {
         } return row;
     }
 
+    public static ArrayList<List<String>> getAllRows(String table){
+        String getRow = "SELECT * FROM " + table + ";";
+        String[] row = new String[getNumberOfColumns(table)];
+        Statement stmt = null;
+        ResultSet result = null;
+        ArrayList<List<String>> allRows = new ArrayList<List<String>>(getNumberOfRows(table));
+        int count = 0;
+        try {
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(getRow);
+        } catch (SQLException e) {
+            System.out.println("SQLException triggered in getRows(), 1. try block:  " + e);
+        }
+        try {
+            while(result.next()){
+                allRows.add(new ArrayList<String>());
+                for (int i = 0; i < row.length; i++) {
+                    allRows.get(count).add(result.getString(i + 1));
+                    System.out.println(table + "[" + count + "][" + i + "]: " + result.getString(i + 1));
+                } count ++;
+                System.out.println("");
+            }
+        } catch (SQLException e){
+            System.out.println("SQLException triggered in getRows(), 2. try block: " + e);
+        }
+        finally {
+            closeDB(stmt);
+        } return allRows;
+    }
+
+
+    public static ArrayList<UserModel> getAllUsers() {
+        String getRow = "SELECT * FROM User;";
+        Statement stmt = null;
+        ResultSet result = null;
+        ArrayList<UserModel> allUsers = new ArrayList<UserModel>(getNumberOfRows("User"));
+
+        try {
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(getRow);
+        } catch (SQLException e) {
+            System.out.println("SQLException triggered in getRows(), 1. try block:  " + e);
+        }
+        try {
+            while (result.next()) {
+                allUsers.add(new UserModel(result.getString("username"),
+                                            result.getString("passwordHash"),
+                                            result.getString("domain"),
+                                            result.getString("firstName"),
+                                            result.getString("lastName"),
+                                            result.getString("phone")));
+                System.out.println("\nUSER\nusername: " + result.getString("username") + "\npasswordHash: " +
+                        result.getString("passwordHash") + "\ndomain: " +
+                        result.getString("domain") + "\nfirstName: " +
+                        result.getString("firstName") + "\nlastName: " +
+                        result.getString("lastName") + "\nphone: " +
+                        result.getString("phone"));
+            }
+        } catch (SQLException e) {
+            System.out.println("SQLException triggered in getRows(), 2. try block: " + e);
+        } finally {
+            closeDB(stmt);
+        }
+        return allUsers;
+    }
+
+
+    public static int getNumberOfRows(String table) {
+        String getNumberOfColumns = "SELECT COUNT(*) FROM " + table;
+        ResultSet result = null;
+        Statement stmt = null;
+        int numberOfRows = 0;
+
+        try {
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(getNumberOfColumns);
+        } catch (SQLException e) {
+            System.out.println("SQLExeption triggered in getNumberOfRows(), 1. try block: " + e);
+        }
+        try {
+            if (result.next()) {
+                numberOfRows = result.getInt(1);
+                System.out.println("numberOfRows: " + numberOfRows);
+            } else throw new NullPointerException(table + " has no columns");
+        } catch (SQLException e) {
+            System.out.println("SQLExeption triggered in getNumberOfRows(), 2. try block: " + e);
+        } finally {
+            closeDB(stmt);
+        } return numberOfRows;
+    }
+
     public static int getNumberOfColumns(String table) {
         String getNumberOfColumns = "SELECT COUNT(*) totalColumns FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name =  '" + table + "' AND TABLE_SCHEMA=(SELECT DATABASE())";
         ResultSet result = null;
@@ -75,8 +168,8 @@ public class Logic {
         } return numberOfColumns;
     }
 
-    public static boolean inDatabase(String whatToFind, String attribute, String table){
-        String query = "SELECT " + whatToFind +" FROM " + table + " WHERE " + whatToFind + " = '" + attribute+ "';";
+    public static boolean inDatabase(String table, String identifyingAttribute, String identifyingValue){
+        String query = "SELECT " + identifyingAttribute +" FROM " + table + " WHERE " + identifyingAttribute+ " = '" + identifyingValue+ "';";
         Statement stmt = null;
         ResultSet result = null;
         String queryResult = null;
@@ -91,11 +184,11 @@ public class Logic {
             closeDB(stmt);
         }
 
-        if (queryResult.equalsIgnoreCase(attribute)){
-            System.out.println("'" + whatToFind + "' = '" + attribute + "' already exists in table '" + table + "'");
+        if (queryResult != null && queryResult.equalsIgnoreCase(identifyingValue)){
+            System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' already exists in table '" + table + "'");
             return true;
         } else {
-            System.out.println("'" + whatToFind + "' = '" + attribute + "' does not exist in table '" + table + "'");
+            System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' does not exist in table '" + table + "'");
             return false;
         }
     }
@@ -115,40 +208,48 @@ public class Logic {
     }
 
 
-    public static boolean createUser(UserModel user){
+
+
+    public static boolean createUser(UserModel user) {
         System.out.println("createUser()");
         //String UserTable = "email, domain, username, passwordHash, firstName, lastName, phone";
         String query = "INSERT INTO User VALUES ('" + user.getEmail() + "', '" +
-                                                     user.getDomain() + "', '" +
-                                                     user.getUsername() + "', '" +
-                                                     user.getPassword() + "', '" +
-                                                     user.getFirstName() + "', '" +
-                                                     user.getLastName() + "', '" +
-                                                     user.getPhone() + "');";
+                user.getDomain() + "', '" +
+                user.getUsername() + "', '" +
+                user.getPassword() + "', '" +
+                user.getFirstName() + "', '" +
+                user.getLastName() + "', '" +
+                user.getPhone() + "');";
         System.out.println("query: " + query);
         Statement stmt = null;
-        System.out.println("\nCHECKING IF USER ALREADY EXISTS IN DATABASE: ");
+        System.out.println("\nChecking if user in db: ");
         try {
-            if (inDatabase("email", user.getEmail(), "User")) {
+            if (inDatabase("User", "email", user.getEmail())) {
                 System.out.println("User '" + user.getEmail() + "' already exists in database");
                 return false;
+            } else {
+                try {
+                    stmt = conn.createStatement();
+                    stmt.executeUpdate(query);
+                } catch (SQLException f) {
+                    System.out.println("SQLException triggered in createUser(): " + f);
+                } finally {
+                    System.out.println("User '" + user.getEmail() + "' successfully created in database");
+                    closeDB(stmt);
+                    return true;
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Exception triggered in createUser(): " + e);
+        } return false;
+    }
+        /*
         } catch (NullPointerException e){
             // THIS EXCEPTION IS INTENTIONAL AND NECESSARY
             // TRIGGERING IT COMFIRMES THERE ALREADY IS A USER WITH THAT EMAIL
-            //System.out.println("NullPointerException triggered in createUser()");
-            try {
-                stmt = conn.createStatement();
-                stmt.executeUpdate(query);
-            } catch (SQLException f) {
-                System.out.println("SQLExecption triggered in createUser(): " + f);
-            } finally {
-                System.out.println("User '" + user.getEmail() + "' successfully created in database");
-                closeDB(stmt);
-            }
-        } return true;
+            // System.out.println("NullPointerException triggered in createUser()");
+            */
 
-    }
 
     public static boolean updateUser(UserModel user){
         String query = "UPDATE User SET passwordHash = '" + user.getPassword() + "', " +
@@ -160,7 +261,7 @@ public class Logic {
         Statement stmt = null;
         System.out.println("\nCHECKING IF USER ALREADY EXISTS IN DATABASE: ");
 
-        if (inDatabase("email", user.getEmail(), "User")) {
+        if (inDatabase("User",  "email",  user.getEmail())) {
             try {
                 stmt = conn.createStatement();
                 stmt.executeUpdate(query);
@@ -239,11 +340,6 @@ public class Logic {
         }
         return name;
     }
-
-    // HVIS DU SKAL INSERTE ELLER UPDATE
-    // stmt.executeUpdate(createString);
-    //System.out.println("Command executed:");
-    //System.out.println(ex);
 
     public static void closeDB(Statement stmt){
         try {

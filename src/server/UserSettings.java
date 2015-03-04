@@ -10,14 +10,13 @@ import java.util.Hashtable;
  */
 public class UserSettings {
 
-    public static Query setSettings(Hashtable<String, String> data){
+    public static Query setSettings(Hashtable<String, UserModel> data){
         try {
             UserModel user = new UserModel();
             //user.setUsername(data.get("username"));
             return new Query("settings", true);
 
-        }
-        catch(Exception e){
+        } catch(Exception e){
             System.out.println("Invalid data given.");
         }
         return new Query("settings", false);
@@ -29,8 +28,7 @@ public class UserSettings {
             user.setUsername(data.get("username"));
             return new Query("settings", true);
 
-        }
-        catch(Exception e){
+        } catch(Exception e){
             System.out.println("Invalid data given.");
         }
         return new Query("settings", false);

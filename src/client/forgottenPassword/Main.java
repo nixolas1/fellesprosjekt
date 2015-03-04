@@ -50,9 +50,8 @@ public class Main extends Application {
             put("username",user);
             put("domain", domain);
         }};
-        ThreadClient socket = new ThreadClient();
 
-        Query reply = socket.send(new Query("reset", data));
+        Query reply = client.Main.socket.send(new Query("reset", data));
         Hashtable<String, Boolean> response = reply.data;
 
         return response;

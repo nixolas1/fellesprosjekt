@@ -16,6 +16,7 @@ import java.util.Hashtable;
  */
 public class Main extends Application {
     Stage stage;
+    public static ThreadClient socket = null;
     @Override
     public void start(Stage mainStage) {
         try {
@@ -29,7 +30,9 @@ public class Main extends Application {
     }
 
     public static void main(String[] args){
+        socket = new ThreadClient();
         launch(args);
+
     }
 
 

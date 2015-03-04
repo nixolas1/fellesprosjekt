@@ -25,18 +25,16 @@ public class Main extends Application {
 		}
 	}
 
-	public static boolean createUser(final String user, final String pass, final String domain, final String firstName, final String lastName, final String phone) {
+	public static boolean createUser(final String user, final String domain, final String firstName, final String lastName, final String phone) {
         Hashtable<String, String> data = new Hashtable<String, String>() {{
             put("username",user);
-            put("pass", pass);
             put("domain", domain);
             put("firstName", firstName);
             put("lastName", lastName);
             put("phone", phone);
         }};
-        ThreadClient socket = new ThreadClient();
 
-        Query reply = socket.send(new Query("create", data));
+        Query reply = client.Main.socket.send(new Query("create", data));
         Hashtable<String, Boolean> response = reply.data;
 
         if(response.get("reply")){
