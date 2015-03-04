@@ -1,4 +1,4 @@
-package client.userSettings;
+package client.usersettings;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +26,7 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-    /*
+
 
     public static void show(Stage primaryStage) {
         show(primaryStage, null);
@@ -44,5 +44,5 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-    */
+
 }
