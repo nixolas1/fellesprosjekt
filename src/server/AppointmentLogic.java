@@ -23,7 +23,7 @@ public class AppointmentLogic {
                 ArrayList<Appointment> apps = getModelsFromDBOutput(
                         server.database.Logic.getAllRowsWhere("Appointment", "Calendar_calendarid = " + cal_id));
                 System.out.println(apps.toString());
-                return new Query("userAppointments", "apps");
+                return new Query("getAppointments", apps);
             }
 
 
@@ -35,9 +35,9 @@ public class AppointmentLogic {
     }
 
     public static ArrayList<Appointment> getModelsFromDBOutput(ArrayList<List<String>> list){
-        ArrayList<Appointment> appList = new ArrayList<Appointment>();
+        ArrayList<Appointment> appList = new ArrayList<>();
         for (List<String>a : list){
-            System.out.println(a.toString());
+            //System.out.println(a.toString());
             appList.add(new Appointment(a.get(0), a.get(1), a.get(2), a.get(3), a.get(4), a.get(5), a.get(6), a.get(7), a.get(8), a.get(9)));
         }
 

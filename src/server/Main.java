@@ -36,9 +36,7 @@ public class Main {
         //server.database.Logic.getNumberOfRows("User");
         //server.database.Logic.getAllRows("User");
         //ArrayList<UserModel> hore = server.database.Logic.getAllUsers();
-        getCalendarAppointments(new Hashtable<String, String>() {{
-            put("id", "2");
-        }});
+        //getCalendarAppointments(new Hashtable<String, String>() {{put("id", "2");}});
 
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
