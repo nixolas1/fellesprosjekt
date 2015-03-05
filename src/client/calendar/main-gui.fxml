@@ -87,7 +87,7 @@
                                     <Font name="Helvetica Neue Light" size="20.0" />
                                  </font>
                               </Text>
-                              <Text fill="#9e9e9e" layoutX="47.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="38">
+                              <Text fx:id="weekNum" fill="#9e9e9e" layoutX="47.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="38">
                                  <font>
                                     <Font name="Helvetica Neue Light" size="20.0" />
                                  </font>
@@ -101,7 +101,7 @@
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
                               </Text>
-                              <Text layoutX="74.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="14.">
+                              <Text fx:id="monDate" layoutX="74.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="14.">
                                  <font>
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
@@ -115,7 +115,7 @@
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
                               </Text>
-                              <Text layoutX="63.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="15.">
+                              <Text fx:id="tueDate" layoutX="63.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="15.">
                                  <font>
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
@@ -129,7 +129,7 @@
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
                               </Text>
-                              <Text layoutX="73.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="16.">
+                              <Text fx:id="wedDate" layoutX="73.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="16.">
                                  <font>
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
@@ -143,7 +143,7 @@
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
                               </Text>
-                              <Text layoutX="67.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="17.">
+                              <Text fx:id="thuDate" layoutX="67.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="17.">
                                  <font>
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
@@ -157,7 +157,7 @@
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
                               </Text>
-                              <Text layoutX="67.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="18.">
+                              <Text fx:id="friDate" layoutX="67.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="18.">
                                  <font>
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
@@ -171,7 +171,7 @@
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
                               </Text>
-                              <Text layoutX="67.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="19.">
+                              <Text fx:id="satDate" layoutX="67.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="19.">
                                  <font>
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
@@ -185,7 +185,7 @@
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
                               </Text>
-                              <Text layoutX="75.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="20.">
+                              <Text fx:id="sunDate" layoutX="75.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="20.">
                                  <font>
                                     <Font name="Helvetica Neue UltraLight" size="20.0" />
                                  </font>
@@ -401,12 +401,12 @@
                   </ScrollPane>
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Text layoutX="5.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="september">
+                        <Text fx:id="month" layoutX="5.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="september">
                            <font>
                               <Font name="Helvetica Neue Light" size="50.0" />
                            </font>
                         </Text>
-                        <Text layoutX="250.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2015">
+                        <Text fx:id="year" layoutX="250.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2015">
                            <font>
                               <Font name="Helvetica Neue UltraLight" size="50.0" />
                            </font>
@@ -416,12 +416,12 @@
                               <Font name="Helvetica Neue" size="13.0" />
                            </font>
                         </Button>
-                        <Button layoutX="914.5" layoutY="21.0" mnemonicParsing="false" text="&lt;">
+                        <Button fx:id="lastWeek" layoutX="914.5" layoutY="21.0" mnemonicParsing="false" text="&lt;">
                            <font>
                               <Font name="Helvetica Neue" size="13.0" />
                            </font>
                         </Button>
-                        <Button layoutX="987.0" layoutY="21.0" mnemonicParsing="false" text="&gt;">
+                        <Button fx:id="nextWeek" layoutX="987.0" layoutY="21.0" mnemonicParsing="false" text="&gt;">
                            <font>
                               <Font name="Helvetica Neue" size="13.0" />
                            </font>
@@ -443,7 +443,8 @@
             <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="40.0" minHeight="100.0" prefHeight="40.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="370.0" minHeight="370.0" prefHeight="370.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="190.0" minHeight="190.0" prefHeight="190.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="180.0" minHeight="180.0" prefHeight="180.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
@@ -488,15 +489,7 @@
                      </font></Button>
                </children>
             </Pane>
-            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ebebeb" height="170.0" layoutY="200.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.2" width="170.0" />
-                  <Text layoutX="2.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Månedskalender med ukenr" wrappingWidth="164.7195281982422">
-                     <font>
-                        <Font name="Helvetica Neue" size="13.0" />
-                     </font></Text>
-               </children>
-            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6" />
             <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #a1a1a1;">
                <children>
                   <Rectangle height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="170.0">
@@ -509,8 +502,13 @@
                         </LinearGradient>
                      </fill>
                   </Rectangle>
-                  <ComboBox fx:id="chooseCalendar" layoutX="10.0" layoutY="6.0" prefWidth="150.0" promptText="Finn kalender" />
+                  <ComboBox fx:id="findCalendar" layoutX="10.0" layoutY="6.0" prefWidth="150.0" promptText="Finn kalender" />
                </children></Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #c9c9c9; -fx-border-width: 1 0 0px 0;" GridPane.rowIndex="7">
+               <children>
+                  <DatePicker fx:id="monthView" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" promptText="Finn måned" />
+               </children>
+            </Pane>
          </children>
       </GridPane>
    </children>
