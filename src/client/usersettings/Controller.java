@@ -78,6 +78,7 @@ public class Controller{
 
 
     public void cancelChanges(){
+        client.calendar.Main.show(Main.stage);
         System.out.println("cancelChanges()");
     }
 
