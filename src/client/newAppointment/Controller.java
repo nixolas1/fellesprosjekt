@@ -58,32 +58,13 @@ public class Controller implements Initializable{
 
     @FXML private ListView attendeeList;
 
-    private Stage myParent;
-    private Stage newAppointmentStage;
+
     private ArrayList<UserModel> allUsers;
     private ObservableList<String> userInfo;
     private ObservableList<String> attendees;
-    private UserModel loggedUser;
     UserModel user = new UserModel();
 
-    public void showNewAppointment(Stage parentStage, UserModel loggedUser) {
-        this.myParent = parentStage;
-        this.loggedUser = loggedUser;
 
-        try {
-            newAppointmentStage = new Stage();
-            GridPane pane = (GridPane) FXMLLoader.load(Controller.class.getResource("view.fxml"));
-            Scene scene = new Scene(pane);
-            newAppointmentStage.setScene(scene);
-            newAppointmentStage.setTitle("Ny avtale");
-            newAppointmentStage.initOwner(this.myParent);
-            newAppointmentStage.initModality(Modality.WINDOW_MODAL);
-            newAppointmentStage.show();
-        } catch (Exception ex) {
-            System.out.println("Exception found in newAppointment");
-            ex.printStackTrace();
-        }
-    }
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
@@ -205,8 +186,8 @@ public class Controller implements Initializable{
             LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
             LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
             Room room = new Room(1, "test", 1, 0, 24, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
-            UserModel owner = loggedUser;
-            Calendar cal = new Calendar("test", 1); // TESTS CAL! TODO get from DB
+            UserModel owner = new UserModel(); // todo FIX
+            Calendar cal = new Calendar("test", 1); // TEST CAL! TODO get from DB
             Appointment app = new Appointment(title, purpose, startDate, endDate, room, owner, cal);
 
             //TODO send appointment to server, insert into db

@@ -92,6 +92,7 @@ public class Controller{
             System.out.println("Successful login!");
             loginErrorText.setText("Riktig! Du blir nå sendt til kalenderen din.");
             UserModel user = UserModel.getUserFromServer(userName, domainText);
+            client.Main.user = user;
             client.calendar.Main.show(Main.stage, user);
         }
         else{

@@ -1,5 +1,6 @@
 package client;
 
+import calendar.UserModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,6 +17,7 @@ import java.util.Hashtable;
  */
 public class Main extends Application {
     Stage stage;
+    public static UserModel user = new UserModel();
     public static ThreadClient socket = null;
     @Override
     public void start(Stage mainStage) {

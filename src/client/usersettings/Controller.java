@@ -1,4 +1,4 @@
-package client.userSettings;
+package client.usersettings;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -49,9 +49,11 @@ public class Controller{
         System.out.println("something");
     }
 
+    public void logOff(ActionEvent event) {
+        client.login.Main.show(Main.stage);
+    }
 
-
-
-
-
+    public void toCalendar(ActionEvent event) {
+        client.calendar.Main.show(Main.stage);
+    }
 }
