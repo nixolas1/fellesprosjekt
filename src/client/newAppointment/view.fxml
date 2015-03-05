@@ -58,7 +58,7 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="7">
          <children>
-            <Label prefHeight="25.0" prefWidth="82.0" text="Formål">
+            <Label prefHeight="25.0" prefWidth="82.0" text="Beskrivelse">
                <font>
                   <Font name="Helvetica Neue" size="13.0" />
                </font>
@@ -87,18 +87,14 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
          <children>
-            <Label prefHeight="25.0" text="Tid" />
+            <Label fx:id="timeLabel" prefHeight="25.0" text="Tid" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
          <children>
             <TextField fx:id="from" maxWidth="61.0" prefHeight="25.0" prefWidth="54.0" promptText="00:00" />
-            <Text layoutX="45.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="til" textAlignment="CENTER" wrappingWidth="43.7294921875">
-               <font>
-                  <Font name="Helvetica Neue" size="13.0" />
-               </font>
-            </Text>
             <TextField fx:id="to" layoutX="80.0" maxWidth="56.0" prefHeight="25.0" prefWidth="87.0" promptText="00:00" />
+            <Label fx:id="toLabel" layoutX="62.0" layoutY="3.0" text="til" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
@@ -164,7 +160,7 @@
       <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: rgba(0,0,0,0.4); -fx-border-width: 0 0 1px 0;" />
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <RadioButton layoutY="6.0" mnemonicParsing="false" text="Privat avtale">
+            <RadioButton fx:id="personal" layoutY="6.0" mnemonicParsing="false" text="Privat">
                <toggleGroup>
                   <ToggleGroup fx:id="type" />
                </toggleGroup>
@@ -173,7 +169,7 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
          <children>
-            <RadioButton layoutY="6.0" mnemonicParsing="false" selected="true" text="Møte" toggleGroup="$type" />
+            <RadioButton fx:id="work" layoutY="6.0" mnemonicParsing="false" selected="true" text="Jobb" toggleGroup="$type" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">

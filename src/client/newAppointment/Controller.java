@@ -36,16 +36,20 @@ public class Controller implements Initializable{
 
 
     @FXML
-    private TextField title, room, from, to, purpose, repeat;
+    private TextField title, from, to, description, repeat, locationDescription;
 
     @FXML
     private DatePicker date, endDate, stoprepeat;
 
     @FXML
-    private ComboBox usersComboBox;
+    private ComboBox usersComboBox, room;
 
     @FXML
-    private Label stoplabel;
+    private Label stoplabel, roomOrLocation, timeLabel, toLabel;
+
+    @FXML private CheckBox allDay;
+
+    @FXML private RadioButton work, personal;
 
     @FXML
     private Button create, add, remove;
@@ -71,6 +75,29 @@ public class Controller implements Initializable{
 
         add.setDisable(true);
         remove.setDisable(true);
+        locationDescription.setVisible(false);
+
+        ToggleGroup tg = new ToggleGroup();
+        work.setToggleGroup(tg);
+        personal.setToggleGroup(tg);
+
+        tg.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if (tg.getSelectedToggle() != null) {
+                    if (work.isSelected()) {
+                        locationDescription.setVisible(false);
+                        room.setVisible(true);
+                        roomOrLocation.setText("Rom");
+                    }
+                    if (personal.isSelected()) {
+                        locationDescription.setVisible(true);
+                        room.setVisible(false);
+                        roomOrLocation.setText("Sted");
+                    }
+                }
+            }
+        });
 
         usersComboBox.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -90,15 +117,33 @@ public class Controller implements Initializable{
             }
         });
 
+        allDay.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(allDay.isSelected()) {
+                    to.setDisable(true);
+                    from.setDisable(true);
+                    timeLabel.setDisable(true);
+                    toLabel.setDisable(true);
 
-        createValidationListener(room, 0, "[\\w- ]+ [\\d]+", 50);
+                } else {
+                    to.setDisable(false);
+                    from.setDisable(false);
+                    timeLabel.setDisable(false);
+                    toLabel.setDisable(false);
+                }
+            }
+        });
+
+
+        //createValidationListener(room, 0, "[\\w- ]+ [\\d]+", 50);
         createValidationListener(from, 0,   "[\\d]{2}:[\\d]{2}", 5);
         createValidationListener(to,   2,   "[\\d]{2}:[\\d]{2}", 5);
-        createValidationListener(purpose, 1, ".*", 50);
+        createValidationListener(description, 1, ".*", 50);
         createValidationListener(repeat,  3, "[0-9]*", 3);
 
         dateValidation(date);
-        dateValidation(endDate);
+       // dateValidation(endDate);
         dateValidation(stoprepeat);
 
         stoprepeat.setVisible(false);
@@ -127,8 +172,6 @@ public class Controller implements Initializable{
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH); // AutoCompleteMode ON
 
 
-        usersComboBox.setItems(FXCollections.observableArrayList(userInfo));
-        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
 
     }
 
@@ -147,6 +190,7 @@ public class Controller implements Initializable{
            // UserModel user = getUserModel(email);
             attendees.add(usr);
             userInfo.remove(usr);
+            //usersComboBox.setItems(userInfo);
             }
         //FxUtil.resetSelection(usersComboBox);
         usersComboBox.getEditor().setText("");
@@ -176,9 +220,9 @@ public class Controller implements Initializable{
     @FXML
     public void createAppointment(ActionEvent event) {
         if(checkIfAllValid()) {
-            // title, purpose, startDate, endDate, room, owner, cal
+            // title, description, startDate, endDate, room, owner, cal
             String title = this.title.getText();
-            String purpose = this.purpose.getText();
+            String description = this.description.getText();
             int hrStart = Integer.parseInt(from.getText().split(":")[0]);
             int minStart = Integer.parseInt((from.getText().split(":")[1]));
             int hrEnd = Integer.parseInt((to.getText().split(":")[0]));
@@ -188,12 +232,11 @@ public class Controller implements Initializable{
             Room room = new Room(1, "test", 1, 0, 24, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
             UserModel owner = new UserModel(); // todo FIX
             Calendar cal = new Calendar("test", 1); // TEST CAL! TODO get from DB
-            Appointment app = new Appointment(title, purpose, startDate, endDate, room, owner, cal);
+            Appointment app = new Appointment(title, description, startDate, endDate, room, owner, cal);
 
             //TODO send appointment to server, insert into db
         } else {
             System.out.println("One or more fields INVALID. Data not sent to server.");
-            // TODO Error text field?
         }
 
     }
@@ -205,7 +248,6 @@ public class Controller implements Initializable{
         }
         return userInfo;
     }
-
 
 
     public boolean checkIfAllValid(){
