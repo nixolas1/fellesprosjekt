@@ -25,8 +25,9 @@ public class UserSettings {
     }
 
     public static Query updateSettings(Hashtable<String, String> data){
+        System.out.println("updateSettings()");
         try{
-            String a = "username, password, domain, firstName, lastName, phone";
+            //String a = "username, password, domain, firstName, lastName, phone";
             UserModel user = new UserModel(data.get("username"),
                                             data.get("password"),
                                             data.get("domain"),
@@ -34,7 +35,7 @@ public class UserSettings {
                                             data.get("lastName"),
                                             data.get("phone"));
 
-            if(server.database.Logic.inDatabase("User", "email", user.getEmail() + "@" + user.getDomain())){
+            if(server.database.Logic.inDatabase("User", "email", user.getEmail())){
                 if (server.database.Logic.updateUser(user)){
                     return new Query("settings", true);
                 } else {
@@ -42,7 +43,7 @@ public class UserSettings {
                 }
             }
         } catch (Exception e){
-            System.out.print("Exception triggered in server.userSettings.updateSettings(): ");
+            System.out.print("Exception triggered in server.usersettings.updateSettings(): ");
             e.printStackTrace();
         } return new Query("settings", false);
     }
