@@ -1,6 +1,13 @@
 package calendar;
 
-public class UserModel {
+import network.Query;
+
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.io.Serializable;
+
+public class UserModel implements Serializable {
+
 
     private String username = "";
     private String firstName = "";
@@ -9,6 +16,7 @@ public class UserModel {
     private String password = "";
     private String domain = "";
     private String email = "";
+    private ArrayList<Calendar> calendar = new ArrayList<Calendar>();
 
     public UserModel(){};
 
@@ -48,6 +56,9 @@ public class UserModel {
         return domain;
     }
 
+    public void setCalendars(ArrayList<Calendar> cal){this.calendar=cal;}
+    public void addCalendar(Calendar cal){this.calendar.add(cal);}
+
     public void setDomain(String domain) {
         this.domain = domain;
         if (!this.username.equals(""))
@@ -82,8 +93,30 @@ public class UserModel {
     }
 
     public String toString(){
-        return "Bruker: "+getUsername()+" passord: "+getPassword()+" fornavn: "+getFirstName()+" etternavn: "+
-                getLastName()+" telefon: "+getPhone()+" domene: "+getDomain()+" email: "+getEmail();
+        return "[Bruker: "+getUsername()+" passord: "+getPassword()+" fornavn: "+getFirstName()+" etternavn: "+
+                getLastName()+" telefon: "+getPhone()+" domene: "+getDomain()+" email: "+getEmail() + "]";
     }
+
+    public String displayInfo() {
+        return getFirstName() + " " + getLastName() + ", " + getEmail();
+    }
+
+    public static ArrayList<UserModel> getUsersFromDB() {
+        return client.newAppointment.Main.getAllUsers();
+    }
+
+    public static UserModel getUserFromServer(final String user, final String domain){
+
+        System.out.println("Getting user: "+user+", "+domain);
+        Hashtable<String, String> data = new Hashtable<String, String>(){{
+            put("username",user);
+            put("domain", domain);
+        }};
+
+        Query reply = client.Main.socket.send(new Query("getUser", data));
+        Hashtable<String, UserModel> response = reply.data;
+        return response.get("reply");
+    }
+
 
 }

@@ -205,9 +205,11 @@ public class Controller{
         return false;
     }
 
+    public void logOff(ActionEvent event) {
+        client.login.Main.show(Main.stage);
+    }
 
-
-
-
-
+    public void toCalendar(ActionEvent event) {
+        client.calendar.Main.show(Main.stage);
+    }
 }

@@ -6,32 +6,33 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane  fx:controller="client.newAppointment.Controller" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="500.0" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #ebebeb;" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.newAppointment.Controller">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="133.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="307.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" />
       <ColumnConstraints />
   </columnConstraints>
   <rowConstraints>
       <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="71.0" valignment="CENTER" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="54.0" minHeight="0.0" prefHeight="47.0" valignment="CENTER" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="97.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="102.0" minHeight="10.0" prefHeight="54.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="66.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" valignment="CENTER" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="130.0" minHeight="130.0" prefHeight="130.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: rgba(0,0,0,0.4); -fx-border-width: 0 0 1px 0;" GridPane.columnSpan="2" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New Appointment" textAlignment="CENTER" wrappingWidth="460.35498046875">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ny avtale" textAlignment="CENTER" wrappingWidth="460.35498046875">
          <font>
-            <Font size="37.0" />
+            <Font name="Helvetica Neue" size="37.0" />
          </font>
       </Text>
       <FlowPane prefHeight="2.0" prefWidth="450.0" GridPane.rowIndex="1" GridPane.valignment="CENTER">
          <children>
-            <Label prefHeight="25.0" prefWidth="82.0" text="Room" />
+            <Label prefHeight="25.0" prefWidth="82.0" text="Rom" />
          </children>
          <GridPane.margin>
             <Insets top="10.0" />
@@ -39,7 +40,10 @@
       </FlowPane>
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
          <children>
-            <Label prefHeight="25.0" prefWidth="82.0" text="Purpose" />
+            <Label prefHeight="25.0" prefWidth="82.0" text="Formål">
+               <font>
+                  <Font name="Helvetica Neue" size="13.0" />
+               </font></Label>
          </children>
          <GridPane.margin>
             <Insets />
@@ -47,7 +51,7 @@
       </FlowPane>
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
          <children>
-            <Label prefHeight="25.0" prefWidth="82.0" text="Date" />
+            <Label prefHeight="25.0" prefWidth="82.0" text="Dato" />
          </children>
          <GridPane.margin>
             <Insets top="10.0" />
@@ -55,21 +59,23 @@
       </FlowPane>
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
          <children>
-            <Label prefHeight="25.0" prefWidth="102.0" text="Repeat every" textAlignment="RIGHT" />
+            <Label prefHeight="25.0" prefWidth="102.0" text="Gjenta hver" textAlignment="RIGHT">
+               <font>
+                  <Font name="Helvetica Neue" size="13.0" />
+               </font></Label>
          </children>
       </FlowPane>
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
          <children>
-            <Label fx:id="stoplabel" prefHeight="25.0" prefWidth="131.0" text="Stop repeating on" textAlignment="RIGHT" />
+            <Label fx:id="stoplabel" prefHeight="25.0" prefWidth="131.0" text="Gjenta til" textAlignment="RIGHT">
+               <font>
+                  <Font name="Helvetica Neue" size="13.0" />
+               </font></Label>
          </children>
       </FlowPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="7">
          <children>
-            <Button fx:id="create" layoutY="45.0" mnemonicParsing="false" text="Create">
-               <padding>
-                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
-               </padding>
-            </Button>
+            <Label layoutY="6.0" text="Deltakere" />
          </children>
       </AnchorPane>
       <TextField fx:id="room" prefHeight="25.0" prefWidth="283.0" promptText="Bygg Romnummer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -77,7 +83,10 @@
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
             <TextField fx:id="from" maxWidth="61.0" prefHeight="25.0" prefWidth="54.0" promptText="00:00" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To" textAlignment="CENTER" wrappingWidth="43.7294921875" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="til" textAlignment="CENTER" wrappingWidth="43.7294921875">
+               <font>
+                  <Font name="Helvetica Neue" size="13.0" />
+               </font></Text>
             <TextField fx:id="to" maxWidth="56.0" prefHeight="25.0" prefWidth="87.0" promptText="00:00" />
          </children>
       </FlowPane>
@@ -88,11 +97,17 @@
       </FlowPane>
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
          <children>
-            <TextField fx:id="repeat" prefHeight="25.0" prefWidth="80.0" promptText="0 (never)" />
-            <Label prefHeight="15.0" prefWidth="62.0" text="days" textAlignment="RIGHT">
+            <TextField fx:id="repeat" prefHeight="25.0" prefWidth="80.0" promptText="0 (aldri)">
+               <font>
+                  <Font name="Helvetica Neue" size="13.0" />
+               </font></TextField>
+            <Label prefHeight="15.0" prefWidth="62.0" text="dag" textAlignment="RIGHT">
                <padding>
                   <Insets left="20.0" />
                </padding>
+               <font>
+                  <Font name="Helvetica Neue" size="13.0" />
+               </font>
             </Label>
          </children>
       </FlowPane>
@@ -101,12 +116,39 @@
             <DatePicker fx:id="stoprepeat" promptText="1.1.2015" />
          </children>
       </FlowPane>
-      <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+         <children>
+            <Pane prefHeight="130.0" prefWidth="360.0">
+               <children>
+                  <Button fx:id="remove" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUser" text="&lt;" />
+                  <Button fx:id="add" layoutX="164.0" mnemonicParsing="false" onAction="#addUser" text="&gt;" />
+                  <ComboBox fx:id="usersComboBox" prefHeight="26.0" prefWidth="160.0" promptText="Finn deltaker" />
+                  <ListView fx:id="attendeeList" layoutX="194.0" prefHeight="130.0" prefWidth="166.0" />
+               </children>
+            </Pane>
+         </children></FlowPane>
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
          <children>
-            <Label prefHeight="25.0" text="Time" />
+            <Label prefHeight="25.0" text="Tid" />
          </children>
       </FlowPane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="8">
+         <children>
+            <Button layoutY="10.0" maxHeight="36.0" maxWidth="100.0" minHeight="36.0" minWidth="80.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="80.0" text="Avbryt" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+         <children>
+            <Button fx:id="create" layoutY="10.0" maxHeight="36.0" maxWidth="360.0" minHeight="36.0" minWidth="360.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="360.0" stylesheets="@gui.css" text="Opprett avtale" textFill="WHITE">
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font name="Helvetica Neue" size="13.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
