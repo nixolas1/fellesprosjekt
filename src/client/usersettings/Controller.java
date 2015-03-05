@@ -36,7 +36,16 @@ public class Controller{
     void initialize() {
         //model = client.userSettings.Main.user;
         // username, password, domain, firstName, lastName, phone
-        model = new UserModel("sondreheiho", Crypto.hash("morra"), "stud.ntnu.no", "Sondre", "Den Beste", "12345678");
+        //model = new UserModel("sondrejw", Crypto.hash("morra"), "stud.ntnu.no", "Sondre", "Den Beste", "12345678");
+        //model = server.database.Logic.getUser("sondrejw@stud.ntnu.no");
+
+        model = new UserModel("sondrejw",
+                                "HNI9KX1fGqfdsoNdXcq3dibd2JaFT7eCwj7XZjHBDME=",
+                                "stud.ntnu.no",
+                                "Sondre",
+                                "Johan Widmark",
+                                "48179861");
+
         createValidationListener(password1, passwordReg, 50);
         createPasswordValidationListener(password11, passwordReg, 50);
         createValidationListener(firstName, nameReg, 30);
@@ -73,12 +82,15 @@ public class Controller{
     }
 
     public boolean hasChangedPassword(){
-        System.out.println("hasChangedPassword()");
         if (password1.getText().length() > 0 && password11.getText().length() > 0) {
+            System.out.println("hasChangedPassword(): true");
             System.out.println("password1.getText().length():" + password1.getText().length());
             System.out.println("password11.getText().length():" + password11.getText().length());
             return true;
-        } else return false;
+        } else {
+            System.out.println("hasChangedPassword(): false");
+            return false;
+        }
     }
 
     public boolean validatePasswordFields() {
@@ -96,12 +108,12 @@ public class Controller{
         if (hasChangedPassword()){
             if (validAllFields() && validatePasswordFields()){
                 Boolean response = client.userSettings.Main.updateUser(
-                                    model.getUsername(),
-                                    Crypto.hash(password1.getText()),
-                                    model.getDomain(),
-                                    firstName.getText(),
-                                    lastName.getText(),
-                                    phone.getText());
+                        model.getUsername(),
+                        Crypto.hash(password1.getText()),
+                        model.getDomain(),
+                        firstName.getText(),
+                        lastName.getText(),
+                        phone.getText());
                 if (response) {
                     System.out.println("User settings updated");
                 } else {

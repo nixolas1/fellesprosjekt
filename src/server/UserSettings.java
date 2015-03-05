@@ -25,8 +25,9 @@ public class UserSettings {
     }
 
     public static Query updateSettings(Hashtable<String, String> data){
+        System.out.println("updateSettings()");
         try{
-            String a = "username, password, domain, firstName, lastName, phone";
+            //String a = "username, password, domain, firstName, lastName, phone";
             UserModel user = new UserModel(data.get("username"),
                                             data.get("password"),
                                             data.get("domain"),
