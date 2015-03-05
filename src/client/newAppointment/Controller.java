@@ -6,9 +6,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
-import calendar.Appointment;
-import calendar.Calendar;
-import calendar.UserModel;
+
+import calendar.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -39,7 +38,7 @@ public class Controller implements Initializable{
     private TextField title, room, from, to, purpose, repeat;
 
     @FXML
-    private DatePicker date, stoprepeat;
+    private DatePicker date, endDate, stoprepeat;
 
     @FXML
     private ComboBox usersComboBox;
@@ -201,11 +200,11 @@ public class Controller implements Initializable{
         int hrEnd = Integer.parseInt((to.getText().split(":")[0]));
         int minEnd = Integer.parseInt(to.getText().split(":")[1]);
         LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
-       // LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
-        //Room room = this.room.getText();
+        LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
+        Room room = new Room(1,"test",1,0,24,new ArrayList<Utility>());
         UserModel owner = loggedUser;
-        //Calendar cal =
-        Appointment app = new Appointment();
+        Calendar cal = new Calendar("test",1);
+        Appointment app = new Appointment(title, purpose, startDate, endDate, room, owner, cal);
 
         //TODO send appointment to server, insert into db
 
