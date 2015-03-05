@@ -63,6 +63,7 @@ public class Controller implements Initializable{
     private ObservableList<String> userInfo;
     private ObservableList<String> attendees;
     private UserModel loggedUser;
+    UserModel user = new UserModel();
 
     public void showNewAppointment(Stage parentStage, UserModel loggedUser) {
         this.myParent = parentStage;
@@ -137,7 +138,7 @@ public class Controller implements Initializable{
         create.setDisable(true);
         attendees = FXCollections.observableArrayList(); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
-        allUsers = calendar.UserModel.getUsersFromDB();
+        allUsers = getUsersFromDB();
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH); // AutoCompleteMode ON
@@ -146,6 +147,10 @@ public class Controller implements Initializable{
         usersComboBox.setItems(FXCollections.observableArrayList(userInfo));
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
 
+    }
+
+    public static ArrayList<UserModel> getUsersFromDB() {
+        return calendar.UserModel.getAllUsers();
     }
 
 

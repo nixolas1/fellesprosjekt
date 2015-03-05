@@ -32,13 +32,7 @@ public class Main extends Application {
 		launch(args);
 	}
 
-    public static ArrayList<UserModel> getAllUsers() {
-        ThreadClient socket = new ThreadClient();
-        Query reply = socket.send(new Query("getAllUsers",new ArrayList<UserModel>()));
-        System.out.println(reply.function);
-        Hashtable<String, ArrayList<UserModel>> response = reply.data;
-        return response.get("reply");
-    }
+
 
 }
 

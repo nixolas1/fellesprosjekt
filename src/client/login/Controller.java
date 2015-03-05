@@ -1,5 +1,6 @@
 package client.login;
 
+import calendar.UserModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -58,10 +59,10 @@ public class Controller{
 
     @FXML
     public void login(ActionEvent event) {
-        final String user = username.getText();
+        final String userName = username.getText();
         final String pass = password.getText();
         final String domainText = domain.getValue().toString();
-        if (!(valid(user, userNameReg, 30))) {
+        if (!(valid(userName, userNameReg, 30))) {
             // brukernavn ulovlig tegn
             loginErrorText.setText("Brukernavn inneholder ulovlige tegn");
             password.setText("");
@@ -79,7 +80,7 @@ public class Controller{
 
         Hashtable<String, Boolean> response = new Query("reply", false).data;
         try {
-            response = Main.checkLogin(user, pass, domainText);
+            response = Main.checkLogin(userName, pass, domainText);
         }
         catch (NullPointerException e){
             System.out.println("Unable to connect to socket");
@@ -90,7 +91,8 @@ public class Controller{
             //riktig!
             System.out.println("Successful login!");
             loginErrorText.setText("Riktig! Du blir nå sendt til kalenderen din.");
-            client.calendar.Main.show(Main.stage);
+            UserModel user = UserModel.getUserFromServer(userName, domainText);
+            client.calendar.Main.show(Main.stage, user);
         }
         else{
             try {

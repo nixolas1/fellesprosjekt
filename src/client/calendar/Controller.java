@@ -27,7 +27,7 @@ public class Controller {
     public void onBtnShowNewAppointment(ActionEvent event) {
         client.newAppointment.Controller newApp = new client.newAppointment.Controller();
         try {
-            newApp.showNewAppointment(primaryStage, new UserModel("balle","okpwqeropgkr","stud.ntnu.no","balle","svin","911"));
+            newApp.showNewAppointment(primaryStage, Main.user);
         } catch (Exception e) {
             e.printStackTrace();
         }

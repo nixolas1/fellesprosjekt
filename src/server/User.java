@@ -15,4 +15,7 @@ public class User {
         ArrayList<UserModel> allUsers = server.database.Logic.getAllUsers();
         return new Query("getAllUsers", allUsers);
     }
+    public static Query getUser(Hashtable<String, String> data) {
+        return new Query("",data);
+    }
 }
