@@ -53,8 +53,12 @@ public class Logic {
         } return row;
     }
 
-    public static ArrayList<List<String>> getAllRows(String table){
-        String getRow = "SELECT * FROM " + table + ";";
+    public static ArrayList<List<String>> getAllRows(String table) {
+        return getAllRowsWhere(table, "");
+    }
+
+    public static ArrayList<List<String>> getAllRowsWhere(String table, String where){
+        String getRow = "SELECT * FROM " + table + where + ";";
         String[] row = new String[getNumberOfColumns(table)];
         Statement stmt = null;
         ResultSet result = null;
