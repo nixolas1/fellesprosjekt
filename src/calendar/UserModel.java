@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.io.Serializable;
 
-public class UserModel {
+public class UserModel implements Serializable {
 
     private String username = "";
     private String firstName = "";

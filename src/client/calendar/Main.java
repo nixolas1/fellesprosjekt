@@ -28,6 +28,10 @@ public class Main extends Application {
         }
     }
 
+    public static void show(Stage primaryStage) {
+        show(primaryStage, null);
+    }
+
     static Stage stage;
     static UserModel user;
     public static void show(Stage primaryStage, UserModel loggedUser) {

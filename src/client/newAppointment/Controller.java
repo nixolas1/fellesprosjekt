@@ -57,32 +57,13 @@ public class Controller implements Initializable{
 
     @FXML private ListView attendeeList;
 
-    private Stage myParent;
-    private Stage newAppointmentStage;
+
     private ArrayList<UserModel> allUsers;
     private ObservableList<String> userInfo;
     private ObservableList<String> attendees;
-    private UserModel loggedUser;
     UserModel user = new UserModel();
 
-    public void showNewAppointment(Stage parentStage, UserModel loggedUser) {
-        this.myParent = parentStage;
-        this.loggedUser = loggedUser;
 
-        try {
-            newAppointmentStage = new Stage();
-            GridPane pane = (GridPane) FXMLLoader.load(Controller.class.getResource("view.fxml"));
-            Scene scene = new Scene(pane);
-            newAppointmentStage.setScene(scene);
-            newAppointmentStage.setTitle("Ny avtale");
-            newAppointmentStage.initOwner(this.myParent);
-            newAppointmentStage.initModality(Modality.WINDOW_MODAL);
-            newAppointmentStage.show();
-        } catch (Exception ex) {
-            System.out.println("Exception found in newAppointment");
-            ex.printStackTrace();
-        }
-    }
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
