@@ -3,6 +3,7 @@ package calendar;
 import server.User;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -13,8 +14,8 @@ public class Appointment implements Serializable {
 
     String title;
     String purpose;
-    Date startDate;
-    Date endDate;
+    LocalDateTime startDate;
+    LocalDateTime endDate;
     Room room;
     UserModel owner;
     Calendar cal;
@@ -23,7 +24,7 @@ public class Appointment implements Serializable {
     public Appointment() {
     }
 
-    public Appointment(String title, String purpose, Date startDate, Date endDate, Room room, UserModel owner, Calendar cal){
+    public Appointment(String title, String purpose, LocalDateTime startDate, LocalDateTime endDate, Room room, UserModel owner, Calendar cal){
         this.title=title;
         this.purpose=purpose;
         this.startDate=startDate;
@@ -39,10 +40,10 @@ public class Appointment implements Serializable {
     public String getPurpose() {
         return purpose;
     }
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
     public Room getRoom() {
@@ -66,10 +67,10 @@ public class Appointment implements Serializable {
     public void setPurpose(String purpose) {
         this.purpose = purpose;
     }
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
     public void setRoom(Room room) {
