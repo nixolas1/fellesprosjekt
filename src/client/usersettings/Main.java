@@ -1,4 +1,4 @@
-package client.userSettings;
+package client.usersettings;
 
 import calendar.UserModel;
 import javafx.application.Application;
@@ -15,7 +15,6 @@ import java.util.Hashtable;
  */
 public class Main extends Application {
     static Stage stage;
-    static UserModel user;
 
 
     @Override
@@ -30,11 +29,11 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-
-    public static void show(Stage primaryStage, UserModel model) {
+    static UserModel user=new UserModel();
+    public static void show(Stage primaryStage) {
         try {
             stage = primaryStage;
-            user = model;
+            user = client.Main.user;
             GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));
             Scene scene = new Scene(root, 1200, 800);
             primaryStage.setScene(scene);

@@ -1,10 +1,8 @@
-package client.userSettings;
+package client.usersettings;
 
 import calendar.UserModel;
-import client.newUser.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,17 +10,22 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import network.Query;
-import java.util.Hashtable;
-import javafx.scene.paint.Color;
 import security.Crypto;
 
 
 public class Controller{
 
-    @FXML private TextField username, domain, firstName, lastName, phone;
+
+    @FXML private Text loginErrorText;
+    @FXML private PasswordField password;
+    @FXML private ChoiceBox domain;
+
+    @FXML private Button login, newUser, forgottenPassword;
+
+    private String userNameReg = "^[a-zA-Z0-9_.]*$";
+    @FXML private TextField username, firstName, lastName, phone;
     @FXML private PasswordField password1, password11;
-    @FXML private Button cancel, save;
+
 
     private String nameReg = "[A-Za-z,æ,ø,å,Æ,Ø,Å,-, ]+";
     private String passwordReg = "[\\S ]{6,50}$";
@@ -34,17 +37,18 @@ public class Controller{
 
     @FXML
     void initialize() {
-        //model = client.userSettings.Main.user;
+        //model = client.usersettings.Main.user;
         // username, password, domain, firstName, lastName, phone
         //model = new UserModel("sondrejw", Crypto.hash("morra"), "stud.ntnu.no", "Sondre", "Den Beste", "12345678");
         //model = server.database.Logic.getUser("sondrejw@stud.ntnu.no");
 
-        model = new UserModel("sondrejw",
+        model = Main.user;
+        /*new UserModel("sondrejw",
                                 "HNI9KX1fGqfdsoNdXcq3dibd2JaFT7eCwj7XZjHBDME=",
                                 "stud.ntnu.no",
                                 "Sondre",
                                 "Johan Widmark",
-                                "48179861");
+                                "48179861");*/
 
         createValidationListener(password1, passwordReg, 50);
         createPasswordValidationListener(password11, passwordReg, 50);
@@ -57,7 +61,7 @@ public class Controller{
     public void initializeFields(){
         username.setText(model.getUsername());
         username.setDisable(true);
-        domain.setText(model.getDomain());
+        //domain.setText(model.getDomain());
         domain.setDisable(true);
         firstName.setText(model.getFirstName());
         lastName.setText(model.getLastName());
@@ -107,7 +111,7 @@ public class Controller{
         // TODO  -->   username, password, domain, firstName, lastName, phone
         if (hasChangedPassword()){
             if (validAllFields() && validatePasswordFields()){
-                Boolean response = client.userSettings.Main.updateUser(
+                Boolean response = client.usersettings.Main.updateUser(
                         model.getUsername(),
                         Crypto.hash(password1.getText()),
                         model.getDomain(),
@@ -118,13 +122,14 @@ public class Controller{
                     System.out.println("User settings updated");
                 } else {
                     System.out.println("Something wrong happened in updating user settings");
+                    System.out.println();
                 }
             } else {
                 System.out.println("One og more fields are not correct");
             }
         } else {
             if (validAllFields()){
-                Boolean response = client.userSettings.Main.updateUser(
+                Boolean response = client.usersettings.Main.updateUser(
                         model.getUsername(),
                         model.getPassword(),
                         model.getDomain(),
