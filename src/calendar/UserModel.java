@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class UserModel implements Serializable {
 
+
     private String username = "";
     private String firstName = "";
     private String lastName = "";
@@ -114,7 +115,6 @@ public class UserModel implements Serializable {
 
         Query reply = client.Main.socket.send(new Query("getUser", data));
         Hashtable<String, UserModel> response = reply.data;
-
         return response.get("reply");
     }
 
