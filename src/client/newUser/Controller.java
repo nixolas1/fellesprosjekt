@@ -24,7 +24,7 @@ public class Controller {
 
     private String nameReg = "[A-Za-z,æ,ø,å,Æ,Ø,Å,-, ]+";
     private String userNameReg = "^[a-zA-Z0-9_.]*$";
-    private String passwordReg = "[\\S ]{6,50}$";
+    //private String passwordReg = "[\\S ]{6,50}$";
     private String phoneReg = "[0-9]{8}";
 
     UserModel model = new UserModel();
