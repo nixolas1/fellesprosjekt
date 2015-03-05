@@ -37,19 +37,7 @@ public class Controller{
 
     @FXML
     void initialize() {
-        //model = client.usersettings.Main.user;
-        // username, password, domain, firstName, lastName, phone
-        //model = new UserModel("sondrejw", Crypto.hash("morra"), "stud.ntnu.no", "Sondre", "Den Beste", "12345678");
-        //model = server.database.Logic.getUser("sondrejw@stud.ntnu.no");
-
         model = Main.user;
-        /*new UserModel("sondrejw",
-                                "HNI9KX1fGqfdsoNdXcq3dibd2JaFT7eCwj7XZjHBDME=",
-                                "stud.ntnu.no",
-                                "Sondre",
-                                "Johan Widmark",
-                                "48179861");*/
-
         createValidationListener(password1, passwordReg, 50);
         createPasswordValidationListener(password11, passwordReg, 50);
         createValidationListener(firstName, nameReg, 30);
