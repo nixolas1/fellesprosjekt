@@ -20,9 +20,9 @@ public class Query implements Serializable{
         this.data = new Hashtable<String, String>(){{put("reply", data);}};
     }
 
-    public Query(String function, final ArrayList<UserModel> data) {
+    public Query(String function, final ArrayList data) {
         this.function = function;
-        this.data = new Hashtable<String, ArrayList<UserModel>>(){{put("reply",data);}};
+        this.data = new Hashtable<String, ArrayList>(){{put("reply",data);}};
     }
 
     public Query(String function, final UserModel data) {
