@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import calendar.*;
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -116,6 +117,7 @@ public class Controller implements Initializable{
         createValidationListener(repeat,  3, "[0-9]*", 3);
 
         dateValidation(date);
+        dateValidation(endDate);
         dateValidation(stoprepeat);
 
         stoprepeat.setVisible(false);
@@ -192,21 +194,26 @@ public class Controller implements Initializable{
 
     @FXML
     public void createAppointment(ActionEvent event) {
-        // title, purpose, startDate, endDate, room, owner, cal
-        String title = this.title.getText();
-        String purpose = this.purpose.getText();
-        int hrStart = Integer.parseInt(from.getText().split(":")[0]);
-        int minStart = Integer.parseInt((from.getText().split(":")[1]));
-        int hrEnd = Integer.parseInt((to.getText().split(":")[0]));
-        int minEnd = Integer.parseInt(to.getText().split(":")[1]);
-        LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
-        LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
-        Room room = new Room(1,"test",1,0,24,new ArrayList<Utility>());
-        UserModel owner = loggedUser;
-        Calendar cal = new Calendar("test",1);
-        Appointment app = new Appointment(title, purpose, startDate, endDate, room, owner, cal);
+        if(checkIfAllValid()) {
+            // title, purpose, startDate, endDate, room, owner, cal
+            String title = this.title.getText();
+            String purpose = this.purpose.getText();
+            int hrStart = Integer.parseInt(from.getText().split(":")[0]);
+            int minStart = Integer.parseInt((from.getText().split(":")[1]));
+            int hrEnd = Integer.parseInt((to.getText().split(":")[0]));
+            int minEnd = Integer.parseInt(to.getText().split(":")[1]);
+            LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
+            LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
+            Room room = new Room(1, "test", 1, 0, 24, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
+            UserModel owner = loggedUser;
+            Calendar cal = new Calendar("test", 1); // TESTS CAL! TODO get from DB
+            Appointment app = new Appointment(title, purpose, startDate, endDate, room, owner, cal);
 
-        //TODO send appointment to server, insert into db
+            //TODO send appointment to server, insert into db
+        } else {
+            System.out.println("One or more fields INVALID. Data not sent to server.");
+            // TODO Error text field?
+        }
 
     }
 
