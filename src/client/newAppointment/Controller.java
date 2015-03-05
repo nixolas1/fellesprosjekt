@@ -1,12 +1,13 @@
 package client.newAppointment;
 
-//import client.newAppointment.Main;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 import calendar.Appointment;
+import calendar.Calendar;
 import calendar.UserModel;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -35,7 +36,7 @@ public class Controller implements Initializable{
 
 
     @FXML
-    private TextField room, from, to, purpose, repeat;
+    private TextField title, room, from, to, purpose, repeat;
 
     @FXML
     private DatePicker date, stoprepeat;
@@ -192,7 +193,21 @@ public class Controller implements Initializable{
 
     @FXML
     public void createAppointment(ActionEvent event) {
+        // title, purpose, startDate, endDate, room, owner, cal
+        String title = this.title.getText();
+        String purpose = this.purpose.getText();
+        int hrStart = Integer.parseInt(from.getText().split(":")[0]);
+        int minStart = Integer.parseInt((from.getText().split(":")[1]));
+        int hrEnd = Integer.parseInt((to.getText().split(":")[0]));
+        int minEnd = Integer.parseInt(to.getText().split(":")[1]);
+        LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
+       // LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
+        //Room room = this.room.getText();
+        UserModel owner = loggedUser;
+        //Calendar cal =
         Appointment app = new Appointment();
+
+        //TODO send appointment to server, insert into db
 
     }
 
