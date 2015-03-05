@@ -15,6 +15,9 @@ public class Calendar {
         this.name = name;
         this.id = id;
     }
+    public Calendar(int id){
+        this.id = id;
+    }
 
     public void addApointment(Appointment appoint){
         this.appointments.add(appoint);

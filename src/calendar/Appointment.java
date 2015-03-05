@@ -3,6 +3,7 @@ package calendar;
 import server.User;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -11,10 +12,14 @@ import java.util.Date;
  */
 public class Appointment implements Serializable {
 
+    int id;
     String title;
     String purpose;
-    Date startDate;
-    Date endDate;
+    String location;
+    LocalDateTime startDate;
+    LocalDateTime endDate;
+    LocalDateTime endRepeatDate;
+    int repeatEvery;
     Room room;
     UserModel owner;
     Calendar cal;
@@ -23,8 +28,24 @@ public class Appointment implements Serializable {
     public Appointment() {
     }
 
-    public Appointment(String title, String purpose, Date startDate, Date endDate, Room room, UserModel owner, Calendar cal){
+    public Appointment(String id, String title, String purpose, String location, String startDate, String endDate, String endRepeatDate, String repeatEveryXDays, String calID, String roomID){
+        this.title = title;
+        this.id = Integer.parseInt(id);
+        this.purpose = purpose;
+        this.startDate = LocalDateTime.parse(startDate);
+        this.endDate = LocalDateTime.parse(endDate);
+        this.cal = new Calendar(Integer.parseInt(calID));
+
+        //can be null
+        if(roomID != null) this.room = new Room(Integer.parseInt(roomID));
+        if(location != null) this.location = location;
+        if(repeatEveryXDays != null) this.repeatEvery = Integer.parseInt(repeatEveryXDays);
+        if(endRepeatDate != null) this.endRepeatDate = LocalDateTime.parse(endRepeatDate);
+    }
+
+    public Appointment(int id, String title, String purpose, LocalDateTime startDate, LocalDateTime endDate, Room room, UserModel owner, Calendar cal){
         this.title=title;
+        this.id=id;
         this.purpose=purpose;
         this.startDate=startDate;
         this.endDate=endDate;
@@ -39,10 +60,10 @@ public class Appointment implements Serializable {
     public String getPurpose() {
         return purpose;
     }
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
     public Room getRoom() {
@@ -66,10 +87,10 @@ public class Appointment implements Serializable {
     public void setPurpose(String purpose) {
         this.purpose = purpose;
     }
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
     public void setRoom(Room room) {

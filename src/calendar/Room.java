@@ -22,6 +22,15 @@ public class Room {
         this.utilities = utilities;
     }
 
+    public Room(int id){
+        String[] roomRow = server.database.Logic.getRow("Room", "roomid", Integer.toString(id));
+        System.out.println(roomRow);
+        new Room(id, "", 1, 420, 1300, new ArrayList<Utility>());
+    }
+    public Room(String name){
+    this.name=name;
+    }
+
     public Room(int id, String name, int capacity, int opensAt, int closesAt){
         new Room(id, name, capacity, opensAt, closesAt, new ArrayList<Utility>());
     }
