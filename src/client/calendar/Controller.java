@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class Controller {
 
 
-    @FXML private ComboBox chooseCalendar;
+    //@FXML private ComboBox chooseCalendar;
     @FXML private Text name;
     @FXML private Button logOff;
     @FXML private Button userSettings;
@@ -48,7 +48,7 @@ public class Controller {
 
     @FXML
     void initialize() {
-        chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
+        //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
         populateCalendars(new Integer[]{1, 2, 3});
     }
 
@@ -81,8 +81,8 @@ public class Controller {
     }
 
     public void populateCalendar(int calID){
-        //ThreadClient socket = new ThreadClient();
-        ArrayList<Appointment> apps = Appointment.getAppointmentsInCalendar(calID, client.Main.socket);
+        ThreadClient socket = new ThreadClient();
+        ArrayList<Appointment> apps = Appointment.getAppointmentsInCalendar(calID, socket);
         for(Appointment app : apps){
             //only display appointments this week
             if(app.getStartDate().getDayOfYear()<displayDate.getDayOfYear()+7) {
