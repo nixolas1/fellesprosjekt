@@ -178,6 +178,10 @@ public class Logic {
 
 
     public static boolean createGroup(Group group){
+        // todo "INSERT INTO User VALUES ('" + user.getEmail() + "', '" )
+        int groupId = getLastGroupIdUsed();
+        //for (UserModel user : group.members)
+        String query = "INSERT INTO GroupCalendar ";
         ResultSet result = null;
         Statement stmt = null;
     }
