@@ -1,8 +1,9 @@
 package calendar;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Attendee {
+public class Attendee implements Serializable {
 
     UserModel user;
     Appointment appointment;

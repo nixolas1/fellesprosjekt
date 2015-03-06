@@ -33,6 +33,11 @@ public class UserModel implements Serializable {
         setLastName(lastName);
         setPhone(phone);
     }
+    /*public UserModel(int id){
+        String[] userRow = server.database.Logic.getRow("User", "email", Integer.toString(id));
+        System.out.println(roomRow);
+        new Room(id, "", 1, 420, 1300, new ArrayList<Utility>());
+    }*/
 
     public String getUsername() {
         return username;

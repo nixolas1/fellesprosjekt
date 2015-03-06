@@ -1,5 +1,6 @@
 package client;
 
+import calendar.Appointment;
 import calendar.UserModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +26,7 @@ public class Main extends Application {
             this.stage=mainStage;
             System.out.println("Starting main client stage");
             client.login.Main.show(mainStage);
+            //System.out.println(Appointment.getAppointmentsInCalendar("1", socket));
 
         } catch (Exception e) {
             e.printStackTrace();
