@@ -46,7 +46,7 @@
                 </Pane>
                 <Pane prefHeight="40.0" prefWidth="139.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                     <children>
-                        <Button fx:id="cancel" layoutY="10.0" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" mnemonicParsing="false" onAction="#cancelChanges" prefHeight="40.0" prefWidth="80.0" text="Avbryt">
+                        <Button fx:id="cancel" layoutY="10.0" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" mnemonicParsing="false" onAction="#toCalendar" prefHeight="40.0" prefWidth="80.0" text="Avbryt">
                             <font>
                                 <Font name="Helvetica Neue" size="13.0" />
                             </font>
@@ -73,7 +73,7 @@
                 </Pane>
                 <Pane prefHeight="60.0" prefWidth="293.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>
-                  <ChoiceBox fx:id="domain" layoutX="5.0" layoutY="24.0" maxHeight="40.0" maxWidth="175.0" minHeight="40.0" minWidth="175.0" prefHeight="40.0" prefWidth="175.0" />
+                  <ChoiceBox fx:id="domain" layoutX="5.0" layoutY="24.0" maxHeight="40.0" maxWidth="175.0" minHeight="40.0" minWidth="175.0" prefHeight="40.0" prefWidth="175.0" value="stud.ntnu.no"/>
                </children>
                 </Pane>
                 <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
