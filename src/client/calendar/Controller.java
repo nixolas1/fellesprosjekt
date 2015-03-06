@@ -30,6 +30,8 @@ public class Controller {
     @FXML private Button userSettings;
     @FXML private Button yourCalendar;
     @FXML private Button today;
+    @FXML private Text year;
+    @FXML private Text month;
     @FXML private Text weekNum;
     @FXML private Text monDate;
     @FXML private Text tueDate;
@@ -50,6 +52,19 @@ public class Controller {
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
         populateCalendars(new Integer[]{1, 2, 3});
+    }
+
+    public void updateYear() {
+       // String yearNow = displayDate.getYear();
+       // year.setText();
+    }
+
+    public void updateMonth() {
+
+    }
+
+    public void updateWeekNum() {
+
     }
 
     public void updateDate() {
