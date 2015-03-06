@@ -67,12 +67,9 @@ public class Controller{
 
 
     public void cancelChanges(){
-        System.out.println("cancelChanges()");
+        System.out.println("Back to Calendar");
     }
 
-    public void saveChanges(){
-        updateUser();
-    }
 
     public boolean hasChangedPassword(){
         if (password1.getText().length() > 0 && password11.getText().length() > 0) {
@@ -95,7 +92,7 @@ public class Controller{
 
 
     @FXML
-    public void updateUser() {
+    public void saveChanges() {
         System.out.println("updateUser()");
         // TODO  -->   username, password, domain, firstName, lastName, phone
         if (hasChangedPassword()){
