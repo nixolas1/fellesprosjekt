@@ -1,11 +1,12 @@
 package calendar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by nixo on 3/3/15.
  */
-public class Calendar {
+public class Calendar implements Serializable {
     String name;
     int id;
     public String color = "0xCCCCCC";
@@ -13,6 +14,9 @@ public class Calendar {
 
     public Calendar(String name, int id){
         this.name = name;
+        this.id = id;
+    }
+    public Calendar(int id){
         this.id = id;
     }
 

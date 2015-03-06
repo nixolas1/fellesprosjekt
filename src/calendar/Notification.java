@@ -1,11 +1,12 @@
 package calendar;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by nixo on 3/4/15.
  */
-public class Notification {
+public class Notification implements Serializable {
     Appointment app;
     Calendar cal;
     UserModel user;

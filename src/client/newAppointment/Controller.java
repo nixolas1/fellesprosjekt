@@ -220,7 +220,6 @@ public class Controller implements Initializable{
     @FXML
     public void createAppointment(ActionEvent event) {
         if(checkIfAllValid()) {
-            // title, description, startDate, endDate, room, owner, cal
             String title = this.title.getText();
             String description = this.description.getText();
             int hrStart = Integer.parseInt(from.getText().split(":")[0]);
@@ -232,8 +231,7 @@ public class Controller implements Initializable{
             Room room = new Room(1, "test", 1, 0, 24, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
             UserModel owner = new UserModel(); // todo FIX
             Calendar cal = new Calendar("test", 1); // TEST CAL! TODO get from DB
-            Appointment app = new Appointment(title, description, startDate, endDate, room, owner, cal);
-
+            Appointment app = new Appointment(1, title, description, startDate, endDate, room, owner, cal, 0, null, "abc");
             //TODO send appointment to server, insert into db
         } else {
             System.out.println("One or more fields INVALID. Data not sent to server.");
