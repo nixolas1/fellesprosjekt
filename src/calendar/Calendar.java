@@ -13,6 +13,13 @@ public class Calendar implements Serializable {
     String name = "";
     int id;
     public ArrayList<Appointment> appointments = new ArrayList<Appointment>();
+    Group group;
+
+    public Calendar(String name, int id, Group group){
+        this.group = group;
+        this.name = name;
+        this.id = id;
+    }
 
     public Calendar(String name, int id){
         this.name = name;
