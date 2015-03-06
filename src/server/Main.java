@@ -38,6 +38,9 @@ public class Main {
         //ArrayList<UserModel> hore = server.database.Logic.getAllUsers();
         //getCalendarAppointments(new Hashtable<String, String>() {{put("id", "2");}});
 
+        Logic.getAllRows("Room");
+
+
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
 

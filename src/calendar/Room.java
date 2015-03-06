@@ -34,7 +34,7 @@ public class Room implements Serializable {
     }
 
     public Room(int id, String name, int capacity, int opensAt, int closesAt){
-        new Room(id, name, capacity, opensAt, closesAt, new ArrayList<Utility>());
+        new Room(id, name, capacity, opensAt, closesAt, null);
     }
 
 }
