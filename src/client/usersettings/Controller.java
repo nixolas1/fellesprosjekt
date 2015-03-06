@@ -3,6 +3,7 @@ package client.usersettings;
 import calendar.UserModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -49,7 +50,7 @@ public class Controller{
     public void initializeFields(){
         username.setText(model.getUsername());
         username.setDisable(true);
-        //domain.setText(model.getDomain());
+        domain.setItems(FXCollections.observableArrayList("stud.ntnu.no"));
         domain.setDisable(true);
         firstName.setText(model.getFirstName());
         lastName.setText(model.getLastName());
