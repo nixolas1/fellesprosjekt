@@ -15,13 +15,13 @@ public class RoomLogic {
             ArrayList<Room> rooms = getModelsFromDBOutput(
                     server.database.Logic.getAllRows("Room"));
             System.out.println(rooms.toString());
-            return new Query("getAppointments", rooms);
+            return new Query("getRooms", rooms);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return new Query("userAppointments", false);
+        return new Query("getRooms", false);
     }
 
     public static ArrayList<Room> getModelsFromDBOutput(ArrayList<List<String>> list){

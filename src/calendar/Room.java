@@ -42,8 +42,9 @@ public class Room implements Serializable {
     }
 
     public static ArrayList<Room> getAllRooms(ThreadClient socket){
+        System.out.println("getAllRooms()");
         try {
-            Query reply = socket.send(new Query("getAppointments"));
+            Query reply = socket.send(new Query("getRooms"));
             Hashtable<String, ArrayList<Room>> response = reply.data;
             return response.get("reply");
         }catch(Exception e){
