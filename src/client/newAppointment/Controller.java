@@ -285,35 +285,37 @@ public class Controller implements Initializable{
     public boolean checkIfAllValid(){
         Boolean ret = true;
         if(title.getText()==null || title.getText()=="") ret = false;
+        if(description.getText()==null || description.getText()=="") ret = false;
+        if(locationDescription.getText()==null || locationDescription.getText()=="") ret = false;
         if(dateIsAfter(endDate, date) || dateIsAfter(stoprepeat, date)) {
             ret = false;
             System.out.println("date shit in checkIfAllValid()");
         }
         if(work.isSelected() && room.getOpacity()!=2.0) {
                 ret = false;
-                System.out.println("Room problem [WORK only]");
+                System.out.println("Room invalid [WORK only]");
         }
         if(personal.isSelected() && (locationDescription.getText()=="" || locationDescription.getText()==null)) {
             ret = false;
-            System.out.println("Sted problem [PERSONAL only]");
+            System.out.println("Sted invalid [PERSONAL only]");
         }
         if(!allDay.isSelected()) {
             if (from.getOpacity() != 2.0) {
                 ret = false;
-                System.out.println("From problem");
+                System.out.println("From invalid");
             }
             if (to.getOpacity() != 2.0) {
                 ret = false;
-                System.out.println("To problem");
+                System.out.println("To invalid");
             }
         }
         if(date.getOpacity()!=2.0) {
             ret = false;
-            System.out.println("Date problem");
+            System.out.println("Date invalid");
         }
         if(stoprepeat.getOpacity()==3.0) {
             ret = false;
-            System.out.println("stoprepeat problem");
+            System.out.println("stoprepeat invalid");
         }
 
         create.setDisable(!ret);
