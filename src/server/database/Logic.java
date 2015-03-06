@@ -188,7 +188,7 @@ public class Logic {
         } try {
             if (result.next()){
                 lastIdUsed = result.getInt(1);
-                System.out.println("lastIdUsed: " + lastIdUsed);
+                //System.out.println("lastIdUsed: " + lastIdUsed);
             }
         } catch (SQLException f){
             System.out.println("SQLException triggered in getLastGroupIdUsed(), 2. catch block: " + f);
@@ -200,7 +200,7 @@ public class Logic {
 
 
     public static boolean createGroup(Group group){
-        // Dette blir gjort når Group objektet instansieres, og ikke i databasen
+        // Dette blir gjort når Group objektet instansieres, og ikke i databasen:
         //int groupId = getLastGroupIdUsed() + 1;
         int groupId = group.getId();
         String query = "INSERT INTO GroupCalendar VALUES (" + groupId + ", ";
@@ -209,16 +209,15 @@ public class Logic {
         for (UserModel user : group.getMembers()){
             try {
                 stmt = conn.createStatement();
-                query = query + "'" + user.getEmail() + "');";
-                System.out.println("QUERY: " + query);
-                stmt.executeUpdate(query);
+                System.out.println("QUERY: " + query + "'" + user.getEmail() + "');");
+                stmt.executeUpdate(query + "'" + user.getEmail() + "');");
                 System.out.println(user.getEmail() + " was successfully added to GroupCalendar with ID = " + groupId);
             } catch (SQLException e) {
-                System.out.println("SQLExeption triggered in getNumberOfColumns()" + e);
+                System.out.println("SQLExeption triggered in createGroup(): " + e);
                 System.out.println("This happend during inserting user '" + user.getEmail() + "' into GroupCalendar");
                 return false;
             } catch (Exception f) {
-                System.out.println("Exception triggered in createGroup(): " + f);
+                System.out.println("Exception triggered in createGroup():  " + f);
                 return false;
             }
         } closeDB(stmt);
@@ -241,6 +240,8 @@ public class Logic {
             result = stmt.executeQuery(getNumberOfColumns);
         } catch (SQLException e) {
             System.out.println("SQLExeption triggered in getNumberOfColumns(), 1. try block: " + e);
+        } catch (Exception f){
+            System.out.println("Exception triggered in getNumberofColumns(), 1. try block: "+ f);
         }
         try {
             if (result.next()) {
@@ -249,6 +250,8 @@ public class Logic {
             } else throw new NullPointerException(table + " has no columns");
         } catch (SQLException e) {
             System.out.println("SQLExeption triggered in getNumberOfColumns(), 2. try block: " + e);
+        } catch (Exception f){
+            System.out.println("Exception triggered in getNumberofColumns(), 2. try block: " + f);
         } finally {
             closeDB(stmt);
         } return numberOfColumns;

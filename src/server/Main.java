@@ -45,6 +45,7 @@ public class Main {
         UserModel user2 = server.database.Logic.getUser("admin@stud.ntnu.no");
         UserModel user3 = server.database.Logic.getUser("fucku@stud.ntnu.no");
         UserModel user4 = server.database.Logic.getUser("slange@stud.ntnu.no");
+        user4.setPhone("12345678");
         ArrayList<UserModel> list = new ArrayList<>(Arrays.asList(user1, user2, user3, user4));
         Group group = new Group(Logic.getLastGroupIdUsed() +1, "TESTGRUPPE", list);
         Logic.createGroup(group);
