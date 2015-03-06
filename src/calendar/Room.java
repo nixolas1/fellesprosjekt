@@ -13,6 +13,7 @@ public class Room implements Serializable {
     int opensAt; //minutes since midnight
     int closesAt;
     int id;
+
     ArrayList<Utility> utilities;
     public Room(int id, String name, int capacity, int opensAt, int closesAt, ArrayList<Utility> utilities){
         this.name=name;
