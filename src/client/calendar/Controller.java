@@ -65,8 +65,8 @@ public class Controller {
     }
 
     public void populateCalendar(int calID){
-        ThreadClient socket = new ThreadClient();
-        ArrayList<Appointment> apps = Appointment.getAppointmentsInCalendar(calID, socket);
+        //ThreadClient socket = new ThreadClient();
+        ArrayList<Appointment> apps = Appointment.getAppointmentsInCalendar(calID, client.Main.socket);
         for(Appointment app : apps){
             //only display appointments this week
             if(app.getStartDate().getDayOfYear()<displayDate.getDayOfYear()+7) {
