@@ -1,8 +1,13 @@
 package calendar;
 
-import java.util.ArrayList;
+import network.Query;
 
-public class UserModel {
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.io.Serializable;
+
+public class UserModel implements Serializable {
+
 
     private String username = "";
     private String firstName = "";
@@ -28,6 +33,11 @@ public class UserModel {
         setLastName(lastName);
         setPhone(phone);
     }
+    /*public UserModel(int id){
+        String[] userRow = server.database.Logic.getRow("User", "email", Integer.toString(id));
+        System.out.println(roomRow);
+        new Room(id, "", 1, 420, 1300, new ArrayList<Utility>());
+    }*/
 
     public String getUsername() {
         return username;
@@ -88,12 +98,30 @@ public class UserModel {
     }
 
     public String toString(){
-        return "Bruker: "+getUsername()+" passord: "+getPassword()+" fornavn: "+getFirstName()+" etternavn: "+
-                getLastName()+" telefon: "+getPhone()+" domene: "+getDomain()+" email: "+getEmail();
+        return "[Bruker: "+getUsername()+" passord: "+getPassword()+" fornavn: "+getFirstName()+" etternavn: "+
+                getLastName()+" telefon: "+getPhone()+" domene: "+getDomain()+" email: "+getEmail() + "]";
     }
 
     public String displayInfo() {
         return getFirstName() + " " + getLastName() + ", " + getEmail();
     }
+
+    public static ArrayList<UserModel> getUsersFromDB() {
+        return client.newAppointment.Main.getAllUsers();
+    }
+
+    public static UserModel getUserFromServer(final String user, final String domain){
+
+        System.out.println("Getting user: "+user+", "+domain);
+        Hashtable<String, String> data = new Hashtable<String, String>(){{
+            put("username",user);
+            put("domain", domain);
+        }};
+
+        Query reply = client.Main.socket.send(new Query("getUser", data));
+        Hashtable<String, UserModel> response = reply.data;
+        return response.get("reply");
+    }
+
 
 }
