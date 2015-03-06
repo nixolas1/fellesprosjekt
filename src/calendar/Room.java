@@ -36,4 +36,8 @@ public class Room implements Serializable {
         new Room(id, name, capacity, opensAt, closesAt, new ArrayList<Utility>());
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
 }
