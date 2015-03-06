@@ -153,7 +153,7 @@ public class Logic {
 
 
     public static int getLastGroupIdUsed(){
-        String query = "SELECT * FROM GroupCalendar ORDER BY Calendar_calendarid DESC LIMIT = 1;";
+        String query = "SELECT Calendar_calendarid FROM GroupCalendar ORDER BY Calendar_calendarid DESC LIMIT 1;";
         ResultSet result = null;
         Statement stmt = null;
         int lastIdUsed = 0;
