@@ -3,6 +3,7 @@ package client.usersettings;
 import calendar.UserModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -37,19 +38,7 @@ public class Controller{
 
     @FXML
     void initialize() {
-        //model = client.usersettings.Main.user;
-        // username, password, domain, firstName, lastName, phone
-        //model = new UserModel("sondrejw", Crypto.hash("morra"), "stud.ntnu.no", "Sondre", "Den Beste", "12345678");
-        //model = server.database.Logic.getUser("sondrejw@stud.ntnu.no");
-
         model = Main.user;
-        /*new UserModel("sondrejw",
-                                "HNI9KX1fGqfdsoNdXcq3dibd2JaFT7eCwj7XZjHBDME=",
-                                "stud.ntnu.no",
-                                "Sondre",
-                                "Johan Widmark",
-                                "48179861");*/
-
         createValidationListener(password1, passwordReg, 50);
         createPasswordValidationListener(password11, passwordReg, 50);
         createValidationListener(firstName, nameReg, 30);
@@ -61,7 +50,7 @@ public class Controller{
     public void initializeFields(){
         username.setText(model.getUsername());
         username.setDisable(true);
-        //domain.setText(model.getDomain());
+        domain.setItems(FXCollections.observableArrayList("stud.ntnu.no"));
         domain.setDisable(true);
         firstName.setText(model.getFirstName());
         lastName.setText(model.getLastName());
@@ -78,13 +67,9 @@ public class Controller{
 
 
     public void cancelChanges(){
-        client.calendar.Main.show(Main.stage);
-        System.out.println("cancelChanges()");
+        System.out.println("Back to Calendar");
     }
 
-    public void saveChanges(){
-        updateUser();
-    }
 
     public boolean hasChangedPassword(){
         if (password1.getText().length() > 0 && password11.getText().length() > 0) {
@@ -107,7 +92,7 @@ public class Controller{
 
 
     @FXML
-    public void updateUser() {
+    public void saveChanges() {
         System.out.println("updateUser()");
         // TODO  -->   username, password, domain, firstName, lastName, phone
         if (hasChangedPassword()){

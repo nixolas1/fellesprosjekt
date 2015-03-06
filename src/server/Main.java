@@ -1,6 +1,7 @@
 package server;
 
 import calendar.UserModel;
+import network.ThreadClient;
 import network.ThreadServer;
 import security.Crypto;
 import server.database.*;
@@ -38,8 +39,15 @@ public class Main {
         //ArrayList<UserModel> hore = server.database.Logic.getAllUsers();
         //getCalendarAppointments(new Hashtable<String, String>() {{put("id", "2");}});
 
+
+
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
+        /*
+        ThreadClient cl = new ThreadClient();
+        System.out.println("ThreadClient instanceiatied");
+        calendar.Room.getAllRooms(cl);
+        */
 
 
     }

@@ -1,8 +1,12 @@
 package calendar;
 
+import network.Query;
+import network.ThreadClient;
+
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * Created by nixo on 3/3/15.
@@ -13,6 +17,7 @@ public class Room implements Serializable {
     int opensAt; //minutes since midnight
     int closesAt;
     int id;
+
     ArrayList<Utility> utilities;
     public Room(int id, String name, int capacity, int opensAt, int closesAt, ArrayList<Utility> utilities){
         this.name=name;
@@ -33,7 +38,20 @@ public class Room implements Serializable {
     }
 
     public Room(int id, String name, int capacity, int opensAt, int closesAt){
-        new Room(id, name, capacity, opensAt, closesAt, new ArrayList<Utility>());
+        new Room(id, name, capacity, opensAt, closesAt, null);
+    }
+
+    public static ArrayList<Room> getAllRooms(ThreadClient socket){
+        System.out.println("getAllRooms()");
+        try {
+            Query reply = socket.send(new Query("getRooms"));
+            Hashtable<String, ArrayList<Room>> response = reply.data;
+            return response.get("reply");
+        }catch(Exception e){
+            System.err.println("Unable to send or recieve rooms from server:");
+            e.printStackTrace();
+            return new ArrayList<Room>();
+        }
     }
 
 }
