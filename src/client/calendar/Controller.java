@@ -2,11 +2,14 @@ package client.calendar;
 
 import calendar.Appointment;
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -53,7 +56,7 @@ public class Controller {
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
-        populateCalendars(new Integer[]{1, 2, 3});
+        populateCalendars(new Integer[]{1, 2, 3, 4});
     }
 
     public void updateYear() {
@@ -146,10 +149,23 @@ public class Controller {
         setAnchor(title, "top", 20);
         setAnchor(location, "bottom", 0);
 
+        if(app.getEndDate().getHour()-app.getStartDate().getHour()<2)
+            location.setText("");
 
         //style
         String color = "-fx-background-color: "+app.getCal().getColor();
         pane.setStyle(color);
+        pane.setCursor(Cursor.HAND);
+
+        //interaction
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("Pressed "+app.getTitle());
+                client.detailedAppointment.Main.show(Main.stage, app);
+                event.consume();
+            }
+        });
 
         return pane;
     }
