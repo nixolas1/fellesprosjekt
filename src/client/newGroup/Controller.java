@@ -10,13 +10,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import calendar.Group;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
-import javax.swing.*;
+import javax.xml.soap.Text;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -27,7 +26,9 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     @FXML
-    private TextField name, description;
+    private TextField name;
+
+    @FXML private TextArea description;
 
     @FXML
     private Button cancel, create, add, remove;
@@ -42,7 +43,7 @@ public class Controller implements Initializable {
     private ComboBox usersComboBox;
 
     @FXML
-    private ListView attendeeList;
+    private ListView groupList;
 
     private ArrayList<UserModel> allUsers;
     private ObservableList<String> userInfo;
@@ -67,10 +68,10 @@ public class Controller implements Initializable {
 
         });
 
-        attendeeList.focusedProperty().addListener(new ChangeListener<Boolean>() {
+        groupList.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (attendeeList.isFocused()) {
+                if (groupList.isFocused()) {
                     remove.setDisable(false);
                 }
             }
@@ -78,14 +79,16 @@ public class Controller implements Initializable {
 
         create.setDisable(true);
         groupmembers = FXCollections.observableArrayList();
-        attendeeList.setItems(groupmembers);
-        allUsers = calendar.UserModel.getUsersFromDB();
+        groupList.setItems(groupmembers);
+        allUsers = calendar.UserModel.getAllUsers();
         userInfo = displayUserInfo(allUsers);
         usersComboBox.setItems(userInfo);
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
 
         usersComboBox.setItems(FXCollections.observableArrayList(userInfo));
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
+
+        groupmembersUserModel = new ArrayList<>();
 
     }
 
@@ -111,7 +114,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void removeUser(ActionEvent event) {
-        String usr = attendeeList.getSelectionModel().getSelectedItem().toString();
+        String usr = groupList.getSelectionModel().getSelectedItem().toString();
         System.out.println(usr);
         if (groupmembers.contains(usr)) {
             groupmembers.remove(usr);

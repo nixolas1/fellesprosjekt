@@ -49,10 +49,10 @@
             <Label layoutY="6.0" text="Deltakere" />
          </children>
       </AnchorPane>
-      <TextField id="name" fx:id="room" prefHeight="25.0" prefWidth="283.0" promptText="Navn på gruppe" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <TextField id="name" fx:id="name" prefHeight="25.0" prefWidth="283.0" promptText="Navn på gruppe" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.rowSpan="2">
          <children>
-            <TextField id="description" fx:id="purpose" prefHeight="92.0" prefWidth="360.0" />
+            <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </FlowPane>
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
@@ -64,7 +64,7 @@
                   <Button id="remove" fx:id="remove" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUser" text="&lt;" />
                   <Button id="add" fx:id="add" layoutX="164.0" mnemonicParsing="false" onAction="#addUser" text="&gt;" />
                   <ComboBox id="usersComboBox" fx:id="usersComboBox" prefHeight="26.0" prefWidth="160.0" promptText="Finn deltaker" />
-                  <ListView id="attendeeList" fx:id="attendeeList" layoutX="194.0" prefHeight="130.0" prefWidth="166.0" />
+                  <ListView id="attendeeList" fx:id="groupList" layoutX="194.0" prefHeight="130.0" prefWidth="166.0" />
                </children>
             </Pane>
          </children></FlowPane>
