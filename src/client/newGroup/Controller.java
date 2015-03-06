@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import calendar.Group;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class Controller implements Initializable {
 
     private ArrayList<UserModel> allUsers;
     private ObservableList<String> userInfo;
-    private ObservableList<String> attendees;
+    private ObservableList<String> groupmembers;
     UserModel user = new UserModel();
 
     @FXML
@@ -74,8 +75,8 @@ public class Controller implements Initializable {
         });
 
         create.setDisable(true);
-        attendees = FXCollections.observableArrayList();
-        attendeeList.setItems(attendees);
+        groupmembers = FXCollections.observableArrayList();
+        attendeeList.setItems(groupmembers);
         allUsers = calendar.UserModel.getUsersFromDB();
         userInfo = displayUserInfo(allUsers);
         usersComboBox.setItems(userInfo);
@@ -85,8 +86,6 @@ public class Controller implements Initializable {
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
 
     }
-
-
 
     public ObservableList<String> displayUserInfo(ArrayList<UserModel> users) {
         ObservableList<String> userInfo = FXCollections.observableArrayList();
@@ -100,10 +99,10 @@ public class Controller implements Initializable {
     public void addUser(ActionEvent event) {
         String usr = (String) FxUtil.getComboBoxValue(usersComboBox);
         if (userInfo.contains(usr)){
-            attendees.add(usr);
+            groupmembers.add(usr);
         }
         usersComboBox.getEditor().setText("");
-        System.out.println(attendees);
+        System.out.println(groupmembers);
     }
 
 
@@ -111,14 +110,28 @@ public class Controller implements Initializable {
     public void removeUser(ActionEvent event) {
         String usr = attendeeList.getSelectionModel().getSelectedItem().toString();
         System.out.println(usr);
-        if (attendees.contains(usr)) {
-            attendees.remove(usr);
+        if (groupmembers.contains(usr)) {
+            groupmembers.remove(usr);
             userInfo.add(usr);
         }
     }
 
-  /*  @FXML
-    public void createGroup(ActionEvent event) {
-        Group group = new Group();
-    }*/
+    @FXML
+    public static void createGroup(ArrayList<UserModel> users, TextField name) {
+        int lastIdInDatabase = 4;
+        String groupname = name.getText();
+
+        Group group = new Group(lastIdInDatabase+1, groupname , users);
+
+        /*ArrayList<UserModel> groupMembers = new ArrayList<>(users.size());
+        for (UserModel user : users){
+            groupMembers.add(user);
+        }*/
+
+        //Group group = new Group();
+    }
+
+    public isValid() {
+        if
+    }
 }
