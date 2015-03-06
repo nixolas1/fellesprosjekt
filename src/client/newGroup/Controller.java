@@ -16,6 +16,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import calendar.Group;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -46,6 +47,7 @@ public class Controller implements Initializable {
     private ArrayList<UserModel> allUsers;
     private ObservableList<String> userInfo;
     private ObservableList<String> groupmembers;
+    private ArrayList<UserModel> groupmembersUserModel;
     UserModel user = new UserModel();
 
     @FXML
@@ -97,6 +99,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void addUser(ActionEvent event) {
+        create.setDisable(false);
         String usr = (String) FxUtil.getComboBoxValue(usersComboBox);
         if (userInfo.contains(usr)){
             groupmembers.add(usr);
@@ -117,11 +120,27 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public static void createGroup(ArrayList<UserModel> users, TextField name) {
-        int lastIdInDatabase = 4;
+    public void createGroup(ActionEvent event) {
         String groupname = name.getText();
+        for (String user : groupmembers) {
+            String email = user.split(",")[1].trim();
+            UserModel usr = getUserModel(email);
+            groupmembersUserModel.add(usr);
+        }
+        System.out.println(groupmembersUserModel);
+        Group group = new Group(groupname, groupmembersUserModel);
+        //toDo - må addes i database, sondreeeee
+    }
+    public UserModel getUserModel(String email) {
+        for (UserModel user : allUsers) {
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+        return null;
+    }
 
-        Group group = new Group(lastIdInDatabase+1, groupname , users);
+
 
         /*ArrayList<UserModel> groupMembers = new ArrayList<>(users.size());
         for (UserModel user : users){
@@ -129,9 +148,9 @@ public class Controller implements Initializable {
         }*/
 
         //Group group = new Group();
-    }
 
-    public isValid() {
+
+    /*public isValid() {
         if
-    }
+    }*/
 }

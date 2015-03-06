@@ -18,7 +18,8 @@ public class Group implements Serializable {
         this.members = members;
     }
 
-    public Group() {
-
+    public Group(String name, ArrayList<UserModel> members) {
+        this.name = name;
+        this.members = members;
     }
 }

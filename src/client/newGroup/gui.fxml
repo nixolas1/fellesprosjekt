@@ -84,7 +84,7 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
          <children>
-            <Button id="create" fx:id="create" layoutY="10.0" maxHeight="36.0" maxWidth="360.0" minHeight="36.0" minWidth="360.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="360.0" stylesheets="@gui.css" text="Opprett gruppe" textFill="WHITE">
+            <Button id="create" fx:id="create" layoutY="10.0" maxHeight="36.0" maxWidth="360.0" minHeight="36.0" minWidth="360.0" mnemonicParsing="false" onAction="#createGroup" prefHeight="36.0" prefWidth="360.0" stylesheets="@gui.css" text="Opprett gruppe" textFill="WHITE">
                <padding>
                   <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
                </padding>
