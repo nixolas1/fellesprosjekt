@@ -1,6 +1,8 @@
 package server.database;
 
+import calendar.Appointment;
 import calendar.UserModel;
+import network.Query;
 //import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 import java.sql.Connection;
@@ -8,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -51,6 +54,26 @@ public class Logic {
         finally {
             closeDB(stmt);
         } return row;
+    }
+
+    public static Query sendAllRows(Hashtable<String, String> data){
+        try {
+            String table = data.get("table");
+            String where = data.get("where");
+            ArrayList<List<String>> rows = null;
+            if(where == null || where.equals("")){
+                rows = getAllRows(table);
+            }else{
+                rows = getAllRowsWhere(table, where);
+            }
+
+            return new Query("getRows", rows);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new Query("getRows", false);
     }
 
     public static ArrayList<List<String>> getAllRows(String table) {
