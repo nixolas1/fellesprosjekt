@@ -178,12 +178,30 @@ public class Logic {
 
 
     public static boolean createGroup(Group group){
-        // todo "INSERT INTO User VALUES ('" + user.getEmail() + "', '" )
-        int groupId = getLastGroupIdUsed();
-        //for (UserModel user : group.members)
-        String query = "INSERT INTO GroupCalendar ";
+        // Dette blir gjort når Group objektet instansieres, og ikke i databasen
+        //int groupId = getLastGroupIdUsed() + 1;
+        int groupId = group.getId();
+        String query = "INSERT INTO GroupCalendar VALUES (" + groupId + ", ";
         ResultSet result = null;
         Statement stmt = null;
+        for (UserModel user : group.getMembers()){
+            try {
+                stmt = conn.createStatement();
+                query = query + "'" + user.getEmail() + "');";
+                System.out.println("QUERY: " + query);
+                stmt.executeUpdate(query);
+                System.out.println(user.getEmail() + " was successfully added to GroupCalendar with ID = " + groupId);
+            } catch (SQLException e) {
+                System.out.println("SQLExeption triggered in getNumberOfColumns()" + e);
+                System.out.println("This happend during inserting user '" + user.getEmail() + "' into GroupCalendar");
+                return false;
+            } catch (Exception f) {
+                System.out.println("Exception triggered in createGroup(): " + f);
+                return false;
+            }
+        } closeDB(stmt);
+        System.out.println("Group '" + group.getName() + "' with id = " + groupId + " successfully created in database");
+        return true;
     }
 
 
@@ -356,7 +374,7 @@ public class Logic {
                 System.out.println("phone: '" + phone + "'\n");
 
             } else {
-                throw new NullPointerException("User has no entry");
+                throw new NullPointerException("User "+ mail + " has no entry in table = 'User");
             }
         } catch (SQLException e){
             System.out.println("SQLExeption triggered in getUsername(), 2. try block: " + e);
