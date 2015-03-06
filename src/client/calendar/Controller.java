@@ -47,6 +47,7 @@ public class Controller {
     protected static Stage primaryStage;
 
     private LocalDate displayDate = LocalDate.parse("2015-03-02");
+    private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
 
     @FXML
     void initialize() {
@@ -96,12 +97,12 @@ public class Controller {
     }
 
     public void populateCalendar(int calID){
-        ThreadClient socket = new ThreadClient();
         ArrayList<Appointment> apps = Appointment.getAppointmentsInCalendar(calID, socket);
         for(Appointment app : apps){
             //only display appointments this week
             if(app.getStartDate().getDayOfYear()<displayDate.getDayOfYear()+7) {
-                System.out.println(app.getTitle() + " " + app.getStartDate());
+                System.out.println(app.getTitle() + " " + app.getStartDate()+" i kalender "+app.getCal().getID());
+
                 AnchorPane pane = generateAppointmentPane(app);
                 insertPane(pane, app.getStartDate(), app.getEndDate());
             }
@@ -109,9 +110,15 @@ public class Controller {
     }
 
     private AnchorPane generateAppointmentPane(Appointment app){
-        AnchorPane pane = new AnchorPane();
-        String color = app.getCal().color; color = "lightblue";
+        AnchorPane pane = new AnchorPane(new Label(app.getTitle()));
+
+        //color
+        String color = app.getCal().getColor();
         pane.setStyle("-fx-background-color: "+color);
+
+        final Label title = new Label(app.getTitle());
+        AnchorPane.setTopAnchor(title, 5.0);
+
         return pane;
     }
 
