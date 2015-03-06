@@ -1,6 +1,8 @@
 package server.database;
 
+import calendar.Group;
 import calendar.UserModel;
+import com.sun.org.apache.regexp.internal.RESyntaxException;
 //import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 import java.sql.Connection;
@@ -148,6 +150,40 @@ public class Logic {
             closeDB(stmt);
         } return numberOfRows;
     }
+
+
+    public static int getLastGroupIdUsed(){
+        String query = "SELECT * FROM GroupCalendar ORDER BY Calendar_calendarid DESC LIMIT = 1;";
+        ResultSet result = null;
+        Statement stmt = null;
+        int lastIdUsed = 0;
+
+        try{
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("SQLException triggered in getLastGroupIdUsed(), 1. catch block: " + e);
+        } try {
+            if (result.next()){
+                lastIdUsed = result.getInt(1);
+                System.out.println("lastIdUsed: " + lastIdUsed);
+            }
+        } catch (SQLException f){
+            System.out.println("SQLException triggered in getLastGroupIdUsed(), 2. catch block: " + f);
+        } finally {
+            closeDB(stmt);
+        } return lastIdUsed;
+
+    }
+
+    /*
+    public static boolean createGroup(Group group){
+        ResultSet
+    }
+    */
+
+
+
 
     public static int getNumberOfColumns(String table) {
         String getNumberOfColumns = "SELECT COUNT(*) totalColumns FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name =  '" + table + "' AND TABLE_SCHEMA=(SELECT DATABASE())";

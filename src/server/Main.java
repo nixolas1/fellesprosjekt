@@ -40,14 +40,12 @@ public class Main {
         //getCalendarAppointments(new Hashtable<String, String>() {{put("id", "2");}});
 
 
+        int foo = server.database.Logic.getLastGroupIdUsed();
+        System.out.println("foo: " + foo);
 
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
-        /*
-        ThreadClient cl = new ThreadClient();
-        System.out.println("ThreadClient instanceiatied");
-        calendar.Room.getAllRooms(cl);
-        */
+
 
 
     }
