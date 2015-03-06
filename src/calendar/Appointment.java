@@ -66,9 +66,9 @@ public class Appointment implements Serializable {
         this.endRepeatDate=endRepeatDate;
     }
 
-    public static ArrayList<Appointment> getAppointmentsInCalendar(String calID, ThreadClient socket){
+    public static ArrayList<Appointment> getAppointmentsInCalendar(int calID, ThreadClient socket){
         Hashtable<String, String> data = new Hashtable<String, String>(){{
-            put("id",calID);
+            put("id",Integer.toString(calID));
         }};
 
         try {
