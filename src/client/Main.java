@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import network.ClientDB;
 import network.Query;
 import network.ThreadClient;
 import security.Crypto;
@@ -34,7 +35,9 @@ public class Main extends Application {
 
     public static void main(String[] args){
         socket = new ThreadClient();
+        //System.out.println(ClientDB.getAllTableRows("Calendar", socket).toString());
         launch(args);
+
 
     }
 
