@@ -176,11 +176,12 @@ public class Logic {
 
     }
 
-    /*
+
     public static boolean createGroup(Group group){
-        ResultSet
+        ResultSet result = null;
+        Statement stmt = null;
     }
-    */
+
 
 
 
