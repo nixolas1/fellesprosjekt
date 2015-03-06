@@ -40,7 +40,7 @@ public class Main {
         //server.database.Logic.getAllRows("User");
         //ArrayList<UserModel> hore = server.database.Logic.getAllUsers();
         //getCalendarAppointments(new Hashtable<String, String>() {{put("id", "2");}});
-
+        /*
         UserModel user1 = server.database.Logic.getUser("sondrejw@stud.ntnu.no");
         UserModel user2 = server.database.Logic.getUser("admin@stud.ntnu.no");
         UserModel user3 = server.database.Logic.getUser("fucku@stud.ntnu.no");
@@ -49,7 +49,7 @@ public class Main {
         ArrayList<UserModel> list = new ArrayList<>(Arrays.asList(user1, user2, user3, user4));
         Group group = new Group(Logic.getLastGroupIdUsed() +1, "TESTGRUPPE", list);
         Logic.createGroup(group);
-
+        */
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
 
