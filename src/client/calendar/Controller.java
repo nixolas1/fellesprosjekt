@@ -117,7 +117,40 @@ public class Controller {
         }
     }
 
+    private AnchorPane generateAppointmentPane(Appointment app){
 
+        String startText = app.getStartDate().format(DateTimeFormatter.ofPattern("HH:mm"));
+        String endText = app.getEndDate().format(DateTimeFormatter.ofPattern("HH:mm"));
+
+        final Label title = paneLabel(app.getTitle());
+        final Label time = paneLabel(startText + " - " + endText);
+        final Label location = paneLabel("");//TODO find solution for location display. app.getRoom().getName());
+
+        AnchorPane pane = new AnchorPane(title, time, location);
+        setAnchor(time, "top", 0);
+        setAnchor(title, "top", 20);
+        setAnchor(location, "bottom", 0);
+
+        if(app.getEndDate().getHour()-app.getStartDate().getHour()<2)
+            location.setText("");
+
+        //style
+        String color = "-fx-background-color: "+app.getCal().getColor(0.6);
+        pane.setStyle(color);
+        pane.setCursor(Cursor.HAND);
+
+        //interaction
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("Pressed "+app.getTitle());
+                //client.detailedAppointment.Main.show(Main.stage, app);
+                event.consume();
+            }
+        });
+
+        return pane;
+    }
 
     private Label paneLabel(String text){
         final Label label = new Label(text);
@@ -135,42 +168,6 @@ public class Controller {
             AnchorPane.setBottomAnchor(label, padding + pos);
     }
 
-    private AnchorPane generateAppointmentPane(Appointment app){
-
-        String startText = app.getStartDate().format(DateTimeFormatter.ofPattern("HH:mm"));
-        String endText = app.getEndDate().format(DateTimeFormatter.ofPattern("HH:mm"));
-
-        final Label title = paneLabel(app.getTitle());
-        final Label time = paneLabel(startText + " - " + endText);
-        final Label location = paneLabel(app.getRoom().getName());
-
-        AnchorPane pane = new AnchorPane(title, time, location);
-        setAnchor(time, "top", 0);
-        setAnchor(title, "top", 20);
-        setAnchor(location, "bottom", 0);
-
-        if(app.getEndDate().getHour()-app.getStartDate().getHour()<2)
-            location.setText("");
-
-        //style
-        String color = "-fx-background-color: "+app.getCal().getColor();
-        pane.setStyle(color);
-        pane.setCursor(Cursor.HAND);
-
-        //interaction
-        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println("Pressed "+app.getTitle());
-                client.detailedAppointment.Main.show(Main.stage, app);
-                event.consume();
-            }
-        });
-
-        return pane;
-    }
-
-
     private void insertPane(AnchorPane pane, LocalDateTime startDate, LocalDateTime endDate) {
         int col = startDate.getDayOfYear()-displayDate.getDayOfYear();
         int row = startDate.getHour();
@@ -179,9 +176,10 @@ public class Controller {
     }
 
     private void insertPane(AnchorPane pane, int col, int row, int colspan, int rowspan) {
-
         calendarGrid.add(pane, col, row, colspan, rowspan);
-  }
+    }
+
+
 }
 
 /*for(int day = 0; day<days; day++){

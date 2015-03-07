@@ -30,12 +30,15 @@ public class Calendar implements Serializable {
     }
 
     public String getColor(){
+        return getColor(1.0);
+    }
+    public String getColor(double opacity){
         Random random = new Random(this.id*13379001);
-        final float hue = random.nextInt(360);
-        final float saturation = (random.nextInt(2000) + 1000) / 10000f;
-        final float luminance = 0.9f;
-        Color color =  Color.hsb(hue, saturation, luminance);
-        return "#"+color.toString().substring(4);
+        final int hue = random.nextInt(360);
+        final double saturation = 0.7;
+        final double luminance = 0.9;
+        Color c =  Color.hsb(hue, saturation, luminance, opacity);
+        return "rgba("+ c.getRed()*255+", "+c.getGreen()*255+", "+c.getBlue()*255+", "+c.getOpacity()+");";
     }
 
     public int getID(){return this.id;}
