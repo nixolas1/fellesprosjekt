@@ -443,6 +443,7 @@
             <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="40.0" minHeight="100.0" prefHeight="40.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="370.0" minHeight="370.0" prefHeight="370.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
@@ -488,7 +489,7 @@
                      </font></Button>
                </children>
             </Pane>
-            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="7">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ebebeb" height="170.0" layoutY="200.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.2" width="170.0" />
                   <Text layoutX="2.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Månedskalender med ukenr" wrappingWidth="164.7195281982422">
@@ -511,6 +512,15 @@
                   </Rectangle>
                   <ComboBox fx:id="chooseCalendar" layoutX="10.0" layoutY="6.0" prefWidth="150.0" promptText="Finn kalender" />
                </children></Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
+               <children>
+                  <Button fx:id="createGroup" layoutX="9.0" layoutY="7.0" mnemonicParsing="false" onAction="#onBtnShowNewGroup" text="Opprett gruppe">
+                     <font>
+                        <Font name="Helvetica Neue" size="13.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
          </children>
       </GridPane>
    </children>
