@@ -47,4 +47,13 @@ public class Controller {
     public void showUserSettings(ActionEvent event) {
         client.usersettings.Main.show(Main.stage);
     }
+
+    public void onBtnShowNewGroup(ActionEvent event) {
+     client.newGroupCalendar.Main newGroup = new client.newGroupCalendar.Main();
+       try {
+            newGroup.showNewGroup(primaryStage, Main.user);
+       } catch (Exception e) {
+            e.printStackTrace();
+       }
+    }
 }

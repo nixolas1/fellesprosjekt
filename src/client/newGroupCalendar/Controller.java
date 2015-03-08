@@ -1,4 +1,4 @@
-package client.newGroup;
+package client.newGroupCalendar;
 
 //import calendar.Appointment;
 import calendar.UserModel;
@@ -15,7 +15,6 @@ import calendar.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-import javax.xml.soap.Text;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
