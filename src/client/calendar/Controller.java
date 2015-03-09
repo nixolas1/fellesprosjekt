@@ -20,12 +20,9 @@ import network.ThreadClient;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalField;
-import java.time.temporal.WeekFields;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.Calendar;
 
 /**
  * Created by jonaslochsen on 02.03.15.
@@ -56,19 +53,20 @@ public class Controller {
     protected static Stage primaryStage;
 
     private LocalDate displayDate = LocalDate.parse("2015-03-02");
+    private LocalDate tempDate = LocalDate.now();
+    Calendar calendar = Calendar.getInstance();
+    private int weekCount;
     private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
 
-    private int dayOfMonth = displayDate.getDayOfMonth();
-    private int sevenDays = 7;
 
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
         populateCalendars(new Integer[]{1, 2, 3});
         updateYear();
-        updateMonth();
-        updateWeekNum();
-        updateDate();
+        updateMonth(tempDate.getMonthValue());
+        updateWeekNum(0);
+        updateDate(tempDate);
         populateCalendars(new Integer[]{1, 2, 3, 4});
     }
 
@@ -78,45 +76,50 @@ public class Controller {
     }
 
     public void updateYear() {
-        year.setText(displayDate.getYear() + "");
+        year.setText(tempDate.getYear() + "");
     }
 
-    public void updateMonth() {
-
-        month.setText(monthName(displayDate.getMonthValue()) + "");
-    }
-    TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
-    public void updateWeekNum() {
-
-        weekNum.setText(displayDate.get(woy) + "");
+    public void updateMonth(int value) {
+        month.setText(monthName(value) + "");
     }
 
+    public void updateWeekNum(int count) {
+        weekNum.setText(calendar.get(Calendar.WEEK_OF_YEAR)+count + "");
+        //når året endres, endres ukenr til 1
+    }
 
-    public void updateDate() {
-        monDate.setText(dayOfMonth + "");
-        tueDate.setText(dayOfMonth+1 + "");
-        wedDate.setText(dayOfMonth+2 + "");
-        thuDate.setText(dayOfMonth+3 + "");
-        friDate.setText(dayOfMonth+4 + "");
-        satDate.setText(dayOfMonth+5 + "");
-        sunDate.setText(dayOfMonth+6 + "");
+    public void updateDate(LocalDate week) {
+        monDate.setText(week.getDayOfMonth() + "");
+        tueDate.setText(week.plusDays(1).getDayOfMonth() + "");
+        wedDate.setText(week.plusDays(2).getDayOfMonth() + "");
+        thuDate.setText(week.plusDays(3).getDayOfMonth() + "");
+        friDate.setText(week.plusDays(4).getDayOfMonth() + "");
+        satDate.setText(week.plusDays(5).getDayOfMonth() + "");
+        sunDate.setText(week.plusDays(6).getDayOfMonth() + "");
     }
 
     public void showNextWeek(ActionEvent event) {
-        dayOfMonth = displayDate.getDayOfMonth() + sevenDays;
-        updateDate();
-        sevenDays += 7;
+        weekCount++;
+        updateWeekNum(weekCount);
+        updateDate(tempDate.plusWeeks(weekCount));
+        /*if (tempDate.lengthOfMonth() == 31) {
+            if (monDate.equals("25") || monDate.equals("26") || monDate.equals("27") || monDate.equals("28") || monDate.equals("29") || monDate.equals("30") || monDate.equals("31")) {
+                updateMonth(tempDate.getMonthValue()+1);
+            }
+        }*/
 
     }
 
     public void showLastWeek(ActionEvent event) {
-        dayOfMonth = displayDate.getDayOfMonth() - sevenDays;
-        updateDate();
-        sevenDays -= 7;
+        weekCount--;
+        updateWeekNum(weekCount);
+        updateDate(tempDate.plusWeeks(weekCount));
     }
 
     public void showToday(ActionEvent event) {
-        updateDate();
+        updateDate(tempDate);
+        updateWeekNum(0);
+        weekCount = 0;
     }
 
     public void onBtnShowNewAppointment(ActionEvent event) {
