@@ -15,6 +15,19 @@ import java.util.List;
  */
 public class AppointmentLogic {
 
+    public static Query newAppointment(Hashtable<String, Appointment> data){
+        try {
+            Appointment app = data.get("reply");
+            //if(server.database.Logic.createAppointment(app))
+            //    return new Query("newAppointment", true);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new Query("newAppointment", false);
+    }
+
     public static Query getCalendarAppointments(Hashtable<String, String> data){
         try {
             String cal_id = data.get("id");

@@ -5,11 +5,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.ResourceBundle;
 
 import calendar.*;
 import calendar.Group;
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
+import client.*;
+//import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -298,8 +300,11 @@ public class Controller implements Initializable{
             UserModel owner = new UserModel(); // todo FIX _.-^-._
             Calendar cal = new Calendar("test", 1); // TEST CAL! TODO get from DB
             Appointment app = new Appointment(getAppointmentId(), title, description, startDate, endDate, room, owner, cal, 0, null, "abc");
-            //TODO send appointment to server, insert into db
-            System.out.println("Appointment created\n"+app);
+            Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
+            if(response.get("reply"))
+                System.out.println("Appointment created\n"+app);
+            else
+                System.out.println("Server could not create the appointment.");
         } else {
             System.out.println("One or more fields are INVALID. Data not sent to server.");
         }
