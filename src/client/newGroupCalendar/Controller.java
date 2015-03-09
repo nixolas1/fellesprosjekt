@@ -130,7 +130,7 @@ public class Controller implements Initializable {
             groupmembersUserModel.add(usr);
         }
         System.out.println(groupmembersUserModel);
-        Group group = new Group(groupname, groupmembersUserModel);
+        Group group = new Group(100, groupname, groupmembersUserModel);
         //toDo - må addes i database, sondreeeee
     }
     public UserModel getUserModel(String email) {

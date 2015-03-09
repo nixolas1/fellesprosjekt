@@ -1,12 +1,15 @@
 package server;
 
+import calendar.Group;
 import calendar.UserModel;
+import network.ThreadClient;
 import network.ThreadServer;
 import security.Crypto;
 import server.database.*;
 import server.database.Logic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 import static server.AppointmentLogic.getCalendarAppointments;
@@ -37,9 +40,19 @@ public class Main {
         //server.database.Logic.getAllRows("User");
         //ArrayList<UserModel> hore = server.database.Logic.getAllUsers();
         //getCalendarAppointments(new Hashtable<String, String>() {{put("id", "2");}});
-
+        /*
+        UserModel user1 = server.database.Logic.getUser("sondrejw@stud.ntnu.no");
+        UserModel user2 = server.database.Logic.getUser("admin@stud.ntnu.no");
+        UserModel user3 = server.database.Logic.getUser("fucku@stud.ntnu.no");
+        UserModel user4 = server.database.Logic.getUser("slange@stud.ntnu.no");
+        user4.setPhone("12345678");
+        ArrayList<UserModel> list = new ArrayList<>(Arrays.asList(user1, user2, user3, user4));
+        Group group = new Group(Logic.getLastGroupIdUsed() +1, "TESTGRUPPE", list);
+        Logic.createGroup(group);
+        */
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
+
 
 
     }
