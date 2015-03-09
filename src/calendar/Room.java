@@ -28,10 +28,14 @@ public class Room implements Serializable {
         this.utilities = utilities;
     }
 
-    public Room(int id){
+    public Room(int id){ //TODO fix. gives null.
         String[] roomRow = server.database.Logic.getRow("Room", "roomid", Integer.toString(id));
-        System.out.println(roomRow);
-        new Room(id, "", 1, 420, 1300, new ArrayList<Utility>());
+
+        String name = roomRow[1];
+        int capacity = Integer.parseInt(roomRow[2]);
+        int opensAt = Integer.parseInt(roomRow[3]);
+        int closesAt = Integer.parseInt(roomRow[4]);
+        new Room(id, name, capacity, opensAt, closesAt, new ArrayList<Utility>());
     }
     public Room(String name){
     this.name=name;
@@ -53,5 +57,9 @@ public class Room implements Serializable {
             return new ArrayList<Room>();
         }
     }
+
+    public String getName(){return name;}
+    public int getId(){return id;}
+
 
 }

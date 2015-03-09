@@ -2,11 +2,14 @@ package client.calendar;
 
 import calendar.Appointment;
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -20,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -52,6 +56,7 @@ public class Controller {
     protected static Stage primaryStage;
 
     private LocalDate displayDate = LocalDate.parse("2015-03-02");
+    private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
 
     private int dayOfMonth = displayDate.getDayOfMonth();
     private int sevenDays = 7;
@@ -64,6 +69,7 @@ public class Controller {
         updateMonth();
         updateWeekNum();
         updateDate();
+        populateCalendars(new Integer[]{1, 2, 3, 4});
     }
 
     public static String monthName(int month){
@@ -136,12 +142,16 @@ public class Controller {
     }
 
     public void populateCalendar(int calID){
-        ThreadClient socket = new ThreadClient();
         ArrayList<Appointment> apps = Appointment.getAppointmentsInCalendar(calID, socket);
         for(Appointment app : apps){
             //only display appointments this week
             if(app.getStartDate().getDayOfYear()<displayDate.getDayOfYear()+7) {
-                System.out.println(app.getTitle() + " " + app.getStartDate());
+                System.out.println(app.getTitle() +
+                                ": den " + app.getStartDate()+
+                                " i kalender "+app.getCal().getID()+
+                                " i rom "+app.getRoom().getName()
+                );
+
                 AnchorPane pane = generateAppointmentPane(app);
                 insertPane(pane, app.getStartDate(), app.getEndDate());
             }
@@ -149,23 +159,68 @@ public class Controller {
     }
 
     private AnchorPane generateAppointmentPane(Appointment app){
-        AnchorPane pane = new AnchorPane();
-        String color = app.getCal().color; color = "lightblue";
-        pane.setStyle("-fx-background-color: "+color);
+
+        String startText = app.getStartDate().format(DateTimeFormatter.ofPattern("HH:mm"));
+        String endText = app.getEndDate().format(DateTimeFormatter.ofPattern("HH:mm"));
+
+        final Label title = paneLabel(app.getTitle());
+        final Label time = paneLabel(startText + " - " + endText);
+        final Label location = paneLabel("");//TODO find solution for location display. app.getRoom().getName());
+
+        AnchorPane pane = new AnchorPane(title, time, location);
+        setAnchor(time, "top", 0);
+        setAnchor(title, "top", 20);
+        setAnchor(location, "bottom", 0);
+
+        if(app.getEndDate().getHour()-app.getStartDate().getHour()<2)
+            location.setText("");
+
+        //style
+        String color = "-fx-background-color: "+app.getCal().getColor(0.6);
+        pane.setStyle(color);
+        pane.setCursor(Cursor.HAND);
+
+        //interaction
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("Pressed "+app.getTitle());
+                //client.detailedAppointment.Main.show(Main.stage, app);
+                event.consume();
+            }
+        });
+
         return pane;
     }
 
+    private Label paneLabel(String text){
+        final Label label = new Label(text);
+        label.setMaxWidth(calendarGrid.getColumnConstraints().get(1).getPrefWidth()-5);
+        label.setWrapText(true);
+        return label;
+    }
+
+    private void setAnchor(Label label, String place, double pos){
+        double padding = 5.0;
+        AnchorPane.setLeftAnchor(label, padding);
+        if(place.equals("top"))
+            AnchorPane.setTopAnchor(label, padding+pos);
+        else if(place.equals("bottom"))
+            AnchorPane.setBottomAnchor(label, padding + pos);
+    }
 
     private void insertPane(AnchorPane pane, LocalDateTime startDate, LocalDateTime endDate) {
         int col = startDate.getDayOfYear()-displayDate.getDayOfYear();
         int row = startDate.getHour();
-        insertPane(pane, col, row);
+        int rowspan = endDate.getHour()-startDate.getHour();
+        insertPane(pane, col, row, 1, rowspan);
     }
 
-    private void insertPane(AnchorPane pane, int row, int col) {
+    private void insertPane(AnchorPane pane, int col, int row, int colspan, int rowspan) {
+        calendarGrid.add(pane, col, row, colspan, rowspan);
+    }
 
-        calendarGrid.add(pane, row, col);
-  }
+
 }
 
 /*for(int day = 0; day<days; day++){
