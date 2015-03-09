@@ -2,6 +2,7 @@ package calendar;
 
 import javafx.scene.paint.Color;
 
+import javax.jws.soap.SOAPBinding;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
@@ -13,13 +14,15 @@ public class Calendar implements Serializable {
     String name = "";
     int id;
     public ArrayList<Appointment> appointments = new ArrayList<Appointment>();
-    Group group;
+    ArrayList<UserModel> members = new ArrayList<UserModel>();
 
-    public Calendar(String name, int id, Group group){
-        this.group = group;
+    public Calendar(String name, int id, ArrayList<UserModel> members){
         this.name = name;
-        this.id = id;
+        this.members = members;
+        this.id =
     }
+
+
 
     public Calendar(String name, int id){
         this.name = name;
@@ -47,4 +50,16 @@ public class Calendar implements Serializable {
     }
 
     public ArrayList<Appointment> getAppointments(){return appointments;}
+
+    public ArrayList<UserModel> getMembers(){
+        return this.members;
+    }
+
+    public int getId(){
+        return this.id;
+    }
+
+    public String getName(){
+        return this.name;
+    }
 }

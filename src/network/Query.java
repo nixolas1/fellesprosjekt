@@ -49,4 +49,9 @@ public class Query implements Serializable{
         this.function = function;
         this.data = data;
     }
+
+    public Query(String function, int data){
+        this.function = function;
+        this.data = new Hashtable<String, Integer>(){{put("reply",data);}};
+    }
 }

@@ -50,6 +50,9 @@ public class Main {
         Group group = new Group(Logic.getLastGroupIdUsed() +1, "TESTGRUPPE", list);
         Logic.createGroup(group);
         */
+
+        int stuff = Logic.getLastGroupIdUsed();
+        System.out.println("LAST ID: " + stuff);
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
 

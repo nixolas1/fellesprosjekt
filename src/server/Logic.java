@@ -22,6 +22,7 @@ public class Logic {
             case "getAppointments": return AppointmentLogic.getCalendarAppointments(data);
             case "getRooms": return RoomLogic.getRooms();
             case "getRows": return server.database.Logic.sendAllRows(data);
+            case "getLastGroupId": return server.GroupCalendar.getLastGroupIdUsed();
 
 
         }

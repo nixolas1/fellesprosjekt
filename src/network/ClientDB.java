@@ -1,5 +1,8 @@
 package network;
 
+import server.GroupCalendar;
+import server.database.Logic;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
