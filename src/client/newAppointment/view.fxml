@@ -34,7 +34,7 @@
             <Button fx:id="remove" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUser" text="&lt;" />
             <Button fx:id="add" layoutX="164.0" mnemonicParsing="false" onAction="#addUser" text="&gt;" />
             <ComboBox fx:id="usersComboBox" prefHeight="26.0" prefWidth="160.0" promptText="Finn deltaker" />
-            <ListView fx:id="attendeeList" layoutX="194.0" prefHeight="130.0" prefWidth="175.0" />
+            <ListView fx:id="attendeeList" layoutX="195.0" prefHeight="130.0" prefWidth="175.0" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="11">
@@ -44,7 +44,7 @@
       </Pane>
       <Pane prefHeight="112.0" prefWidth="370.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
          <children>
-            <ListView fx:id="groupList" layoutX="195.0" layoutY="-3.0" prefHeight="130.0" prefWidth="175.0" />
+            <ListView fx:id="groupList" layoutX="195.0" prefHeight="130.0" prefWidth="175.0" />
             <ComboBox fx:id="groupComboBox" layoutY="1.0" prefHeight="26.0" prefWidth="160.0" promptText="Finn gruppe" />
             <Button fx:id="addGroup" layoutX="164.0" mnemonicParsing="false" onAction="#addGroup" text="&gt;" />
             <Button fx:id="removeGroup" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeGroup" text="&lt;" />
@@ -203,7 +203,7 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="13">
          <children>
-            <Button fx:id="create" maxHeight="36.0" maxWidth="370.0" minHeight="36.0" minWidth="370.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="370.0" stylesheets="@gui.css" text="Opprett avtale" textFill="WHITE">
+            <Button fx:id="create" maxHeight="36.0" maxWidth="370.0" minHeight="36.0" minWidth="370.0" mnemonicParsing="false" onAction="#createAppointment" prefHeight="36.0" prefWidth="370.0" stylesheets="@gui.css" text="Opprett avtale" textFill="WHITE">
                <padding>
                   <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
                </padding>

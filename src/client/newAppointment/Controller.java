@@ -28,7 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
-
+import network.Query;
 
 
 import static java.lang.Integer.parseInt;
@@ -99,6 +99,7 @@ public class Controller implements Initializable{
                         locationDescription.setVisible(true);
                         room.setVisible(false);
                         roomOrLocation.setText("Sted");
+                        locationDescription.setText("");
                     }
                 }
             }
@@ -196,7 +197,9 @@ public class Controller implements Initializable{
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
 
-        allGroups = getGroupsFromDB();
+        //allGroups = getGroupsFromDB();
+        allGroups = new ArrayList<>();
+        allGroups.add(new Group(1,"new",new ArrayList<UserModel>()));
         addedGroups = FXCollections.observableArrayList();
         groupList.setItems(addedGroups);
         groupInfo = displayGroupInfo(allGroups);
@@ -204,8 +207,6 @@ public class Controller implements Initializable{
 
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH); // AutoCompleteMode ON
         FxUtil.autoCompleteComboBox(groupComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
-
-
 
     }
 
@@ -216,8 +217,6 @@ public class Controller implements Initializable{
     public static ArrayList<Group> getGroupsFromDB() {
         return calendar.Group.getAllGroups();
     }
-
-
 
     @FXML
     public void addUser(ActionEvent event) {
@@ -296,12 +295,13 @@ public class Controller implements Initializable{
             LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
             LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
             Room room = new Room(1, "test", 1, 0, 24, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
-            UserModel owner = new UserModel(); // todo FIX
+            UserModel owner = new UserModel(); // todo FIX _.-^-._
             Calendar cal = new Calendar("test", 1); // TEST CAL! TODO get from DB
             Appointment app = new Appointment(getAppointmentId(), title, description, startDate, endDate, room, owner, cal, 0, null, "abc");
             //TODO send appointment to server, insert into db
+            System.out.println("Appointment created\n"+app);
         } else {
-            System.out.println("One or more fields INVALID. Data not sent to server.");
+            System.out.println("One or more fields are INVALID. Data not sent to server.");
         }
 
     }
@@ -339,6 +339,10 @@ public class Controller implements Initializable{
     public boolean checkIfAllValid(){
         Boolean ret = true;
         if(title.getText()==null || title.getText()=="") ret = false;
+        if(date.getValue()==null || date.getValue().toString().equals("")) ret=false;
+        if(endDate.getValue()==null || endDate.getValue().toString().equals("")) {
+            endDate.setValue(date.getValue());
+        }
         if(dateIsAfter(endDate, date) || dateIsAfter(stoprepeat, date)) {
             ret = false;
             System.out.println("date shit in checkIfAllValid()");

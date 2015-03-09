@@ -27,6 +27,7 @@ public class Appointment implements Serializable {
     UserModel owner;
     Calendar cal;
     public ArrayList<Attendee> attendees = new ArrayList<Attendee>();
+    public ArrayList<Group> groups = new ArrayList<>();
     //                                                              2015-03-06 12:00:00.0
 
     public Appointment() {
@@ -129,6 +130,9 @@ public class Appointment implements Serializable {
     public ArrayList<Attendee> getAttendees() {
         return attendees;
     }
+    public ArrayList<Group> getGroups() {
+        return groups;
+    }
     public void addAttendee(Attendee attendee) {
         attendees.add(attendee);
     }
@@ -152,6 +156,17 @@ public class Appointment implements Serializable {
     }
     public void setCal(Calendar cal) {
         this.cal = cal;
+    }
+    public void setGroups(ArrayList groups) {
+        this.groups = groups;
+    }
+    public void addGroup(Group group) {
+        groups.add(group);
+    }
+
+    public String toString() {
+        return "Appointment ["+id+"] Title: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
+                "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo()+ "";
     }
 
 }

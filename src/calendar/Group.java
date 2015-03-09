@@ -41,7 +41,7 @@ public class Group implements Serializable {
     }
 
     public String displayInfo() {
-        return name + "["+id+"]";
+        return name + " ["+id+"]";
     }
 
 }
