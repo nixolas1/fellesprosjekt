@@ -119,6 +119,7 @@ public class Controller {
         updateDate();
     }
 
+
     public void onBtnShowNewAppointment(ActionEvent event) {
         client.newAppointment.Main newApp = new client.newAppointment.Main();
         try {

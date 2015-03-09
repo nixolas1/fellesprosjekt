@@ -2,14 +2,12 @@ package calendar;
 
 import network.Query;
 import network.ThreadClient;
-import server.User;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Hashtable;
 
 /**
@@ -90,6 +88,22 @@ public class Appointment implements Serializable {
             return new ArrayList<Appointment>();
         }
     }
+
+    /*public Integer getCollisionCount(Appointment controlAppointment, ArrayList<Appointment> appointments){
+        Integer count = 0;
+        LocalDateTime start = controlAppointment.getStartDate();
+        for(Appointment app : appointments){
+            if(!app.equals(controlAppointment)){
+                LocalDateTime other = app.getStartDate();
+                if(other.getDayOfYear() == start.getDayOfYear()){
+                    if(){
+
+                    }
+                }
+            }
+        }
+        return count;
+    }*/
 
     public String getTitle() {
         return title;
