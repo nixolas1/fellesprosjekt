@@ -173,6 +173,7 @@ public class Controller {
         ArrayList<Appointment> collisions = app.getCollisions(apps);
         int numCollisions = collisions.size();
         double paneWidth = getColWidth()/numCollisions;
+        int duration = app.getEndDate().getHour()-app.getStartDate().getHour();
 
         String startText = app.getStartDate().format(DateTimeFormatter.ofPattern("HH:mm"));
         String endText = app.getEndDate().format(DateTimeFormatter.ofPattern("HH:mm"));
@@ -186,7 +187,7 @@ public class Controller {
         setAnchor(title, "top", 20);
         setAnchor(location, "bottom", 0);
 
-        if(app.getEndDate().getHour()-app.getStartDate().getHour()<2)
+        if(duration<2)
             location.setText("");
 
         if(paneWidth<70){
@@ -204,9 +205,7 @@ public class Controller {
         pane.setStyle(color);
         pane.setCursor(Cursor.HAND);
         pane.setMaxWidth(paneWidth);
-        pane.setPadding(new Insets(0,0,0,padding));
-
-
+        //pane.setPadding(new Insets(0,0,0,padding));
 
         //interaction
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -217,6 +216,10 @@ public class Controller {
                 event.consume();
             }
         });
+
+        if(numCollisions>0) {
+         //todo add padding to collided items
+        }
 
         return pane;
     }
