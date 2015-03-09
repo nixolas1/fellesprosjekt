@@ -15,4 +15,17 @@ public class Group implements Serializable {
         this.id = id;
         this.members = members;
     }
+
+    public ArrayList<UserModel> getMembers(){
+        return this.members;
+    }
+
+    public int getId(){
+        return this.id;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
 }
