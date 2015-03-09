@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import calendar.*;
+import calendar.Group;
 import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -42,7 +43,7 @@ public class Controller implements Initializable{
     private DatePicker date, endDate, stoprepeat;
 
     @FXML
-    private ComboBox usersComboBox, room;
+    private ComboBox usersComboBox, room, groupComboBox;
 
     @FXML
     private Label stoplabel, roomOrLocation, timeLabel, toLabel;
@@ -52,7 +53,7 @@ public class Controller implements Initializable{
     @FXML private RadioButton work, personal;
 
     @FXML
-    private Button create, add, remove;
+    private Button create, add, remove, addGroup, removeGroup;
 
     @FXML
     private ResourceBundle resources;
@@ -60,12 +61,15 @@ public class Controller implements Initializable{
     @FXML
     private URL location;
 
-    @FXML private ListView attendeeList;
+    @FXML private ListView attendeeList, groupList;
 
 
     private ArrayList<UserModel> allUsers;
     private ObservableList<String> userInfo;
     private ObservableList<String> attendees;
+    private ArrayList<Group> allGroups;
+    private ObservableList<String> groupInfo;
+    private ObservableList<String> addedGroups;
     private ArrayList<Room> allRooms;
     UserModel user = new UserModel(); // todo loggedUser?
 
@@ -191,7 +195,15 @@ public class Controller implements Initializable{
         allRooms = getAllRooms();
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
+
+        allGroups = getGroupsFromDB();
+        addedGroups = FXCollections.observableArrayList();
+        groupList.setItems(addedGroups);
+        groupInfo = displayGroupInfo(allGroups);
+        groupComboBox.setItems(groupInfo);
+
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH); // AutoCompleteMode ON
+        FxUtil.autoCompleteComboBox(groupComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
 
 
 
@@ -199,6 +211,10 @@ public class Controller implements Initializable{
 
     public static ArrayList<UserModel> getUsersFromDB() {
         return calendar.UserModel.getAllUsers();
+    }
+
+    public static ArrayList<Group> getGroupsFromDB() {
+        return calendar.Group.getAllGroups();
     }
 
 
@@ -236,6 +252,36 @@ public class Controller implements Initializable{
             attendees.remove(usr);
             userInfo.add(usr);
         }
+    }
+
+    @FXML
+    public void addGroup(ActionEvent event) {
+        String grp = (String) FxUtil.getComboBoxValue(groupComboBox);
+        if(groupInfo.contains(grp)) {
+            addedGroups.add(grp);
+            groupInfo.remove(grp);
+        }
+        groupComboBox.getEditor().setText("");
+        System.out.println(addedGroups);
+    }
+
+    @FXML
+    public void removeGroup(ActionEvent event) {
+        String grp = groupList.getSelectionModel().getSelectedItem().toString();
+        System.out.println(grp);
+        if (addedGroups.contains(grp)) {
+            addedGroups.remove(grp);
+            groupInfo.add(grp);
+            System.out.println("Group " + grp + " removed.");
+        }
+    }
+
+    // Get group from ID
+    public Group getGroup(int id) {
+        for (Group grp : allGroups) {
+            if(grp.getId() == id) return grp;
+        }
+        return null;
     }
 
     @FXML
@@ -279,6 +325,14 @@ public class Controller implements Initializable{
             userInfo.add(user.displayInfo());
         }
         return userInfo;
+    }
+
+    public ObservableList<String> displayGroupInfo(ArrayList<Group> groups) {
+        ObservableList<String> groupInfo = FXCollections.observableArrayList();
+        for (Group grp : groups) {
+            groupInfo.add(grp.displayInfo());
+        }
+        return groupInfo;
     }
 
 

@@ -2,14 +2,12 @@ package calendar;
 
 import network.Query;
 import network.ThreadClient;
-import server.User;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Hashtable;
 
 /**
@@ -46,10 +44,19 @@ public class Appointment implements Serializable {
         this.cal = new Calendar(Integer.parseInt(calID));
 
         //can be null
-        if(roomID != null) this.room = new Room(Integer.parseInt(roomID));
+        if(roomID != null) {
+            String[] roomRow = server.database.Logic.getRow("Room", "roomid", roomID);
+            String name = roomRow[1];
+            int capacity = Integer.parseInt(roomRow[2]);
+            int opensAt = Integer.parseInt(roomRow[3]);
+            int closesAt = Integer.parseInt(roomRow[4]);
+            this.room = new Room(Integer.parseInt(roomID), name, capacity, opensAt, closesAt, new ArrayList<Utility>());
+        }
+
         if(location != null) this.location = location;
         if(repeatEveryXDays != null) this.repeatEvery = Integer.parseInt(repeatEveryXDays);
         if(endRepeatDate != null) this.endRepeatDate = LocalDate.parse(endRepeatDate, dateFormat);
+        //System.out.println(roomID+"!!!!!!!!!!!!" + this.room.getName());
     }
 
     public Appointment(int id, String title, String purpose, LocalDateTime startDate, LocalDateTime endDate, Room room, UserModel owner, Calendar cal, int repeatEvery, LocalDate endRepeatDate, String location){
@@ -81,6 +88,22 @@ public class Appointment implements Serializable {
             return new ArrayList<Appointment>();
         }
     }
+
+    /*public Integer getCollisionCount(Appointment controlAppointment, ArrayList<Appointment> appointments){
+        Integer count = 0;
+        LocalDateTime start = controlAppointment.getStartDate();
+        for(Appointment app : appointments){
+            if(!app.equals(controlAppointment)){
+                LocalDateTime other = app.getStartDate();
+                if(other.getDayOfYear() == start.getDayOfYear()){
+                    if(){
+
+                    }
+                }
+            }
+        }
+        return count;
+    }*/
 
     public String getTitle() {
         return title;
