@@ -14,9 +14,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ThreadClient;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by jonaslochsen on 02.03.15.
@@ -48,30 +53,65 @@ public class Controller {
 
     private LocalDate displayDate = LocalDate.parse("2015-03-02");
 
+    private int dayOfMonth = displayDate.getDayOfMonth();
+    private int sevenDays = 7;
+
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
         populateCalendars(new Integer[]{1, 2, 3});
+        updateYear();
+        updateMonth();
+        updateWeekNum();
+        updateDate();
+    }
+
+    public static String monthName(int month){
+        String[] monthNames = {"januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"};
+        return monthNames[month - 1];
     }
 
     public void updateYear() {
-       // String yearNow = displayDate.getYear();
-       // year.setText();
+        year.setText(displayDate.getYear() + "");
     }
 
     public void updateMonth() {
 
+        month.setText(monthName(displayDate.getMonthValue()) + "");
     }
-
+    TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
     public void updateWeekNum() {
 
+        weekNum.setText(displayDate.get(woy) + "");
     }
+
 
     public void updateDate() {
+        monDate.setText(dayOfMonth + "");
+        tueDate.setText(dayOfMonth+1 + "");
+        wedDate.setText(dayOfMonth+2 + "");
+        thuDate.setText(dayOfMonth+3 + "");
+        friDate.setText(dayOfMonth+4 + "");
+        satDate.setText(dayOfMonth+5 + "");
+        sunDate.setText(dayOfMonth+6 + "");
+    }
+
+    public void showNextWeek(ActionEvent event) {
+        dayOfMonth = displayDate.getDayOfMonth() + sevenDays;
+        updateDate();
+        sevenDays += 7;
 
     }
 
+    public void showLastWeek(ActionEvent event) {
+        dayOfMonth = displayDate.getDayOfMonth() - sevenDays;
+        updateDate();
+        sevenDays -= 7;
+    }
 
+    public void showToday(ActionEvent event) {
+        updateDate();
+    }
 
     public void onBtnShowNewAppointment(ActionEvent event) {
         client.newAppointment.Main newApp = new client.newAppointment.Main();
