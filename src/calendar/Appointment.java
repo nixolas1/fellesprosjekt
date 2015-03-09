@@ -89,21 +89,15 @@ public class Appointment implements Serializable {
         }
     }
 
-    /*public Integer getCollisionCount(Appointment controlAppointment, ArrayList<Appointment> appointments){
-        Integer count = 0;
-        LocalDateTime start = controlAppointment.getStartDate();
+    public ArrayList<Appointment> getCollisions(ArrayList<Appointment> appointments){
+        ArrayList<Appointment> colls = new ArrayList<>();
         for(Appointment app : appointments){
-            if(!app.equals(controlAppointment)){
-                LocalDateTime other = app.getStartDate();
-                if(other.getDayOfYear() == start.getDayOfYear()){
-                    if(){
-
-                    }
-                }
+            if(this.getStartDate().isBefore(app.getEndDate()) && app.getStartDate().isBefore(this.getEndDate())){
+                colls.add(app);
             }
         }
-        return count;
-    }*/
+        return colls;
+    }
 
     public String getTitle() {
         return title;

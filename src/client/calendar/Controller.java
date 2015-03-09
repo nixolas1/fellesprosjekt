@@ -4,13 +4,16 @@ import calendar.Appointment;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
@@ -64,7 +67,6 @@ public class Controller {
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
-        populateCalendars(new Integer[]{1, 2, 3});
         updateYear();
         updateMonth();
         updateWeekNum();
@@ -138,12 +140,19 @@ public class Controller {
     }
 
     public void populateCalendars(Integer[] id){
-        for(int i : id)
-            populateCalendar(i);
+        ArrayList<Appointment> apps = new ArrayList<>();
+        for(int i : id){
+            apps.addAll(Appointment.getAppointmentsInCalendar(i, socket));
+        }
+        populateCalendar(apps);
     }
 
     public void populateCalendar(int calID){
         ArrayList<Appointment> apps = Appointment.getAppointmentsInCalendar(calID, socket);
+        populateCalendar(apps);
+    }
+
+    public void populateCalendar(ArrayList<Appointment> apps){
         for(Appointment app : apps){
             //only display appointments this week
             if(app.getStartDate().getDayOfYear()<displayDate.getDayOfYear()+7) {
@@ -153,20 +162,24 @@ public class Controller {
                                 " i rom "+app.getRoom().getName()
                 );
 
-                AnchorPane pane = generateAppointmentPane(app);
+                AnchorPane pane = generateAppointmentPane(app, apps);
                 insertPane(pane, app.getStartDate(), app.getEndDate());
             }
         }
     }
 
-    private AnchorPane generateAppointmentPane(Appointment app){
+    private AnchorPane generateAppointmentPane(Appointment app, ArrayList<Appointment> apps){
+
+        ArrayList<Appointment> collisions = app.getCollisions(apps);
+        int numCollisions = collisions.size();
+        double paneWidth = getColWidth()/numCollisions;
 
         String startText = app.getStartDate().format(DateTimeFormatter.ofPattern("HH:mm"));
         String endText = app.getEndDate().format(DateTimeFormatter.ofPattern("HH:mm"));
 
-        final Label title = paneLabel(app.getTitle());
-        final Label time = paneLabel(startText + " - " + endText);
-        final Label location = paneLabel("");//TODO find solution for location display. app.getRoom().getName());
+        final Label title = paneLabel(app.getTitle(), paneWidth);
+        final Label time = paneLabel(startText + " - " + endText, paneWidth);
+        final Label location = paneLabel("", paneWidth);//TODO find solution for location display. app.getRoom().getName());
 
         AnchorPane pane = new AnchorPane(title, time, location);
         setAnchor(time, "top", 0);
@@ -176,10 +189,24 @@ public class Controller {
         if(app.getEndDate().getHour()-app.getStartDate().getHour()<2)
             location.setText("");
 
+        if(paneWidth<70){
+            time.setText("");
+            setAnchor(title, "top", 0);
+        }
+        if(paneWidth<50) {
+            title.setText("");
+        }
+
         //style
-        String color = "-fx-background-color: "+app.getCal().getColor(0.6);
+        String color = "-fx-background-color: "+app.getCal().getColor(0.6)+" ";
+        double padding = paneWidth*collisions.indexOf(app);
+        System.out.println(color);
         pane.setStyle(color);
         pane.setCursor(Cursor.HAND);
+        pane.setMaxWidth(paneWidth);
+        pane.setPadding(new Insets(0,0,0,padding));
+
+
 
         //interaction
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -194,9 +221,9 @@ public class Controller {
         return pane;
     }
 
-    private Label paneLabel(String text){
+    private Label paneLabel(String text, double width){
         final Label label = new Label(text);
-        label.setMaxWidth(calendarGrid.getColumnConstraints().get(1).getPrefWidth()-5);
+        label.setMaxWidth(width-5);
         label.setWrapText(true);
         return label;
     }
@@ -221,6 +248,9 @@ public class Controller {
         calendarGrid.add(pane, col, row, colspan, rowspan);
     }
 
+    public double getColWidth(){
+        return calendarGrid.getColumnConstraints().get(1).getPrefWidth();
+    }
 
 }
 
