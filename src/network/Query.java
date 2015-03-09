@@ -1,5 +1,6 @@
 package network;
 
+import calendar.Calendar;
 import calendar.UserModel;
 
 import java.io.Serializable;
@@ -50,8 +51,8 @@ public class Query implements Serializable{
         this.data = data;
     }
 
-    public Query(String function, int data){
+    public Query(String function, final Calendar data) {
         this.function = function;
-        this.data = new Hashtable<String, Integer>(){{put("reply",data);}};
+        this.data = new Hashtable<String, Calendar>(){{put("reply",data);}};
     }
 }

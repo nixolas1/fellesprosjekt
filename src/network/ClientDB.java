@@ -1,6 +1,5 @@
 package network;
 
-import server.GroupCalendar;
 import server.database.Logic;
 
 import java.util.ArrayList;

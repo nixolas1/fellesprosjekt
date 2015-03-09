@@ -251,7 +251,7 @@ public class Controller implements Initializable{
             LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
             Room room = new Room(1, "test", 1, 0, 24, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
             UserModel owner = new UserModel(); // todo FIX
-            Calendar cal = new Calendar("test", 1); // TEST CAL! TODO get from DB
+            Calendar cal = new Calendar("test"); // TEST CAL! TODO get from DB
             Appointment app = new Appointment(getAppointmentId(), title, description, startDate, endDate, room, owner, cal, 0, null, "abc");
             //TODO send appointment to server, insert into db
         } else {

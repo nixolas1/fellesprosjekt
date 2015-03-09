@@ -158,7 +158,7 @@ public class Controller {
             if(app.getStartDate().getDayOfYear()<displayDate.getDayOfYear()+7) {
                 System.out.println(app.getTitle() +
                                 ": den " + app.getStartDate()+
-                                " i kalender "+app.getCal().getID()+
+                                " i kalender "+app.getCal().getId()+
                                 " i rom "+app.getRoom().getName()
                 );
 
