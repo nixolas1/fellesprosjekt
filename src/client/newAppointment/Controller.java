@@ -324,16 +324,14 @@ public class Controller implements Initializable{
     public boolean valid(String text, String match, int max, int extra) {
         if(extra==2 && valid(text, match, max,0) && valid(from.getText(), match, max,0)){
             if (allDay.isSelected()) return true;
+            if (date.getValue()!=null && endDate.getValue()!=null) {
+                if (date.getValue().isBefore(endDate.getValue())) return true;
+            }
             int h = parseInt(from.getText(0, 2)), m = parseInt(from.getText(3, 5));
             int hh = parseInt(text.substring(0, 2)), mm = parseInt(text.substring(3, 5));
-            if (date.getValue()!=null && endDate!=null) {
-                if (date.getValue().isBefore(endDate.getValue()) && date.getValue()!=endDate.getValue()) {
-                    return true;
-                } else {
-                    return false;
-                }
+            if (hh <= h && mm <= m) {
+                return false;
             }
-            if (hh <= h && mm <= m) return false;
             if(hh >= 24 || h >= 24 || m >= 60 || mm >= 60) return false;
         }
         return text.length() <= max && text.matches(match);
@@ -353,16 +351,20 @@ public class Controller implements Initializable{
                 if (d == null || d.isBefore(LocalDate.now()) || dateIsAfter(endDate,date)) {
                     field.setStyle("-fx-text-inner-color: red;");
                     field.setOpacity(3.0);
+                    updateTimeValid();
                     checkIfAllValid();
                 }
                     else {
                     field.setStyle("-fx-text-inner-color: green;");
                     field.setOpacity(2.0);
+                    updateTimeValid();
                     checkIfAllValid();
                 }
             }
         });
     }
+
+
 
     public void createValidationListener(final TextField field, final int forceCorrect, final String match, final int max){
         field.textProperty().addListener(new ChangeListener<String>() {
@@ -385,6 +387,36 @@ public class Controller implements Initializable{
             }
         });
     }
+
+    public void updateTimeValid() {
+        if(date.getValue()==null || endDate.getValue()==null) {
+            System.out.println("date / endDate == NULL");
+            return;
+        }
+        if(date.getValue().isBefore(endDate.getValue()) && !(date.getValue().equals(endDate.getValue()))) {
+            System.out.println("den andre jævla ifen i updateTimeValid line 396");
+            if(validTime()){
+                System.out.println("Valid L399");
+                to.setOpacity(2.0);
+                to.setStyle("fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
+            } else {
+                System.out.println("Invalid L403");
+                to.setOpacity(3.0);
+                to.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
+            }
+        } else {
+            return;
+        }
+    }
+
+    public boolean validTime() {
+        if(from.getText().length()!=5 || to.getText().length()!=5) return false;
+        int h = Integer.parseInt(from.getText(0, 2)), m = Integer.parseInt(from.getText(3, 5));
+        int hh = Integer.parseInt(to.getText(0, 2)), mm = Integer.parseInt(to.getText(3, 5));
+        if(h>=24 || hh>=24 || m>=60 || mm>=60) return false;
+        return true;
+    }
+
 
     public void updateRepeatVisibility(TextField field){
         if("".equals(field.getText()) || field.getText().equals("0")) {
