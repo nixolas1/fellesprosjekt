@@ -19,10 +19,7 @@ public class Calendar implements Serializable {
     public Calendar(String name, int id, ArrayList<UserModel> members){
         this.name = name;
         this.members = members;
-        this.id =
     }
-
-
 
     public Calendar(String name, int id){
         this.name = name;
