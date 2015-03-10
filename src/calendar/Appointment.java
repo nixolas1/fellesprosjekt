@@ -15,17 +15,17 @@ import java.util.Hashtable;
  */
 public class Appointment implements Serializable {
 
-    int id;
-    String title;
-    String purpose;
-    String location;
-    LocalDateTime startDate;
-    LocalDateTime endDate;
-    LocalDate endRepeatDate;
-    int repeatEvery;
-    Room room;
-    UserModel owner;
-    Calendar cal;
+    int id = -1;
+    String title = null;
+    String purpose = null;
+    String location = null;
+    LocalDateTime startDate = null;
+    LocalDateTime endDate = null;
+    LocalDate endRepeatDate = null;
+    int repeatEvery = 0;
+    Room room = null;
+    UserModel owner = null;
+    Calendar cal = null;
     public ArrayList<Attendee> attendees = new ArrayList<Attendee>();
     public ArrayList<Calendar> groups = new ArrayList<>();
     //                                                              2015-03-06 12:00:00.0
@@ -176,6 +176,18 @@ public class Appointment implements Serializable {
     }
     public void addGroup(Calendar group) {
         groups.add(group);
+    }
+
+    public LocalDate getEndRepeatDate() {
+        return endRepeatDate;
+    }
+
+    public int getRepeatEvery() {
+        return repeatEvery;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     /*
