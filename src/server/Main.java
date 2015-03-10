@@ -1,5 +1,6 @@
 package server;
 
+import calendar.Appointment;
 import calendar.Group;
 import calendar.UserModel;
 import network.ThreadClient;
@@ -50,6 +51,18 @@ public class Main {
         Group group = new Group(Logic.getLastGroupIdUsed() +1, "TESTGRUPPE", list);
         Logic.createGroup(group);
         */
+        /*
+        Hashtable<String, ArrayList<Appointment>> hore= AppointmentLogic.getCalendarAppointments(new Hashtable<String, String>() {{put("id", "1");}}).data;
+        ArrayList<Appointment> appList = hore.get("reply");
+        Appointment app = appList.get(0);
+        // todo id, title, purpose, location, startDate, endDate, endRepeatDate, repeatEveryXDays, calID, roomID
+        System.out.println("\n\nTitle: " + app.getTitle());
+        System.out.println("Purpose: " + app.getPurpose());
+        System.out.println("StartDate: " + app.getStartDate());
+        System.out.println("EndDate: " + app.getEndDate());
+        */
+        RoomLogic.availableRooms();
+
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
 

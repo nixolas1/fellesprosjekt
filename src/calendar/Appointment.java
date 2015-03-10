@@ -74,6 +74,20 @@ public class Appointment implements Serializable {
         this.endRepeatDate=endRepeatDate;
     }
 
+    public Appointment(int id, String title, String purpose, String location, LocalDateTime startDate, LocalDateTime endDate, Room room, UserModel owner, Calendar cal, int repeatEvery, LocalDate endRepeatDate){
+        this.title=title;
+        this.id=id;
+        this.purpose=purpose;
+        this.startDate=startDate;
+        this.endDate=endDate;
+        this.room=room;
+        this.owner=owner;
+        this.cal = cal;
+        this.location = location;
+        this.repeatEvery = repeatEvery;
+        this.endRepeatDate=endRepeatDate;
+    }
+
     public static ArrayList<Appointment> getAppointmentsInCalendar(int calID, ThreadClient socket){
         Hashtable<String, String> data = new Hashtable<String, String>(){{
             put("id",Integer.toString(calID));
@@ -164,9 +178,18 @@ public class Appointment implements Serializable {
         groups.add(group);
     }
 
+    /*
     public String toString() {
         return "Appointment ["+id+"] Title: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
                 "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo()+ "";
     }
+
+    public String ohString(){
+        // todo id, title, purpose, location, startDate, endDate, endRepeatDate, repeatEveryXDays, calID, roomID
+        return "Appointment ["+id+"] Title: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
+                "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo()+ "";
+
+    }
+    */
 
 }
