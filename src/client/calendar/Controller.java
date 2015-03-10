@@ -20,7 +20,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ThreadClient;
+import sun.plugin.javascript.navig.Anchor;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -61,8 +63,7 @@ public class Controller {
 
     protected static Stage primaryStage;
 
-    private LocalDate displayDate = LocalDate.parse("2015-03-02");
-    private LocalDate tempDate = LocalDate.now();
+    private LocalDate calDate = LocalDate.now();
     private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
     private Integer[] cals = new Integer[]{1,2,3,4};
 
@@ -71,6 +72,7 @@ public class Controller {
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
+        calDate = getLastMonday(calDate);
         updateYear();
         updateMonth();
         updateWeekNum();
@@ -85,45 +87,48 @@ public class Controller {
     }
 
     public void updateYear() {
-        year.setText(tempDate.getYear() + "");
+        year.setText(calDate.getYear() + "");
     }
 
     public void updateMonth() {
-        month.setText(monthName(tempDate.getMonthValue()) + "");
+        month.setText(monthName(calDate.getMonthValue()) + "");
     }
 
     public void updateWeekNum() {
         TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
-        int weekNumber = tempDate.get(woy);
+        int weekNumber = calDate.get(woy);
         weekNum.setText(weekNumber + "");
     }
 
     private LocalDate getLastMonday(LocalDate d) {
-        return d;
+        Calendar c = Calendar.getInstance(Locale.ENGLISH);
+        c.setTime(Date.valueOf(d));
+        int day = c.get(Calendar.DAY_OF_WEEK);
+        return d.minusDays(day-2);
     }
 
     public void updateDate() {
-        monDate.setText(tempDate.getDayOfMonth() + "");
-        tueDate.setText(tempDate.plusDays(1).getDayOfMonth() + "");
-        wedDate.setText(tempDate.plusDays(2).getDayOfMonth() + "");
-        thuDate.setText(tempDate.plusDays(3).getDayOfMonth() + "");
-        friDate.setText(tempDate.plusDays(4).getDayOfMonth() + "");
-        satDate.setText(tempDate.plusDays(5).getDayOfMonth() + "");
-        sunDate.setText(tempDate.plusDays(6).getDayOfMonth() + "");
+        monDate.setText(calDate.getDayOfMonth() + "");
+        tueDate.setText(calDate.plusDays(1).getDayOfMonth() + "");
+        wedDate.setText(calDate.plusDays(2).getDayOfMonth() + "");
+        thuDate.setText(calDate.plusDays(3).getDayOfMonth() + "");
+        friDate.setText(calDate.plusDays(4).getDayOfMonth() + "");
+        satDate.setText(calDate.plusDays(5).getDayOfMonth() + "");
+        sunDate.setText(calDate.plusDays(6).getDayOfMonth() + "");
     }
 
     public void showNextWeek(ActionEvent event) {
-        tempDate=tempDate.plusWeeks(1);
+        calDate=calDate.plusWeeks(1);
         updateView();
     }
 
     public void showLastWeek(ActionEvent event) {
-        tempDate = tempDate.minusWeeks(1);
+        calDate = calDate.minusWeeks(1);
         updateView();
     }
 
     public void showToday(ActionEvent event) {
-        tempDate = LocalDate.now();
+        calDate = LocalDate.now();
         updateView();
     }
 
@@ -156,8 +161,7 @@ public class Controller {
     }
 
     public void clearAppointments(){
-        calendarGrid.getChildren().removeAll();
-        //calendarGrid.getChildren().clear();
+        calendarGrid.getChildren().removeIf(AnchorPane.class::isInstance);
     }
 
     public void populateCalendars(Integer[] id){
@@ -185,29 +189,40 @@ public class Controller {
         for(Appointment app : apps){
 
             Boolean isRepeat=false, isThisWeek=false;
+            LocalDateTime start = app.getStartDate();
+
+
+            //display is its a repeating event and repeats this week
+            /*if(app.getRepeatEvery()>0 && app.getEndRepeatDate().isAfter(calDate)){
+                LocalDateTime nextRepeat = start, now=calDate.atStartOfDay(), tempEnd=app.getEndDate();
+                while(nextRepeat.isBefore(now)){
+                    nextRepeat = nextRepeat.plusDays(app.getRepeatEvery());
+                    tempEnd = tempEnd.plusDays((app.getRepeatEvery()));
+                    System.out.println(nextRepeat);
+                }
+                if(nextRepeat.isBefore(now.plusDays(7))) {
+                    isRepeat = true;
+                    app.setStartDate(nextRepeat);
+                    app.setEndDate(tempEnd);
+                }
+            }*/
 
             //only display appointments this week
-            if(app.getStartDate().getDayOfYear()<tempDate.getDayOfYear()+7
-                    && app.getStartDate().getDayOfYear()>=tempDate.getDayOfYear()) {
+            if(start.toLocalDate().isBefore(calDate.plusDays(7))
+                    && start.toLocalDate().isAfter(calDate)) {
                 isThisWeek = true;
             }
 
-            //display is its a repeating event and repeats this week
-            /*if(app.getRepeatEvery()>0 && app.getEndRepeatDate().isAfter(tempDate)){
-                app.getStartDate()-tempDate;
-                app.getStartDate().plusDays(app.getRepeatEvery()*);
-                isRepeat=true;
-            }*/
 
-            if(isThisWeek || isRepeat){
+            if(isThisWeek && isRepeat){
                 System.out.println(app.getTitle() +
-                                ": den " + app.getStartDate()+
+                                ": den " + start+
                                 " i kalender "+app.getCal().getID()+
                                 " i rom "+app.getRoom().getName()
                 );
 
                 AnchorPane pane = generateAppointmentPane(app, apps);
-                insertPane(pane, app.getStartDate(), app.getEndDate());
+                insertPane(pane, start, app.getEndDate());
             }
         }
     }
@@ -285,7 +300,7 @@ public class Controller {
     }
 
     private void insertPane(AnchorPane pane, LocalDateTime startDate, LocalDateTime endDate) {
-        int col = startDate.getDayOfYear()-tempDate.getDayOfYear();
+        int col = startDate.getDayOfYear()-calDate.getDayOfYear();
         int row = startDate.getHour();
         int rowspan = endDate.getHour()-startDate.getHour();
         insertPane(pane, col, row, 1, rowspan);
