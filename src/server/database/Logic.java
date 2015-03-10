@@ -1,5 +1,6 @@
 package server.database;
 
+import calendar.Appointment;
 import calendar.Group;
 import calendar.UserModel;
 import network.Query;
@@ -196,6 +197,20 @@ public class Logic {
             closeDB(stmt);
         } return lastIdUsed;
 
+    }
+
+    public static boolean createAppointment(Appointment app){
+        String query = "INSERT INTO Appointment () VALUES ();";
+        Statement stmt = null;
+        app.getStartDate();
+        try {
+            stmt = conn.createStatement();
+            System.out.println("QUERY: " + query);
+            stmt.executeQuery(query);
+        } catch (SQLException e) {
+            System.out.println("SQLException triggered in createAppointment(), 1. try block: " + e);
+        }
+        return false;
     }
 
 
