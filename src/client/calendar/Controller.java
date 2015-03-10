@@ -1,6 +1,7 @@
 package client.calendar;
 
 import calendar.Appointment;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -150,7 +151,7 @@ public class Controller {
 
     public void clearAppointments(){
         calendarGrid.getChildren().removeAll();
-        calendarGrid.getChildren().clear();
+        //calendarGrid.getChildren().clear();
     }
 
     public void populateCalendars(Integer[] id){
@@ -176,10 +177,23 @@ public class Controller {
 
     public void populateCalendar(ArrayList<Appointment> apps){
         for(Appointment app : apps){
+
+            Boolean isRepeat=false, isThisWeek=false;
+
             //only display appointments this week
-            System.out.println(app.getStartDate() + " | "+tempDate);
-            if(app.getStartDate().getDayOfYear()<tempDate.getDayOfYear()+7 &&
-                    app.getStartDate().getDayOfYear()>=tempDate.getDayOfYear()) {
+            if(app.getStartDate().getDayOfYear()<tempDate.getDayOfYear()+7
+                    && app.getStartDate().getDayOfYear()>=tempDate.getDayOfYear()) {
+                isThisWeek = true;
+            }
+
+            //display is its a repeating event and repeats this week
+            /*if(app.getRepeatEvery()>0 && app.getEndRepeatDate().isAfter(tempDate)){
+                app.getStartDate()-tempDate;
+                app.getStartDate().plusDays(app.getRepeatEvery()*);
+                isRepeat=true;
+            }*/
+
+            if(isThisWeek || isRepeat){
                 System.out.println(app.getTitle() +
                                 ": den " + app.getStartDate()+
                                 " i kalender "+app.getCal().getID()+
