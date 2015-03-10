@@ -4,27 +4,33 @@ import calendar.Appointment;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ThreadClient;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
-import java.time.format.DateTimeFormatter;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Hashtable;
 import java.util.Locale;
 
 /**
@@ -55,21 +61,22 @@ public class Controller {
 
     protected static Stage primaryStage;
 
-    private LocalDate displayDate = LocalDate.parse("2015-03-02");
+    private LocalDate calDate = LocalDate.now();
     private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
+    private Integer[] cals = new Integer[]{1,2,3,4};
 
-    private int dayOfMonth = displayDate.getDayOfMonth();
-    private int sevenDays = 7;
+    private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
 
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
-        //populateCalendars(new Integer[]{1, 2, 3});
+        calDate = getLastMonday(calDate);
         updateYear();
         updateMonth();
         updateWeekNum();
         updateDate();
-        //populateCalendars(new Integer[]{1, 2, 3, 4});
+        appointments = getAppointments(cals);
+        populateCalendars(cals);
     }
 
     public static String monthName(int month){
@@ -78,45 +85,59 @@ public class Controller {
     }
 
     public void updateYear() {
-        year.setText(displayDate.getYear() + "");
+        year.setText(calDate.getYear() + "");
     }
 
     public void updateMonth() {
-
-        month.setText(monthName(displayDate.getMonthValue()) + "");
+        month.setText(monthName(calDate.getMonthValue()) + "");
     }
-    TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+
     public void updateWeekNum() {
-
-        weekNum.setText(displayDate.get(woy) + "");
+        TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+        int weekNumber = calDate.get(woy);
+        weekNum.setText(weekNumber + "");
     }
 
+    private LocalDate getLastMonday(LocalDate d) {
+        Calendar c = Calendar.getInstance(Locale.ENGLISH);
+        c.setTime(Date.valueOf(d));
+        int day = c.get(Calendar.DAY_OF_WEEK);
+        return d.minusDays(day-2);
+    }
 
     public void updateDate() {
-        monDate.setText(dayOfMonth + "");
-        tueDate.setText(dayOfMonth+1 + "");
-        wedDate.setText(dayOfMonth+2 + "");
-        thuDate.setText(dayOfMonth+3 + "");
-        friDate.setText(dayOfMonth+4 + "");
-        satDate.setText(dayOfMonth+5 + "");
-        sunDate.setText(dayOfMonth+6 + "");
+        monDate.setText(calDate.getDayOfMonth() + "");
+        tueDate.setText(calDate.plusDays(1).getDayOfMonth() + "");
+        wedDate.setText(calDate.plusDays(2).getDayOfMonth() + "");
+        thuDate.setText(calDate.plusDays(3).getDayOfMonth() + "");
+        friDate.setText(calDate.plusDays(4).getDayOfMonth() + "");
+        satDate.setText(calDate.plusDays(5).getDayOfMonth() + "");
+        sunDate.setText(calDate.plusDays(6).getDayOfMonth() + "");
     }
 
     public void showNextWeek(ActionEvent event) {
-        dayOfMonth = displayDate.getDayOfMonth() + sevenDays;
-        updateDate();
-        sevenDays += 7;
-
+        calDate=calDate.plusWeeks(1);
+        updateView();
     }
 
     public void showLastWeek(ActionEvent event) {
-        dayOfMonth = displayDate.getDayOfMonth() - sevenDays;
-        updateDate();
-        sevenDays -= 7;
+        calDate = calDate.minusWeeks(1);
+        updateView();
     }
 
     public void showToday(ActionEvent event) {
+        calDate = LocalDate.now();
+        updateView();
+    }
+
+    public void updateView(){
         updateDate();
+        updateWeekNum();
+        updateMonth();
+        updateYear();
+
+        clearAppointments();
+        populateCalendars(cals);
     }
 
 
@@ -147,49 +168,111 @@ public class Controller {
        }
     }
 
+    public void clearAppointments(){
+        calendarGrid.getChildren().removeIf(AnchorPane.class::isInstance);
+    }
+
     public void populateCalendars(Integer[] id){
-        for(int i : id)
-            populateCalendar(i);
+        ArrayList<Appointment> apps = new ArrayList<>();
+        for(int i : id){
+            apps.addAll(appointments.get(i));
+        }
+        populateCalendar(apps);
+    }
+
+    public Hashtable<Integer, ArrayList<Appointment>> getAppointments(Integer[] id){
+        Hashtable<Integer, ArrayList<Appointment>> apps = new Hashtable<>();
+        for(Integer i : id){
+            apps.put(i, Appointment.getAppointmentsInCalendar(i, socket));
+        }
+        return apps;
     }
 
     public void populateCalendar(int calID){
         ArrayList<Appointment> apps = Appointment.getAppointmentsInCalendar(calID, socket);
+        populateCalendar(apps);
+    }
+
+    public void populateCalendar(ArrayList<Appointment> apps){
         for(Appointment app : apps){
+
+            Boolean isRepeat=false, isThisWeek=false;
+            LocalDateTime start = app.getStartDate();
+
+
+            //display is its a repeating event and repeats this week
+            /*if(app.getRepeatEvery()>0 && app.getEndRepeatDate().isAfter(calDate)){
+                LocalDateTime nextRepeat = start, now=calDate.atStartOfDay(), tempEnd=app.getEndDate();
+                while(nextRepeat.isBefore(now)){
+                    nextRepeat = nextRepeat.plusDays(app.getRepeatEvery());
+                    tempEnd = tempEnd.plusDays((app.getRepeatEvery()));
+                    System.out.println(nextRepeat);
+                }
+                if(nextRepeat.isBefore(now.plusDays(7))) {
+                    isRepeat = true;
+                    app.setStartDate(nextRepeat);
+                    app.setEndDate(tempEnd);
+                }
+            }*/
+
             //only display appointments this week
-            if(app.getStartDate().getDayOfYear()<displayDate.getDayOfYear()+7) {
+            if(start.toLocalDate().isBefore(calDate.plusDays(7))
+                    && start.toLocalDate().isAfter(calDate)) {
+                isThisWeek = true;
+            }
+
+
+            if(isThisWeek && isRepeat){
                 System.out.println(app.getTitle() +
-                                ": den " + app.getStartDate()+
-                                " i kalender "+app.getCal().getId()+
+                                ": den " + start+
+                                " i kalender "+app.getCal().getID()+
                                 " i rom "+app.getRoom().getName()
                 );
 
-                AnchorPane pane = generateAppointmentPane(app);
-                insertPane(pane, app.getStartDate(), app.getEndDate());
+                AnchorPane pane = generateAppointmentPane(app, apps);
+                insertPane(pane, start, app.getEndDate());
             }
         }
     }
 
-    private AnchorPane generateAppointmentPane(Appointment app){
+    private AnchorPane generateAppointmentPane(Appointment app, ArrayList<Appointment> apps){
+
+        ArrayList<Appointment> collisions = app.getCollisions(apps);
+        int numCollisions = collisions.size();
+        double paneWidth = getColWidth()/numCollisions;
+        int duration = app.getEndDate().getHour()-app.getStartDate().getHour();
 
         String startText = app.getStartDate().format(DateTimeFormatter.ofPattern("HH:mm"));
         String endText = app.getEndDate().format(DateTimeFormatter.ofPattern("HH:mm"));
 
-        final Label title = paneLabel(app.getTitle());
-        final Label time = paneLabel(startText + " - " + endText);
-        final Label location = paneLabel("");//TODO find solution for location display. app.getRoom().getName());
+        final Label title = paneLabel(app.getTitle(), paneWidth);
+        final Label time = paneLabel(startText + " - " + endText, paneWidth);
+        final Label location = paneLabel("", paneWidth);//TODO find solution for location display. app.getRoom().getName());
 
         AnchorPane pane = new AnchorPane(title, time, location);
         setAnchor(time, "top", 0);
         setAnchor(title, "top", 20);
         setAnchor(location, "bottom", 0);
 
-        if(app.getEndDate().getHour()-app.getStartDate().getHour()<2)
+        if(duration<2)
             location.setText("");
 
+        if(paneWidth<70){
+            time.setText("");
+            setAnchor(title, "top", 0);
+        }
+        if(paneWidth<50) {
+            title.setText("");
+        }
+
         //style
-        String color = "-fx-background-color: "+app.getCal().getColor(0.6);
+        String color = "-fx-background-color: "+app.getCal().getColor(0.6)+" ";
+        double padding = paneWidth*collisions.indexOf(app);
+        //System.out.println(color);
         pane.setStyle(color);
         pane.setCursor(Cursor.HAND);
+        pane.setMaxWidth(paneWidth);
+        //pane.setPadding(new Insets(0,0,0,padding));
 
         //interaction
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -201,12 +284,16 @@ public class Controller {
             }
         });
 
+        if(numCollisions>0) {
+         //todo add padding to collided items
+        }
+
         return pane;
     }
 
-    private Label paneLabel(String text){
+    private Label paneLabel(String text, double width){
         final Label label = new Label(text);
-        label.setMaxWidth(calendarGrid.getColumnConstraints().get(1).getPrefWidth()-5);
+        label.setMaxWidth(width - 5);
         label.setWrapText(true);
         return label;
     }
@@ -221,7 +308,7 @@ public class Controller {
     }
 
     private void insertPane(AnchorPane pane, LocalDateTime startDate, LocalDateTime endDate) {
-        int col = startDate.getDayOfYear()-displayDate.getDayOfYear();
+        int col = startDate.getDayOfYear()-calDate.getDayOfYear();
         int row = startDate.getHour();
         int rowspan = endDate.getHour()-startDate.getHour();
         insertPane(pane, col, row, 1, rowspan);
@@ -231,6 +318,9 @@ public class Controller {
         calendarGrid.add(pane, col, row, colspan, rowspan);
     }
 
+    public double getColWidth(){
+        return calendarGrid.getColumnConstraints().get(1).getPrefWidth();
+    }
 
 }
 

@@ -22,7 +22,7 @@ public class Appointment implements Serializable {
     LocalDateTime startDate;
     LocalDateTime endDate;
     LocalDate endRepeatDate;
-    int repeatEvery;
+    int repeatEvery=0;
     Room room;
     UserModel owner;
     Calendar cal;
@@ -89,21 +89,15 @@ public class Appointment implements Serializable {
         }
     }
 
-    /*public Integer getCollisionCount(Appointment controlAppointment, ArrayList<Appointment> appointments){
-        Integer count = 0;
-        LocalDateTime start = controlAppointment.getStartDate();
+    public ArrayList<Appointment> getCollisions(ArrayList<Appointment> appointments){
+        ArrayList<Appointment> colls = new ArrayList<>();
         for(Appointment app : appointments){
-            if(!app.equals(controlAppointment)){
-                LocalDateTime other = app.getStartDate();
-                if(other.getDayOfYear() == start.getDayOfYear()){
-                    if(){
-
-                    }
-                }
+            if(this.getStartDate().isBefore(app.getEndDate()) && app.getStartDate().isBefore(this.getEndDate())){
+                colls.add(app);
             }
         }
-        return count;
-    }*/
+        return colls;
+    }
 
     public String getTitle() {
         return title;
@@ -129,6 +123,41 @@ public class Appointment implements Serializable {
     public ArrayList<Attendee> getAttendees() {
         return attendees;
     }
+    public int getRepeatEvery(){return repeatEvery;}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public LocalDate getEndRepeatDate() {
+        return endRepeatDate;
+    }
+
+    public void setEndRepeatDate(LocalDate endRepeatDate) {
+        this.endRepeatDate = endRepeatDate;
+    }
+
+    public void setRepeatEvery(int repeatEvery) {
+        this.repeatEvery = repeatEvery;
+    }
+
+    public void setAttendees(ArrayList<Attendee> attendees) {
+        this.attendees = attendees;
+    }
+
+
     public void addAttendee(Attendee attendee) {
         attendees.add(attendee);
     }
