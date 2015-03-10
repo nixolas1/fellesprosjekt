@@ -84,6 +84,7 @@ public class Controller implements Initializable{
         add.setDisable(true);
         remove.setDisable(true);
         locationDescription.setVisible(false);
+        room.setItems(FXCollections.observableArrayList("qwe","qwe2","wasdadad"));
 
         ToggleGroup tg = new ToggleGroup();
         work.setToggleGroup(tg);
@@ -108,6 +109,13 @@ public class Controller implements Initializable{
                         locationDescription.setText("");
                     }
                 }
+            }
+        });
+
+        room.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                checkIfAllValid();
             }
         });
 
@@ -155,6 +163,7 @@ public class Controller implements Initializable{
         otherLocation.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                checkIfAllValid();
                 if(otherLocation.isSelected()) {
                     room.setVisible(false);
                     locationDescription.setVisible(true);
@@ -312,8 +321,8 @@ public class Controller implements Initializable{
             String description = this.description.getText();
             int hrStart = 00;
             int minStart = 00;
-            int hrEnd = 24;
-            int minEnd = 00;
+            int hrEnd = 23;
+            int minEnd = 59;
             if(!allDay.isSelected()) {
                 hrStart = Integer.parseInt(from.getText().split(":")[0]);
                 minStart = Integer.parseInt((from.getText().split(":")[1]));
@@ -327,11 +336,12 @@ public class Controller implements Initializable{
             if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
                 location = locationDescription.getText();
             } else {
-                room = new Room(1, "test", 1, 0, 24, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
+                room = new Room(1, "test", 1, 0, 23, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
             }
             UserModel owner = new UserModel(); // todo FIX
             Calendar cal = new Calendar("test", 1); // TEST CAL! TODO get from DB
             Appointment app = new Appointment(getAppointmentId(), title, description, startDate, endDate, room, owner, cal, 0, null, "abc");
+            System.out.println(app);
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
             if(response.get("reply"))
                 System.out.println("Appointment created\n"+app);
@@ -384,11 +394,16 @@ public class Controller implements Initializable{
             ret = false;
             System.out.println("date shit in checkIfAllValid()");
         }
-        if(work.isSelected() && room.getOpacity()!=2.0) {
+        if(work.isSelected()) {
+            if (otherLocation.isSelected() && locationDescription.getOpacity() != 2.0) {
                 ret = false;
                 System.out.println("Room problem [WORK only]");
+            }
+          /*  if(!otherLocation.isSelected() && (room.getValue.equals(null) || room.getValue().equals(""))) {
+                ret = false;
+            }*/
         }
-        if(personal.isSelected() && (locationDescription.getText()=="" || locationDescription.getText()==null)) {
+        if(personal.isSelected() && (locationDescription.getText().equals("") || locationDescription.getText().equals(null))) {
             ret = false;
             System.out.println("Location problem [PERSONAL only]");
         }
@@ -410,15 +425,15 @@ public class Controller implements Initializable{
             ret = false;
             System.out.println("stoprepeat problem");
         }
-        // todo description, room/location
+        // todo room
         if (description.getText().equals("")) ret = false;
-        if(work.isSelected() && !otherLocation.isSelected()) {
-            if(room.getValue().equals("")) {
+        /*if(work.isSelected() && !otherLocation.isSelected()) {
+            if(room.getValue().equals(null) || room.getValue().equals("")) {
                 ret = false;
             }
-        }
+        }*/
         if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
-            if(locationDescription.getText().equals("")) {
+            if (locationDescription.getText().equals("")) {
                 ret = false;
             }
         }
@@ -492,11 +507,7 @@ public class Controller implements Initializable{
     }
 
     public boolean updateTimeValid() {
-        System.out.println(validTime(timeRegex));
-        if(!validTime(timeRegex)) {
-            return false;
-        }
-        return true;
+        return validTime(timeRegex);
     }
 
     public boolean validTime(String match) {
