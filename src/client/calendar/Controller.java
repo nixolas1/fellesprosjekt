@@ -29,6 +29,7 @@ import java.time.temporal.WeekFields;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Hashtable;
 import java.util.Locale;
 
 /**
@@ -62,7 +63,9 @@ public class Controller {
     private LocalDate displayDate = LocalDate.parse("2015-03-02");
     private LocalDate tempDate = LocalDate.now();
     private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
+    private Integer[] cals = new Integer[]{1,2,3,4};
 
+    private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
 
     @FXML
     void initialize() {
@@ -71,7 +74,8 @@ public class Controller {
         updateMonth();
         updateWeekNum();
         updateDate();
-        populateCalendars(new Integer[]{1, 2, 3, 4});
+        appointments = getAppointments(cals);
+        populateCalendars(cals);
     }
 
     public static String monthName(int month){
@@ -109,27 +113,27 @@ public class Controller {
 
     public void showNextWeek(ActionEvent event) {
         tempDate=tempDate.plusWeeks(1);
-        updateWeekNum();
-        updateDate();
-        updateMonth();
-        updateYear();
-
+        updateView();
     }
 
     public void showLastWeek(ActionEvent event) {
         tempDate = tempDate.minusWeeks(1);
-        updateWeekNum();
-        updateDate();
-        updateMonth();
-        updateYear();
+        updateView();
     }
 
     public void showToday(ActionEvent event) {
         tempDate = LocalDate.now();
+        updateView();
+    }
+
+    public void updateView(){
         updateDate();
         updateWeekNum();
         updateMonth();
         updateYear();
+
+        clearAppointments();
+        populateCalendars(cals);
     }
 
 
@@ -150,12 +154,25 @@ public class Controller {
         client.usersettings.Main.show(Main.stage);
     }
 
+    public void clearAppointments(){
+        calendarGrid.getChildren().removeAll();
+        calendarGrid.getChildren().clear();
+    }
+
     public void populateCalendars(Integer[] id){
         ArrayList<Appointment> apps = new ArrayList<>();
         for(int i : id){
-            apps.addAll(Appointment.getAppointmentsInCalendar(i, socket));
+            apps.addAll(appointments.get(i));
         }
         populateCalendar(apps);
+    }
+
+    public Hashtable<Integer, ArrayList<Appointment>> getAppointments(Integer[] id){
+        Hashtable<Integer, ArrayList<Appointment>> apps = new Hashtable<>();
+        for(Integer i : id){
+            apps.put(i, Appointment.getAppointmentsInCalendar(i, socket));
+        }
+        return apps;
     }
 
     public void populateCalendar(int calID){
@@ -166,7 +183,9 @@ public class Controller {
     public void populateCalendar(ArrayList<Appointment> apps){
         for(Appointment app : apps){
             //only display appointments this week
-            if(app.getStartDate().getDayOfYear()<displayDate.getDayOfYear()+7) {
+            System.out.println(app.getStartDate() + " | "+tempDate);
+            if(app.getStartDate().getDayOfYear()<tempDate.getDayOfYear()+7 &&
+                    app.getStartDate().getDayOfYear()>=tempDate.getDayOfYear()) {
                 System.out.println(app.getTitle() +
                                 ": den " + app.getStartDate()+
                                 " i kalender "+app.getCal().getID()+
@@ -212,7 +231,7 @@ public class Controller {
         //style
         String color = "-fx-background-color: "+app.getCal().getColor(0.6)+" ";
         double padding = paneWidth*collisions.indexOf(app);
-        System.out.println(color);
+        //System.out.println(color);
         pane.setStyle(color);
         pane.setCursor(Cursor.HAND);
         pane.setMaxWidth(paneWidth);
@@ -252,7 +271,7 @@ public class Controller {
     }
 
     private void insertPane(AnchorPane pane, LocalDateTime startDate, LocalDateTime endDate) {
-        int col = startDate.getDayOfYear()-displayDate.getDayOfYear();
+        int col = startDate.getDayOfYear()-tempDate.getDayOfYear();
         int row = startDate.getHour();
         int rowspan = endDate.getHour()-startDate.getHour();
         insertPane(pane, col, row, 1, rowspan);
