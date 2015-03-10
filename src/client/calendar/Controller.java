@@ -28,6 +28,7 @@ import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Locale;
 
 /**
@@ -60,9 +61,11 @@ public class Controller {
 
     private LocalDate displayDate = LocalDate.parse("2015-03-02");
     private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
+    private Integer[] cals = new Integer[]{1,2,3,4};
 
     private int dayOfMonth = displayDate.getDayOfMonth();
     private int sevenDays = 7;
+    private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
 
     @FXML
     void initialize() {
@@ -71,7 +74,8 @@ public class Controller {
         updateMonth();
         updateWeekNum();
         updateDate();
-        populateCalendars(new Integer[]{1, 2, 3, 4});
+        appointments = getAppointments(cals);
+        populateCalendars(cals);
     }
 
     public static String monthName(int month){
@@ -139,12 +143,24 @@ public class Controller {
         client.usersettings.Main.show(Main.stage);
     }
 
+    public void clearAppointments(){
+        calendarGrid.getChildren().removeAll();
+    }
+
     public void populateCalendars(Integer[] id){
         ArrayList<Appointment> apps = new ArrayList<>();
         for(int i : id){
-            apps.addAll(Appointment.getAppointmentsInCalendar(i, socket));
+            apps.addAll(appointments.get(i));
         }
         populateCalendar(apps);
+    }
+
+    public Hashtable<Integer, ArrayList<Appointment>> getAppointments(Integer[] id){
+        Hashtable<Integer, ArrayList<Appointment>> apps = new Hashtable<>();
+        for(Integer i : id){
+            apps.put(i, Appointment.getAppointmentsInCalendar(i, socket));
+        }
+        return apps;
     }
 
     public void populateCalendar(int calID){
