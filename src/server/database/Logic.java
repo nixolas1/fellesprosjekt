@@ -202,19 +202,25 @@ public class Logic {
     public static boolean createAppointment(Appointment app){
         String query = "INSERT INTO Appointment (title, description, location, starttime, endtime, repeatEndDate, repeat, Calendar_calendarid, Room_roomid) VALUES ";
         // title	description	location	starttime	endtime	repeatEndDate	repeat	Calendar_calendarid	Room_roomid
-        Statement stmt = null;
         String location = app.getRoom() != null ? app.getRoom().toString() : app.getLocation();
+        int roomId = app.getRoom() != null ? app.getRoom().getId() : null;
+        Statement stmt = null;
         app.getStartDate();
         try {
             stmt = conn.createStatement();
             System.out.println("QUERY: " + query);
-            String query2 = query + String.format("('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", app.getTitle(), app.getPurpose(), app.getRoom(), app.getStartDate(), app.getEndDate() +
-                                                    app.get);
+            String query2 = query + String.format("('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",
+                            app.getTitle(), app.getPurpose(), app.getRoom(), app.getStartDate(),
+                            app.getEndDate(), app.getEndRepeatDate(), app.getRepeatEvery(), app.getCal(), roomId);
             stmt.executeQuery(query2);
+            System.out.println("Appointment [Title='" + app.getTitle() + "'] successfully created in database");
         } catch (SQLException e) {
             System.out.println("SQLException triggered in createAppointment(), 1. try block: " + e);
+            return false;
+        } finally {
+            closeDB(stmt);
+            return true;
         }
-        return false;
     }
 
 
