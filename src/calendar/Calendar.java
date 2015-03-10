@@ -16,13 +16,17 @@ import java.util.Random;
 public class Calendar implements Serializable {
     String name = "";
     String description = "";
-    int id;
+    int id=-1;
     public ArrayList<Appointment> appointments = new ArrayList<Appointment>();
     ArrayList<UserModel> members = new ArrayList<UserModel>();
 
     public Calendar(String name, ArrayList<UserModel> members){
         this.name = name;
         this.members = members;
+    }
+
+    public Calendar(int id){
+        this.id = id;
     }
 
     public Calendar(String name){
