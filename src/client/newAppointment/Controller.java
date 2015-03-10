@@ -50,7 +50,7 @@ public class Controller implements Initializable{
     @FXML
     private Label stoplabel, roomOrLocation, timeLabel, toLabel;
 
-    @FXML private CheckBox allDay;
+    @FXML private CheckBox allDay, otherLocation;
 
     @FXML private RadioButton work, personal;
 
@@ -84,6 +84,7 @@ public class Controller implements Initializable{
         add.setDisable(true);
         remove.setDisable(true);
         locationDescription.setVisible(false);
+        room.setItems(FXCollections.observableArrayList("qwe","qwe2","wasdadad"));
 
         ToggleGroup tg = new ToggleGroup();
         work.setToggleGroup(tg);
@@ -92,19 +93,29 @@ public class Controller implements Initializable{
         tg.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                otherLocation.setSelected(false);
                 if (tg.getSelectedToggle() != null) {
                     if (work.isSelected()) {
+                        otherLocation.setVisible(true);
                         locationDescription.setVisible(false);
                         room.setVisible(true);
                         roomOrLocation.setText("Rom");
                     }
                     if (personal.isSelected()) {
                         locationDescription.setVisible(true);
+                        otherLocation.setVisible(false);
                         room.setVisible(false);
                         roomOrLocation.setText("Sted");
                         locationDescription.setText("");
                     }
                 }
+            }
+        });
+
+        room.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                checkIfAllValid();
             }
         });
 
@@ -129,6 +140,7 @@ public class Controller implements Initializable{
         allDay.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                checkIfAllValid();
                 if (allDay.isSelected()) {
                     to.setDisable(true);
                     from.setDisable(true);
@@ -144,6 +156,22 @@ public class Controller implements Initializable{
                     from.setDisable(false);
                     timeLabel.setDisable(false);
                     toLabel.setDisable(false);
+                }
+            }
+        });
+
+        otherLocation.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                checkIfAllValid();
+                if(otherLocation.isSelected()) {
+                    room.setVisible(false);
+                    locationDescription.setVisible(true);
+                    roomOrLocation.setText("Sted");
+                } else {
+                    room.setVisible(true);
+                    locationDescription.setVisible(false);
+                    roomOrLocation.setText("Rom");
                 }
             }
         });
@@ -291,16 +319,29 @@ public class Controller implements Initializable{
         if(checkIfAllValid()) {
             String title = this.title.getText();
             String description = this.description.getText();
-            int hrStart = Integer.parseInt(from.getText().split(":")[0]);
-            int minStart = Integer.parseInt((from.getText().split(":")[1]));
-            int hrEnd = Integer.parseInt((to.getText().split(":")[0]));
-            int minEnd = Integer.parseInt(to.getText().split(":")[1]);
+            int hrStart = 00;
+            int minStart = 00;
+            int hrEnd = 23;
+            int minEnd = 59;
+            if(!allDay.isSelected()) {
+                hrStart = Integer.parseInt(from.getText().split(":")[0]);
+                minStart = Integer.parseInt((from.getText().split(":")[1]));
+                hrEnd = Integer.parseInt((to.getText().split(":")[0]));
+                minEnd = Integer.parseInt(to.getText().split(":")[1]);
+            }
             LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
             LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
-            Room room = new Room(1, "test", 1, 0, 24, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
+            Room room = null;
+            String location = null;
+            if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
+                location = locationDescription.getText();
+            } else {
+                room = new Room(1, "test", 1, 0, 23, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
+            }
             UserModel owner = new UserModel(); // todo FIX
             Calendar cal = new Calendar("test", 1); // TEST CAL! TODO get from DB
             Appointment app = new Appointment(getAppointmentId(), title, description, startDate, endDate, room, owner, cal, 0, null, "abc");
+            System.out.println(app);
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
             if(response.get("reply"))
                 System.out.println("Appointment created\n"+app);
@@ -353,11 +394,16 @@ public class Controller implements Initializable{
             ret = false;
             System.out.println("date shit in checkIfAllValid()");
         }
-        if(work.isSelected() && room.getOpacity()!=2.0) {
+        if(work.isSelected()) {
+            if (otherLocation.isSelected() && locationDescription.getOpacity() != 2.0) {
                 ret = false;
                 System.out.println("Room problem [WORK only]");
+            }
+          /*  if(!otherLocation.isSelected() && (room.getValue.equals(null) || room.getValue().equals(""))) {
+                ret = false;
+            }*/
         }
-        if(personal.isSelected() && (locationDescription.getText()=="" || locationDescription.getText()==null)) {
+        if(personal.isSelected() && (locationDescription.getText().equals("") || locationDescription.getText().equals(null))) {
             ret = false;
             System.out.println("Location problem [PERSONAL only]");
         }
@@ -378,6 +424,18 @@ public class Controller implements Initializable{
         if(stoprepeat.getOpacity()==3.0) {
             ret = false;
             System.out.println("stoprepeat problem");
+        }
+        // todo room
+        if (description.getText().equals("")) ret = false;
+        /*if(work.isSelected() && !otherLocation.isSelected()) {
+            if(room.getValue().equals(null) || room.getValue().equals("")) {
+                ret = false;
+            }
+        }*/
+        if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
+            if (locationDescription.getText().equals("")) {
+                ret = false;
+            }
         }
 
         create.setDisable(!ret);
@@ -449,11 +507,7 @@ public class Controller implements Initializable{
     }
 
     public boolean updateTimeValid() {
-        System.out.println(validTime(timeRegex));
-        if(!validTime(timeRegex)) {
-            return false;
-        }
-        return true;
+        return validTime(timeRegex);
     }
 
     public boolean validTime(String match) {
@@ -463,11 +517,9 @@ public class Controller implements Initializable{
         int hh = Integer.parseInt(to.getText(0, 2)), mm = Integer.parseInt(to.getText(3, 5));
         if(h>=24 || hh>=24 || m>=60 || mm>=60) return false;
         if(date.getValue().isBefore(endDate.getValue())) {
-            System.out.println("Date is before endDate");
             return true;
         }
         if (date.getValue().equals(endDate.getValue())) {
-            System.out.println("date.getValue()==endDate.getValue()");
             if(h > hh) return false;
             if(h == hh) {
                 if(m > mm) return false;
