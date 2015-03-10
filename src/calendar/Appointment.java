@@ -2,14 +2,12 @@ package calendar;
 
 import network.Query;
 import network.ThreadClient;
-import server.User;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Hashtable;
 
 /**
@@ -89,6 +87,16 @@ public class Appointment implements Serializable {
             e.printStackTrace();
             return new ArrayList<Appointment>();
         }
+    }
+
+    public ArrayList<Appointment> getCollisions(ArrayList<Appointment> appointments){
+        ArrayList<Appointment> colls = new ArrayList<>();
+        for(Appointment app : appointments){
+            if(this.getStartDate().isBefore(app.getEndDate()) && app.getStartDate().isBefore(this.getEndDate())){
+                colls.add(app);
+            }
+        }
+        return colls;
     }
 
     public String getTitle() {
