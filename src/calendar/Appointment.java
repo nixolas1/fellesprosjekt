@@ -74,9 +74,8 @@ public class Appointment implements Serializable {
         this.endRepeatDate=endRepeatDate;
     }
 
-    public Appointment(int id, String title, String purpose, String location, LocalDateTime startDate, LocalDateTime endDate, Room room, UserModel owner, Calendar cal, int repeatEvery, LocalDate endRepeatDate){
+    public Appointment(String title, String purpose, String location, LocalDateTime startDate, LocalDateTime endDate, Room room, Calendar cal, int repeatEvery, LocalDate endRepeatDate){
         this.title=title;
-        this.id=id;
         this.purpose=purpose;
         this.startDate=startDate;
         this.endDate=endDate;

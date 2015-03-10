@@ -1,14 +1,14 @@
 package server;
 
-import calendar.Appointment;
-import calendar.Group;
-import calendar.UserModel;
+import calendar.*;
 import network.ThreadClient;
 import network.ThreadServer;
 import security.Crypto;
 import server.database.*;
 import server.database.Logic;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -51,17 +51,24 @@ public class Main {
         Group group = new Group(Logic.getLastGroupIdUsed() +1, "TESTGRUPPE", list);
         Logic.createGroup(group);
         */
+
         /*
         Hashtable<String, ArrayList<Appointment>> hore= AppointmentLogic.getCalendarAppointments(new Hashtable<String, String>() {{put("id", "1");}}).data;
         ArrayList<Appointment> appList = hore.get("reply");
-        Appointment app = appList.get(0);
-        // todo id, title, purpose, location, startDate, endDate, endRepeatDate, repeatEveryXDays, calID, roomID
-        System.out.println("\n\nTitle: " + app.getTitle());
-        System.out.println("Purpose: " + app.getPurpose());
-        System.out.println("StartDate: " + app.getStartDate());
-        System.out.println("EndDate: " + app.getEndDate());
+        Appointment app1 = appList.get(0);
         */
-        RoomLogic.availableRooms();
+
+        Hashtable<String, ArrayList<Room>> foo = RoomLogic.getRooms().data;
+        ArrayList<Room> roomList = foo.get("reply");
+        Room fuckRoom = roomList.get(3);
+
+        // todo id, title, purpose, location, startDate, endDate, endRepeatDate, repeatEveryXDays, calID, roomID
+        LocalDateTime startdate = LocalDateTime.parse("2015-04-04T10:10");
+        LocalDateTime enddate = LocalDateTime.parse("2015-04-04T16:10");
+        Appointment app = new Appointment("testmøte", "for å teste vel", null, startdate, enddate, fuckRoom, new Calendar(5), 0, null);
+        Logic.createAppointment(app);
+
+        //RoomLogic.availableRooms();
 
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
