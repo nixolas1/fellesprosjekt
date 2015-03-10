@@ -59,7 +59,11 @@ public class Room implements Serializable {
     }
 
     public String getName(){return name;}
-    public int getId(){return id;}
+    public int getId(){return this.id;}
+
+    public void setId(int id){
+        this.id = id;
+    }
 
 
     public int getCapacity() {

@@ -60,12 +60,13 @@ public class Main {
 
         Hashtable<String, ArrayList<Room>> foo = RoomLogic.getRooms().data;
         ArrayList<Room> roomList = foo.get("reply");
-        Room fuckRoom = roomList.get(3);
-
+        Room fuckRoom = roomList.get(2);
+        fuckRoom.setId(3);
         // todo id, title, purpose, location, startDate, endDate, endRepeatDate, repeatEveryXDays, calID, roomID
         LocalDateTime startdate = LocalDateTime.parse("2015-04-04T10:00");
         LocalDateTime enddate = LocalDateTime.parse("2015-04-04T16:00");
         Appointment app = new Appointment("testmøte", "for å teste vel", null, startdate, enddate, fuckRoom, new Calendar(5), 0, null);
+
         Logic.createAppointment(app);
 
         //RoomLogic.availableRooms();
