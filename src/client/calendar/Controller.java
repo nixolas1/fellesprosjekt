@@ -20,6 +20,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ThreadClient;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -76,6 +79,16 @@ public class Controller {
         updateDate();
         appointments = getAppointments(cals);
         populateCalendars(cals);
+        importFont();
+    }
+
+    public void importFont() {
+        try {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("")));
+        } catch (IOException|FontFormatException e) {
+            //Handle exception
+        }
     }
 
     public static String monthName(int month){
