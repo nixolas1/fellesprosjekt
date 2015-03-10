@@ -23,10 +23,9 @@ import network.ThreadClient;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -60,11 +59,10 @@ public class Controller {
     protected static Stage primaryStage;
 
     private LocalDate displayDate = LocalDate.parse("2015-03-02");
+    private LocalDate tempDate = LocalDate.now();
     private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
     private Integer[] cals = new Integer[]{1,2,3,4};
 
-    private int dayOfMonth = displayDate.getDayOfMonth();
-    private int sevenDays = 7;
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
 
     @FXML
@@ -84,45 +82,52 @@ public class Controller {
     }
 
     public void updateYear() {
-        year.setText(displayDate.getYear() + "");
+        year.setText(tempDate.getYear() + "");
     }
 
     public void updateMonth() {
-
-        month.setText(monthName(displayDate.getMonthValue()) + "");
+        month.setText(monthName(tempDate.getMonthValue()) + "");
     }
-    TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+
     public void updateWeekNum() {
-
-        weekNum.setText(displayDate.get(woy) + "");
+        TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+        int weekNumber = tempDate.get(woy);
+        weekNum.setText(weekNumber + "");
     }
-
 
     public void updateDate() {
-        monDate.setText(dayOfMonth + "");
-        tueDate.setText(dayOfMonth+1 + "");
-        wedDate.setText(dayOfMonth+2 + "");
-        thuDate.setText(dayOfMonth+3 + "");
-        friDate.setText(dayOfMonth+4 + "");
-        satDate.setText(dayOfMonth+5 + "");
-        sunDate.setText(dayOfMonth+6 + "");
+        monDate.setText(tempDate.getDayOfMonth() + "");
+        tueDate.setText(tempDate.plusDays(1).getDayOfMonth() + "");
+        wedDate.setText(tempDate.plusDays(2).getDayOfMonth() + "");
+        thuDate.setText(tempDate.plusDays(3).getDayOfMonth() + "");
+        friDate.setText(tempDate.plusDays(4).getDayOfMonth() + "");
+        satDate.setText(tempDate.plusDays(5).getDayOfMonth() + "");
+        sunDate.setText(tempDate.plusDays(6).getDayOfMonth() + "");
     }
 
     public void showNextWeek(ActionEvent event) {
-        dayOfMonth = displayDate.getDayOfMonth() + sevenDays;
-        updateDate();
-        sevenDays += 7;
-
+        tempDate=tempDate.plusWeeks(1);
+        updateView();
     }
 
     public void showLastWeek(ActionEvent event) {
-        dayOfMonth = displayDate.getDayOfMonth() - sevenDays;
-        updateDate();
-        sevenDays -= 7;
+        tempDate = tempDate.minusWeeks(1);
+        updateView();
     }
 
     public void showToday(ActionEvent event) {
+        tempDate = LocalDate.now();
+        updateView();
+    }
+
+    public void updateView(){
         updateDate();
+        updateWeekNum();
+        updateMonth();
+        updateYear();
+
+        clearAppointments();
+        populateCalendars(cals);
     }
 
 
@@ -145,6 +150,7 @@ public class Controller {
 
     public void clearAppointments(){
         calendarGrid.getChildren().removeAll();
+        calendarGrid.getChildren().clear();
     }
 
     public void populateCalendars(Integer[] id){
@@ -171,7 +177,9 @@ public class Controller {
     public void populateCalendar(ArrayList<Appointment> apps){
         for(Appointment app : apps){
             //only display appointments this week
-            if(app.getStartDate().getDayOfYear()<displayDate.getDayOfYear()+7) {
+            System.out.println(app.getStartDate() + " | "+tempDate);
+            if(app.getStartDate().getDayOfYear()<tempDate.getDayOfYear()+7 &&
+                    app.getStartDate().getDayOfYear()>=tempDate.getDayOfYear()) {
                 System.out.println(app.getTitle() +
                                 ": den " + app.getStartDate()+
                                 " i kalender "+app.getCal().getID()+
@@ -217,7 +225,7 @@ public class Controller {
         //style
         String color = "-fx-background-color: "+app.getCal().getColor(0.6)+" ";
         double padding = paneWidth*collisions.indexOf(app);
-        System.out.println(color);
+        //System.out.println(color);
         pane.setStyle(color);
         pane.setCursor(Cursor.HAND);
         pane.setMaxWidth(paneWidth);
@@ -257,7 +265,7 @@ public class Controller {
     }
 
     private void insertPane(AnchorPane pane, LocalDateTime startDate, LocalDateTime endDate) {
-        int col = startDate.getDayOfYear()-displayDate.getDayOfYear();
+        int col = startDate.getDayOfYear()-tempDate.getDayOfYear();
         int row = startDate.getHour();
         int rowspan = endDate.getHour()-startDate.getHour();
         insertPane(pane, col, row, 1, rowspan);
