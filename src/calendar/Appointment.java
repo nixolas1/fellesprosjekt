@@ -22,7 +22,7 @@ public class Appointment implements Serializable {
     LocalDateTime startDate;
     LocalDateTime endDate;
     LocalDate endRepeatDate;
-    int repeatEvery;
+    int repeatEvery=0;
     Room room;
     UserModel owner;
     Calendar cal;
@@ -123,6 +123,41 @@ public class Appointment implements Serializable {
     public ArrayList<Attendee> getAttendees() {
         return attendees;
     }
+    public int getRepeatEvery(){return repeatEvery;}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public LocalDate getEndRepeatDate() {
+        return endRepeatDate;
+    }
+
+    public void setEndRepeatDate(LocalDate endRepeatDate) {
+        this.endRepeatDate = endRepeatDate;
+    }
+
+    public void setRepeatEvery(int repeatEvery) {
+        this.repeatEvery = repeatEvery;
+    }
+
+    public void setAttendees(ArrayList<Attendee> attendees) {
+        this.attendees = attendees;
+    }
+
+
     public void addAttendee(Attendee attendee) {
         attendees.add(attendee);
     }
