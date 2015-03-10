@@ -51,6 +51,10 @@ public class Main extends Application {
             ex.printStackTrace();
         }
     }
+
+    public static Hashtable<String, Boolean> sendAppointment() {
+        return new Hashtable<String,Boolean>();
+    }
 	
 	public static void main(String[] args) {
 		launch(args);

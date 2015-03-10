@@ -312,7 +312,7 @@ public class Controller implements Initializable{
     }
     public int getAppointmentId() {
         // todo: Get ID from server
-        return 0;
+        return -1;
     }
     public void updateRoomList() {
         // todo: Oppdaterer romlisten som inneholder aktuelle rom, dvs rom med riktig antall plasser ift. deltakere
@@ -472,6 +472,14 @@ public class Controller implements Initializable{
         int h = Integer.parseInt(from.getText(0, 2)), m = Integer.parseInt(from.getText(3, 5));
         int hh = Integer.parseInt(to.getText(0, 2)), mm = Integer.parseInt(to.getText(3, 5));
         if(h>=24 || hh>=24 || m>=60 || mm>=60) return false;
+        if(date.getValue().isBefore(endDate.getValue())) {
+            System.out.println("Date is before endDate");
+            return true;
+        }
+        if (date.getValue()==endDate.getValue()) {
+            if(h > hh) return false;
+            //if(h == hh)
+        }
         return true;
     }
 
