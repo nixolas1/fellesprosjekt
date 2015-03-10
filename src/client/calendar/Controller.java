@@ -26,7 +26,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 /**
@@ -89,6 +91,10 @@ public class Controller {
         TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
         int weekNumber = tempDate.get(woy);
         weekNum.setText(weekNumber + "");
+    }
+
+    private LocalDate getLastMonday(LocalDate d) {
+        return d;
     }
 
     public void updateDate() {
@@ -231,7 +237,7 @@ public class Controller {
 
     private Label paneLabel(String text, double width){
         final Label label = new Label(text);
-        label.setMaxWidth(width-5);
+        label.setMaxWidth(width - 5);
         label.setWrapText(true);
         return label;
     }
