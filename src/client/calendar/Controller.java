@@ -1,7 +1,6 @@
 package client.calendar;
 
 import calendar.Appointment;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,7 +19,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ThreadClient;
-import sun.plugin.javascript.navig.Anchor;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -158,6 +156,16 @@ public class Controller {
 
     public void showUserSettings(ActionEvent event) {
         client.usersettings.Main.show(Main.stage);
+    }
+
+
+    public void onBtnShowNewGroup(ActionEvent event) {
+     client.newGroupCalendar.Main newGroup = new client.newGroupCalendar.Main();
+       try {
+            newGroup.showNewGroup(primaryStage, Main.user);
+       } catch (Exception e) {
+            e.printStackTrace();
+       }
     }
 
     public void clearAppointments(){

@@ -1,13 +1,14 @@
 package client.newAppointment;
 
-//import client.newAppointment.Main;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
-import calendar.Appointment;
-import calendar.UserModel;
+
+import calendar.*;
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,16 +36,20 @@ public class Controller implements Initializable{
 
 
     @FXML
-    private TextField room, from, to, purpose, repeat;
+    private TextField title, from, to, description, repeat, locationDescription;
 
     @FXML
-    private DatePicker date, stoprepeat;
+    private DatePicker date, endDate, stoprepeat;
 
     @FXML
-    private ComboBox usersComboBox;
+    private ComboBox usersComboBox, room;
 
     @FXML
-    private Label stoplabel;
+    private Label stoplabel, roomOrLocation, timeLabel, toLabel;
+
+    @FXML private CheckBox allDay;
+
+    @FXML private RadioButton work, personal;
 
     @FXML
     private Button create, add, remove;
@@ -61,7 +66,8 @@ public class Controller implements Initializable{
     private ArrayList<UserModel> allUsers;
     private ObservableList<String> userInfo;
     private ObservableList<String> attendees;
-    UserModel user = new UserModel();
+    private ArrayList<Room> allRooms;
+    UserModel user = new UserModel(); // todo loggedUser?
 
 
 
@@ -70,6 +76,29 @@ public class Controller implements Initializable{
 
         add.setDisable(true);
         remove.setDisable(true);
+        locationDescription.setVisible(false);
+
+        ToggleGroup tg = new ToggleGroup();
+        work.setToggleGroup(tg);
+        personal.setToggleGroup(tg);
+
+        tg.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if (tg.getSelectedToggle() != null) {
+                    if (work.isSelected()) {
+                        locationDescription.setVisible(false);
+                        room.setVisible(true);
+                        roomOrLocation.setText("Rom");
+                    }
+                    if (personal.isSelected()) {
+                        locationDescription.setVisible(true);
+                        room.setVisible(false);
+                        roomOrLocation.setText("Sted");
+                    }
+                }
+            }
+        });
 
         usersComboBox.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -89,15 +118,54 @@ public class Controller implements Initializable{
             }
         });
 
+        allDay.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (allDay.isSelected()) {
+                    to.setDisable(true);
+                    from.setDisable(true);
+                    timeLabel.setDisable(true);
+                    toLabel.setDisable(true);
+                    from.setText("");
+                    to.setText("");
+                    from.setStyle("-fx-text-inner-color: black;");
+                    to.setStyle("-fx-text-inner-color: black;");
 
-        createValidationListener(room, 0, "[\\w- ]+ [\\d]+", 50);
-        createValidationListener(from, 0,   "[\\d]{2}:[\\d]{2}", 5);
+                } else {
+                    to.setDisable(false);
+                    from.setDisable(false);
+                    timeLabel.setDisable(false);
+                    toLabel.setDisable(false);
+                }
+            }
+        });
+
+        stoprepeat.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(dateIsAfter(date,stoprepeat) && dateIsAfter(endDate,stoprepeat)) {
+                    stoprepeat.setStyle("-fx-text-inner-color: green;");
+                    stoprepeat.setOpacity(2.0);
+                } else {
+                    stoprepeat.setStyle("-fx-text-inner-color: red;");
+                    stoprepeat.setOpacity(3.0);
+                }
+            }
+        });
+
+
+
+        //createValidationListener(room, 0, "[\\w- ]+ [\\d]+", 50);
+        createValidationListener(from, 0, "[\\d]{2}:[\\d]{2}", 5);
         createValidationListener(to,   2,   "[\\d]{2}:[\\d]{2}", 5);
-        createValidationListener(purpose, 1, ".*", 50);
+        createValidationListener(description, 1, ".*", 50);
         createValidationListener(repeat,  3, "[0-9]*", 3);
+        createValidationListener(title, 0, ".{0,50}", 50);
+        createValidationListener(locationDescription, 0, ".{0,50}",50);
 
-        dateValidation(date);
-        dateValidation(stoprepeat);
+       dateValidation(date);
+       dateValidation(endDate);
+       // dateValidation(stoprepeat);
 
         stoprepeat.setVisible(false);
         stoplabel.setVisible(false);
@@ -119,15 +187,18 @@ public class Controller implements Initializable{
         create.setDisable(true);
         attendees = FXCollections.observableArrayList(); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
-        allUsers = calendar.UserModel.getUsersFromDB();
+        allUsers = getUsersFromDB();
+        allRooms = getAllRooms();
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH); // AutoCompleteMode ON
 
 
-        usersComboBox.setItems(FXCollections.observableArrayList(userInfo));
-        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
 
+    }
+
+    public static ArrayList<UserModel> getUsersFromDB() {
+        return calendar.UserModel.getAllUsers();
     }
 
 
@@ -135,12 +206,12 @@ public class Controller implements Initializable{
     @FXML
     public void addUser(ActionEvent event) {
         String usr = (String) FxUtil.getComboBoxValue(usersComboBox);
-        // validating
         if (userInfo.contains(usr)) {
            // String email = usr.split(",")[1].trim();
            // UserModel user = getUserModel(email);
             attendees.add(usr);
             userInfo.remove(usr);
+            //usersComboBox.setItems(userInfo);
             }
         //FxUtil.resetSelection(usersComboBox);
         usersComboBox.getEditor().setText("");
@@ -169,7 +240,36 @@ public class Controller implements Initializable{
 
     @FXML
     public void createAppointment(ActionEvent event) {
-        Appointment app = new Appointment();
+        if(checkIfAllValid()) {
+            String title = this.title.getText();
+            String description = this.description.getText();
+            int hrStart = Integer.parseInt(from.getText().split(":")[0]);
+            int minStart = Integer.parseInt((from.getText().split(":")[1]));
+            int hrEnd = Integer.parseInt((to.getText().split(":")[0]));
+            int minEnd = Integer.parseInt(to.getText().split(":")[1]);
+            LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
+            LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
+            Room room = new Room(1, "test", 1, 0, 24, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
+            UserModel owner = new UserModel(); // todo FIX
+            Calendar cal = new Calendar("test"); // TEST CAL! TODO get from DB
+            Appointment app = new Appointment(getAppointmentId(), title, description, startDate, endDate, room, owner, cal, 0, null, "abc");
+            //TODO send appointment to server, insert into db
+        } else {
+            System.out.println("One or more fields INVALID. Data not sent to server.");
+        }
+
+    }
+
+    public ArrayList<Room> getAllRooms() {
+        // todo: Get all rooms from server
+        return new ArrayList<Room>();
+    }
+    public int getAppointmentId() {
+        // todo: Get ID from server
+        return 0;
+    }
+    public void updateRoomList() {
+        // todo: Oppdaterer romlisten som inneholder aktuelle rom, dvs rom med riktig antall plasser ift. deltakere
 
     }
 
@@ -182,38 +282,80 @@ public class Controller implements Initializable{
     }
 
 
-
     public boolean checkIfAllValid(){
         Boolean ret = true;
-        if(room.getOpacity()!=2.0) ret = false;
-        if(from.getOpacity()!=2.0) ret = false;
-        if(to.getOpacity()!=2.0)   ret = false;
-        if(date.getOpacity()!=2.0) ret = false;
-        if(stoprepeat.getOpacity()==3.0) ret = false;
+        if(title.getText()==null || title.getText()=="") ret = false;
+        if(dateIsAfter(endDate, date) || dateIsAfter(stoprepeat, date)) {
+            ret = false;
+            System.out.println("date shit in checkIfAllValid()");
+        }
+        if(work.isSelected() && room.getOpacity()!=2.0) {
+                ret = false;
+                System.out.println("Room problem [WORK only]");
+        }
+        if(personal.isSelected() && (locationDescription.getText()=="" || locationDescription.getText()==null)) {
+            ret = false;
+            System.out.println("Sted problem [PERSONAL only]");
+        }
+        if(!allDay.isSelected()) {
+            if (from.getOpacity() != 2.0) {
+                ret = false;
+                System.out.println("From problem");
+            }
+            if (to.getOpacity() != 2.0) {
+                ret = false;
+                System.out.println("To problem");
+            }
+        }
+        if(date.getOpacity()!=2.0) {
+            ret = false;
+            System.out.println("Date problem");
+        }
+        if(stoprepeat.getOpacity()==3.0) {
+            ret = false;
+            System.out.println("stoprepeat problem");
+        }
 
         create.setDisable(!ret);
+        System.out.println("checkIfAllValid() ret = " +ret);
         return ret;
     }
 
     public boolean valid(String text, String match, int max, int extra) {
         if(extra==2 && valid(text, match, max,0) && valid(from.getText(), match, max,0)){
+            if (allDay.isSelected()) return true;
             int h = parseInt(from.getText(0, 2)), m = parseInt(from.getText(3, 5));
             int hh = parseInt(text.substring(0, 2)), mm = parseInt(text.substring(3, 5));
-            if(hh<=h && mm<=m)return false;
+            if (date.getValue()!=null && endDate!=null) {
+                if (date.getValue().isBefore(endDate.getValue()) && date.getValue()!=endDate.getValue()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            if (hh <= h && mm <= m) return false;
+            if(hh >= 24 || h >= 24 || m >= 60 || mm >= 60) return false;
         }
         return text.length() <= max && text.matches(match);
+    }
+
+    public boolean dateIsAfter(DatePicker date, DatePicker after) {
+        if (date.getValue() == null || after.getValue() == null) return false;
+        if (after.getValue().isAfter(date.getValue())) return true;
+        return false;
     }
 
     public void dateValidation(final DatePicker field) {
         field.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                LocalDate date = field.getValue();
-                if (date == null || date.isBefore(LocalDate.now())) {
+                LocalDate d = field.getValue();
+                if (d == null || d.isBefore(LocalDate.now()) || dateIsAfter(endDate,date)) {
                     field.setStyle("-fx-text-inner-color: red;");
                     field.setOpacity(3.0);
                     checkIfAllValid();
-                } else {
+                }
+                    else {
                     field.setStyle("-fx-text-inner-color: green;");
                     field.setOpacity(2.0);
                     checkIfAllValid();
@@ -243,8 +385,6 @@ public class Controller implements Initializable{
             }
         });
     }
-
-
 
     public void updateRepeatVisibility(TextField field){
         if("".equals(field.getText()) || field.getText().equals("0")) {
