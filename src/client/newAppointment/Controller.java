@@ -74,6 +74,7 @@ public class Controller implements Initializable{
     private ObservableList<String> addedGroups;
     private ArrayList<Room> allRooms;
     UserModel user = new UserModel(); // todo loggedUser?
+    private String timeRegex = "[\\d]{2}:[\\d]{2}";
 
 
 
@@ -297,7 +298,7 @@ public class Controller implements Initializable{
             LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
             LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
             Room room = new Room(1, "test", 1, 0, 24, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
-            UserModel owner = new UserModel(); // todo FIX _.-^-._
+            UserModel owner = new UserModel(); // todo FIX
             Calendar cal = new Calendar("test", 1); // TEST CAL! TODO get from DB
             Appointment app = new Appointment(getAppointmentId(), title, description, startDate, endDate, room, owner, cal, 0, null, "abc");
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
@@ -343,7 +344,7 @@ public class Controller implements Initializable{
 
     public boolean checkIfAllValid(){
         Boolean ret = true;
-        if(title.getText()==null || title.getText()=="") ret = false;
+        if(title.getText()==null || title.getText().equals("")) ret = false;
         if(date.getValue()==null || date.getValue().toString().equals("")) ret=false;
         if(endDate.getValue()==null || endDate.getValue().toString().equals("")) {
             endDate.setValue(date.getValue());
@@ -358,7 +359,7 @@ public class Controller implements Initializable{
         }
         if(personal.isSelected() && (locationDescription.getText()=="" || locationDescription.getText()==null)) {
             ret = false;
-            System.out.println("Sted problem [PERSONAL only]");
+            System.out.println("Location problem [PERSONAL only]");
         }
         if(!allDay.isSelected()) {
             if (from.getOpacity() != 2.0) {
@@ -385,17 +386,8 @@ public class Controller implements Initializable{
     }
 
     public boolean valid(String text, String match, int max, int extra) {
-        if(extra==2 && valid(text, match, max,0) && valid(from.getText(), match, max,0)){
-            if (allDay.isSelected()) return true;
-            if (date.getValue()!=null && endDate.getValue()!=null) {
-                if (date.getValue().isBefore(endDate.getValue())) return true;
-            }
-            int h = parseInt(from.getText(0, 2)), m = parseInt(from.getText(3, 5));
-            int hh = parseInt(text.substring(0, 2)), mm = parseInt(text.substring(3, 5));
-            if (hh <= h && mm <= m) {
-                return false;
-            }
-            if(hh >= 24 || h >= 24 || m >= 60 || mm >= 60) return false;
+        if(extra==2 && valid(text, match, max,0) && valid(from.getText(), match, max,0)) {
+            return updateTimeValid();
         }
         return text.length() <= max && text.matches(match);
     }
@@ -410,17 +402,22 @@ public class Controller implements Initializable{
         field.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                if(!(to.getText()==null || to.getText().equals(""))) {
+                    if (!updateTimeValid()) {
+                        to.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
+                    } else {
+                        to.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
+                    }
+                }
                 LocalDate d = field.getValue();
                 if (d == null || d.isBefore(LocalDate.now()) || dateIsAfter(endDate,date)) {
                     field.setStyle("-fx-text-inner-color: red;");
                     field.setOpacity(3.0);
-                    updateTimeValid();
                     checkIfAllValid();
-                }
-                    else {
+                    }
+                else {
                     field.setStyle("-fx-text-inner-color: green;");
                     field.setOpacity(2.0);
-                    updateTimeValid();
                     checkIfAllValid();
                 }
             }
@@ -451,29 +448,17 @@ public class Controller implements Initializable{
         });
     }
 
-    public void updateTimeValid() {
-        if(date.getValue()==null || endDate.getValue()==null) {
-            System.out.println("date / endDate == NULL");
-            return;
+    public boolean updateTimeValid() {
+        System.out.println(validTime(timeRegex));
+        if(!validTime(timeRegex)) {
+            return false;
         }
-        if(date.getValue().isBefore(endDate.getValue()) && !(date.getValue().equals(endDate.getValue()))) {
-            System.out.println("den andre jævla ifen i updateTimeValid line 396");
-            if(validTime()){
-                System.out.println("Valid L399");
-                to.setOpacity(2.0);
-                to.setStyle("fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
-            } else {
-                System.out.println("Invalid L403");
-                to.setOpacity(3.0);
-                to.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
-            }
-        } else {
-            return;
-        }
+        return true;
     }
 
-    public boolean validTime() {
+    public boolean validTime(String match) {
         if(from.getText().length()!=5 || to.getText().length()!=5) return false;
+        if(!(from.getText().matches(match)) || !(to.getText().matches(match))) return false;
         int h = Integer.parseInt(from.getText(0, 2)), m = Integer.parseInt(from.getText(3, 5));
         int hh = Integer.parseInt(to.getText(0, 2)), mm = Integer.parseInt(to.getText(3, 5));
         if(h>=24 || hh>=24 || m>=60 || mm>=60) return false;
@@ -481,9 +466,12 @@ public class Controller implements Initializable{
             System.out.println("Date is before endDate");
             return true;
         }
-        if (date.getValue()==endDate.getValue()) {
+        if (date.getValue().equals(endDate.getValue())) {
+            System.out.println("date.getValue()==endDate.getValue()");
             if(h > hh) return false;
-            //if(h == hh)
+            if(h == hh) {
+                if(m > mm) return false;
+            }
         }
         return true;
     }
