@@ -202,7 +202,9 @@ public class Logic {
     public static boolean createAppointment(Appointment app){
         String query = "INSERT INTO Appointment (title, description, location, starttime, endtime, repeatEndDate, repeat, Calendar_calendarid, Room_roomid) VALUES ";
         // title	description	location	starttime	endtime	repeatEndDate	repeat	Calendar_calendarid	Room_roomid
+        String query2 = "INSERT INTO `nixo_fp`.`Appointment` (`appointmentid`, `title`, `description`, `location`, `starttime`, `endtime`, `repeatEndDate`, `repeat`, `Calendar_calendarid`, `Room_roomid`) VALUES ";
         String location = app.getRoom() != null ? app.getRoom().toString() : app.getLocation();
+        String description = app.getPurpose() != null ? ("'" + app.getPurpose() + "'") : "NULL";
         System.out.println("String location = '" + location + "'");
         int roomId = app.getRoom() != null ? app.getRoom().getId() : null;
         System.out.println("int roomId = " + roomId);
@@ -213,8 +215,11 @@ public class Logic {
             query += String.format("('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",
                     app.getTitle(), app.getPurpose(), app.getRoom(), app.getStartDate(),
                     app.getEndDate(), app.getEndRepeatDate(), app.getRepeatEvery(), app.getCal().getID(), roomId);
-            System.out.println("QUERY: " + query);
-            stmt.executeUpdate(query);
+            String q = "INSERT INTO Appointment (appointmentid, title, description, location, starttime, endtime, repeatEndDate, repeat, Calendar_calendarid, Room_roomid) VALUES (NULL, 'testmoete', 'for aa teste vel', 'IT bygget', '2015-04-04 10:00:00', '2015-04-04 16:00:00', NULL, NULL, '5', '0');";
+            String q2 = "INSERT INTO `nixo_fp`.`Appointment` (`appointmentid`, `title`, `description`, `location`, `starttime`, `endtime`, `repeatEndDate`, `repeat`, `Calendar_calendarid`, `Room_roomid`) VALUES ('null', 'Testmøte3', 'blablabla', 'ITbygg', '2015-04-04 10:00:00', '2015-04-04 16:00:00', 'null', 'null', '6', '13');";
+            System.out.println("Q: " + q2);
+            //System.out.println("QUERY: " + query);
+            stmt.executeUpdate(q2);
             System.out.println("Appointment [Title='" + app.getTitle() + "'] successfully created in database");
         } catch (SQLException e) {
             System.out.println("SQLException triggered in createAppointment(): " + e);
