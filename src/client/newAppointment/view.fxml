@@ -48,6 +48,7 @@
             <ComboBox fx:id="groupComboBox" layoutY="1.0" prefHeight="26.0" prefWidth="160.0" promptText="Finn gruppe" />
             <Button fx:id="addGroup" layoutX="164.0" mnemonicParsing="false" onAction="#addGroup" text="&gt;" />
             <Button fx:id="removeGroup" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeGroup" text="&lt;" />
+            <CheckBox fx:id="otherLocation" layoutY="105.0" mnemonicParsing="false" text="Annen lokasjon" />
          </children>
       </Pane>
       <Pane prefHeight="67.0" prefWidth="467.0" style="-fx-border-color: rgba(0,0,0,0.4); -fx-border-width: 0 0 1px 0;" GridPane.columnIndex="1">
