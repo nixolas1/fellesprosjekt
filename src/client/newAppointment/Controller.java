@@ -3,12 +3,10 @@ package client.newAppointment;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import calendar.*;
+import calendar.Calendar;
 import calendar.Group;
 import client.*;
 //import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
@@ -72,7 +70,7 @@ public class Controller implements Initializable{
     private ArrayList<Group> allGroups;
     private ObservableList<String> groupInfo;
     private ObservableList<String> addedGroups;
-    private ArrayList<Room> allRooms;
+    private ArrayList<Room> rooms;
     UserModel user = new UserModel(); // todo loggedUser?
     private String timeRegex = "[\\d]{2}:[\\d]{2}";
 
@@ -84,7 +82,6 @@ public class Controller implements Initializable{
         add.setDisable(true);
         remove.setDisable(true);
         locationDescription.setVisible(false);
-        room.setItems(FXCollections.observableArrayList("qwe","qwe2","wasdadad"));
 
         ToggleGroup tg = new ToggleGroup();
         work.setToggleGroup(tg);
@@ -224,13 +221,15 @@ public class Controller implements Initializable{
         attendees = FXCollections.observableArrayList(); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
         allUsers = getUsersFromDB();
-        allRooms = getAllRooms();
+        rooms = getRooms();
+        room.setItems(FXCollections.observableArrayList(rooms));
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
 
         //allGroups = getGroupsFromDB();
         allGroups = new ArrayList<>();
         allGroups.add(new Group(1,"new",new ArrayList<UserModel>()));
+        allGroups.add(new Group(2,"TestGroup",new ArrayList<UserModel>()));
         addedGroups = FXCollections.observableArrayList();
         groupList.setItems(addedGroups);
         groupInfo = displayGroupInfo(allGroups);
@@ -333,6 +332,7 @@ public class Controller implements Initializable{
             LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
             Room room = null;
             String location = null;
+            int repeat = Integer.parseInt(this.repeat.getText());
             if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
                 location = locationDescription.getText();
             } else {
@@ -340,7 +340,7 @@ public class Controller implements Initializable{
             }
             UserModel owner = new UserModel(); // todo FIX
             Calendar cal = new Calendar("test", 1); // TEST CAL! TODO get from DB
-            Appointment app = new Appointment(getAppointmentId(), title, description, startDate, endDate, room, owner, cal, 0, null, "abc");
+            Appointment app = new Appointment(getAppointmentId(),title,description,startDate,endDate,room,owner,cal,repeat,stoprepeat.getValue(),location);
             System.out.println(app);
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
             if(response.get("reply"))
@@ -353,9 +353,9 @@ public class Controller implements Initializable{
 
     }
 
-    public ArrayList<Room> getAllRooms() {
+    public ArrayList<Room> getRooms() {
         // todo: Get all rooms from server
-        return new ArrayList<Room>();
+        return new ArrayList<Room>(Arrays.asList(new Room(1,"Rom1",3,1,12), new Room(2,"Room321",5,9,15), new Room(3,"R1",500,8,20)));
     }
     public int getAppointmentId() {
         // todo: Get ID from server

@@ -66,4 +66,8 @@ public class Room implements Serializable {
         return capacity;
     }
 
+    public String toString() {
+        return getId() + ", " + getName() + ", " + getCapacity();
+    }
+
 }

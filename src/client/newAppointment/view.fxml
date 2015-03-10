@@ -194,7 +194,7 @@
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="12">
          <children>
             <TextField fx:id="locationDescription" prefWidth="370.0" />
-            <ComboBox fx:id="room" prefWidth="160.0" />
+            <ComboBox fx:id="room" prefWidth="370.0" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="13">
