@@ -21,8 +21,10 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by jonaslochsen on 02.03.15.
@@ -54,8 +56,6 @@ public class Controller {
 
     private LocalDate displayDate = LocalDate.parse("2015-03-02");
     private LocalDate tempDate = LocalDate.now();
-    Calendar calendar = Calendar.getInstance();
-    private int weekCount;
     private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
 
 
@@ -64,9 +64,9 @@ public class Controller {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
         populateCalendars(new Integer[]{1, 2, 3});
         updateYear();
-        updateMonth(tempDate.getMonthValue());
-        updateWeekNum(0);
-        updateDate(tempDate);
+        updateMonth();
+        updateWeekNum();
+        updateDate();
         populateCalendars(new Integer[]{1, 2, 3, 4});
     }
 
@@ -79,47 +79,49 @@ public class Controller {
         year.setText(tempDate.getYear() + "");
     }
 
-    public void updateMonth(int value) {
-        month.setText(monthName(value) + "");
+    public void updateMonth() {
+        month.setText(monthName(tempDate.getMonthValue()) + "");
     }
 
-    public void updateWeekNum(int count) {
-        weekNum.setText(calendar.get(Calendar.WEEK_OF_YEAR)+count + "");
-        //når året endres, endres ukenr til 1
+    public void updateWeekNum() {
+        TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+        int weekNumber = tempDate.get(woy);
+        weekNum.setText(weekNumber + "");
     }
 
-    public void updateDate(LocalDate week) {
-        monDate.setText(week.getDayOfMonth() + "");
-        tueDate.setText(week.plusDays(1).getDayOfMonth() + "");
-        wedDate.setText(week.plusDays(2).getDayOfMonth() + "");
-        thuDate.setText(week.plusDays(3).getDayOfMonth() + "");
-        friDate.setText(week.plusDays(4).getDayOfMonth() + "");
-        satDate.setText(week.plusDays(5).getDayOfMonth() + "");
-        sunDate.setText(week.plusDays(6).getDayOfMonth() + "");
+    public void updateDate() {
+        monDate.setText(tempDate.getDayOfMonth() + "");
+        tueDate.setText(tempDate.plusDays(1).getDayOfMonth() + "");
+        wedDate.setText(tempDate.plusDays(2).getDayOfMonth() + "");
+        thuDate.setText(tempDate.plusDays(3).getDayOfMonth() + "");
+        friDate.setText(tempDate.plusDays(4).getDayOfMonth() + "");
+        satDate.setText(tempDate.plusDays(5).getDayOfMonth() + "");
+        sunDate.setText(tempDate.plusDays(6).getDayOfMonth() + "");
     }
 
     public void showNextWeek(ActionEvent event) {
-        weekCount++;
-        updateWeekNum(weekCount);
-        updateDate(tempDate.plusWeeks(weekCount));
-        /*if (tempDate.lengthOfMonth() == 31) {
-            if (monDate.equals("25") || monDate.equals("26") || monDate.equals("27") || monDate.equals("28") || monDate.equals("29") || monDate.equals("30") || monDate.equals("31")) {
-                updateMonth(tempDate.getMonthValue()+1);
-            }
-        }*/
+        tempDate=tempDate.plusWeeks(1);
+        updateWeekNum();
+        updateDate();
+        updateMonth();
+        updateYear();
 
     }
 
     public void showLastWeek(ActionEvent event) {
-        weekCount--;
-        updateWeekNum(weekCount);
-        updateDate(tempDate.plusWeeks(weekCount));
+        tempDate = tempDate.minusWeeks(1);
+        updateWeekNum();
+        updateDate();
+        updateMonth();
+        updateYear();
     }
 
     public void showToday(ActionEvent event) {
-        updateDate(tempDate);
-        updateWeekNum(0);
-        weekCount = 0;
+        tempDate = LocalDate.now();
+        updateDate();
+        updateWeekNum();
+        updateMonth();
+        updateYear();
     }
 
     public void onBtnShowNewAppointment(ActionEvent event) {
