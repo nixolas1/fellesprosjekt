@@ -64,12 +64,12 @@ public class Controller {
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
-        populateCalendars(new Integer[]{1, 2, 3});
+        //populateCalendars(new Integer[]{1, 2, 3});
         updateYear();
         updateMonth();
         updateWeekNum();
         updateDate();
-        populateCalendars(new Integer[]{1, 2, 3, 4});
+        //populateCalendars(new Integer[]{1, 2, 3, 4});
     }
 
     public static String monthName(int month){
@@ -136,6 +136,7 @@ public class Controller {
     public void showUserSettings(ActionEvent event) {
         client.usersettings.Main.show(Main.stage);
     }
+
 
     public void onBtnShowNewGroup(ActionEvent event) {
      client.newGroupCalendar.Main newGroup = new client.newGroupCalendar.Main();
