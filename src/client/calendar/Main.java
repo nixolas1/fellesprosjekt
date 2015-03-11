@@ -34,6 +34,7 @@ public class Main extends Application {
 
     static Stage stage;
     static UserModel user;
+
     public static void show(Stage primaryStage, UserModel loggedUser) {
         try {
             stage = primaryStage;

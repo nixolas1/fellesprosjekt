@@ -18,8 +18,8 @@ public class AppointmentLogic {
     public static Query newAppointment(Hashtable<String, Appointment> data){
         try {
             Appointment app = data.get("reply");
-            //if(server.database.Logic.createAppointment(app))
-            //    return new Query("newAppointment", true);
+            if(server.database.Logic.createAppointment(app))
+                return new Query("newAppointment", true);
         }
         catch (Exception e) {
             e.printStackTrace();

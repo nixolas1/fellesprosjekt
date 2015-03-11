@@ -14,6 +14,8 @@ public class Group implements Serializable {
     String name;
     int id;
     ArrayList<UserModel> members = new ArrayList<UserModel>();
+
+
     public Group(int id, String name, ArrayList<UserModel> members){
         this.name = name;
         this.id = id;

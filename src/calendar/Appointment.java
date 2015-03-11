@@ -26,6 +26,7 @@ public class Appointment implements Serializable {
     Room room = null;
     UserModel owner = null;
     Calendar cal = null;
+
     public ArrayList<Attendee> attendees = new ArrayList<Attendee>();
     public ArrayList<Calendar> groups = new ArrayList<>();
     //                                                              2015-03-06 12:00:00.0
@@ -43,7 +44,6 @@ public class Appointment implements Serializable {
         this.startDate = LocalDateTime.parse(startDate, format);
         this.endDate = LocalDateTime.parse(endDate, format);
         this.cal = new Calendar(Integer.parseInt(calID));
-
         //can be null
         if(roomID != null) {
             String[] roomRow = server.database.Logic.getRow("Room", "roomid", roomID);
@@ -103,21 +103,15 @@ public class Appointment implements Serializable {
         }
     }
 
-    /*public Integer getCollisionCount(Appointment controlAppointment, ArrayList<Appointment> appointments){
-        Integer count = 0;
-        LocalDateTime start = controlAppointment.getStartDate();
+    public ArrayList<Appointment> getCollisions(ArrayList<Appointment> appointments){
+        ArrayList<Appointment> colls = new ArrayList<>();
         for(Appointment app : appointments){
-            if(!app.equals(controlAppointment)){
-                LocalDateTime other = app.getStartDate();
-                if(other.getDayOfYear() == start.getDayOfYear()){
-                    if(){
-
-                    }
-                }
+            if(this.getStartDate().isBefore(app.getEndDate()) && app.getStartDate().isBefore(this.getEndDate())){
+                colls.add(app);
             }
         }
-        return count;
-    }*/
+        return colls;
+    }
 
     public String getTitle() {
         return title;
@@ -146,6 +140,41 @@ public class Appointment implements Serializable {
     public ArrayList<Calendar> getGroups() {
         return groups;
     }
+    public int getRepeatEvery(){return repeatEvery;}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public LocalDate getEndRepeatDate() {
+        return endRepeatDate;
+    }
+
+    public void setEndRepeatDate(LocalDate endRepeatDate) {
+        this.endRepeatDate = endRepeatDate;
+    }
+
+    public void setRepeatEvery(int repeatEvery) {
+        this.repeatEvery = repeatEvery;
+    }
+
+    public void setAttendees(ArrayList<Attendee> attendees) {
+        this.attendees = attendees;
+    }
+
+
     public void addAttendee(Attendee attendee) {
         attendees.add(attendee);
     }
@@ -177,17 +206,10 @@ public class Appointment implements Serializable {
         groups.add(group);
     }
 
-    public LocalDate getEndRepeatDate() {
-        return endRepeatDate;
-    }
 
-    public int getRepeatEvery() {
-        return repeatEvery;
-    }
 
-    public String getLocation() {
-        return location;
-    }
+
+
 
     /*
     public String toString() {

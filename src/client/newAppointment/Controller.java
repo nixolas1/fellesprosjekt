@@ -4,13 +4,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-
 import calendar.*;
-import calendar.Calendar;
-import calendar.Group;
-import client.*;
-//import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,15 +17,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.*;
-import javafx.fxml.*;
 import javafx.scene.control.*;
 import network.Query;
-
-
-import static java.lang.Integer.parseInt;
 
 public class Controller implements Initializable{
 
@@ -339,7 +326,7 @@ public class Controller implements Initializable{
                 room = new Room(1, "test", 1, 0, 23, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
             }
             UserModel owner = new UserModel(); // todo FIX
-            Calendar cal = new Calendar("test", 1); // TEST CAL! TODO get from DB
+            calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
             Appointment app = new Appointment(getAppointmentId(),title,description,startDate,endDate,room,owner,cal,repeat,stoprepeat.getValue(),location);
             System.out.println(app);
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
@@ -347,6 +334,7 @@ public class Controller implements Initializable{
                 System.out.println("Appointment created\n"+app);
             else
                 System.out.println("Server could not create the appointment.");
+
         } else {
             System.out.println("One or more fields are INVALID. Data not sent to server.");
         }

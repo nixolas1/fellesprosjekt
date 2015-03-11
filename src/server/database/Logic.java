@@ -1,6 +1,7 @@
 package server.database;
 
 import calendar.Appointment;
+import calendar.Calendar;
 import calendar.Group;
 import calendar.UserModel;
 import network.Query;
@@ -176,7 +177,7 @@ public class Logic {
 
 
     public static int getLastGroupIdUsed(){
-        String query = "SELECT Calendar_calendarid FROM GroupCalendar ORDER BY Calendar_calendarid DESC LIMIT 1;";
+        String query = "SELECT calendarid FROM Calendar ORDER BY calendarid DESC LIMIT 1;";
         ResultSet result = null;
         Statement stmt = null;
         int lastIdUsed = 0;
@@ -196,13 +197,16 @@ public class Logic {
         } finally {
             closeDB(stmt);
         } return lastIdUsed;
+    }
 
+    public static boolean addAppointment(Appointment appointment){
+        return true;
     }
 
     public static boolean createAppointment(Appointment app){
         //String query = "INSERT INTO Appointment (title, description, location, starttime, endtime, repeatEndDate, repeat, Calendar_calendarid, Room_roomid) VALUES ";
         // title	description	location	starttime	endtime	repeatEndDate	repeat	Calendar_calendarid	Room_roomid
-        String query = "INSERT INTO `nixo_fp`.`Appointment` (`appointmentid`, `title`, `description`, `location`, `starttime`, `endtime`, `repeatEndDate`, `repeat`, `Calendar_calendarid`, `Room_roomid`) VALUES ";
+        String query = "INSERT INTO nixo_fp.Appointment (appointmentid, title, description, location, starttime, endtime, repeatEndDate, repeat, Calendar_calendarid, Room_roomid) VALUES ";
         String location = app.getLocation() != null && app.getLocation().length() > 0 ? ( "'" + app.getLocation() + "'" ) : "NULL" ;
         String description = app.getPurpose() != null && app.getPurpose().length() > 0 ? ("'" + app.getPurpose() + "'") : "NULL";
         String repeatEndDate = app.getEndRepeatDate() != null ? ("'" + app.getEndRepeatDate() + "'" ) : "NULL";
@@ -221,7 +225,7 @@ public class Logic {
             //String q = "INSERT INTO Appointment (appointmentid, title, description, location, starttime, endtime, repeatEndDate, repeat, Calendar_calendarid, Room_roomid) VALUES (NULL, 'testmoete', 'for aa teste vel', 'IT bygget', '2015-04-04 10:00:00', '2015-04-04 16:00:00', NULL, NULL, '5', '0');";
             //String q2 = "VALUES ('null', 'Testmøte3', 'blablabla', 'ITbygg', '2015-04-04 10:00:00', '2015-04-04 16:00:00', 'null', 'null', '6', '13');";
             //String query3 = "(`appointmentid`, `title`, `description`, `location`, `starttime`, `endtime`, `repeatEndDate`, `repeat`, `Calendar_calendarid`, `Room_roomid`) VALUES ";
-            String query2 = "(NULL, '"+app.getTitle()+"', "+description+", "+location+", '"+app.getStartDate()+"', '"+app.getEndDate()+"', "+repeatEndDate+", "+repeat+", "+app.getCal().getID()+", "+roomId+");";
+            String query2 = "(NULL, '"+app.getTitle()+"', "+description+", "+location+", '"+app.getStartDate()+"', '"+app.getEndDate()+"', "+repeatEndDate+", "+repeat+", "+app.getCal().getId()+", "+roomId+");";
             System.out.println("QUERY: " + query + query2);
             //System.out.println("QUERY: " + query);
             stmt.executeUpdate(query + query2);
@@ -236,30 +240,38 @@ public class Logic {
     }
 
 
-    public static boolean createGroup(Group group){
-        // Dette blir gjort når Group objektet instansieres, og ikke i databasen:
-        //int groupId = getLastGroupIdUsed() + 1;
-        int groupId = group.getId();
-        String query = "INSERT INTO GroupCalendar VALUES (" + groupId + ", ";
-        ResultSet result = null;
+    public static Query createGroup(Hashtable<String, Calendar> data){
+        Calendar groupCalendar = data.get("data");
+        int groupId = getLastGroupIdUsed() + 1;
+        //int groupId = groupCalendar.getId();
+        String memberQuery = "INSERT INTO User_has_Calendar (Calendar_calendarid, User_email, isVisible, notifications) VALUES (" + groupId + ", ";
+        String calendarQuery = "INSERT INTO Calendar (calendarid, name, description) VALUES (" + groupId + ", '" + groupCalendar.getName() + "', '" + groupCalendar.getDescription() + "');";
         Statement stmt = null;
-        for (UserModel user : group.getMembers()){
+        try {
+            stmt = conn.createStatement();
+            //System.out.println("QUERY: " + calendarQuery);
+            stmt.executeUpdate(calendarQuery);
+            System.out.println(String.format("GroupCalendar '%s' successfully added to Calendar with id = %s", groupCalendar.getName(), groupId));
+        } catch (SQLException e){
+            System.out.println("SQLException triggered in createGroup(), 1. try block: " + e);
+        }
+        for (UserModel user : groupCalendar.getMembers()){
             try {
                 stmt = conn.createStatement();
-                System.out.println("QUERY: " + query + "'" + user.getEmail() + "');");
-                stmt.executeUpdate(query + "'" + user.getEmail() + "');");
-                System.out.println(user.getEmail() + " was successfully added to GroupCalendar with ID = " + groupId);
+                //System.out.println("QUERY: " + memberQuery + "'" + user.getEmail() + "', 1, 1);");
+                stmt.executeUpdate(memberQuery + "'" + user.getEmail() + "', 1, 1);");
+                System.out.println(String.format("User '%s' successfully added to GroupCalendar with id = %s", user.getEmail(), groupId));
             } catch (SQLException e) {
                 System.out.println("SQLExeption triggered in createGroup(): " + e);
                 System.out.println("This happend during inserting user '" + user.getEmail() + "' into GroupCalendar");
-                return false;
+                return new Query("createGroup", false);
             } catch (Exception f) {
                 System.out.println("Exception triggered in createGroup():  " + f);
-                return false;
+                return new Query("createGroup", false);
             }
         } closeDB(stmt);
-        System.out.println("Group '" + group.getName() + "' with id = " + groupId + " successfully created in database");
-        return true;
+        System.out.println(String.format("Group '%s' successfully created in database with id = %s ", groupCalendar.getName(), groupId));
+        return new Query("createGroup", String.valueOf(groupId));
     }
 
 
