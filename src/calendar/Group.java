@@ -18,8 +18,16 @@ public class Group implements Serializable {
         this.members = members;
     }
 
-    public Group(String name, ArrayList<UserModel> members) {
-        this.name = name;
-        this.members = members;
+    public ArrayList<UserModel> getMembers(){
+        return this.members;
     }
+
+    public int getId(){
+        return this.id;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
 }

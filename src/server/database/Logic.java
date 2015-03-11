@@ -1,6 +1,11 @@
 package server.database;
 
+import calendar.Appointment;
+import calendar.Calendar;
+import calendar.Group;
 import calendar.UserModel;
+import network.Query;
+import com.sun.org.apache.regexp.internal.RESyntaxException;
 //import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 import java.sql.Connection;
@@ -8,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -51,6 +57,26 @@ public class Logic {
         finally {
             closeDB(stmt);
         } return row;
+    }
+
+    public static Query sendAllRows(Hashtable<String, String> data){
+        try {
+            String table = data.get("table");
+            String where = data.get("where");
+            ArrayList<List<String>> rows = null;
+            if(where == null || where.equals("")){
+                rows = getAllRows(table);
+            }else{
+                rows = getAllRowsWhere(table, where);
+            }
+
+            return new Query("getRows", rows);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new Query("getRows", false);
     }
 
     public static ArrayList<List<String>> getAllRows(String table) {
@@ -149,6 +175,73 @@ public class Logic {
         } return numberOfRows;
     }
 
+
+    public static int getLastGroupIdUsed(){
+        String query = "SELECT calendarid FROM Calendar ORDER BY calendarid DESC LIMIT 1;";
+        ResultSet result = null;
+        Statement stmt = null;
+        int lastIdUsed = 0;
+
+        try{
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("SQLException triggered in getLastGroupIdUsed(), 1. catch block: " + e);
+        } try {
+            if (result.next()){
+                lastIdUsed = result.getInt(1);
+                //System.out.println("lastIdUsed: " + lastIdUsed);
+            }
+        } catch (SQLException f){
+            System.out.println("SQLException triggered in getLastGroupIdUsed(), 2. catch block: " + f);
+        } finally {
+            closeDB(stmt);
+        } return lastIdUsed;
+    }
+
+    public static boolean addAppointment(Appointment appointment){
+        return true;
+    }
+
+
+    public static Query createGroup(Hashtable<String, Calendar> data){
+        Calendar groupCalendar = data.get("data");
+        int groupId = getLastGroupIdUsed() + 1;
+        //int groupId = groupCalendar.getId();
+        String memberQuery = "INSERT INTO User_has_Calendar (Calendar_calendarid, User_email, isVisible, notifications) VALUES (" + groupId + ", ";
+        String calendarQuery = "INSERT INTO Calendar (calendarid, name, description) VALUES (" + groupId + ", '" + groupCalendar.getName() + "', '" + groupCalendar.getDescription() + "');";
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            //System.out.println("QUERY: " + calendarQuery);
+            stmt.executeUpdate(calendarQuery);
+            System.out.println(String.format("GroupCalendar '%s' successfully added to Calendar with id = %s", groupCalendar.getName(), groupId));
+        } catch (SQLException e){
+            System.out.println("SQLException triggered in createGroup(), 1. try block: " + e);
+        }
+        for (UserModel user : groupCalendar.getMembers()){
+            try {
+                stmt = conn.createStatement();
+                //System.out.println("QUERY: " + memberQuery + "'" + user.getEmail() + "', 1, 1);");
+                stmt.executeUpdate(memberQuery + "'" + user.getEmail() + "', 1, 1);");
+                System.out.println(String.format("User '%s' successfully added to GroupCalendar with id = %s", user.getEmail(), groupId));
+            } catch (SQLException e) {
+                System.out.println("SQLExeption triggered in createGroup(): " + e);
+                System.out.println("This happend during inserting user '" + user.getEmail() + "' into GroupCalendar");
+                return new Query("createGroup", false);
+            } catch (Exception f) {
+                System.out.println("Exception triggered in createGroup():  " + f);
+                return new Query("createGroup", false);
+            }
+        } closeDB(stmt);
+        System.out.println(String.format("Group '%s' successfully created in database with id = %s ", groupCalendar.getName(), groupId));
+        return new Query("createGroup", String.valueOf(groupId));
+    }
+
+
+
+
+
     public static int getNumberOfColumns(String table) {
         String getNumberOfColumns = "SELECT COUNT(*) totalColumns FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name =  '" + table + "' AND TABLE_SCHEMA=(SELECT DATABASE())";
         ResultSet result = null;
@@ -160,6 +253,8 @@ public class Logic {
             result = stmt.executeQuery(getNumberOfColumns);
         } catch (SQLException e) {
             System.out.println("SQLExeption triggered in getNumberOfColumns(), 1. try block: " + e);
+        } catch (Exception f){
+            System.out.println("Exception triggered in getNumberofColumns(), 1. try block: "+ f);
         }
         try {
             if (result.next()) {
@@ -168,6 +263,8 @@ public class Logic {
             } else throw new NullPointerException(table + " has no columns");
         } catch (SQLException e) {
             System.out.println("SQLExeption triggered in getNumberOfColumns(), 2. try block: " + e);
+        } catch (Exception f){
+            System.out.println("Exception triggered in getNumberofColumns(), 2. try block: " + f);
         } finally {
             closeDB(stmt);
         } return numberOfColumns;
@@ -315,7 +412,7 @@ public class Logic {
                 System.out.println("phone: '" + phone + "'\n");
 
             } else {
-                throw new NullPointerException("User has no entry");
+                throw new NullPointerException("User "+ mail + " has no entry in table = 'User");
             }
         } catch (SQLException e){
             System.out.println("SQLExeption triggered in getUsername(), 2. try block: " + e);

@@ -2,14 +2,12 @@ package calendar;
 
 import network.Query;
 import network.ThreadClient;
-import server.User;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Hashtable;
 
 /**
@@ -24,7 +22,7 @@ public class Appointment implements Serializable {
     LocalDateTime startDate;
     LocalDateTime endDate;
     LocalDate endRepeatDate;
-    int repeatEvery;
+    int repeatEvery=0;
     Room room;
     UserModel owner;
     Calendar cal;
@@ -44,12 +42,20 @@ public class Appointment implements Serializable {
         this.startDate = LocalDateTime.parse(startDate, format);
         this.endDate = LocalDateTime.parse(endDate, format);
         this.cal = new Calendar(Integer.parseInt(calID));
-
         //can be null
-        if(roomID != null) this.room = new Room(Integer.parseInt(roomID));
+        if(roomID != null) {
+            String[] roomRow = server.database.Logic.getRow("Room", "roomid", roomID);
+            String name = roomRow[1];
+            int capacity = Integer.parseInt(roomRow[2]);
+            int opensAt = Integer.parseInt(roomRow[3]);
+            int closesAt = Integer.parseInt(roomRow[4]);
+            this.room = new Room(Integer.parseInt(roomID), name, capacity, opensAt, closesAt, new ArrayList<Utility>());
+        }
+
         if(location != null) this.location = location;
         if(repeatEveryXDays != null) this.repeatEvery = Integer.parseInt(repeatEveryXDays);
         if(endRepeatDate != null) this.endRepeatDate = LocalDate.parse(endRepeatDate, dateFormat);
+        //System.out.println(roomID+"!!!!!!!!!!!!" + this.room.getName());
     }
 
     public Appointment(int id, String title, String purpose, LocalDateTime startDate, LocalDateTime endDate, Room room, UserModel owner, Calendar cal, int repeatEvery, LocalDate endRepeatDate, String location){
@@ -66,9 +72,9 @@ public class Appointment implements Serializable {
         this.endRepeatDate=endRepeatDate;
     }
 
-    public static ArrayList<Appointment> getAppointmentsInCalendar(String calID, ThreadClient socket){
+    public static ArrayList<Appointment> getAppointmentsInCalendar(int calID, ThreadClient socket){
         Hashtable<String, String> data = new Hashtable<String, String>(){{
-            put("id",calID);
+            put("id",Integer.toString(calID));
         }};
 
         try {
@@ -80,6 +86,16 @@ public class Appointment implements Serializable {
             e.printStackTrace();
             return new ArrayList<Appointment>();
         }
+    }
+
+    public ArrayList<Appointment> getCollisions(ArrayList<Appointment> appointments){
+        ArrayList<Appointment> colls = new ArrayList<>();
+        for(Appointment app : appointments){
+            if(this.getStartDate().isBefore(app.getEndDate()) && app.getStartDate().isBefore(this.getEndDate())){
+                colls.add(app);
+            }
+        }
+        return colls;
     }
 
     public String getTitle() {
@@ -106,6 +122,41 @@ public class Appointment implements Serializable {
     public ArrayList<Attendee> getAttendees() {
         return attendees;
     }
+    public int getRepeatEvery(){return repeatEvery;}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public LocalDate getEndRepeatDate() {
+        return endRepeatDate;
+    }
+
+    public void setEndRepeatDate(LocalDate endRepeatDate) {
+        this.endRepeatDate = endRepeatDate;
+    }
+
+    public void setRepeatEvery(int repeatEvery) {
+        this.repeatEvery = repeatEvery;
+    }
+
+    public void setAttendees(ArrayList<Attendee> attendees) {
+        this.attendees = attendees;
+    }
+
+
     public void addAttendee(Attendee attendee) {
         attendees.add(attendee);
     }
