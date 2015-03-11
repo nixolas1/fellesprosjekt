@@ -79,7 +79,7 @@
       </FlowPane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="8">
          <children>
-            <Button id="cancel" layoutY="10.0" maxHeight="36.0" maxWidth="100.0" minHeight="36.0" minWidth="80.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="80.0" text="Avbryt" />
+            <Button id="cancel" fx:id="cancel" layoutY="10.0" maxHeight="36.0" maxWidth="100.0" minHeight="36.0" minWidth="80.0" mnemonicParsing="false" onAction="#cancel" prefHeight="36.0" prefWidth="80.0" text="Avbryt" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
