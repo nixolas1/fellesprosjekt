@@ -739,6 +739,11 @@
                              <Font name="Helvetica Neue" size="13.0" />
                          </font>
                      </Button>
+                  <Button fx:id="createRoom" layoutX="10.0" layoutY="46.0" mnemonicParsing="false" onAction="#onBtnShowNewRoom" text="Opprett rom">
+                     <font>
+                        <Font name="Helvetica Neue" size="13.0" />
+                     </font>
+                  </Button>
                  </children>
              </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #a1a1a1;">

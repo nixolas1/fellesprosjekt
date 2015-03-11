@@ -23,7 +23,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("view.fxml"));;
-			Scene scene = new Scene(root,500,680);
+			Scene scene = new Scene(root,500,800);
+			/*scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());*/
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
@@ -49,6 +50,11 @@ public class Main extends Application {
             ex.printStackTrace();
         }
     }
+
+    public static Hashtable<String, Boolean> sendAppointment() {
+        return new Hashtable<String,Boolean>();
+    }
+
 
 	public static void main(String[] args) { launch(args); }
 }

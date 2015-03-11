@@ -20,6 +20,7 @@ public class Logic {
             case "getAllUsers": return User.getAllUsers();
             case "updateSettings": return UserSettings.updateSettings(data);
             case "getAppointments": return AppointmentLogic.getCalendarAppointments(data);
+            case "newAppointment": return AppointmentLogic.newAppointment(data);
             case "getRooms": return RoomLogic.getRooms();
             case "getRows": return server.database.Logic.sendAllRows(data);
             case "createGroup": return server.database.Logic.createGroup(data);

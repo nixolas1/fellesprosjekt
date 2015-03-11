@@ -1,5 +1,6 @@
 package network;
 
+import calendar.Appointment;
 import calendar.Calendar;
 import calendar.UserModel;
 
@@ -29,6 +30,11 @@ public class Query implements Serializable{
     public Query(String function, final UserModel data) {
         this.function = function;
         this.data = new Hashtable<String, UserModel>(){{put("reply",data);}};
+    }
+
+    public Query(String function, final Appointment data) {
+        this.function = function;
+        this.data = new Hashtable<String, Appointment>(){{put("reply",data);}};
     }
 
     public Query(String function, final Boolean valid){

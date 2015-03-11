@@ -1,8 +1,10 @@
 package server;
 
+import calendar.Appointment;
 import calendar.Room;
 import network.Query;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -32,5 +34,18 @@ public class RoomLogic {
         }
 
         return roomList;
+    }
+
+    public static ArrayList<Room> availableRooms(){
+        //Hashtable<String, ArrayList<Appointment>> hore= AppointmentLogic.getCalendarAppointments(new Hashtable<String, String>() {{put("id", "1");}}).data;
+        Hashtable<String, ArrayList<Room>> foo = getRooms().data;
+        ArrayList<Room> appList = foo.get("reply");
+        System.out.println(appList.toString());
+
+        /*Query query = getRooms();
+        Appointment app = appList.get(0);
+        Hashtable<String, ArrayList<Room>> allRooms = query.data;
+        ArrayList*/
+        return appList;
     }
 }
