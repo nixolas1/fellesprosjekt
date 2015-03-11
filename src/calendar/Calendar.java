@@ -1,9 +1,13 @@
 package calendar;
 
 import javafx.scene.paint.Color;
+import network.Query;
+import network.ThreadClient;
 
+import javax.jws.soap.SOAPBinding;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 /**
@@ -11,27 +15,28 @@ import java.util.Random;
  */
 public class Calendar implements Serializable {
     String name = "";
-    int id;
+    String description = "";
+    int id=-1;
     public ArrayList<Appointment> appointments = new ArrayList<Appointment>();
-    Group group;
+    ArrayList<UserModel> members = new ArrayList<UserModel>();
 
-    public Calendar(String name, int id, Group group){
-        this.group = group;
+    public Calendar(String name, ArrayList<UserModel> members){
         this.name = name;
-        this.id = id;
+        this.members = members;
     }
 
-    public Calendar(String name, int id){
-        this.name = name;
-        this.id = id;
-    }
     public Calendar(int id){
         this.id = id;
+    }
+
+    public Calendar(String name){
+        this.name = name;
     }
 
     public String getColor(){
         return getColor(1.0);
     }
+
     public String getColor(double opacity){
         Random random = new Random(this.id*13379001);
         final int hue = random.nextInt(360);
@@ -41,10 +46,37 @@ public class Calendar implements Serializable {
         return "rgba("+ c.getRed()*255+", "+c.getGreen()*255+", "+c.getBlue()*255+", "+c.getOpacity()+");";
     }
 
-    public int getID(){return this.id;}
     public void addApointment(Appointment appoint){
         this.appointments.add(appoint);
     }
 
     public ArrayList<Appointment> getAppointments(){return appointments;}
+
+    public ArrayList<UserModel> getMembers(){
+        return this.members;
+    }
+
+    public int getId(){
+        return this.id;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public String getDescription(){
+        return this.description;
+    }
+
+    public static int createGroupInDatabase(Calendar groupCalendar, ThreadClient socket){
+        try {
+            Query reply = socket.send(new Query("createGroup", groupCalendar));
+            Hashtable<String, String> response = reply.data;
+            return Integer.parseInt(response.get("reply"));
+        }catch(Exception e){
+            System.err.println("Unable to send or recieve appointments from server:");
+            e.printStackTrace();
+            return -1;
+        }
+    }
 }

@@ -1,13 +1,13 @@
 package calendar;
 
 import network.Query;
+import network.ThreadClient;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.io.Serializable;
 
 public class UserModel implements Serializable {
-
 
     private String username = "";
     private String firstName = "";
@@ -105,10 +105,7 @@ public class UserModel implements Serializable {
     public String displayInfo() {
         return getFirstName() + " " + getLastName() + ", " + getEmail();
     }
-
-    public static ArrayList<UserModel> getUsersFromDB() {
-        return client.newAppointment.Main.getAllUsers();
-    }
+    
 
     public static UserModel getUserFromServer(final String user, final String domain){
 
@@ -120,6 +117,14 @@ public class UserModel implements Serializable {
 
         Query reply = client.Main.socket.send(new Query("getUser", data));
         Hashtable<String, UserModel> response = reply.data;
+
+        return response.get("reply");
+    }
+    public static ArrayList<UserModel> getAllUsers() {
+        ThreadClient socket = new ThreadClient();
+        Query reply = socket.send(new Query("getAllUsers",new ArrayList<UserModel>()));
+        System.out.println(reply.function);
+        Hashtable<String, ArrayList<UserModel>> response = reply.data;
         return response.get("reply");
     }
 
