@@ -1,14 +1,15 @@
 package server;
 
-import calendar.Calendar;
-import calendar.Group;
-import calendar.UserModel;
+import calendar.*;
+
 import network.ThreadClient;
 import network.ThreadServer;
 import security.Crypto;
 import server.database.*;
 import server.database.Logic;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -53,6 +54,25 @@ public class Main {
         System.out.println("hashtable: " + foo.toString());
         Logic.createGroup(foo);
         */
+
+        /*
+        Hashtable<String, ArrayList<Appointment>> hore= AppointmentLogic.getCalendarAppointments(new Hashtable<String, String>() {{put("id", "1");}}).data;
+        ArrayList<Appointment> appList = hore.get("reply");
+        Appointment app1 = appList.get(0);
+        */
+
+        Hashtable<String, ArrayList<Room>> foo = RoomLogic.getRooms().data;
+        ArrayList<Room> roomList = foo.get("reply");
+        Room fuckRoom = roomList.get(2);
+        fuckRoom.setId(3);
+        // todo id, title, purpose, location, startDate, endDate, endRepeatDate, repeatEveryXDays, calID, roomID
+        LocalDateTime startdate = LocalDateTime.parse("2015-04-04T10:00");
+        LocalDateTime enddate = LocalDateTime.parse("2015-04-04T16:00");
+        Appointment app = new Appointment("testmøte", "for å teste vel", null, startdate, enddate, fuckRoom, new Calendar(5), 0, null);
+
+        Logic.createAppointment(app);
+
+        //RoomLogic.availableRooms();
 
 
 

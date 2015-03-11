@@ -1,7 +1,11 @@
 package calendar;
 
+import network.Query;
+import network.ThreadClient;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * Created by nixo on 3/4/15.
@@ -28,6 +32,18 @@ public class Group implements Serializable {
 
     public String getName(){
         return this.name;
+    }
+
+    public static ArrayList<Group> getAllGroups() {
+        ThreadClient socket = new ThreadClient();
+        Query reply = socket.send(new Query("getAllGroups",new ArrayList<Group>()));
+        System.out.println(reply.function);
+        Hashtable<String, ArrayList<Group>> response = reply.data;
+        return response.get("reply");
+    }
+
+    public String displayInfo() {
+        return name + " ["+id+"]";
     }
 
 }

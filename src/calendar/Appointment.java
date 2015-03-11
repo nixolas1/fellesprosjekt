@@ -29,8 +29,6 @@ public class Appointment implements Serializable {
     Boolean appType;
     Boolean otherLocation; //if work is chosen
 
-
-
     public ArrayList<Attendee> attendees = new ArrayList<Attendee>();
     //                                                              2015-03-06 12:00:00.0
 
@@ -93,11 +91,6 @@ public class Appointment implements Serializable {
         }
     }
 
-    public static Appointment getAppointmentFromDB(String id){ //Server side only!
-        String[] a = server.database.Logic.getRow("Appointment", "appointmentid", id);
-        return new Appointment(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9]);
-    }
-
     public ArrayList<Appointment> getCollisions(ArrayList<Appointment> appointments){
         ArrayList<Appointment> colls = new ArrayList<>();
         for(Appointment app : appointments){
@@ -133,10 +126,10 @@ public class Appointment implements Serializable {
         return attendees;
     }
     public int getRepeatEvery(){return repeatEvery;}
+
     public int getId() {
         return id;
     }
-    public Boolean getAppType() {return true;}
 
     public void setId(int id) {
         this.id = id;
@@ -191,6 +184,28 @@ public class Appointment implements Serializable {
     public void setCal(Calendar cal) {
         this.cal = cal;
     }
+
+public String displayInfo() {
+    return "Appointment ["+id+"]\nTitle: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
+            "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo();
+}
+
+
+
+
+    /*
+    public String toString() {
+        return "Appointment ["+id+"] Title: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
+                "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo()+ "";
+    }
+
+    public String ohString(){
+        // todo id, title, purpose, location, startDate, endDate, endRepeatDate, repeatEveryXDays, calID, roomID
+        return "Appointment ["+id+"] Title: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
+                "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo()+ "";
+
+    }
+    */
     public void setAppType() {}
 
 }
