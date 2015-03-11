@@ -9,24 +9,25 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Hashtable;
-
 /**
  * Created by nixo on 2/23/15.
  */
 public class Appointment implements Serializable {
 
-    int id;
-    String title;
-    String purpose;
-    String location;
-    LocalDateTime startDate;
-    LocalDateTime endDate;
-    LocalDate endRepeatDate;
-    int repeatEvery=0;
-    Room room;
-    UserModel owner;
-    Calendar cal;
+    int id = -1;
+    String title = null;
+    String purpose = null;
+    String location = null;
+    LocalDateTime startDate = null;
+    LocalDateTime endDate = null;
+    LocalDate endRepeatDate = null;
+    int repeatEvery = 0;
+    Room room = null;
+    UserModel owner = null;
+    Calendar cal = null;
+
     public ArrayList<Attendee> attendees = new ArrayList<Attendee>();
+    public ArrayList<Calendar> groups = new ArrayList<>();
     //                                                              2015-03-06 12:00:00.0
 
     public Appointment() {
@@ -61,6 +62,19 @@ public class Appointment implements Serializable {
     public Appointment(int id, String title, String purpose, LocalDateTime startDate, LocalDateTime endDate, Room room, UserModel owner, Calendar cal, int repeatEvery, LocalDate endRepeatDate, String location){
         this.title=title;
         this.id=id;
+        this.purpose=purpose;
+        this.startDate=startDate;
+        this.endDate=endDate;
+        this.room=room;
+        this.owner=owner;
+        this.cal = cal;
+        this.location = location;
+        this.repeatEvery = repeatEvery;
+        this.endRepeatDate=endRepeatDate;
+    }
+
+    public Appointment(String title, String purpose, String location, LocalDateTime startDate, LocalDateTime endDate, Room room, Calendar cal, int repeatEvery, LocalDate endRepeatDate){
+        this.title=title;
         this.purpose=purpose;
         this.startDate=startDate;
         this.endDate=endDate;
@@ -122,6 +136,9 @@ public class Appointment implements Serializable {
     public ArrayList<Attendee> getAttendees() {
         return attendees;
     }
+    public ArrayList<Calendar> getGroups() {
+        return groups;
+    }
     public int getRepeatEvery(){return repeatEvery;}
 
     public int getId() {
@@ -181,5 +198,33 @@ public class Appointment implements Serializable {
     public void setCal(Calendar cal) {
         this.cal = cal;
     }
+    public void setGroups(ArrayList groups) {
+        this.groups = groups;
+    }
+    public void addGroup(Calendar group) {
+        groups.add(group);
+    }
+
+public String displayInfo() {
+    return "Appointment ["+id+"]\nTitle: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
+            "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo();
+}
+
+
+
+
+    /*
+    public String toString() {
+        return "Appointment ["+id+"] Title: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
+                "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo()+ "";
+    }
+
+    public String ohString(){
+        // todo id, title, purpose, location, startDate, endDate, endRepeatDate, repeatEveryXDays, calID, roomID
+        return "Appointment ["+id+"] Title: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
+                "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo()+ "";
+
+    }
+    */
 
 }
