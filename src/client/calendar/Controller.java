@@ -72,8 +72,8 @@ public class Controller {
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
-        findCalendar.setItems(FXCollections.observableArrayList(new ArrayList<String>(Arrays.asList("Test1","Test2"))));
-        findUserCalendar.setItems(FXCollections.observableArrayList(new ArrayList<String>(Arrays.asList("Test1","Test2"))));
+        findCalendar.setItems(FXCollections.observableArrayList("Test1","Test2"));
+        findUserCalendar.setItems(FXCollections.observableArrayList("Test1","Test2"));
 
         FxUtil.autoCompleteComboBox(findCalendar, FxUtil.AutoCompleteMode.CONTAINING); // AutoCompleteMode ON
         FxUtil.autoCompleteComboBox(findUserCalendar, FxUtil.AutoCompleteMode.CONTAINING);
