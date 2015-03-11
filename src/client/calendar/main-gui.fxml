@@ -45,6 +45,12 @@
                      </font>
                   </Button>
                   <ComboBox layoutY="6.0" prefWidth="165.0" promptText="Finn brukerkalender" />
+                  <ComboBox fx:id="notifCombo" layoutX="851.0" layoutY="8.0" prefWidth="165.0" promptText="Varsler" />
+                  <Text fx:id="notifCount" fill="RED" layoutX="784.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="RIGHT" wrappingWidth="57.12890625">
+                     <font>
+                        <Font name="Open Sans" size="20.0" />
+                     </font>
+                  </Text>
                </children>
             </Pane>
             <GridPane GridPane.rowIndex="1">

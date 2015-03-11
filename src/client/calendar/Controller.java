@@ -1,6 +1,7 @@
 package client.calendar;
 
 import calendar.Appointment;
+import client.notifications.Notifications;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -40,6 +41,7 @@ public class Controller {
 
 
     //@FXML private ComboBox chooseCalendar;
+    @FXML private ComboBox notifCombo;
     @FXML private Text name;
     @FXML private Button logOff;
     @FXML private Button userSettings;
@@ -55,6 +57,7 @@ public class Controller {
     @FXML private Text friDate;
     @FXML private Text satDate;
     @FXML private Text sunDate;
+    @FXML private Text notifCount;
     @FXML private GridPane calendarGrid;
 
 
@@ -62,9 +65,9 @@ public class Controller {
     protected static Stage primaryStage;
 
     private LocalDate calDate = LocalDate.now();
-    private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
+    private ThreadClient socket = client.Main.socket;
     private Integer[] cals = new Integer[]{1,2,3,4};
-
+    private Notifications notifs;
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
 
     @FXML
@@ -77,6 +80,7 @@ public class Controller {
         updateDate();
         appointments = getAppointments(cals);
         populateCalendars(cals);
+        notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
     }
 
     public static String monthName(int month){
