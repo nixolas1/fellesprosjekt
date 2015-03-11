@@ -115,6 +115,7 @@ public class UserModel implements Serializable {
             put("domain", domain);
         }};
 
+        System.out.println("### "+data.toString());
         Query reply = client.Main.socket.send(new Query("getUser", data));
         Hashtable<String, UserModel> response = reply.data;
 
