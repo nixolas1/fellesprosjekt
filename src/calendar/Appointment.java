@@ -42,7 +42,6 @@ public class Appointment implements Serializable {
         this.startDate = LocalDateTime.parse(startDate, format);
         this.endDate = LocalDateTime.parse(endDate, format);
         this.cal = new Calendar(Integer.parseInt(calID));
-
         //can be null
         if(roomID != null) {
             String[] roomRow = server.database.Logic.getRow("Room", "roomid", roomID);

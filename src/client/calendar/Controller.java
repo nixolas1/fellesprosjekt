@@ -1,7 +1,6 @@
 package client.calendar;
 
 import calendar.Appointment;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,7 +19,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ThreadClient;
-import sun.plugin.javascript.navig.Anchor;
 
 import java.awt.*;
 import java.io.File;
@@ -173,6 +171,16 @@ public class Controller {
         client.usersettings.Main.show(Main.stage);
     }
 
+
+    public void onBtnShowNewGroup(ActionEvent event) {
+     client.newGroupCalendar.Main newGroup = new client.newGroupCalendar.Main();
+       try {
+            newGroup.showNewGroup(primaryStage, Main.user);
+       } catch (Exception e) {
+            e.printStackTrace();
+       }
+    }
+
     public void clearAppointments(){
         calendarGrid.getChildren().removeIf(AnchorPane.class::isInstance);
     }
@@ -222,15 +230,15 @@ public class Controller {
 
             //only display appointments this week
             if(start.toLocalDate().isBefore(calDate.plusDays(7))
-                    && start.toLocalDate().isAfter(calDate)) {
+                    && start.toLocalDate().isAfter(calDate.minusDays(1))) {
                 isThisWeek = true;
             }
 
 
-            if(isThisWeek && isRepeat){
+            if(isThisWeek || isRepeat){
                 System.out.println(app.getTitle() +
                                 ": den " + start+
-                                " i kalender "+app.getCal().getID()+
+                                " i kalender "+app.getCal().getId()+
                                 " i rom "+app.getRoom().getName()
                 );
 
@@ -271,6 +279,7 @@ public class Controller {
         }
 
         //style
+        System.out.println(app.toString());
         String color = "-fx-background-color: "+app.getCal().getColor(0.6)+" ";
         double padding = paneWidth*collisions.indexOf(app);
         //System.out.println(color);

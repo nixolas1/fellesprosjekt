@@ -1,5 +1,5 @@
 package client.newAppointment;
-	
+
 import calendar.UserModel;
 import com.sun.deploy.util.SessionState;
 import javafx.application.Application;
@@ -14,9 +14,8 @@ import network.ThreadClient;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-
 public class Main extends Application {
-    private Stage myParent;
+    private Stage appParent;
     private Stage newAppointmentStage;
     private UserModel loggedUser;
 
@@ -24,8 +23,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("view.fxml"));;
-			Scene scene = new Scene(root,500,600);
-			/*scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());*/
+			Scene scene = new Scene(root,500,680);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
@@ -34,7 +32,7 @@ public class Main extends Application {
 	}
 
     public void showNewAppointment(Stage parentStage, UserModel loggedUser) {
-        this.myParent = parentStage;
+        this.appParent = parentStage;
         this.loggedUser = loggedUser;
 
         try {
@@ -43,7 +41,7 @@ public class Main extends Application {
             Scene scene = new Scene(pane);
             newAppointmentStage.setScene(scene);
             newAppointmentStage.setTitle("Ny avtale");
-            newAppointmentStage.initOwner(this.myParent);
+            newAppointmentStage.initOwner(this.appParent);
             newAppointmentStage.initModality(Modality.WINDOW_MODAL);
             newAppointmentStage.show();
         } catch (Exception ex) {
@@ -51,19 +49,6 @@ public class Main extends Application {
             ex.printStackTrace();
         }
     }
-	
-	public static void main(String[] args) {
-		launch(args);
-	}
 
-    public static ArrayList<UserModel> getAllUsers() {
-        ThreadClient socket = new ThreadClient();
-        Query reply = socket.send(new Query("getAllUsers",new ArrayList<UserModel>()));
-        System.out.println(reply.function);
-        Hashtable<String, ArrayList<UserModel>> response = reply.data;
-        return response.get("reply");
-    }
-
+	public static void main(String[] args) { launch(args); }
 }
-
-
