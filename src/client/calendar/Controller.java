@@ -1,8 +1,14 @@
 package client.calendar;
 
 import calendar.Appointment;
+import calendar.UserModel;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import client.notifications.Notifications;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -41,7 +47,6 @@ public class Controller {
 
 
     //@FXML private ComboBox chooseCalendar;
-    @FXML private ComboBox notifCombo;
     @FXML private Text name;
     @FXML private Button logOff;
     @FXML private Button userSettings;
@@ -57,7 +62,6 @@ public class Controller {
     @FXML private Text friDate;
     @FXML private Text satDate;
     @FXML private Text sunDate;
-    @FXML private Text notifCount;
     @FXML private GridPane calendarGrid;
 
 
@@ -65,9 +69,9 @@ public class Controller {
     protected static Stage primaryStage;
 
     private LocalDate calDate = LocalDate.now();
-    private ThreadClient socket = client.Main.socket;
+    private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
     private Integer[] cals = new Integer[]{1,2,3,4};
-    private Notifications notifs;
+
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
 
     @FXML
@@ -80,7 +84,6 @@ public class Controller {
         updateDate();
         appointments = getAppointments(cals);
         populateCalendars(cals);
-        notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
     }
 
     public static String monthName(int month){
