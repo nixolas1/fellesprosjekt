@@ -30,51 +30,95 @@ public class Controller implements Initializable{
 
 
     private ObservableList<String> utilities;
+    private ObservableList<String> addedUtilities;
     private String timeRegex = "[\\d]{2}:[\\d]{2}";
     private String numberRegex = "-?\\d+";
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        add.setDisable(true);
-        remove.setDisable(true);
-
-        utilityComboBox.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (utilityComboBox.isFocused()) {
-                    add.setDisable(false);
-                }
-            }
-        });
-
-        utilityList.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (utilityList.isFocused()) {
-                    remove.setDisable(false);
-                }
-            }
-        });
-
         create.setDisable(true);
-        utilities = FXCollections.observableArrayList();
-        utilityList.setItems(utilities);
+        utilityList.setItems(addedUtilities);
 
-        //todo hente liste med mulige utstyr for rom
+        name.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                String s = name.getText();
+                if(s.length()>1 && s.length()<30) {
+                    name.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
+                    name.setOpacity(2.0);
+                } else {
+                    name.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
+                    name.setOpacity(1.0);
+                }
+                checkIfAllValid();
+            }
+        });
+
+        capacity.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if((!capacity.getText().matches("[0-9]")) || Integer.parseInt(capacity.getText())<0) {
+                    capacity.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
+                    capacity.setOpacity(2.0);
+                } else {
+                    capacity.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
+                    capacity.setOpacity(1.0);
+                }
+                checkIfAllValid();
+            }
+        });
+
+        from.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if(!from.getText().matches(timeRegex)) {
+                    from.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
+                    from.setOpacity(2.0);
+                } else {
+                    from.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
+                    from.setOpacity(1.0);
+                }
+                checkIfAllValid();
+            }
+        });
+
+        to.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if((!to.getText().matches(timeRegex))) {
+                    to.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
+                    to.setOpacity(2.0);
+                } else {
+                    toValidation();
+
+                }
+                checkIfAllValid();
+            }
+        });
 
     }
 
+    public void toValidation() {
+        int toH = Integer.parseInt(to.getText(0,2)), toM = Integer.parseInt((to.getText(3,5)));
+        int fromH = Integer.parseInt(from.getText(0,2)), fromM = Integer.parseInt(from.getText(3,5));
+        if(fromH > toH || (fromH==toH && fromM>toM)) {
+            to.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
+            to.setOpacity(2.0);
+        } else {
+            to.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
+            to.setOpacity(1.0);
+        }
+    }
 
     @FXML
     public void addUtility(ActionEvent event) {
-
+        // todo
     }
 
     @FXML
     public void removeUtility(ActionEvent event) {
-
+        // todo
     }
 
     public boolean validTime(String match) {
@@ -92,9 +136,9 @@ public class Controller implements Initializable{
 
     public boolean checkIfAllValid(){
         Boolean ret = true;
-        if(name.getText()==null || name.getText().equals("")) ret = false;
-        if (Integer.parseInt(capacity.getText()) <= 0) ret = false;
-        if (validTime(timeRegex) == false) ret = false;
+        if(name.getOpacity()!=1.0) ret = false;
+        if(from.getOpacity()!=1.0) ret = false;
+        if(to.getOpacity()!=1.0) ret = false;
 
         create.setDisable(!ret);
         System.out.println("checkIfAllValid() ret = " +ret);
@@ -122,27 +166,6 @@ public class Controller implements Initializable{
         return validTime(timeRegex);
     }
 
-    public void createValidationListener(final TextField field, final int forceCorrect, final String match, final int max){
-        field.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> arg0, String oldValue, String newValue) {
-                if (!valid(newValue, match, max, forceCorrect)) {
-                    field.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
-                    if(forceCorrect == 1 || forceCorrect==3) field.setText(oldValue);
-                    System.out.println("Invalid:"+ newValue);
-                    field.setOpacity(3.0);
-                    checkIfAllValid();
-                }
-                else{
-                    //if(forceCorrect==3)updateRepeatVisibility(field);
-                    System.out.println("VALID: "+ newValue);
-                    field.setOpacity(2.0);
-                    checkIfAllValid();
-                    field.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
-                }
-            }
-        });
-    }
 
     public boolean checkCapacity(TextField capacity) {
         int roomsize = Integer.parseInt(this.capacity.getText());
