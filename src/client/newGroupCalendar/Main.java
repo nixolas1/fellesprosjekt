@@ -10,9 +10,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    private Stage groupParent;
+    private static Stage groupParent;
     private static Stage newGroupStage;
-    private UserModel loggedUser;
+    private static UserModel user;
 
     @Override
     public void start(Stage primaryStage) {
@@ -26,17 +26,17 @@ public class Main extends Application {
         }
     }
 
-    public void showNewGroup(Stage parentStage, UserModel loggedUser) {
-        this.groupParent = parentStage;
-        this.loggedUser = loggedUser;
+    public static void showNewGroup(Stage parentStage, UserModel loggedUser) {
+        groupParent = parentStage;
+        user = loggedUser;
 
         try {
             newGroupStage = new Stage();
             GridPane pane = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));
             Scene scene = new Scene(pane);
             newGroupStage.setScene(scene);
-            newGroupStage.setTitle("Ny gruppe");
-            newGroupStage.initOwner(this.groupParent);
+            //newGroupStage.setTitle("Ny gruppe");
+            newGroupStage.initOwner(groupParent);
             newGroupStage.initModality(Modality.WINDOW_MODAL);
             newGroupStage.show();
         } catch (Exception ex) {
