@@ -22,6 +22,8 @@ public class Logic {
             case "getAppointments": return AppointmentLogic.getCalendarAppointments(data);
             case "getRooms": return RoomLogic.getRooms();
             case "getRows": return server.database.Logic.sendAllRows(data);
+            case "createGroup": return server.database.Logic.createGroup(data);
+            //case "getLastGroupIdUsed": return server.database.Logic.getId();
 
 
         }

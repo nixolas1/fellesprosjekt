@@ -25,7 +25,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ThreadClient;
-import sun.plugin.javascript.navig.Anchor;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -78,7 +77,7 @@ public class Controller {
 
     @FXML
     void initialize() {
-        allUsers = UserModel.getUsersFromDB();
+        allUsers = UserModel.getAllUsers();
         allUsersDisplay = displayUserInfo(allUsers);
         findCalendar.setItems(FXCollections.observableArrayList("Test1","Test2"));
         findUserCalendar.setItems(FXCollections.observableArrayList(allUsersDisplay));
@@ -89,9 +88,13 @@ public class Controller {
         findUserCalendar.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                System.out.println("Going to " + findUserCalendar.getValue().toString().split(",")[0].trim() + "'s calendar");
+                System.out.println("Viewing " + findUserCalendar.getValue().toString().split(",")[0].trim() + "'s calendar");
                 UserModel user = getUserModelFromEmail(findUserCalendar.getValue().toString().split(",")[1].trim());
-                //Todo show calendar
+                clearAppointments();
+                cals = new Integer[]{1,2};
+                appointments = getAppointments(cals);
+                populateCalendars(cals);
+
             }
         });
 
@@ -183,6 +186,16 @@ public class Controller {
         client.usersettings.Main.show(Main.stage);
     }
 
+
+    public void onBtnShowNewGroup(ActionEvent event) {
+     client.newGroupCalendar.Main newGroup = new client.newGroupCalendar.Main();
+       try {
+            newGroup.showNewGroup(primaryStage, Main.user);
+       } catch (Exception e) {
+            e.printStackTrace();
+       }
+    }
+
     public void clearAppointments(){
         calendarGrid.getChildren().removeIf(AnchorPane.class::isInstance);
     }
@@ -232,15 +245,15 @@ public class Controller {
 
             //only display appointments this week
             if(start.toLocalDate().isBefore(calDate.plusDays(7))
-                    && start.toLocalDate().isAfter(calDate)) {
+                    && start.toLocalDate().isAfter(calDate.minusDays(1))) {
                 isThisWeek = true;
             }
 
 
-            if(isThisWeek && isRepeat){
+            if(isThisWeek || isRepeat){
                 System.out.println(app.getTitle() +
                                 ": den " + start+
-                                " i kalender "+app.getCal().getID()+
+                                " i kalender "+app.getCal().getId()+
                                 " i rom "+app.getRoom().getName()
                 );
 
@@ -281,6 +294,7 @@ public class Controller {
         }
 
         //style
+        System.out.println(app.toString());
         String color = "-fx-background-color: "+app.getCal().getColor(0.6)+" ";
         double padding = paneWidth*collisions.indexOf(app);
         //System.out.println(color);
@@ -353,8 +367,6 @@ public class Controller {
     }
 
 }
-
-
 
 /*for(int day = 0; day<days; day++){
             for(int hour = 0; hour<hours; hour++){
