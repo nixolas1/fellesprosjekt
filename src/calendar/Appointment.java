@@ -91,6 +91,11 @@ public class Appointment implements Serializable {
         }
     }
 
+    public static Appointment getAppointmentFromDB(String id){ //Server side only!
+        String[] a = server.database.Logic.getRow("Appointment", "appointmentid", id);
+        return new Appointment(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9]);
+    }
+
     public ArrayList<Appointment> getCollisions(ArrayList<Appointment> appointments){
         ArrayList<Appointment> colls = new ArrayList<>();
         for(Appointment app : appointments){

@@ -388,6 +388,7 @@ public class Controller implements Initializable{
             if (otherLocation.isSelected() && locationDescription.getOpacity() != 2.0) {
                 ret = false;
                 System.out.println("Room problem [WORK only]");
+            }
         }
         if(personal.isSelected() && (locationDescription.getText().equals("") || locationDescription.getText().equals(null))) {
             ret = false;
