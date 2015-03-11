@@ -77,6 +77,7 @@ public class Controller {
 
     @FXML
     void initialize() {
+        name.setText(Main.user.getFirstName() + " " + Main.user.getLastName());
         allUsers = UserModel.getAllUsers();
         allUsersDisplay = displayUserInfo(allUsers);
         findCalendar.setItems(FXCollections.observableArrayList("Test1","Test2"));
