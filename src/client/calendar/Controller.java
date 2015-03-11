@@ -30,10 +30,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Hashtable;
-import java.util.Locale;
+import java.util.*;
+import client.newAppointment.FxUtil;
 
 /**
  * Created by jonaslochsen on 02.03.15.
@@ -42,6 +40,8 @@ public class Controller {
 
 
     //@FXML private ComboBox chooseCalendar;
+    @FXML private ComboBox findCalendar;
+    @FXML private ComboBox findUserCalendar;
     @FXML private Text name;
     @FXML private Button logOff;
     @FXML private Button userSettings;
@@ -72,6 +72,12 @@ public class Controller {
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
+        findCalendar.setItems(FXCollections.observableArrayList(new ArrayList<String>(Arrays.asList("Test1","Test2"))));
+        findUserCalendar.setItems(FXCollections.observableArrayList(new ArrayList<String>(Arrays.asList("Test1","Test2"))));
+
+        FxUtil.autoCompleteComboBox(findCalendar, FxUtil.AutoCompleteMode.CONTAINING); // AutoCompleteMode ON
+        FxUtil.autoCompleteComboBox(findUserCalendar, FxUtil.AutoCompleteMode.CONTAINING);
+
         calDate = getLastMonday(calDate);
         updateYear();
         updateMonth();

@@ -44,7 +44,7 @@
                         <Font name="Helvetica Neue" size="13.0" />
                      </font>
                   </Button>
-                  <ComboBox layoutY="6.0" prefWidth="165.0" promptText="Finn brukerkalender" />
+                  <ComboBox fx:id="findUserCalendar" layoutY="6.0" prefWidth="165.0" promptText="Finn brukerkalender" />
                </children>
             </Pane>
             <GridPane GridPane.rowIndex="1">
