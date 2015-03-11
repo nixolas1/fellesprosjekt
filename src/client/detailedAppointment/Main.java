@@ -2,10 +2,12 @@ package client.detailedAppointment;
 
 import calendar.Appointment;
 import calendar.UserModel;
+import client.newAppointment.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import network.Query;
 
@@ -15,14 +17,17 @@ import java.util.Hashtable;
  * Created by Sondre on 04.03.15.
  */
 public class Main extends Application {
-    static Stage stage;
+
+    private static Stage detAppParent;
+    private static Stage detAppointmentStage;
+    private static UserModel user;
     static Appointment appointment;
 
     @Override
     public void start(Stage primaryStage) {
         try {
             GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));
-            Scene scene = new Scene(root, 1200, 800);
+            Scene scene = new Scene(root, 500, 680);
             //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -30,18 +35,25 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-    static UserModel user=new UserModel();
-    public static void show(Stage primaryStage, Appointment app) {
+
+
+    public static void showDetAppointment(Stage parentStage, UserModel loggedUser, Appointment app) {
+        detAppParent = parentStage;
+        user = loggedUser;
+        appointment = app;
+
         try {
-            stage = primaryStage;
-            user = client.Main.user;
-            appointment = app;
-            GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));
-            Scene scene = new Scene(root, 1200, 800);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+            detAppointmentStage = new Stage();
+            GridPane pane = (GridPane) FXMLLoader.load(client.detailedAppointment.Controller.class.getResource("gui.fxml"));
+            Scene scene = new Scene(pane);
+            detAppointmentStage.setScene(scene);
+            //detAppointmentStage.setTitle("");
+            detAppointmentStage.initOwner(detAppParent);
+            detAppointmentStage.initModality(Modality.WINDOW_MODAL);
+            detAppointmentStage.show();
+        } catch (Exception ex) {
+            System.out.println("Exception found in detAppointment");
+            ex.printStackTrace();
         }
     }
 

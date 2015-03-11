@@ -26,6 +26,11 @@ public class Appointment implements Serializable {
     Room room;
     UserModel owner;
     Calendar cal;
+    Boolean appType;
+    Boolean otherLocation; //if work is chosen
+
+
+
     public ArrayList<Attendee> attendees = new ArrayList<Attendee>();
     //                                                              2015-03-06 12:00:00.0
 
@@ -123,10 +128,10 @@ public class Appointment implements Serializable {
         return attendees;
     }
     public int getRepeatEvery(){return repeatEvery;}
-
     public int getId() {
         return id;
     }
+    public Boolean getAppType() {return true;}
 
     public void setId(int id) {
         this.id = id;
@@ -181,5 +186,6 @@ public class Appointment implements Serializable {
     public void setCal(Calendar cal) {
         this.cal = cal;
     }
+    public void setAppType() {}
 
 }

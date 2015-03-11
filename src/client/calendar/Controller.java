@@ -139,7 +139,7 @@ public class Controller {
     }
 
     public void showToday(ActionEvent event) {
-        calDate = LocalDate.now();
+        calDate = getLastMonday(LocalDate.now());
         updateView();
     }
 
@@ -293,7 +293,12 @@ public class Controller {
             @Override
             public void handle(MouseEvent event) {
                 System.out.println("Pressed "+app.getTitle());
-                //client.detailedAppointment.Main.show(Main.stage, app);
+                client.detailedAppointment.Main detApp = new client.detailedAppointment.Main();
+                try {
+                    detApp.showDetAppointment(primaryStage, Main.user, app);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 event.consume();
             }
         });
