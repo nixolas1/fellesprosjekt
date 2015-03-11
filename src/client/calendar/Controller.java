@@ -1,8 +1,13 @@
 package client.calendar;
 
 import calendar.Appointment;
+import calendar.UserModel;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -39,7 +44,6 @@ import client.newAppointment.FxUtil;
 public class Controller {
 
 
-    //@FXML private ComboBox chooseCalendar;
     @FXML private ComboBox findCalendar;
     @FXML private ComboBox findUserCalendar;
     @FXML private Text name;
@@ -67,16 +71,29 @@ public class Controller {
     private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
     private Integer[] cals = new Integer[]{1,2,3,4};
 
+    private ArrayList<UserModel> allUsers;
+    private ObservableList<String> allUsersDisplay;
+
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
 
     @FXML
     void initialize() {
-        //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
+        allUsers = UserModel.getUsersFromDB();
+        allUsersDisplay = displayUserInfo(allUsers);
         findCalendar.setItems(FXCollections.observableArrayList("Test1","Test2"));
-        findUserCalendar.setItems(FXCollections.observableArrayList("Test1","Test2"));
+        findUserCalendar.setItems(FXCollections.observableArrayList(allUsersDisplay));
 
         FxUtil.autoCompleteComboBox(findCalendar, FxUtil.AutoCompleteMode.CONTAINING); // AutoCompleteMode ON
         FxUtil.autoCompleteComboBox(findUserCalendar, FxUtil.AutoCompleteMode.CONTAINING);
+
+        findUserCalendar.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                System.out.println("Going to " + findUserCalendar.getValue().toString().split(",")[0].trim() + "'s calendar");
+                UserModel user = getUserModelFromEmail(findUserCalendar.getValue().toString().split(",")[1].trim());
+                //Todo show calendar
+            }
+        });
 
         calDate = getLastMonday(calDate);
         updateYear();
@@ -320,7 +337,24 @@ public class Controller {
         return calendarGrid.getColumnConstraints().get(1).getPrefWidth();
     }
 
+    public ObservableList<String> displayUserInfo(ArrayList<UserModel> users) {
+        ObservableList<String> userInfo = FXCollections.observableArrayList();
+        for (UserModel user : users) {
+            userInfo.add(user.displayInfo());
+        }
+        return userInfo;
+    }
+
+    public UserModel getUserModelFromEmail(String email) {
+        for(UserModel user : allUsers) {
+            if(user.getEmail().equals(email)) return user;
+        }
+        return null;
+    }
+
 }
+
+
 
 /*for(int day = 0; day<days; day++){
             for(int hour = 0; hour<hours; hour++){
