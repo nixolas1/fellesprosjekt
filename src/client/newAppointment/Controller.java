@@ -328,10 +328,10 @@ public class Controller implements Initializable{
             UserModel owner = new UserModel(); // todo FIX
             calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
             Appointment app = new Appointment(getAppointmentId(),title,description,startDate,endDate,room,owner,cal,repeat,stoprepeat.getValue(),location);
-            System.out.println(app);
+            System.out.println(app.displayInfo());
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
             if(response.get("reply"))
-                System.out.println("Appointment created\n"+app);
+                System.out.println("Appointment created\n"+app.displayInfo());
             else
                 System.out.println("Server could not create the appointment.");
 
