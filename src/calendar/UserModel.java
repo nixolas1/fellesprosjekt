@@ -105,7 +105,11 @@ public class UserModel implements Serializable {
     public String displayInfo() {
         return getFirstName() + " " + getLastName() + ", " + getEmail();
     }
-    
+
+    public static UserModel getUserFromServer(final String email){
+        String[] split = email.split("@");
+        return getUserFromServer(split[0], split[1]);
+    }
 
     public static UserModel getUserFromServer(final String user, final String domain){
 

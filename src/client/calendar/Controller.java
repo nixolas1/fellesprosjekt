@@ -248,7 +248,7 @@ public class Controller {
             if(isThisWeek || isRepeat){
                 System.out.println(app.getTitle() +
                                 ": den " + start+
-                                " i kalender "+app.getCal().getId()+
+                                " i kalender "+app.getCals()+
                                 " i rom "+app.getRoom().getName()
                 );
 
@@ -290,7 +290,7 @@ public class Controller {
 
         //style
         System.out.println(app.toString());
-        String color = "-fx-background-color: "+app.getCal().getColor(0.6)+" ";
+        String color = "-fx-background-color: "+app.getCals().get(0).getColor(0.6)+" "; //TODO make correct calID
         double padding = paneWidth*collisions.indexOf(app);
         //System.out.println(color);
         pane.setStyle(color);
