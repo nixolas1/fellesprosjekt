@@ -149,7 +149,7 @@ public class Controller implements Initializable{
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 checkIfAllValid();
-                if(otherLocation.isSelected()) {
+                if (otherLocation.isSelected()) {
                     room.setVisible(false);
                     locationDescription.setVisible(true);
                     roomOrLocation.setText("Sted");
@@ -182,7 +182,7 @@ public class Controller implements Initializable{
         createValidationListener(description, 1, ".*", 50);
         createValidationListener(repeat,  3, "[0-9]*", 3);
         createValidationListener(title, 0, ".{0,50}", 50);
-        createValidationListener(locationDescription, 0, ".{0,50}",50);
+        createValidationListener(locationDescription, 0, ".{0,50}", 50);
 
        dateValidation(date);
        dateValidation(endDate);
@@ -295,30 +295,13 @@ public class Controller implements Initializable{
     @FXML
     public void createAppointment(ActionEvent event) {
         if(checkIfAllValid()) {
-            String title = this.title.getText();
-            String description = this.description.getText();
-            int hrStart = 00;
-            int minStart = 00;
-            int hrEnd = 23;
-            int minEnd = 59;
-            if(!allDay.isSelected()) {
-                hrStart = Integer.parseInt(from.getText().split(":")[0]);
-                minStart = Integer.parseInt((from.getText().split(":")[1]));
-                hrEnd = Integer.parseInt((to.getText().split(":")[0]));
-                minEnd = Integer.parseInt(to.getText().split(":")[1]);
-            }
-            LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
-            LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
-            Room room = null;
-            String location = null;
-            int repeat = Integer.parseInt(this.repeat.getText());
+            Appointment app = createAppointmentObject();
             if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
-                location = locationDescription.getText();
+                app.setLocation(locationDescription.getText());
             } else {
-                room = new Room(1, "test", 1, 0, 23, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
+                app.setRoom(new Room(1, "test", 1, 0, 23, new ArrayList<Utility>())); // TEST ROOM! TODO get rooms from DB
             }
             calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
-            Appointment app = new Appointment(getAppointmentId(),title,description,startDate,endDate,room,loggedUser,cal,repeat,stoprepeat.getValue(),location);
             app.setAttendees(getAttendees(cal));
             app.setGroups(getGroups()); // GROUPS = CALENDARS
             System.out.println(app.displayInfo());
@@ -331,6 +314,42 @@ public class Controller implements Initializable{
         } else {
             System.out.println("One or more fields are INVALID. Data not sent to server.");
         }
+
+    }
+
+    public Appointment createAppointmentObject() { // Without room / location
+        String title = this.title.getText() != null && this.title.getText().length() > 0 ? this.title.getText() : null;
+        String description = this.description.getText() != null && this.description.getText().length() > 0 ? this.description.getText() : null;
+        int hrStart = 00;
+        int minStart = 00;
+        int hrEnd = 23;
+        int minEnd = 59;
+        if(!allDay.isSelected()) {
+            hrStart = Integer.parseInt(from.getText().split(":")[0]);
+            minStart = Integer.parseInt((from.getText().split(":")[1]));
+            hrEnd = Integer.parseInt((to.getText().split(":")[0]));
+            minEnd = Integer.parseInt(to.getText().split(":")[1]);
+        }
+        LocalDate endRepeatDate = null;
+        LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
+        LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
+        if(Integer.parseInt(repeat.getText()) > 0 && stoprepeat.getValue() != null) endRepeatDate = stoprepeat.getValue();
+        Room room = null;
+        String location = null;
+        int repeat = Integer.parseInt(this.repeat.getText());
+        Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null,repeat,endRepeatDate,location);
+        return app;
+
+    }
+
+    public ArrayList<Room> requestRoomList() {
+        if(updateTimeValid()) {
+            Appointment app = createAppointmentObject();
+            Query reply = client.Main.socket.send(new Query("getRooms", app));
+            ArrayList<Room> roomList = reply.data.get("reply");
+            return roomList;
+        }
+        return null;
 
     }
 
