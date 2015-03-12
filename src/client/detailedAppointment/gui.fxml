@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="500.0" style="-fx-background-color: #ebebeb;" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.detailedAppointment.Controller">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="500.0" style="-fx-background-color: #ebebeb;" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.detailedAppointment.Controller">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="370.0" minWidth="370.0" prefWidth="370.0" />
@@ -23,9 +23,10 @@
         <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="134.0" minHeight="134.0" prefHeight="134.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="134.0" minHeight="118.0" prefHeight="131.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="137.0" minHeight="30.0" prefHeight="124.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="66.0" minHeight="0.0" prefHeight="25.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="30.0" minHeight="4.0" prefHeight="20.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
         <Pane prefHeight="130.0" prefWidth="360.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
@@ -33,18 +34,21 @@
                 <Button fx:id="remove" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUser" text="&lt;" />
                 <Button fx:id="add" layoutX="164.0" mnemonicParsing="false" onAction="#addUser" text="&gt;" />
                 <ComboBox fx:id="usersComboBox" prefHeight="26.0" prefWidth="160.0" promptText="Finn deltaker" />
-                <ListView fx:id="attendeeList" layoutX="194.0" prefHeight="130.0" prefWidth="175.0" />
+                <ListView fx:id="attendeeList" layoutX="195.0" prefHeight="130.0" prefWidth="175.0" />
             </children>
         </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="11">
             <children>
-                <Label fx:id="roomOrLocation" prefHeight="25.0" prefWidth="82.0" text="Rom" />
+                <Label layoutY="6.0" text="Grupper" />
             </children>
         </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
+        <Pane prefHeight="112.0" prefWidth="370.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
             <children>
-                <TextField fx:id="locationDescription" prefWidth="370.0" />
-                <ComboBox fx:id="room" prefWidth="160.0" />
+                <ListView fx:id="groupList" layoutX="195.0" prefHeight="130.0" prefWidth="175.0" />
+                <ComboBox fx:id="groupComboBox" layoutY="1.0" prefHeight="26.0" prefWidth="160.0" promptText="Finn gruppe" />
+                <Button fx:id="addGroup" layoutX="164.0" mnemonicParsing="false" onAction="#addGroup" text="&gt;" />
+                <Button fx:id="removeGroup" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeGroup" text="&lt;" />
+                <CheckBox fx:id="otherLocation" layoutY="105.0" mnemonicParsing="false" text="Annen lokasjon" />
             </children>
         </Pane>
         <Pane prefHeight="67.0" prefWidth="467.0" style="-fx-border-color: rgba(0,0,0,0.4); -fx-border-width: 0 0 1px 0;" GridPane.columnIndex="1">
@@ -184,12 +188,23 @@
         </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="12">
             <children>
-                <Button maxHeight="36.0" maxWidth="100.0" minHeight="36.0" minWidth="80.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="80.0" text="Avbryt" />
+                <Label fx:id="roomOrLocation" prefHeight="25.0" prefWidth="82.0" text="Rom" />
             </children>
         </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="12">
             <children>
-                <Button fx:id="create" maxHeight="36.0" maxWidth="370.0" minHeight="36.0" minWidth="370.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="370.0" stylesheets="@gui.css" text="Opprett avtale" textFill="WHITE">
+                <TextField fx:id="locationDescription" prefWidth="370.0" />
+                <ComboBox fx:id="room" prefWidth="370.0" />
+            </children>
+        </Pane>
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="13">
+            <children>
+                <Button maxHeight="36.0" maxWidth="100.0" minHeight="36.0" minWidth="80.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="80.0" text="Avbryt" />
+            </children>
+        </Pane>
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="13">
+            <children>
+                <Button fx:id="create" maxHeight="36.0" maxWidth="370.0" minHeight="36.0" minWidth="370.0" mnemonicParsing="false" onAction="#createAppointment" prefHeight="36.0" prefWidth="370.0" stylesheets="@gui.css" text="Endre avtale" textFill="WHITE">
                     <padding>
                         <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
                     </padding>
