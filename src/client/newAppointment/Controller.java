@@ -374,7 +374,10 @@ public class Controller implements Initializable{
 
     public boolean checkIfAllValid(){
         Boolean ret = true;
+
         if(title.getText()==null || title.getText().equals("")) ret = false;
+        if(description.getText()==null || description.getText()=="") ret = false;
+        if(locationDescription.getText()==null || locationDescription.getText()=="") ret = false;
         if(date.getValue()==null || date.getValue().toString().equals("")) ret=false;
         if(endDate.getValue()==null || endDate.getValue().toString().equals("")) {
             endDate.setValue(date.getValue());
@@ -391,6 +394,7 @@ public class Controller implements Initializable{
           /*  if(!otherLocation.isSelected() && (room.getValue.equals(null) || room.getValue().equals(""))) {
                 ret = false;
             }*/
+
         }
         if(personal.isSelected() && (locationDescription.getText().equals("") || locationDescription.getText().equals(null))) {
             ret = false;

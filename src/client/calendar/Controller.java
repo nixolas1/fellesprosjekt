@@ -1,7 +1,14 @@
 package client.calendar;
 
 import calendar.Appointment;
+import calendar.UserModel;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import client.notifications.Notifications;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -20,6 +27,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ThreadClient;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -77,6 +87,16 @@ public class Controller {
         updateDate();
         appointments = getAppointments(cals);
         populateCalendars(cals);
+        importFont();
+    }
+
+    public void importFont() {
+        try {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("")));
+        } catch (IOException|FontFormatException e) {
+            //Handle exception
+        }
     }
 
     public static String monthName(int month){
@@ -126,7 +146,7 @@ public class Controller {
     }
 
     public void showToday(ActionEvent event) {
-        calDate = LocalDate.now();
+        calDate = getLastMonday(LocalDate.now());
         updateView();
     }
 
@@ -289,7 +309,12 @@ public class Controller {
             @Override
             public void handle(MouseEvent event) {
                 System.out.println("Pressed "+app.getTitle());
-                //client.detailedAppointment.Main.show(Main.stage, app);
+                client.detailedAppointment.Main detApp = new client.detailedAppointment.Main();
+                try {
+                    detApp.showDetAppointment(primaryStage, Main.user, app);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 event.consume();
             }
         });

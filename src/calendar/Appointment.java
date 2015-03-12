@@ -9,25 +9,27 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Hashtable;
+
 /**
  * Created by nixo on 2/23/15.
  */
 public class Appointment implements Serializable {
 
-    int id = -1;
-    String title = null;
-    String purpose = null;
-    String location = null;
-    LocalDateTime startDate = null;
-    LocalDateTime endDate = null;
-    LocalDate endRepeatDate = null;
-    int repeatEvery = 0;
-    Room room = null;
-    UserModel owner = null;
-    Calendar cal = null;
+    int id;
+    String title;
+    String purpose;
+    String location;
+    LocalDateTime startDate;
+    LocalDateTime endDate;
+    LocalDate endRepeatDate;
+    int repeatEvery=0;
+    Room room;
+    UserModel owner;
+    Calendar cal;
+    Boolean appType;
+    Boolean otherLocation; //if work is chosen
 
     public ArrayList<Attendee> attendees = new ArrayList<Attendee>();
-    public ArrayList<Calendar> groups = new ArrayList<>();
     //                                                              2015-03-06 12:00:00.0
 
     public Appointment() {
@@ -73,19 +75,6 @@ public class Appointment implements Serializable {
         this.endRepeatDate=endRepeatDate;
     }
 
-    public Appointment(String title, String purpose, String location, LocalDateTime startDate, LocalDateTime endDate, Room room, Calendar cal, int repeatEvery, LocalDate endRepeatDate){
-        this.title=title;
-        this.purpose=purpose;
-        this.startDate=startDate;
-        this.endDate=endDate;
-        this.room=room;
-        this.owner=owner;
-        this.cal = cal;
-        this.location = location;
-        this.repeatEvery = repeatEvery;
-        this.endRepeatDate=endRepeatDate;
-    }
-
     public static ArrayList<Appointment> getAppointmentsInCalendar(int calID, ThreadClient socket){
         Hashtable<String, String> data = new Hashtable<String, String>(){{
             put("id",Integer.toString(calID));
@@ -100,6 +89,11 @@ public class Appointment implements Serializable {
             e.printStackTrace();
             return new ArrayList<Appointment>();
         }
+    }
+
+    public static Appointment getAppointmentFromDB(String id){ //Server side only!
+        String[] a = server.database.Logic.getRow("Appointment", "appointmentid", id);
+        return new Appointment(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9]);
     }
 
     public ArrayList<Appointment> getCollisions(ArrayList<Appointment> appointments){
@@ -135,9 +129,6 @@ public class Appointment implements Serializable {
     }
     public ArrayList<Attendee> getAttendees() {
         return attendees;
-    }
-    public ArrayList<Calendar> getGroups() {
-        return groups;
     }
     public int getRepeatEvery(){return repeatEvery;}
 
@@ -198,12 +189,6 @@ public class Appointment implements Serializable {
     public void setCal(Calendar cal) {
         this.cal = cal;
     }
-    public void setGroups(ArrayList groups) {
-        this.groups = groups;
-    }
-    public void addGroup(Calendar group) {
-        groups.add(group);
-    }
 
 public String displayInfo() {
     return "Appointment ["+id+"]\nTitle: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
@@ -226,5 +211,6 @@ public String displayInfo() {
 
     }
     */
+    public void setAppType() {}
 
 }

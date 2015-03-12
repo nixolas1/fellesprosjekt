@@ -48,7 +48,7 @@ public class Logic {
             if(result.next()){
                 for (int i = 0; i < row.length; i++) {
                     row[i] = result.getString(i + 1);
-                    System.out.println("row[" + i + "]: " + row[i]);
+                    //TODO fuck u System.out.println("row[" + i + "]: " + row[i]);
                 }
             } else throw new NullPointerException(identifyingAttribute + ": " + identifyingValue + " has no entry in table " + table);
         } catch (SQLException e){
@@ -102,7 +102,7 @@ public class Logic {
                 allRows.add(new ArrayList<String>());
                 for (int i = 0; i < row.length; i++) {
                     allRows.get(count).add(result.getString(i + 1));
-                    System.out.println(table + "[" + count + "][" + i + "]: " + result.getString(i + 1));
+                    //TODO fuck System.out.println(table + "[" + count + "][" + i + "]: " + result.getString(i + 1));
                 } count ++;
                 System.out.println("");
             }
@@ -166,7 +166,7 @@ public class Logic {
         try {
             if (result.next()) {
                 numberOfRows = result.getInt(1);
-                System.out.println("numberOfRows: " + numberOfRows);
+                //System.out.println("numberOfRows: " + numberOfRows);
             } else throw new NullPointerException(table + " has no columns");
         } catch (SQLException e) {
             System.out.println("SQLExeption triggered in getNumberOfRows(), 2. try block: " + e);
@@ -295,7 +295,7 @@ public class Logic {
         try {
             if (result.next()) {
                 numberOfColumns = result.getInt(1);
-                System.out.println("numberOfColumns: " + numberOfColumns);
+                //System.out.println("numberOfColumns: " + numberOfColumns);
             } else throw new NullPointerException(table + " has no columns");
         } catch (SQLException e) {
             System.out.println("SQLExeption triggered in getNumberOfColumns(), 2. try block: " + e);
