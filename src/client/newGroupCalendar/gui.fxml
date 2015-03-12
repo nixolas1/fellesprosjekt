@@ -52,7 +52,7 @@
       <TextField id="name" fx:id="name" prefHeight="25.0" prefWidth="283.0" promptText="Navn på gruppe" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.rowSpan="2">
          <children>
-            <TextArea fx:id="description" prefHeight="200.0" prefWidth="200.0" />
+            <TextArea fx:id="description" prefHeight="200.0" prefWidth="360.0" />
          </children>
       </FlowPane>
       <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />

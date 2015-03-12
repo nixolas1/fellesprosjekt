@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     private Stage groupParent;
     private static Stage newGroupStage;
-    private UserModel loggedUser;
+    private static UserModel loggedUser;
 
     @Override
     public void start(Stage primaryStage) {
@@ -43,6 +43,10 @@ public class Main extends Application {
             System.out.println("Exception found in newGroup");
             ex.printStackTrace();
         }
+    }
+
+    public static UserModel getLoggedUser() {
+        return loggedUser;
     }
 
     public static void closeStage() {
