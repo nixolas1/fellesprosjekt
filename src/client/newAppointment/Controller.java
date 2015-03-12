@@ -208,6 +208,7 @@ public class Controller implements Initializable{
         create.setDisable(true);
         attendees = FXCollections.observableArrayList(); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
+        //attendees.add(loggedUser.getFirstName() + " " + loggedUser.getLastName() + ", " + loggedUser.getEmail());
         allUsers = getUsersFromDB();
         rooms = getRooms();
         room.setItems(FXCollections.observableArrayList(rooms));
