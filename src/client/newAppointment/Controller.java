@@ -303,7 +303,7 @@ public class Controller implements Initializable{
             }
             calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
             app.setAttendees(getAttendees(cal));
-            app.setGroups(getGroups()); // GROUPS = CALENDARS
+            app.setCals(getGroups()); // GROUPS = CALENDARS
             System.out.println(app.displayInfo());
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
             if(response.get("reply"))
@@ -359,7 +359,7 @@ public class Controller implements Initializable{
             UserModel usr = getUserModel(user.split(",")[1]);
             boolean isOwner = false;
             if(usr.equals(loggedUser)) isOwner = true;
-            attendeeObjects.add(new Attendee(usr,null,cal, LocalDateTime.now(), isOwner));
+            attendeeObjects.add(new Attendee(usr,cal, LocalDateTime.now(), isOwner));
         }
         return attendeeObjects;
     }
@@ -416,7 +416,9 @@ public class Controller implements Initializable{
 
     public boolean checkIfAllValid(){
         Boolean ret = true;
-        if(title.getText()==null || title.getText().equals("")) ret = false;
+        if(title.getText()==null || title.getText()=="") ret = false;
+        if(description.getText()==null || description.getText()=="") ret = false;
+        if(locationDescription.getText()==null || locationDescription.getText()=="") ret = false;
         if(date.getValue()==null || date.getValue().toString().equals("")) ret=false;
         if(endDate.getValue()==null || endDate.getValue().toString().equals("")) {
             endDate.setValue(date.getValue());
@@ -430,9 +432,6 @@ public class Controller implements Initializable{
                 ret = false;
                 System.out.println("Room problem [WORK only]");
             }
-          /*  if(!otherLocation.isSelected() && (room.getValue.equals(null) || room.getValue().equals(""))) {
-                ret = false;
-            }*/
         }
         if(personal.isSelected() && (locationDescription.getText().equals("") || locationDescription.getText().equals(null))) {
             ret = false;
@@ -441,20 +440,20 @@ public class Controller implements Initializable{
         if(!allDay.isSelected()) {
             if (from.getOpacity() != 2.0) {
                 ret = false;
-                System.out.println("From problem");
+                System.out.println("From invalid");
             }
             if (to.getOpacity() != 2.0) {
                 ret = false;
-                System.out.println("To problem");
+                System.out.println("To invalid");
             }
         }
         if(date.getOpacity()!=2.0) {
             ret = false;
-            System.out.println("Date problem");
+            System.out.println("Date invalid");
         }
         if(stoprepeat.getOpacity()==3.0) {
             ret = false;
-            System.out.println("stoprepeat problem");
+            System.out.println("stoprepeat invalid");
         }
         // todo room
         if (description.getText().equals("")) ret = false;

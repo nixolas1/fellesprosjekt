@@ -6,6 +6,7 @@ import client.newAppointment.FxUtil;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,7 +15,6 @@ import javafx.scene.control.*;
 import calendar.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -49,6 +49,7 @@ public class Controller implements Initializable {
     private ObservableList<String> groupmembers;
     private ArrayList<UserModel> groupmembersUserModel;
     UserModel user = new UserModel();
+    boolean nameValid = false, descriptionValid = false, groupValid = false;
 
     @FXML
     @Override
@@ -76,6 +77,36 @@ public class Controller implements Initializable {
             }
         });
 
+        name.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                String s = name.getText();
+                if (s.length() > 0 && s.length() < 50) {
+                    name.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
+                    nameValid = true;
+                } else {
+                    name.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
+                    nameValid = false;
+                }
+                checkIfAllValid();
+            }
+        });
+
+        description.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                String s = description.getText();
+                if (s.length() > 0 && s.length() < 100) {
+                    description.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
+                    descriptionValid = true;
+                } else {
+                    description.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
+                    descriptionValid = false;
+                }
+                checkIfAllValid();
+            }
+        });
+
         create.setDisable(true);
         groupmembers = FXCollections.observableArrayList();
         groupList.setItems(groupmembers);
@@ -91,6 +122,8 @@ public class Controller implements Initializable {
 
     }
 
+
+
     public ObservableList<String> displayUserInfo(ArrayList<UserModel> users) {
         ObservableList<String> userInfo = FXCollections.observableArrayList();
         for (UserModel user : users) {
@@ -101,13 +134,15 @@ public class Controller implements Initializable {
 
     @FXML
     public void addUser(ActionEvent event) {
-        create.setDisable(false);
         String usr = (String) FxUtil.getComboBoxValue(usersComboBox);
-        if (userInfo.contains(usr)){
+        if (userInfo.contains(usr) && !groupmembers.contains(usr)){
             groupmembers.add(usr);
+            userInfo.remove(usr);
         }
         usersComboBox.getEditor().setText("");
         System.out.println(groupmembers);
+        if(groupmembers.size()>0) groupValid = true;
+        checkIfAllValid();
     }
 
 
@@ -119,6 +154,8 @@ public class Controller implements Initializable {
             groupmembers.remove(usr);
             userInfo.add(usr);
         }
+        if(groupmembers.size()<1) groupValid = false;
+        checkIfAllValid();
     }
 
     @FXML
@@ -133,6 +170,12 @@ public class Controller implements Initializable {
         Group group = new Group(100, groupname, groupmembersUserModel);
         //toDo - må addes i database, sondreeeee
     }
+
+    @FXML
+    public void cancel(ActionEvent event) {
+        Main.closeStage();
+    }
+
     public UserModel getUserModel(String email) {
         for (UserModel user : allUsers) {
             if (user.getEmail().equals(email)) {
@@ -142,6 +185,11 @@ public class Controller implements Initializable {
         return null;
     }
 
+    public void checkIfAllValid() {
+        boolean ret = false;
+        if(nameValid && descriptionValid && groupValid) ret = true;
+        create.setDisable(!ret);
+    }
 
 
         /*ArrayList<UserModel> groupMembers = new ArrayList<>(users.size());

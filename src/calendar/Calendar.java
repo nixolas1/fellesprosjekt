@@ -2,8 +2,10 @@ package calendar;
 
 import client.*;
 import javafx.scene.paint.Color;
+import network.ClientDB;
 import network.Query;
 import network.ThreadClient;
+import server.database.*;
 
 import javax.jws.soap.SOAPBinding;
 import java.io.Serializable;
@@ -34,6 +36,24 @@ public class Calendar implements Serializable {
 
     public Calendar(String name){
         this.name = name;
+    }
+
+    public static ArrayList<Calendar> getAllCalendarsInAppointment(int id){
+        ArrayList<List<String>> rows= server.database.Logic.getAllRowsWhere("Appointment_has_Calendar", "Appointment_appointmentid = " + id);
+        ArrayList<Calendar> ret = new ArrayList<>();
+        for(List<String> c : rows){
+            ret.add(new Calendar(c.get(1))); //TODO check that it is correct index
+        }
+        return ret;
+    }
+
+    public static ArrayList<Calendar> getAllCalendarsInAppointmentClientside(int id, ThreadClient socket){
+        ArrayList<List<String>> rows= ClientDB.getAllTableRowsWhere("Appointment_has_Calendar", "Appointment_appointmentid = " + id, socket);
+        ArrayList<Calendar> ret = new ArrayList<>();
+        for(List<String> c : rows){
+            ret.add(new Calendar(c.get(1))); //TODO check that it is correct index
+        }
+        return ret;
     }
 
     public Calendar(int id, String name) {

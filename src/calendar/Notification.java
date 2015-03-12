@@ -1,25 +1,71 @@
 package calendar;
 
+import network.Query;
+import network.ThreadClient;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 
 /**
  * Created by nixo on 3/4/15.
  */
 public class Notification implements Serializable {
-    Appointment app;
-    Calendar cal;
-    UserModel user;
-    String text;
-    boolean seen;
-    Date sent;
+    public Appointment app;
+    public Calendar cal;
+    public UserModel user;
+    public String text="";
+    public boolean seen=false;
+    public LocalDateTime created=LocalDateTime.now();
+    public LocalDateTime dateSeen=LocalDateTime.now();
 
-    public Notification(Appointment app, Calendar cal, UserModel user, String text, boolean seen, Date sent){
+    public Notification(String text, UserModel user, boolean seen){
+        this.text=text;
+        this.seen=seen;
+        this.user=user;
+    }
+
+    public Notification(Appointment app, Calendar cal, UserModel user, String text, boolean seen, LocalDateTime created, LocalDateTime dateSeen){
         this.app=app;
         this.cal=cal;
         this.user=user;
         this.text=text;
         this.seen=seen;
-        this.sent=sent;
+        this.created=created;
+        this.dateSeen=dateSeen;
     }
+
+    public Notification(String appid, String calid, String email, String text, String seen, String created, String dateSeen){
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+
+        this.app=Appointment.getAppointmentFromDB(appid);
+        this.cal=new Calendar(Integer.parseInt(calid));
+        this.user=server.database.Logic.getUser(email);
+        this.text=text;
+
+        if(seen != null)
+            this.seen=Boolean.parseBoolean(seen);
+        if(dateSeen != null)
+            this.dateSeen=LocalDateTime.parse(dateSeen, format);
+        if(created != null)
+            this.created=LocalDateTime.parse(created, format);
+    }
+
+    public static ArrayList<Notification> getUserNotifications(String email, ThreadClient socket){
+        System.out.println("Trying to get all notifications from user "+email);
+        try {
+            Query reply = socket.send(new Query("getNotifications", email));
+            Hashtable<String, ArrayList<Notification>> response = reply.data;
+            System.out.println("Got notifications: "+response.get("reply").toString());
+            return response.get("reply");
+        }catch(Exception e){
+            System.err.println("Unable to send or recieve Notifications from server:");
+            e.printStackTrace();
+            return new ArrayList<Notification>();
+        }
+    }
+
 }

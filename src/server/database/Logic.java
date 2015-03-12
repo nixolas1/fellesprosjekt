@@ -48,7 +48,7 @@ public class Logic {
             if(result.next()){
                 for (int i = 0; i < row.length; i++) {
                     row[i] = result.getString(i + 1);
-                    System.out.println("row[" + i + "]: " + row[i]);
+                    //TODO fuck u System.out.println("row[" + i + "]: " + row[i]);
                 }
             } else throw new NullPointerException(identifyingAttribute + ": " + identifyingValue + " has no entry in table " + table);
         } catch (SQLException e){
@@ -102,7 +102,7 @@ public class Logic {
                 allRows.add(new ArrayList<String>());
                 for (int i = 0; i < row.length; i++) {
                     allRows.get(count).add(result.getString(i + 1));
-                    System.out.println(table + "[" + count + "][" + i + "]: " + result.getString(i + 1));
+                    //TODO fuck System.out.println(table + "[" + count + "][" + i + "]: " + result.getString(i + 1));
                 } count ++;
                 System.out.println("");
             }
@@ -166,7 +166,7 @@ public class Logic {
         try {
             if (result.next()) {
                 numberOfRows = result.getInt(1);
-                System.out.println("numberOfRows: " + numberOfRows);
+                //System.out.println("numberOfRows: " + numberOfRows);
             } else throw new NullPointerException(table + " has no columns");
         } catch (SQLException e) {
             System.out.println("SQLExeption triggered in getNumberOfRows(), 2. try block: " + e);
@@ -225,7 +225,7 @@ public class Logic {
             //String q = "INSERT INTO Appointment (appointmentid, title, description, location, starttime, endtime, repeatEndDate, repeat, Calendar_calendarid, Room_roomid) VALUES (NULL, 'testmoete', 'for aa teste vel', 'IT bygget', '2015-04-04 10:00:00', '2015-04-04 16:00:00', NULL, NULL, '5', '0');";
             //String q2 = "VALUES ('null', 'Testmøte3', 'blablabla', 'ITbygg', '2015-04-04 10:00:00', '2015-04-04 16:00:00', 'null', 'null', '6', '13');";
             //String query3 = "(`appointmentid`, `title`, `description`, `location`, `starttime`, `endtime`, `repeatEndDate`, `repeat`, `Calendar_calendarid`, `Room_roomid`) VALUES ";
-            String query2 = "(NULL, '"+app.getTitle()+"', "+description+", "+location+", '"+app.getStartDate()+"', '"+app.getEndDate()+"', "+repeatEndDate+", "+repeat+", "+app.getCal().getId()+", "+roomId+");";
+            String query2 = "(NULL, '"+app.getTitle()+"', "+description+", "+location+", '"+app.getStartDate()+"', '"+app.getEndDate()+"', "+repeatEndDate+", "+repeat+", "+", "+roomId+");";
             System.out.println("QUERY: " + query + query2);
             //System.out.println("QUERY: " + query);
             stmt.executeUpdate(query + query2);
@@ -295,7 +295,7 @@ public class Logic {
         try {
             if (result.next()) {
                 numberOfColumns = result.getInt(1);
-                System.out.println("numberOfColumns: " + numberOfColumns);
+                //System.out.println("numberOfColumns: " + numberOfColumns);
             } else throw new NullPointerException(table + " has no columns");
         } catch (SQLException e) {
             System.out.println("SQLExeption triggered in getNumberOfColumns(), 2. try block: " + e);

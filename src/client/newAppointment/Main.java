@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class Main extends Application {
-    private Stage appParent;
-    private Stage newAppointmentStage;
-    private static UserModel loggedUser;
+    private static Stage appParent;
+    private static Stage newAppointmentStage;
+    private static UserModel user;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -33,20 +33,20 @@ public class Main extends Application {
 	}
 
     public static UserModel getLoggedUser() {
-        return loggedUser;
+        return user;
     }
 
-    public void showNewAppointment(Stage parentStage, UserModel loggedUser) {
-        this.appParent = parentStage;
-        this.loggedUser = loggedUser;
+    public static void showNewAppointment(Stage parentStage, UserModel loggedUser) {
+        appParent = parentStage;
+        user = loggedUser;
 
         try {
             newAppointmentStage = new Stage();
             GridPane pane = (GridPane) FXMLLoader.load(Controller.class.getResource("view.fxml"));
             Scene scene = new Scene(pane);
             newAppointmentStage.setScene(scene);
-            newAppointmentStage.setTitle("Ny avtale");
-            newAppointmentStage.initOwner(this.appParent);
+            //newAppointmentStage.setTitle("Ny avtale");
+            newAppointmentStage.initOwner(appParent);
             newAppointmentStage.initModality(Modality.WINDOW_MODAL);
             newAppointmentStage.show();
         } catch (Exception ex) {

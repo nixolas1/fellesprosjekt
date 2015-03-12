@@ -1,7 +1,14 @@
 package client.calendar;
 
 import calendar.Appointment;
+import calendar.UserModel;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import client.notifications.Notifications;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -20,6 +27,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ThreadClient;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -56,15 +66,16 @@ public class Controller {
     @FXML private Text satDate;
     @FXML private Text sunDate;
     @FXML private GridPane calendarGrid;
-
+    @FXML private ComboBox notifCombo;
+    @FXML private Text notifCount;
 
 
     protected static Stage primaryStage;
 
     private LocalDate calDate = LocalDate.now();
-    private ThreadClient socket = new ThreadClient(); //TODO: REMOVE IN MASTER BRANCH
+    private ThreadClient socket = client.Main.socket;
     private Integer[] cals = new Integer[]{1,2,3,4};
-
+    private Notifications notifs;
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
 
     @FXML
@@ -77,6 +88,18 @@ public class Controller {
         updateDate();
         appointments = getAppointments(cals);
         populateCalendars(cals);
+        importFont();
+        notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
+
+    }
+
+    public void importFont() {
+        try {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("")));
+        } catch (IOException|FontFormatException e) {
+            //Handle exception
+        }
     }
 
     public static String monthName(int month){
@@ -126,7 +149,7 @@ public class Controller {
     }
 
     public void showToday(ActionEvent event) {
-        calDate = LocalDate.now();
+        calDate = getLastMonday(LocalDate.now());
         updateView();
     }
 
@@ -225,7 +248,7 @@ public class Controller {
             if(isThisWeek || isRepeat){
                 System.out.println(app.getTitle() +
                                 ": den " + start+
-                                " i kalender "+app.getCal().getId()+
+                                " i kalender "+app.getCals()+
                                 " i rom "+app.getRoom().getName()
                 );
 
@@ -267,7 +290,7 @@ public class Controller {
 
         //style
         System.out.println(app.toString());
-        String color = "-fx-background-color: "+app.getCal().getColor(0.6)+" ";
+        String color = "-fx-background-color: "+app.getCals().get(0).getColor(0.6)+" "; //TODO make correct calID
         double padding = paneWidth*collisions.indexOf(app);
         //System.out.println(color);
         pane.setStyle(color);
@@ -280,7 +303,12 @@ public class Controller {
             @Override
             public void handle(MouseEvent event) {
                 System.out.println("Pressed "+app.getTitle());
-                //client.detailedAppointment.Main.show(Main.stage, app);
+                client.detailedAppointment.Main detApp = new client.detailedAppointment.Main();
+                try {
+                    detApp.showDetAppointment(primaryStage, Main.user, app);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 event.consume();
             }
         });
