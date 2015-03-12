@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import calendar.*;
+import calendar.Calendar;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -54,18 +55,18 @@ public class Controller implements Initializable{
     private ArrayList<UserModel> allUsers;
     private ObservableList<String> userInfo;
     private ObservableList<String> attendees;
-    private ArrayList<Group> allGroups;
+    private ArrayList<Calendar> allGroups;
     private ObservableList<String> groupInfo;
     private ObservableList<String> addedGroups;
     private ArrayList<Room> rooms;
-    UserModel user = new UserModel(); // todo loggedUser?
+    private UserModel loggedUser;
     private String timeRegex = "[\\d]{2}:[\\d]{2}";
 
 
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-
+        loggedUser = Main.getLoggedUser();
         add.setDisable(true);
         remove.setDisable(true);
         locationDescription.setVisible(false);
@@ -213,17 +214,14 @@ public class Controller implements Initializable{
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
 
-        //allGroups = getGroupsFromDB();
-        allGroups = new ArrayList<>();
-        allGroups.add(new Group(1,"new",new ArrayList<UserModel>()));
-        allGroups.add(new Group(2,"TestGroup",new ArrayList<UserModel>()));
+        allGroups = getCalsFromDB();
         addedGroups = FXCollections.observableArrayList();
         groupList.setItems(addedGroups);
-        groupInfo = displayGroupInfo(allGroups);
+        groupInfo = displayCalInfo(allGroups);
         groupComboBox.setItems(groupInfo);
 
-        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH); // AutoCompleteMode ON
-        FxUtil.autoCompleteComboBox(groupComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
+        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.CONTAINING); // AutoCompleteMode ON
+        FxUtil.autoCompleteComboBox(groupComboBox, FxUtil.AutoCompleteMode.CONTAINING);
 
     }
 
@@ -231,8 +229,8 @@ public class Controller implements Initializable{
         return calendar.UserModel.getAllUsers();
     }
 
-    public static ArrayList<Group> getGroupsFromDB() {
-        return calendar.Group.getAllGroups();
+    public static ArrayList<Calendar> getCalsFromDB() {
+        return calendar.Calendar.getAllCalendarsFromDB();
     }
 
     @FXML
@@ -292,13 +290,6 @@ public class Controller implements Initializable{
         }
     }
 
-    // Get group from ID
-    public Group getGroup(int id) {
-        for (Group grp : allGroups) {
-            if(grp.getId() == id) return grp;
-        }
-        return null;
-    }
 
     @FXML
     public void createAppointment(ActionEvent event) {
@@ -325,9 +316,10 @@ public class Controller implements Initializable{
             } else {
                 room = new Room(1, "test", 1, 0, 23, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
             }
-            UserModel owner = new UserModel(); // todo FIX
             calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
-            Appointment app = new Appointment(getAppointmentId(),title,description,startDate,endDate,room,owner,cal,repeat,stoprepeat.getValue(),location);
+            Appointment app = new Appointment(getAppointmentId(),title,description,startDate,endDate,room,loggedUser,cal,repeat,stoprepeat.getValue(),location);
+            app.setAttendees(getAttendees(cal));
+            app.setGroups(getGroups()); // GROUPS = CALENDARS
             System.out.println(app.displayInfo());
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
             if(response.get("reply"))
@@ -340,6 +332,37 @@ public class Controller implements Initializable{
         }
 
     }
+
+    public ArrayList<Attendee> getAttendees(Calendar cal) {
+        ArrayList<Attendee> attendeeObjects = new ArrayList<>();
+        for(String user : attendees) {
+            UserModel usr = getUserModel(user.split(",")[1]);
+            boolean isOwner = false;
+            if(usr.equals(loggedUser)) isOwner = true;
+            attendeeObjects.add(new Attendee(usr,null,cal, LocalDateTime.now(), isOwner));
+        }
+        return attendeeObjects;
+    }
+
+    public ArrayList<Calendar> getGroups() {
+        ArrayList<Calendar> cals = new ArrayList<>();
+        for (String grp : addedGroups) {
+            int id = Integer.parseInt(grp.split(",")[1]);
+            Calendar cal = getCalFromId(id);
+            if(!cal.equals(null)) cals.add(cal);
+        }
+        return cals;
+    }
+
+    public Calendar getCalFromId(int id) {
+        for (Calendar c : allGroups) {
+            if(c.getId() == id) return c;
+        }
+        System.out.println("No calendar with ID = " + id);
+        return null;
+    }
+
+
 
     public ArrayList<Room> getRooms() {
         // todo: Get all rooms from server
@@ -362,9 +385,9 @@ public class Controller implements Initializable{
         return userInfo;
     }
 
-    public ObservableList<String> displayGroupInfo(ArrayList<Group> groups) {
+    public ObservableList<String> displayCalInfo(ArrayList<Calendar> groups) {
         ObservableList<String> groupInfo = FXCollections.observableArrayList();
-        for (Group grp : groups) {
+        for (Calendar grp : groups) {
             groupInfo.add(grp.displayInfo());
         }
         return groupInfo;

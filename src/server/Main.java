@@ -61,7 +61,7 @@ public class Main {
         Appointment app1 = appList.get(0);
         */
 
-        Hashtable<String, ArrayList<Room>> foo = RoomLogic.getRooms().data;
+       /* Hashtable<String, ArrayList<Room>> foo = RoomLogic.getRooms().data;
         ArrayList<Room> roomList = foo.get("reply");
         Room fuckRoom = roomList.get(2);
         fuckRoom.setId(3);
@@ -76,7 +76,7 @@ public class Main {
 
 
 
-        //int stuff = Logic.getLastGroupIdUsed();
+        //int stuff = Logic.getLastGroupIdUsed();*/
         //System.out.println("LAST ID: " + stuff);
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();

@@ -17,7 +17,7 @@ import java.util.Hashtable;
 public class Main extends Application {
     private Stage appParent;
     private Stage newAppointmentStage;
-    private UserModel loggedUser;
+    private static UserModel loggedUser;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -31,6 +31,10 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
+
+    public static UserModel getLoggedUser() {
+        return loggedUser;
+    }
 
     public void showNewAppointment(Stage parentStage, UserModel loggedUser) {
         this.appParent = parentStage;
