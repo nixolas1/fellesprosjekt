@@ -342,7 +342,7 @@ public class Controller implements Initializable{
 
     }
 
-    public ArrayList<Room> requestRoomList() {
+   /* public ArrayList<Room> requestRoomList() {
         if(updateTimeValid()) {
             Appointment app = createAppointmentObject();
             Query reply = client.Main.socket.send(new Query("getRooms", app));
@@ -351,7 +351,7 @@ public class Controller implements Initializable{
         }
         return null;
 
-    }
+    }*/
 
     public ArrayList<Attendee> getAttendees(Calendar cal) {
         ArrayList<Attendee> attendeeObjects = new ArrayList<>();
