@@ -240,7 +240,7 @@ public class Controller implements Initializable{
 
     public void initializeFields() {
         ObservableList<Attendee> attendeeObservableList = FXCollections.observableArrayList(app.attendees);
-        ObservableList<Group> groupObservableList = FXCollections.observableArrayList();//app.calendars);
+        ObservableList<Group> groupObservableList = FXCollections.observableArrayList(app.ca);
 
         headTitle.setText(app.getTitle());
         //work or private
