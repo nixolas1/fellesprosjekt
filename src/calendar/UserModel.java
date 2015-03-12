@@ -105,7 +105,11 @@ public class UserModel implements Serializable {
     public String displayInfo() {
         return getFirstName() + " " + getLastName() + ", " + getEmail();
     }
-    
+
+    public static UserModel getUserFromServer(final String email){
+        String[] split = email.split("@");
+        return getUserFromServer(split[0], split[1]);
+    }
 
     public static UserModel getUserFromServer(final String user, final String domain){
 
@@ -115,7 +119,6 @@ public class UserModel implements Serializable {
             put("domain", domain);
         }};
 
-        System.out.println("### "+data.toString());
         Query reply = client.Main.socket.send(new Query("getUser", data));
         Hashtable<String, UserModel> response = reply.data;
 

@@ -225,7 +225,7 @@ public class Logic {
             //String q = "INSERT INTO Appointment (appointmentid, title, description, location, starttime, endtime, repeatEndDate, repeat, Calendar_calendarid, Room_roomid) VALUES (NULL, 'testmoete', 'for aa teste vel', 'IT bygget', '2015-04-04 10:00:00', '2015-04-04 16:00:00', NULL, NULL, '5', '0');";
             //String q2 = "VALUES ('null', 'Testmøte3', 'blablabla', 'ITbygg', '2015-04-04 10:00:00', '2015-04-04 16:00:00', 'null', 'null', '6', '13');";
             //String query3 = "(`appointmentid`, `title`, `description`, `location`, `starttime`, `endtime`, `repeatEndDate`, `repeat`, `Calendar_calendarid`, `Room_roomid`) VALUES ";
-            String query2 = "(NULL, '"+app.getTitle()+"', "+description+", "+location+", '"+app.getStartDate()+"', '"+app.getEndDate()+"', "+repeatEndDate+", "+repeat+", "+app.getCal().getId()+", "+roomId+");";
+            String query2 = "(NULL, '"+app.getTitle()+"', "+description+", "+location+", '"+app.getStartDate()+"', '"+app.getEndDate()+"', "+repeatEndDate+", "+repeat+", "+", "+roomId+");";
             System.out.println("QUERY: " + query + query2);
             //System.out.println("QUERY: " + query);
             stmt.executeUpdate(query + query2);
