@@ -58,7 +58,6 @@ public class Appointment implements Serializable {
         if(location != null) this.location = location;
         if(repeatEveryXDays != null) this.repeatEvery = Integer.parseInt(repeatEveryXDays);
         if(endRepeatDate != null) this.endRepeatDate = LocalDate.parse(endRepeatDate, dateFormat);
-        //System.out.println(roomID+"!!!!!!!!!!!!" + this.room.getName());
     }
 
     public Appointment(int id, String title, String purpose, LocalDateTime startDate, LocalDateTime endDate, Room room, UserModel owner, Calendar cal, int repeatEvery, LocalDate endRepeatDate, String location){
