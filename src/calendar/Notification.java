@@ -43,7 +43,6 @@ public class Notification implements Serializable {
 
         this.app=Appointment.getAppointmentFromDB(appid);
         this.cal=new Calendar(Integer.parseInt(calid));
-        System.out.println("!!! "+email);
         this.user=server.database.Logic.getUser(email);
         this.text=text;
 

@@ -25,27 +25,31 @@ public class Appointment implements Serializable {
     int repeatEvery=0;
     Room room;
     UserModel owner;
-    Calendar cal;
-    Boolean appType;
-    Boolean otherLocation; //if work is chosen
 
+    Boolean isPrivate;
+    Boolean allDay; //if work is chosen
+    ArrayList<Calendar> cals = new ArrayList<>();
     public ArrayList<Attendee> attendees = new ArrayList<Attendee>();
-    //                                                              2015-03-06 12:00:00.0
 
     public Appointment() {
     }
 
-    public Appointment(String id, String title, String purpose, String location, String startDate, String endDate, String endRepeatDate, String repeatEveryXDays, String calID, String roomID){
+    public Appointment(String id, String title, String description, String location, String startDate,
+                       String endDate, String endRepeatDate, String repeatEveryXDays,
+                       String isPrivate, String isAllDay, String roomID){
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         this.title = title;
         this.id = Integer.parseInt(id);
-        this.purpose = purpose;
+        this.purpose = description;
         this.startDate = LocalDateTime.parse(startDate, format);
         this.endDate = LocalDateTime.parse(endDate, format);
-        this.cal = new Calendar(Integer.parseInt(calID));
-        //can be null
+        this.isPrivate = Boolean.parseBoolean(isPrivate);
+        this.allDay = Boolean.parseBoolean(isAllDay);
+
+        this.cals = Calendar.getAllCalendarsInAppointment(this.id);
+        this.attendees = Attendee.getAllAttendeesForAppointment(this.id);
         if(roomID != null) {
             String[] roomRow = server.database.Logic.getRow("Room", "roomid", roomID);
             String name = roomRow[1];
@@ -54,11 +58,9 @@ public class Appointment implements Serializable {
             int closesAt = Integer.parseInt(roomRow[4]);
             this.room = new Room(Integer.parseInt(roomID), name, capacity, opensAt, closesAt, new ArrayList<Utility>());
         }
-
         if(location != null) this.location = location;
         if(repeatEveryXDays != null) this.repeatEvery = Integer.parseInt(repeatEveryXDays);
         if(endRepeatDate != null) this.endRepeatDate = LocalDate.parse(endRepeatDate, dateFormat);
-        //System.out.println(roomID+"!!!!!!!!!!!!" + this.room.getName());
     }
 
     public Appointment(int id, String title, String purpose, LocalDateTime startDate, LocalDateTime endDate, Room room, UserModel owner, Calendar cal, int repeatEvery, LocalDate endRepeatDate, String location){
@@ -69,7 +71,8 @@ public class Appointment implements Serializable {
         this.endDate=endDate;
         this.room=room;
         this.owner=owner;
-        this.cal = cal;
+        this.cals = Calendar.getAllCalendarsInAppointmentClientside(this.id, client.Main.socket);
+        this.attendees = Attendee.getAllAttendeesForAppointmentClientside(this.id, client.Main.socket);
         this.location = location;
         this.repeatEvery = repeatEvery;
         this.endRepeatDate=endRepeatDate;
@@ -93,7 +96,7 @@ public class Appointment implements Serializable {
 
     public static Appointment getAppointmentFromDB(String id){ //Server side only!
         String[] a = server.database.Logic.getRow("Appointment", "appointmentid", id);
-        return new Appointment(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9]);
+        return new Appointment(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10]);
     }
 
     public ArrayList<Appointment> getCollisions(ArrayList<Appointment> appointments){
@@ -124,8 +127,8 @@ public class Appointment implements Serializable {
     public UserModel getOwner() {
         return owner;
     }
-    public Calendar getCal() {
-        return cal;
+    public ArrayList<Calendar> getCals() {
+        return cals;
     }
     public ArrayList<Attendee> getAttendees() {
         return attendees;
@@ -163,7 +166,7 @@ public class Appointment implements Serializable {
     public void setAttendees(ArrayList<Attendee> attendees) {
         this.attendees = attendees;
     }
-
+    public void addCalender(Calendar cal){cals.add(cal);}
 
     public void addAttendee(Attendee attendee) {
         attendees.add(attendee);
@@ -186,8 +189,8 @@ public class Appointment implements Serializable {
     public void setOwner(UserModel owner) {
         this.owner = owner;
     }
-    public void setCal(Calendar cal) {
-        this.cal = cal;
+    public void setCals(ArrayList<Calendar> cals) {
+        this.cals = cals;
     }
 
 public String displayInfo() {
