@@ -155,6 +155,11 @@ public class Controller implements Initializable{
         }
     }
 
+    @FXML
+    public void cancelCreateRoom(ActionEvent event) {
+        Main.closeStage();
+    }
+
     public boolean valid(String text, String match, int max, int extra) {
         if(extra==2 && valid(text, match, max,0) && valid(from.getText(), match, max,0)) {
             return updateTimeValid();

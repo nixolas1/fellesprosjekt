@@ -12,9 +12,9 @@ import javafx.stage.Stage;
  * Created by Rae on 11.03.15.
  */
 public class Main extends Application {
-    private Stage roomParent;
-    private Stage newRoomStage;
-    private UserModel loggedUser;
+    private static Stage roomParent;
+    private static Stage newRoomStage;
+    private static UserModel loggedUser;
 
     @Override
     public void start(Stage primaryStage) {
@@ -28,9 +28,9 @@ public class Main extends Application {
         }
     }
 
-    public void showNewRoom(Stage parentStage, UserModel loggedUser) {
-        this.roomParent = parentStage;
-        this.loggedUser = loggedUser;
+    public static void showNewRoom(Stage parentStage, UserModel loggedUser) {
+        roomParent = parentStage;
+        loggedUser = loggedUser;
 
         try {
             newRoomStage = new Stage();
@@ -38,7 +38,7 @@ public class Main extends Application {
             Scene scene = new Scene(pane);
             newRoomStage.setScene(scene);
             newRoomStage.setTitle("Nytt rom");
-            newRoomStage.initOwner(this.roomParent);
+            newRoomStage.initOwner(roomParent);
             newRoomStage.initModality(Modality.WINDOW_MODAL);
             newRoomStage.show();
         } catch (Exception ex) {
@@ -49,6 +49,10 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public static void closeStage() {
+        newRoomStage.close();
     }
 
 }
