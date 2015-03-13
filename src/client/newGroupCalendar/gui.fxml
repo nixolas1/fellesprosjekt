@@ -16,9 +16,7 @@
       <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="71.0" valignment="CENTER" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" valignment="CENTER" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="134.0" minHeight="134.0" prefHeight="134.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="130.0" minHeight="130.0" prefHeight="130.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
@@ -30,24 +28,12 @@
             <Font name="Helvetica Neue" size="37.0" />
          </font>
       </Text>
-      <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin>
-      </FlowPane>
-      <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5" />
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="7" />
-      <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-      <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
-         <children>
-            <Pane prefHeight="130.0" prefWidth="360.0" />
-         </children></FlowPane>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="8">
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
          <children>
             <Button id="cancel" fx:id="cancel" maxHeight="36.0" maxWidth="100.0" minHeight="36.0" minWidth="80.0" mnemonicParsing="false" onAction="#cancel" prefHeight="36.0" prefWidth="80.0" text="Avbryt" />
          </children>
       </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
          <children>
             <Button id="create" fx:id="create" maxHeight="36.0" maxWidth="370.0" minHeight="36.0" minWidth="370.0" mnemonicParsing="false" onAction="#createGroup" prefHeight="36.0" prefWidth="370.0" stylesheets="@groupGui.css" text="Opprett gruppe" textFill="WHITE">
                <padding>
@@ -59,9 +45,9 @@
             </Button>
          </children>
       </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
-            <TextField prefWidth="370.0" promptText="Beskrivelse av gruppe" />
+            <TextArea fx:id="description" prefHeight="120.0" prefWidth="370.0" promptText="Beskrivelse av gruppa" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -69,7 +55,7 @@
             <TextField id="name" fx:id="name" prefHeight="26.0" prefWidth="370.0" promptText="Navn på gruppa" />
          </children>
       </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
          <children>
             <Label prefHeight="25.0" prefWidth="82.0" text="Beskrivelse">
                <font>
@@ -83,12 +69,12 @@
             <Label prefHeight="25.0" prefWidth="82.0" text="Navn" />
          </children>
       </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
          <children>
             <Label text="Deltakere" />
          </children>
       </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <children>
             <ComboBox id="usersComboBox" fx:id="usersComboBox" prefHeight="26.0" prefWidth="160.0" promptText="Finn deltaker" />
             <Button id="remove" fx:id="remove" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUser" text="&lt;" />
