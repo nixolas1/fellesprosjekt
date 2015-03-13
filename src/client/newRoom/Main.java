@@ -18,7 +18,7 @@ import java.util.Hashtable;
 public class Main extends Application {
     private static Stage roomParent;
     private static Stage newRoomStage;
-    private UserModel loggedUser;
+    private static UserModel loggedUser;
 
     @Override
     public void start(Stage primaryStage) {

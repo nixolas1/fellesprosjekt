@@ -3,7 +3,6 @@ package client.newRoom;
 import calendar.Room;
 import calendar.Utility;
 import client.*;
-import client.newRoom.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -15,11 +14,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import network.Query;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -136,7 +133,6 @@ public class Controller implements Initializable{
 
     @FXML
     public void removeUtility(ActionEvent event) {
-        // todo
         String utility = utilityList.getSelectionModel().getSelectedItem().toString();
         addedUtilities.remove(utility);
         utilities.add(utility);
@@ -188,7 +184,6 @@ public class Controller implements Initializable{
             } else {
                 System.out.println("an error occured");
             }
-            //todo add to DB
         }
     }
 
