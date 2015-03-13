@@ -1,5 +1,6 @@
 package client.newRoom;
 
+import calendar.Room;
 import calendar.UserModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,13 +8,16 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import network.Query;
+
+import java.util.Hashtable;
 
 /**
  * Created by Rae on 11.03.15.
  */
 public class Main extends Application {
-    private Stage roomParent;
-    private Stage newRoomStage;
+    private static Stage roomParent;
+    private static Stage newRoomStage;
     private UserModel loggedUser;
 
     @Override
@@ -45,6 +49,15 @@ public class Main extends Application {
             System.out.println("Exception found in newRoom");
             ex.printStackTrace();
         }
+    }
+
+    public static void close() {
+        newRoomStage.close();
+    }
+
+    public static Hashtable<String, Boolean> createRoom(Room room) {
+        Query reply = client.Main.socket.send(new Query("createRoom", room));
+        return reply.data;
     }
 
     public static void main(String[] args) {
