@@ -46,7 +46,7 @@ public class Main extends Application {
     }
 
     public static UserModel getLoggedUser() {
-        return loggedUser;
+        return user;
     }
 
     public static void closeStage() {
