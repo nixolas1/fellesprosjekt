@@ -48,4 +48,10 @@ public class RoomLogic {
         ArrayList*/
         return appList;
     }
+
+    public static ArrayList<Room> initiateRoomLogic(Hashtable<String, Appointment> data){
+        Appointment appointment = data.get("data");
+
+
+    }
 }
