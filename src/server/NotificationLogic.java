@@ -32,7 +32,7 @@ public class NotificationLogic {
         ArrayList<Notification> notiList = new ArrayList<>();
         for (List<String>a : list){
             System.out.println(a.toString());
-            notiList.add(new Notification(a.get(0), a.get(1), a.get(2), a.get(3), a.get(4), a.get(5), a.get(6)));
+            notiList.add(new Notification(a.get(0), a.get(1), a.get(2), a.get(3), a.get(4)));
         }
 
         return notiList;

@@ -15,7 +15,6 @@ import java.util.Hashtable;
  */
 public class Notification implements Serializable {
     public Appointment app;
-    public Calendar cal;
     public UserModel user;
     public String text="";
     public boolean seen=false;
@@ -30,7 +29,6 @@ public class Notification implements Serializable {
 
     public Notification(Appointment app, Calendar cal, UserModel user, String text, boolean seen, LocalDateTime created, LocalDateTime dateSeen){
         this.app=app;
-        this.cal=cal;
         this.user=user;
         this.text=text;
         this.seen=seen;
@@ -38,18 +36,15 @@ public class Notification implements Serializable {
         this.dateSeen=dateSeen;
     }
 
-    public Notification(String appid, String calid, String email, String text, String seen, String created, String dateSeen){
+    public Notification(String appid, String email, String text, String seen, String created){
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 
         this.app=Appointment.getAppointmentFromDB(appid);
-        this.cal=new Calendar(Integer.parseInt(calid));
         this.user=server.database.Logic.getUser(email);
         this.text=text;
 
         if(seen != null)
             this.seen=Boolean.parseBoolean(seen);
-        if(dateSeen != null)
-            this.dateSeen=LocalDateTime.parse(dateSeen, format);
         if(created != null)
             this.created=LocalDateTime.parse(created, format);
     }

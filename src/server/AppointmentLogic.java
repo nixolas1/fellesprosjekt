@@ -33,8 +33,10 @@ public class AppointmentLogic {
             String cal_id = data.get("id");
             System.out.println("Getting appointments for cal: "+cal_id);
             if(server.database.Logic.inDatabase("Calendar", "calendarid", cal_id)){
+                //"SELECT * FROM Appointment INNER JOIN Calendar_had_Appointment on groupmember.employeegroup = employeegroup.groupID WHERE groupmember.user=" + userID);
+                //ArrayList<List<String>> fuck = server.database.Logic.getAllRowsWhere("Calendar_has_Appointment", "Calendar_calendarid = " + cal_id)
                 ArrayList<Appointment> apps = getModelsFromDBOutput(
-                        server.database.Logic.getAllRowsWhere("Appointment", "Calendar_calendarid = " + cal_id));
+                            server.database.Logic.getAllRowsWhere("Appointment", "Calendar_calendarid = " + cal_id));
                 System.out.println(apps.toString());
                 return new Query("getAppointments", apps);
             }
