@@ -1,9 +1,6 @@
 package server.database;
 
-import calendar.Appointment;
-import calendar.Calendar;
-import calendar.Group;
-import calendar.UserModel;
+import calendar.*;
 import network.Query;
 import com.sun.org.apache.regexp.internal.RESyntaxException;
 //import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
@@ -239,6 +236,59 @@ public class Logic {
             closeDB(stmt);
         }
         return true;
+    }
+
+    public static int getLastRoomIdUsed(){
+        String query = "SELECT roomid FROM Room ORDER BY roomid DESC LIMIT 1;";
+        ResultSet result = null;
+        Statement stmt = null;
+        int lastIdUsed = 0;
+
+        try{
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("SQLException triggered in getLastRoomIdUsed(), 1. catch block: " + e);
+        } try {
+            if (result.next()){
+                lastIdUsed = result.getInt(1);
+                //System.out.println("lastIdUsed: " + lastIdUsed);
+            }
+        } catch (SQLException f){
+            System.out.println("SQLException triggered in getLastRoomIdUsed(), 2. catch block: " + f);
+        } finally {
+            closeDB(stmt);
+        } return lastIdUsed;
+    }
+
+    public static Query createRoom(Hashtable<String, Room> data) {
+        Room room = data.get("data");
+        int roomId = getLastRoomIdUsed() + 1;
+        System.out.println(roomId);
+        Statement stmt = null;
+        String query = "INSERT INTO Room (roomid, name, capacity, opensAt, closesAt) VALUES (" + roomId + ", '" + room.getName() + "', " + room.getCapacity() + ", " + room.getOpensAt() + ", " + room.getClosesAt() + ");";
+        try {
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+            System.out.println(String.format("Room '%s' successfully added to Room with id = %s", room.getName(), roomId));
+        } catch (SQLException e) {
+            System.out.println("SQLException triggered in createRoom(), 1. try block: " + e);
+            return new Query("createRoom", false);
+        }
+        for (int i = 0; i < room.getUtilities().size() - 1; i++) {
+            try {
+                String utilityQuery = "INSERT INTO Room_has_Utility (Room_roomid, Utility_utilityid) VALUES (" + roomId + ", " + room.getUtilities().get(i).getId() + ");";
+                stmt = conn.createStatement();
+                stmt.executeUpdate(utilityQuery);
+            } catch(SQLException e) {
+                System.out.println("SQLException triggered in createRoom(), 2. try block: " + e);
+                return new Query("createRoom", false);
+            } catch(Exception f) {
+                System.out.println("Exception triggered in createRoom(): " + f);
+            }
+        } closeDB(stmt);
+        System.out.println(String.format("Room '%s' successfully added to Room with id = %s", room.getName(), roomId));
+        return new Query("createRoom", true);
     }
 
 

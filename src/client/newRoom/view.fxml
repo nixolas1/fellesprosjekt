@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: #ebebeb;" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.newRoom.Controller">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="370.0" minWidth="370.0" prefWidth="370.0" />
+      <ColumnConstraints maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
+  </columnConstraints>
+  <rowConstraints>
+      <RowConstraints maxHeight="60.0" minHeight="60.0" prefHeight="60.0" valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="134.0" minHeight="134.0" prefHeight="134.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Pane prefHeight="67.0" prefWidth="467.0" style="-fx-border-color: rgba(0,0,0,0.4); -fx-border-width: 0 0 1px 0;" GridPane.columnSpan="3">
+         <children>
+            <Text layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nytt rom" textAlignment="CENTER" wrappingWidth="460.35498046875">
+               <font>
+                  <Font name="Helvetica Neue" size="37.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+         <children>
+            <Label prefHeight="25.0" text="Navn" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <children>
+            <TextField fx:id="name" prefHeight="26.0" prefWidth="370.0" promptText="Navn på rommet" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+         <children>
+            <Label prefHeight="25.0" text="Kapasitet" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+         <children>
+            <TextField fx:id="capacity" layoutX="-0.0" prefHeight="26.0" prefWidth="54.0" promptText="Tall" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
+         <children>
+            <Label fx:id="timeLabel" prefHeight="25.0" text="Åpningstider" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+         <children>
+            <TextField fx:id="from" maxHeight="-Infinity" maxWidth="61.0" minHeight="-Infinity" prefHeight="26.0" prefWidth="54.0" promptText="00:00" />
+            <Label fx:id="toLabel" layoutX="67.0" layoutY="5.0" text="til" />
+            <TextField fx:id="to" layoutX="90.0" maxHeight="-Infinity" maxWidth="56.0" minHeight="-Infinity" prefHeight="26.0" prefWidth="87.0" promptText="00:00" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="8">
+         <children>
+            <Label text="Utstyrsliste" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+         <children>
+            <ComboBox fx:id="utilityComboBox" prefHeight="26.0" prefWidth="160.0" promptText="Finn utstyr" />
+            <Button fx:id="add" layoutX="164.0" mnemonicParsing="false" onAction="#addUtility" text="&gt;" />
+            <Button fx:id="remove" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUtility" text="&lt;" />
+            <ListView fx:id="utilityList" layoutX="195.0" prefHeight="130.0" prefWidth="175.0" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="10">
+         <children>
+            <Button fx:id="cancel" maxHeight="36.0" maxWidth="100.0" minHeight="36.0" minWidth="80.0" mnemonicParsing="false" onAction="#cancelCreateRoom" prefHeight="36.0" prefWidth="80.0" text="Avbryt" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+         <children>
+            <Button fx:id="create" maxHeight="36.0" maxWidth="370.0" minHeight="36.0" minWidth="370.0" mnemonicParsing="false" onAction="#createRoom" prefHeight="36.0" prefWidth="370.0" stylesheets="@gui.css" text="Opprett rom" textFill="WHITE">
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font name="Helvetica Neue" size="13.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</GridPane>
