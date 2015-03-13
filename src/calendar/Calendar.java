@@ -37,7 +37,7 @@ public class Calendar implements Serializable {
     }
 
     public static ArrayList<Calendar> getAllCalendarsInAppointment(int id){
-        ArrayList<List<String>> rows= server.database.Logic.getAllRowsWhere("Appointment_has_Calendar", "Appointment_appointmentid = " + id);
+        ArrayList<List<String>> rows= server.database.Logic.getAllRowsWhere("Calendar_has_Appointment", "Appointment_appointmentid = " + id);
         ArrayList<Calendar> ret = new ArrayList<>();
         for(List<String> c : rows){
             ret.add(new Calendar(c.get(1))); //TODO check that it is correct index
@@ -46,7 +46,7 @@ public class Calendar implements Serializable {
     }
 
     public static ArrayList<Calendar> getAllCalendarsInAppointmentClientside(int id, ThreadClient socket){
-        ArrayList<List<String>> rows= ClientDB.getAllTableRowsWhere("Appointment_has_Calendar", "Appointment_appointmentid = " + id, socket);
+        ArrayList<List<String>> rows= ClientDB.getAllTableRowsWhere("Calendar_has_Appointment", "Appointment_appointmentid = " + id, socket);
         ArrayList<Calendar> ret = new ArrayList<>();
         for(List<String> c : rows){
             ret.add(new Calendar(c.get(1))); //TODO check that it is correct index
