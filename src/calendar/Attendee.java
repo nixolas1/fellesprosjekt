@@ -14,25 +14,30 @@ public class Attendee implements Serializable {
 
     private UserModel user;
     private int appointmentid;
-    private Calendar cal;
     private LocalDateTime invited, answered, alarm;
     private Boolean attending, isOwner;
 
 
-    public Attendee(UserModel user, int appointment, Calendar cal, LocalDateTime invited, LocalDateTime answered, Boolean attending, Boolean isOwner){
+    public Attendee(UserModel user, int appointment, LocalDateTime invited, LocalDateTime answered, Boolean attending, Boolean isOwner){
         this.user=user;
         this.appointmentid=appointment;
-        this.cal=cal;
         this.invited=invited;
         this.answered=answered;
         this.attending=attending;
         this.isOwner=isOwner;
     }
 
-    public Attendee(UserModel user, int app, Calendar cal, LocalDateTime invited, Boolean isOwner) {
+    public Attendee(UserModel user, int app, LocalDateTime invited, Boolean isOwner) {
         this.user=user;
         this.appointmentid=app;
-        this.cal=cal;
+        this.invited=invited;
+        this.answered=null;
+        this.attending=null;
+        this.isOwner=isOwner;
+    }
+
+    public Attendee(UserModel user, LocalDateTime invited, Boolean isOwner) {
+        this.user=user;
         this.invited=invited;
         this.answered=null;
         this.attending=null;
