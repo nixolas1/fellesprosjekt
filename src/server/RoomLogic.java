@@ -112,6 +112,10 @@ public class RoomLogic {
 
         // Henter alle avtaler
 
+        int[] allCalendarIds;
+        server.database.Logic.getAllRows("Appointment");
+
+        AppointmentLogic.getCalendarAppointments()
 
 
 

@@ -84,6 +84,10 @@ public class Calendar implements Serializable {
         return this.members;
     }
 
+    public void addAppointment(Appointment appointment){
+        appointments.add(appointment);
+    }
+
     public int getId(){
         return this.id;
     }
