@@ -2,7 +2,7 @@ package client.newRoom;
 
 import calendar.Room;
 import calendar.Utility;
-import client.newRoom.*;
+import client.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -42,7 +43,10 @@ public class Controller implements Initializable{
 
         create.setDisable(true);
         utilities = getUtilitiesFromDB();
+        addedUtilities = FXCollections.observableArrayList();
+        utilityComboBox.setItems(utilities);
         utilityList.setItems(addedUtilities);
+
 
         name.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -119,12 +123,19 @@ public class Controller implements Initializable{
 
     @FXML
     public void addUtility(ActionEvent event) {
-        // todo
+        String utility = (String) utilityComboBox.getValue();
+        System.out.println(utility);
+        if (!(addedUtilities.contains(utility))) {
+            addedUtilities.add(utility);
+            utilities.remove(utilityComboBox.getValue());
+        }
     }
 
     @FXML
     public void removeUtility(ActionEvent event) {
-        // todo
+        String utility = utilityList.getSelectionModel().getSelectedItem().toString();
+        addedUtilities.remove(utility);
+        utilities.add(utility);
     }
 
     public boolean validTime(String match) {
@@ -142,6 +153,7 @@ public class Controller implements Initializable{
 
     public boolean checkIfAllValid(){
         Boolean ret = true;
+        updateTimeValid();
         if(name.getOpacity()!=2.0) ret = false;
         if(from.getOpacity()!=2.0) ret = false;
         if(to.getOpacity()!=2.0) ret = false;
@@ -159,37 +171,45 @@ public class Controller implements Initializable{
     public void createRoom(ActionEvent event) {
         if (checkIfAllValid()) {
             String name = this.name.getText();
-            int opensAt = Integer.parseInt(from.getText());
-            int closesAt = Integer.parseInt(to.getText());
+            int opensAt = (Integer.parseInt(from.getText(0,2))*60)+Integer.parseInt(from.getText(3,5));
+            int closesAt = (Integer.parseInt(to.getText(0,2))*60)+Integer.parseInt(to.getText(3,5));
             int capacity = Integer.parseInt(this.capacity.getText());
             //todo make utility objects from Utilities list
             ArrayList<Utility> utilityObjects = makeUtilityObjects();
             Room room = new Room(-1,name,capacity,opensAt,closesAt,utilityObjects);
-            //todo add to DB
+            System.out.println("Room " + name + " created");
+            Boolean reply = Main.createRoom(room).get("reply");
+            if(reply) {
+                System.out.println("success");
+            } else {
+                System.out.println("an error occured");
+            }
         }
     }
 
     public ArrayList<Utility> makeUtilityObjects() {
+        if (addedUtilities.size()<=0) return null;
         ArrayList<Utility> uts = new ArrayList<>();
         for (String u : addedUtilities) {
             String name = u.split(",")[0];
-            int id = Integer.parseInt(u.split(",")[1]);
+            int id = Integer.parseInt(u.split(",")[1].trim());
             uts.add(new Utility(id, name));
         }
         return uts;
     }
 
     public ObservableList<String> getUtilitiesFromDB() {
-        return null;
-    }
-
-
-    public boolean valid(String text, String match, int max, int extra) {
-        if(extra==2 && valid(text, match, max,0) && valid(from.getText(), match, max,0)) {
-            return updateTimeValid();
+        //Fra DB:
+        // ID, NAVN
+        ArrayList<List<String>> utsFromDB = network.ClientDB.getAllTableRows("Utility",client.Main.socket);
+        ObservableList<String> uts = FXCollections.observableArrayList();
+        for(List<String> li : utsFromDB) {
+            String u = li.get(1) + ", " + li.get(0);
+            uts.add(u);
         }
-        return text.length() <= max && text.matches(match);
+        return uts;
     }
+
 
     public boolean updateTimeValid() {
         return validTime(timeRegex);
@@ -204,8 +224,9 @@ public class Controller implements Initializable{
         return false;
     }
 
+    @FXML
     public void cancelCreateRoom(ActionEvent event) {
-        // dosht
+        client.newRoom.Main.close();
     }
 
 }
