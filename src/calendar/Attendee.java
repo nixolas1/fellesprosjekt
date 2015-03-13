@@ -81,4 +81,8 @@ public class Attendee implements Serializable {
         return ret;
     }
 
+    public UserModel getUser(){
+        return this.user;
+    }
+
 }

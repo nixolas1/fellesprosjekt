@@ -1,7 +1,6 @@
 package server;
 
-import calendar.Appointment;
-import calendar.Room;
+import calendar.*;
 import network.Query;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -49,9 +48,72 @@ public class RoomLogic {
         return appList;
     }
 
-    public static ArrayList<Room> initiateRoomLogic(Hashtable<String, Appointment> data){
-        Appointment appointment = data.get("data");
+    public static Query initiateRoomLogic(Hashtable<String, Appointment> data){
+        ArrayList<String> attendeeList = new ArrayList<>();
+        int numberOfConflicts = 0;                           // Teller for hvor mange overlapp man vil få når flere folk er med i flere grupper på samme arrangement
+        int numberOfDistinctAttendees;                      // Det endelig antallet personer som deltar, uten overlapp
+        Appointment appointment = data.get("data");        // Henter data'en fra Hashtable
+
+        // Løper gjennom alle inviterte til en arrangement
+        for (Attendee attendee : appointment.getAttendees()){
+            String email = attendee.getUser().getEmail();
+            if (! attendeeList.contains(email)){
+                attendeeList.add(email);
+            } else {
+                numberOfConflicts += 1;
+            }
+        }
+
+        // Løper gjennom alle medlemmene i alle gruppekalenderene i appointment objektet
+        for (Calendar groupCalendar : appointment.getCals()){
+            ArrayList<UserModel> memberList= groupCalendar.getMembers();
+            for (UserModel member : memberList){
+                if (! attendeeList.contains(member.getEmail())){
+                    attendeeList.add(member.getEmail());
+                } else {
+                    numberOfConflicts += 1;
+                }
+            }
+
+        }
+
+        numberOfDistinctAttendees = attendeeList.size();
+
+        ArrayList<List<String>> foo = server.database.Logic.getAllRows("Room");
+
+        ArrayList<Room> allCapableRooms = new ArrayList<>();            // List over alle rom med nok kapasitet til dette møtet
+
+        // Løper gjennom alle rommene
+        for (List<String> rooms : foo){
+            Room room = new Room();
+            int count = 0;
+            for (String roomAttribute : rooms){
+                for (int i = 0; i <rooms.size(); i++){
+                    // Legger kun til rommene med bra nok kapasitet
+                    if (numberOfDistinctAttendees <= Integer.parseInt(rooms.get(2))) {
+                        switch (i) {
+                            case 0:
+                                room.setId(Integer.valueOf(rooms.get(0)));
+                            case 1:
+                                room.setName(rooms.get(1));
+                            case 2:
+                                room.setCapacity(Integer.valueOf(rooms.get(2)));
+                            case 3:
+                                room.setOpensAt(Integer.valueOf(rooms.get(3)));
+                            case 4:
+                                room.setClosesAt(Integer.valueOf(rooms.get(4)));
+                        }
+                    }
+
+                }
+                allCapableRooms.add(room);
+            }
+        }
+
+        // Henter alle avtaler
 
 
+        return new Query("roomLogic", roomList)
     }
+
 }
