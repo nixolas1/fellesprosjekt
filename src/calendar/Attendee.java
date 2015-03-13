@@ -5,6 +5,7 @@ import network.ThreadClient;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +33,15 @@ public class Attendee implements Serializable {
     public Attendee(UserModel user, int app, Calendar cal, LocalDateTime invited, Boolean isOwner) {
         this.user=user;
         this.appointmentid=app;
+        this.cal=cal;
+        this.invited=invited;
+        this.answered=null;
+        this.attending=null;
+        this.isOwner=isOwner;
+    }
+
+    public Attendee(UserModel user, Calendar cal, LocalDateTime invited, Boolean isOwner) {
+        this.user=user;
         this.cal=cal;
         this.invited=invited;
         this.answered=null;

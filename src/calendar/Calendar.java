@@ -1,5 +1,6 @@
 package calendar;
 
+import client.*;
 import javafx.scene.paint.Color;
 import network.ClientDB;
 import network.Query;
@@ -8,6 +9,7 @@ import server.database.*;
 
 import javax.jws.soap.SOAPBinding;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -54,6 +56,11 @@ public class Calendar implements Serializable {
         return ret;
     }
 
+    public Calendar(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public String getColor(){
         return getColor(1.0);
     }
@@ -89,6 +96,27 @@ public class Calendar implements Serializable {
         return this.description;
     }
 
+  /*  public ArrayList<Calendar> getAllCalendarsFromDB() {
+        try {
+            Query reply = client.Main.socket.send(new Query("getAllCalendars", new ArrayList<Calendar>()));
+            Hashtable<ArrayList<Calendar>, Boolean> response = reply.data;
+            return response.get("reply");
+        } catch(Exception e) {
+            System.err.println("Unable to receive calendars from server:");
+            e.printStackTrace();
+            return null;
+        }
+    }*/
+
+    public static ArrayList<Calendar> getAllCalendarsFromDB() {
+        ArrayList<Calendar> cals = new ArrayList<>();
+        ArrayList<List<String>> calendars = network.ClientDB.getAllTableRows("Calendar",client.Main.socket);
+        for(List<String> li : calendars) {
+            if(Boolean.parseBoolean(li.get(4))) cals.add(new Calendar(Integer.parseInt(li.get(0)), li.get(1)));
+        }
+        return cals;
+    }
+
     public static int createGroupInDatabase(Calendar groupCalendar, ThreadClient socket){
         try {
             Query reply = socket.send(new Query("createGroup", groupCalendar));
@@ -99,5 +127,9 @@ public class Calendar implements Serializable {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    public String displayInfo() {
+        return name + ", " + id;
     }
 }
