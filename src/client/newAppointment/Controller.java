@@ -234,6 +234,7 @@ public class Controller implements Initializable{
         return calendar.Calendar.getAllCalendarsFromDB();
     }
 
+
     @FXML
     public void addUser(ActionEvent event) {
         String usr = (String) FxUtil.getComboBoxValue(usersComboBox);
@@ -416,7 +417,8 @@ public class Controller implements Initializable{
 
     public boolean checkIfAllValid(){
         Boolean ret = true;
-        if(title.getText()==null || title.getText()=="") ret = false;
+
+        if(title.getText()==null || title.getText().equals("")) ret = false;
         if(description.getText()==null || description.getText()=="") ret = false;
         if(locationDescription.getText()==null || locationDescription.getText()=="") ret = false;
         if(date.getValue()==null || date.getValue().toString().equals("")) ret=false;
@@ -432,6 +434,10 @@ public class Controller implements Initializable{
                 ret = false;
                 System.out.println("Room problem [WORK only]");
             }
+          /*  if(!otherLocation.isSelected() && (room.getValue.equals(null) || room.getValue().equals(""))) {
+                ret = false;
+            }*/
+
         }
         if(personal.isSelected() && (locationDescription.getText().equals("") || locationDescription.getText().equals(null))) {
             ret = false;
@@ -440,20 +446,20 @@ public class Controller implements Initializable{
         if(!allDay.isSelected()) {
             if (from.getOpacity() != 2.0) {
                 ret = false;
-                System.out.println("From invalid");
+                System.out.println("From problem");
             }
             if (to.getOpacity() != 2.0) {
                 ret = false;
-                System.out.println("To invalid");
+                System.out.println("To problem");
             }
         }
         if(date.getOpacity()!=2.0) {
             ret = false;
-            System.out.println("Date invalid");
+            System.out.println("Date problem");
         }
         if(stoprepeat.getOpacity()==3.0) {
             ret = false;
-            System.out.println("stoprepeat invalid");
+            System.out.println("stoprepeat problem");
         }
         // todo room
         if (description.getText().equals("")) ret = false;

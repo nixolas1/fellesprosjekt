@@ -2,6 +2,7 @@ package client.calendar;
 
 import calendar.Appointment;
 import calendar.UserModel;
+import client.newAppointment.FxUtil;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,10 +27,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ThreadClient;
+import server.User;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -66,7 +69,7 @@ public class Controller {
     @FXML private Text satDate;
     @FXML private Text sunDate;
     @FXML private GridPane calendarGrid;
-    @FXML public ComboBox notifCombo;
+    @FXML public ComboBox notifCombo, findUserCalendar, findCalendar;
     @FXML public Text notifCount;
 
 
@@ -77,10 +80,15 @@ public class Controller {
     private Integer[] cals = new Integer[]{1,2,3,4};
     private Notifications notifs;
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
+    private ArrayList<UserModel> allUsersUM;
 
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
+        allUsersUM = getAllUserModels();
+        findUserCalendar.setItems(FXCollections.observableArrayList(userModelsToString(allUsersUM)));
+        FxUtil.autoCompleteComboBox(findUserCalendar, FxUtil.AutoCompleteMode.CONTAINING); // AutoComplete ON
+        FxUtil.autoCompleteComboBox(findCalendar, FxUtil.AutoCompleteMode.CONTAINING);
         calDate = getLastMonday(calDate);
         updateYear();
         updateMonth();
@@ -91,6 +99,14 @@ public class Controller {
         importFont();
         notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
 
+    }
+
+    public ArrayList<UserModel> getAllUserModels() {
+        return UserModel.getAllUsers();
+    }
+
+    public ArrayList<String> userModelsToString(ArrayList<UserModel> users) {
+        return UserModel.convertUserModelsToStringArrayList(users);
     }
 
     public void importFont() {
@@ -168,6 +184,15 @@ public class Controller {
         client.newAppointment.Main newApp = new client.newAppointment.Main();
         try {
             newApp.showNewAppointment(primaryStage, Main.user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onBtnShowNewRoom(ActionEvent event) {
+        client.newRoom.Main newRoom = new client.newRoom.Main();
+        try {
+            newRoom.showNewRoom(primaryStage, Main.user);
         } catch (Exception e) {
             e.printStackTrace();
         }

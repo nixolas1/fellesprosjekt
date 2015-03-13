@@ -136,5 +136,13 @@ public class UserModel implements Serializable {
         return response.get("reply");
     }
 
+    public static ArrayList<String> convertUserModelsToStringArrayList(ArrayList<UserModel> users) {
+        ArrayList<String> converted = new ArrayList<>();
+        for (UserModel user : users) {
+            converted.add(user.getFirstName() + " " + user.getLastName() + ", " + user.getEmail());
+        }
+        return converted;
+    }
+
 
 }
