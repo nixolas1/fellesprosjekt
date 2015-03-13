@@ -106,7 +106,7 @@ public class Controller {
     }
 
     public ArrayList<String> userModelsToString(ArrayList<UserModel> users) {
-        return UserModel.convertUserModelsToStingArrayList(users);
+        return UserModel.convertUserModelsToStringArrayList(users);
     }
 
     public void importFont() {
