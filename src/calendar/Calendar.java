@@ -69,6 +69,7 @@ public class Calendar implements Serializable {
     }
 
     public static int createGroupInDatabase(Calendar groupCalendar, ThreadClient socket){
+        System.out.println("createGroupInDatabase()");
         try {
             Query reply = socket.send(new Query("createGroup", groupCalendar));
             Hashtable<String, String> response = reply.data;
