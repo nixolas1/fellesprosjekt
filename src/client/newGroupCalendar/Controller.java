@@ -112,6 +112,7 @@ public class Controller implements Initializable {
         create.setDisable(true);
         groupmembers = FXCollections.observableArrayList();
         groupList.setItems(groupmembers);
+        groupmembers.add(user.getFirstName() + " " + user.getLastName() + ", " + user.getEmail()); // SELF
         allUsers = calendar.UserModel.getAllUsers();
         userInfo = displayUserInfo(allUsers);
         usersComboBox.setItems(userInfo);
@@ -171,9 +172,6 @@ public class Controller implements Initializable {
         System.out.println(groupmembersUserModel);
         Calendar cal = new Calendar(groupname, groupmembersUserModel);
         cal.setDescription(description.getText());
-        System.out.println(cal.getName());
-        System.out.println(cal.getDescription());
-        System.out.println(cal.getMembers());
         Boolean res = Main.createGroup(cal).get("reply");
         if(res) {
             System.out.println("Group '" + groupname + "' created.");
