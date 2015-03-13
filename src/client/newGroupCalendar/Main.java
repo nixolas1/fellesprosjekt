@@ -45,6 +45,10 @@ public class Main extends Application {
         }
     }
 
+    public static UserModel getLoggedUser() {
+        return loggedUser;
+    }
+
     public static void closeStage() {
         newGroupStage.close();
     }

@@ -48,12 +48,13 @@ public class Controller implements Initializable {
     private ObservableList<String> userInfo;
     private ObservableList<String> groupmembers;
     private ArrayList<UserModel> groupmembersUserModel;
-    UserModel user = new UserModel();
+    UserModel user;
     boolean nameValid = false, descriptionValid = false, groupValid = false;
 
     @FXML
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        user = Main.getLoggedUser();
 
         add.setDisable(true);
         remove.setDisable(true);
@@ -96,7 +97,7 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 String s = description.getText();
-                if (s.length() > 0 && s.length() < 100) {
+                if (s.length() > 0 && s.length() < 1000) {
                     description.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
                     descriptionValid = true;
                 } else {

@@ -47,12 +47,12 @@
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
-            <TextArea fx:id="description" prefHeight="120.0" prefWidth="370.0" promptText="Beskrivelse av gruppa" />
+            <TextArea fx:id="description" prefHeight="120.0" prefWidth="370.0" promptText="Beskrivelse av gruppen" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
-            <TextField id="name" fx:id="name" prefHeight="26.0" prefWidth="370.0" promptText="Navn på gruppa" />
+            <TextField id="name" fx:id="name" prefHeight="26.0" prefWidth="370.0" promptText="Navn på gruppen" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
