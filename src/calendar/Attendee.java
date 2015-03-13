@@ -14,37 +14,43 @@ public class Attendee implements Serializable {
 
     private UserModel user;
     private int appointmentid;
-    private Calendar cal;
-    private LocalDateTime invited, answered;
+    private LocalDateTime invited, answered, alarm;
     private Boolean attending, isOwner;
 
 
-    public Attendee(UserModel user, int appointment, Calendar cal, LocalDateTime invited, LocalDateTime answered, Boolean attending, Boolean isOwner){
+    public Attendee(UserModel user, int appointment, LocalDateTime invited, LocalDateTime answered, Boolean attending, Boolean isOwner){
         this.user=user;
         this.appointmentid=appointment;
-        this.cal=cal;
         this.invited=invited;
         this.answered=answered;
         this.attending=attending;
         this.isOwner=isOwner;
     }
 
-    public Attendee(UserModel user, int app, Calendar cal, LocalDateTime invited, Boolean isOwner) {
+    public Attendee(UserModel user, int app, LocalDateTime invited, Boolean isOwner) {
         this.user=user;
         this.appointmentid=app;
-        this.cal=cal;
         this.invited=invited;
         this.answered=null;
         this.attending=null;
         this.isOwner=isOwner;
     }
 
-    public Attendee(String calid, String appid, String email, String timeInvited, String timeAnswered, String willAttend, String isOwner) {
+    public Attendee(UserModel user, LocalDateTime invited, Boolean isOwner) {
+        this.user=user;
+        this.invited=invited;
+        this.answered=null;
+        this.attending=null;
+        this.isOwner=isOwner;
+    }
+
+    public Attendee(String email, String appid, String timeInvited, String timeAnswered, String willAttend, String isOwner, String alarm) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        System.out.println(email);
         this.user=UserModel.getUserFromServer(email);
         this.appointmentid=Integer.parseInt(appid);
-        this.cal=new Calendar(Integer.parseInt(calid));
+
         if(timeInvited != null)
             this.invited=LocalDateTime.parse(timeInvited, format);
         if(timeAnswered != null)
@@ -53,6 +59,8 @@ public class Attendee implements Serializable {
             this.attending=Boolean.parseBoolean(willAttend);
         if(isOwner != null)
             this.isOwner=Boolean.parseBoolean(isOwner);
+        if(alarm != null)
+            this.alarm=LocalDateTime.parse(alarm, format);
     }
 
     public static ArrayList<Attendee> getAllAttendeesForAppointment(int id) {
