@@ -189,6 +189,15 @@ public class Controller {
         }
     }
 
+    public void onBtnShowNewRoom(ActionEvent event) {
+        client.newRoom.Main newRoom = new client.newRoom.Main();
+        try {
+            newRoom.showNewRoom(primaryStage, Main.user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void logOff(ActionEvent event) {
         client.login.Main.show(Main.stage);
     }
