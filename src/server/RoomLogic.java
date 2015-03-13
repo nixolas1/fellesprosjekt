@@ -79,29 +79,39 @@ public class RoomLogic {
 
         numberOfDistinctAttendees = attendeeList.size();
 
-        ArrayList<List<String>> foo = server.database.Logic.getAllRows("Room");
+        ArrayList<List<String>> allRowsFromRoom = server.database.Logic.getAllRows("Room");
 
         ArrayList<Room> allCapableRooms = new ArrayList<>();            // List over alle rom med nok kapasitet til dette møtet
-
+        ArrayList<Integer> allRoomIds = new ArrayList<>();
         // Løper gjennom alle rommene
-        for (List<String> rooms : foo){
+        for (List<String> rooms : allRowsFromRoom){
             Room room = new Room();
             int count = 0;
             for (String roomAttribute : rooms){
+                for (int e = 0; e < rooms.size(); e++) {
+                    if (numberOfDistinctAttendees <= Integer.parseInt(rooms.get(2)))
+                }
+
                 for (int i = 0; i <rooms.size(); i++){
                     // Legger kun til rommene med bra nok kapasitet
                     if (numberOfDistinctAttendees <= Integer.parseInt(rooms.get(2))) {
                         switch (i) {
                             case 0:
                                 room.setId(Integer.valueOf(rooms.get(0)));
+                                allRoomIds.add(Integer.valueOf(rooms.get(0)));
+                                break;
                             case 1:
                                 room.setName(rooms.get(1));
+                                break;
                             case 2:
                                 room.setCapacity(Integer.valueOf(rooms.get(2)));
+                                break;
                             case 3:
                                 room.setOpensAt(Integer.valueOf(rooms.get(3)));
+                                break;
                             case 4:
                                 room.setClosesAt(Integer.valueOf(rooms.get(4)));
+                                break;
                         }
                     }
 
@@ -110,12 +120,35 @@ public class RoomLogic {
             }
         }
 
-        // Henter alle avtaler
+        // Henter alle avtaler som er koblet på en rom-id
 
         int[] allCalendarIds;
-        server.database.Logic.getAllRows("Appointment");
+        ArrayList<List<String>> allRowsFromAppointment = server.database.Logic.getAllRows("Appointment");
 
-        AppointmentLogic.getCalendarAppointments()
+        for (List<String> appointments : allRowsFromAppointment){
+            Appointment app = new Appointment();
+            int count = 0;
+            for (String appointmentAttribute : appointments){
+                for (int i = 0; i < appointments.size(); i++){
+                    // Legger kun til rommene med bra nok kapasitet
+                    if (! appointments.get(11).equalsIgnoreCase("null") || appointments.get(11).length() < 1) {
+                        switch (i) {
+                            case 0: app.setId(Integer.valueOf(appointments.get(0)));
+                            case 1:
+                                app.setName(rooms.get(1));
+                            case 2:
+                                app.setCapacity(Integer.valueOf(rooms.get(2)));
+                            case 3:
+                                app.setOpensAt(Integer.valueOf(rooms.get(3)));
+                            case 4:
+                                app.setClosesAt(Integer.valueOf(rooms.get(4)));
+                        }
+                    }
+
+                }
+                allCapableRooms.add(room);
+            }
+        }
 
 
 

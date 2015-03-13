@@ -216,4 +216,9 @@ public class Appointment implements Serializable {
     */
     public void setAppType() {}
 
+    public static boolean checkIfAppointmentsCollide(Appointment app1, Appointment app2){
+        // Skal sjekke om to appointments kolliderer
+        return true;
+    }
+
 }
