@@ -113,6 +113,8 @@ public class RoomLogic {
         // Henter alle avtaler
 
 
+
+
         return new Query("roomLogic", roomList)
     }
 
