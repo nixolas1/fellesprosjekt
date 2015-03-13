@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import calendar.*;
+import calendar.Calendar;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -54,18 +55,18 @@ public class Controller implements Initializable{
     private ArrayList<UserModel> allUsers;
     private ObservableList<String> userInfo;
     private ObservableList<String> attendees;
-    private ArrayList<Group> allGroups;
+    private ArrayList<Calendar> allGroups;
     private ObservableList<String> groupInfo;
     private ObservableList<String> addedGroups;
     private ArrayList<Room> rooms;
-    UserModel user = new UserModel(); // todo loggedUser?
+    private UserModel loggedUser;
     private String timeRegex = "[\\d]{2}:[\\d]{2}";
 
 
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-
+        loggedUser = Main.getLoggedUser();
         add.setDisable(true);
         remove.setDisable(true);
         locationDescription.setVisible(false);
@@ -148,7 +149,7 @@ public class Controller implements Initializable{
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 checkIfAllValid();
-                if(otherLocation.isSelected()) {
+                if (otherLocation.isSelected()) {
                     room.setVisible(false);
                     locationDescription.setVisible(true);
                     roomOrLocation.setText("Sted");
@@ -181,7 +182,7 @@ public class Controller implements Initializable{
         createValidationListener(description, 1, ".*", 50);
         createValidationListener(repeat,  3, "[0-9]*", 3);
         createValidationListener(title, 0, ".{0,50}", 50);
-        createValidationListener(locationDescription, 0, ".{0,50}",50);
+        createValidationListener(locationDescription, 0, ".{0,50}", 50);
 
        dateValidation(date);
        dateValidation(endDate);
@@ -207,23 +208,21 @@ public class Controller implements Initializable{
         create.setDisable(true);
         attendees = FXCollections.observableArrayList(); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
+        //attendees.add(loggedUser.getFirstName() + " " + loggedUser.getLastName() + ", " + loggedUser.getEmail());
         allUsers = getUsersFromDB();
         rooms = getRooms();
         room.setItems(FXCollections.observableArrayList(rooms));
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
 
-        //allGroups = getGroupsFromDB();
-        allGroups = new ArrayList<>();
-        allGroups.add(new Group(1,"new",new ArrayList<UserModel>()));
-        allGroups.add(new Group(2,"TestGroup",new ArrayList<UserModel>()));
+        allGroups = getCalsFromDB();
         addedGroups = FXCollections.observableArrayList();
         groupList.setItems(addedGroups);
-        groupInfo = displayGroupInfo(allGroups);
+        groupInfo = displayCalInfo(allGroups);
         groupComboBox.setItems(groupInfo);
 
-        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.STARTS_WITH); // AutoCompleteMode ON
-        FxUtil.autoCompleteComboBox(groupComboBox, FxUtil.AutoCompleteMode.STARTS_WITH);
+        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.CONTAINING); // AutoCompleteMode ON
+        FxUtil.autoCompleteComboBox(groupComboBox, FxUtil.AutoCompleteMode.CONTAINING);
 
     }
 
@@ -231,8 +230,8 @@ public class Controller implements Initializable{
         return calendar.UserModel.getAllUsers();
     }
 
-    public static ArrayList<Group> getGroupsFromDB() {
-        return calendar.Group.getAllGroups();
+    public static ArrayList<Calendar> getCalsFromDB() {
+        return calendar.Calendar.getAllCalendarsFromDB();
     }
 
     @FXML
@@ -292,42 +291,19 @@ public class Controller implements Initializable{
         }
     }
 
-    // Get group from ID
-    public Group getGroup(int id) {
-        for (Group grp : allGroups) {
-            if(grp.getId() == id) return grp;
-        }
-        return null;
-    }
 
     @FXML
     public void createAppointment(ActionEvent event) {
         if(checkIfAllValid()) {
-            String title = this.title.getText();
-            String description = this.description.getText();
-            int hrStart = 00;
-            int minStart = 00;
-            int hrEnd = 23;
-            int minEnd = 59;
-            if(!allDay.isSelected()) {
-                hrStart = Integer.parseInt(from.getText().split(":")[0]);
-                minStart = Integer.parseInt((from.getText().split(":")[1]));
-                hrEnd = Integer.parseInt((to.getText().split(":")[0]));
-                minEnd = Integer.parseInt(to.getText().split(":")[1]);
-            }
-            LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
-            LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
-            Room room = null;
-            String location = null;
-            int repeat = Integer.parseInt(this.repeat.getText());
+            Appointment app = createAppointmentObject();
             if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
-                location = locationDescription.getText();
+                app.setLocation(locationDescription.getText());
             } else {
-                room = new Room(1, "test", 1, 0, 23, new ArrayList<Utility>()); // TEST ROOM! TODO get from DB
+                app.setRoom(new Room(1, "test", 1, 0, 23, new ArrayList<Utility>())); // TEST ROOM! TODO get rooms from DB
             }
-            UserModel owner = new UserModel(); // todo FIX
             calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
-            Appointment app = new Appointment(getAppointmentId(),title,description,startDate,endDate,room,owner,cal,repeat,stoprepeat.getValue(),location);
+            app.setAttendees(getAttendees(cal));
+            app.setCals(getGroups()); // GROUPS = CALENDARS
             System.out.println(app.displayInfo());
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
             if(response.get("reply"))
@@ -340,6 +316,73 @@ public class Controller implements Initializable{
         }
 
     }
+
+    public Appointment createAppointmentObject() { // Without room / location
+        String title = this.title.getText() != null && this.title.getText().length() > 0 ? this.title.getText() : null;
+        String description = this.description.getText() != null && this.description.getText().length() > 0 ? this.description.getText() : null;
+        int hrStart = 00;
+        int minStart = 00;
+        int hrEnd = 23;
+        int minEnd = 59;
+        if(!allDay.isSelected()) {
+            hrStart = Integer.parseInt(from.getText().split(":")[0]);
+            minStart = Integer.parseInt((from.getText().split(":")[1]));
+            hrEnd = Integer.parseInt((to.getText().split(":")[0]));
+            minEnd = Integer.parseInt(to.getText().split(":")[1]);
+        }
+        LocalDate endRepeatDate = null;
+        LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
+        LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
+        if(Integer.parseInt(repeat.getText()) > 0 && stoprepeat.getValue() != null) endRepeatDate = stoprepeat.getValue();
+        Room room = null;
+        String location = null;
+        int repeat = Integer.parseInt(this.repeat.getText());
+        Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null,repeat,endRepeatDate,location);
+        return app;
+
+    }
+
+   /* public ArrayList<Room> requestRoomList() {
+        if(updateTimeValid()) {
+            Appointment app = createAppointmentObject();
+            Query reply = client.Main.socket.send(new Query("getRooms", app));
+            ArrayList<Room> roomList = reply.data.get("reply");
+            return roomList;
+        }
+        return null;
+
+    }*/
+
+    public ArrayList<Attendee> getAttendees(Calendar cal) {
+        ArrayList<Attendee> attendeeObjects = new ArrayList<>();
+        for(String user : attendees) {
+            UserModel usr = getUserModel(user.split(",")[1]);
+            boolean isOwner = false;
+            if(usr.equals(loggedUser)) isOwner = true;
+            attendeeObjects.add(new Attendee(usr, LocalDateTime.now(), isOwner));
+        }
+        return attendeeObjects;
+    }
+
+    public ArrayList<Calendar> getGroups() {
+        ArrayList<Calendar> cals = new ArrayList<>();
+        for (String grp : addedGroups) {
+            int id = Integer.parseInt(grp.split(",")[1]);
+            Calendar cal = getCalFromId(id);
+            if(!cal.equals(null)) cals.add(cal);
+        }
+        return cals;
+    }
+
+    public Calendar getCalFromId(int id) {
+        for (Calendar c : allGroups) {
+            if(c.getId() == id) return c;
+        }
+        System.out.println("No calendar with ID = " + id);
+        return null;
+    }
+
+
 
     public ArrayList<Room> getRooms() {
         // todo: Get all rooms from server
@@ -362,9 +405,9 @@ public class Controller implements Initializable{
         return userInfo;
     }
 
-    public ObservableList<String> displayGroupInfo(ArrayList<Group> groups) {
+    public ObservableList<String> displayCalInfo(ArrayList<Calendar> groups) {
         ObservableList<String> groupInfo = FXCollections.observableArrayList();
-        for (Group grp : groups) {
+        for (Calendar grp : groups) {
             groupInfo.add(grp.displayInfo());
         }
         return groupInfo;

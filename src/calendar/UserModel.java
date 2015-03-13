@@ -107,8 +107,12 @@ public class UserModel implements Serializable {
     }
 
     public static UserModel getUserFromServer(final String email){
-        String[] split = email.split("@");
-        return getUserFromServer(split[0], split[1]);
+        try {
+            String[] split = email.split("@");
+            return getUserFromServer(split[0], split[1]);
+        }catch (NullPointerException e){
+            return server.database.Logic.getUser(email);
+        }
     }
 
     public static UserModel getUserFromServer(final String user, final String domain){

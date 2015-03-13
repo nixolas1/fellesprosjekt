@@ -82,10 +82,12 @@ public class Logic {
     public static ArrayList<List<String>> getAllRows(String table) {
         return getAllRowsWhere(table, null);
     }
-
     public static ArrayList<List<String>> getAllRowsWhere(String table, String where){
         String whereText = where != null ? " WHERE "+where : "";
-        String getRow = "SELECT * FROM " + table + whereText + ";";
+        return getAllRowsQuery(table, whereText);
+    }
+    public static ArrayList<List<String>> getAllRowsQuery(String table, String query){
+        String getRow = "SELECT * FROM " + table + " " + query + ";";
         String[] row = new String[getNumberOfColumns(table)];
         Statement stmt = null;
         ResultSet result = null;

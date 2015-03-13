@@ -18,7 +18,7 @@ public class Notifications {
     ArrayList<Notification> notifications = new ArrayList<>();
     Text label = null;
     ComboBox list = null;
-    int every = 15;
+    int every = 60;
 
     public Notifications(String email, Text unreadCountLabel, ComboBox notificationList){
         notifications = Notification.getUserNotifications(email, client.Main.socket);
@@ -43,8 +43,7 @@ public class Notifications {
     }
 
     public void updateList(){
-        label.setText(""+getNumberOfUnreadNotifications());
-
+       label.setText(""+getNumberOfUnreadNotifications());
         list.getItems().clear();
         ObservableList<String> notiInfo = FXCollections.observableArrayList();
         for(Notification n : notifications){

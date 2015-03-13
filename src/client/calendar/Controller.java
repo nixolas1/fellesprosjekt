@@ -66,8 +66,8 @@ public class Controller {
     @FXML private Text satDate;
     @FXML private Text sunDate;
     @FXML private GridPane calendarGrid;
-    @FXML private ComboBox notifCombo;
-    @FXML private Text notifCount;
+    @FXML public ComboBox notifCombo;
+    @FXML public Text notifCount;
 
 
     protected static Stage primaryStage;

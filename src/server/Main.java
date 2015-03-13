@@ -71,7 +71,7 @@ public class Main {
         Appointment app = new Appointment("testmøte", "for å teste vel", null, startdate, enddate, fuckRoom, new Calendar(5), 0, null);
 
         Logic.createAppointment(app);
-*/
+        */
         //RoomLogic.availableRooms();
 
 
