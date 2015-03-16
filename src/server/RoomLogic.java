@@ -50,7 +50,16 @@ public class RoomLogic {
         return appList;
     }
 
+    public static void initiateRoomLogicObject(Appointment appointment) {
+        System.out.println("initiateRoomLogicObject()");
+        Hashtable<String, Appointment> hashTable = new Hashtable<String, Appointment>() {{
+            put("data", appointment);
+        }};
+        initiateRoomLogic(hashTable);
+    }
+
     public static Query initiateRoomLogic(Hashtable<String, Appointment> data){
+        System.out.println("initiateRoomLogic()");
         ArrayList<String> attendeeList = new ArrayList<>();
         int numberOfConflicts = 0;                           // Teller for hvor mange overlapp man vil få når flere folk er med i flere grupper på samme arrangement
         int numberOfDistinctAttendees;                      // Det endelig antallet personer som deltar, uten overlapp
@@ -61,8 +70,10 @@ public class RoomLogic {
             String email = attendee.getUser().getEmail();
             if (! attendeeList.contains(email)){
                 attendeeList.add(email);
+                //System.out.println("Added user '" + email + "'");
             } else {
                 numberOfConflicts += 1;
+                System.out.println("numberOfConflicts: " + numberOfConflicts);
             }
         }
 
@@ -72,25 +83,38 @@ public class RoomLogic {
             for (UserModel member : memberList){
                 if (! attendeeList.contains(member.getEmail())){
                     attendeeList.add(member.getEmail());
+                    //System.out.println("Added user '" + email + "'");
                 } else {
                     numberOfConflicts += 1;
+                    System.out.println("numberOfConflicts: " + numberOfConflicts);
                 }
             }
 
         }
 
         numberOfDistinctAttendees = attendeeList.size();
+        System.out.println("numberOfDistinctAttendees: " + numberOfDistinctAttendees);
 
         ArrayList<List<String>> allRowsFromRoom = server.database.Logic.getAllRows("Room");
-
-        ArrayList<Room> allCapableRooms = new ArrayList<>();            // List over alle rom med nok kapasitet til dette møtet
         ArrayList<Integer> allRoomIds = new ArrayList<>();
+        ArrayList<Room> allCapableRooms = new ArrayList<>();            // List over alle rom med nok kapasitet til dette møtet
+
         // Løper gjennom alle rommene
         for (List<String> rooms : allRowsFromRoom){
-            Room room = new Room();
             int count = 0;
-            for (String roomAttribute : rooms){
-                for (int e = 0; e < rooms.size(); e++) {
+            if (numberOfDistinctAttendees <= Integer.parseInt(rooms.get(2))) {
+                Room room = new Room();
+                room.setId(Integer.valueOf(rooms.get(0)));
+                room.setName(rooms.get(1));
+                room.setCapacity(Integer.valueOf(rooms.get(2)));
+                room.setOpensAt(Integer.valueOf(rooms.get(3)));
+                room.setClosesAt(Integer.valueOf(rooms.get(4)));
+                new Room(Integer.valueOf(rooms.get(0)), rooms.get(1), Integer.valueOf(rooms.get(2)), Integer.valueOf(rooms.get(3)), Integer.valueOf(rooms.get(4)));
+                allRoomIds.add(Integer.valueOf(rooms.get(0)));
+                allCapableRooms.add(room);
+            }
+            /*for (String roomAttribute : rooms){
+                /*for (int e = 0; e < rooms.size(); e++) {
                     if (numberOfDistinctAttendees <= Integer.parseInt(rooms.get(2)))
                 }
 
@@ -117,44 +141,52 @@ public class RoomLogic {
                         }
                     }
 
-                }
-                allCapableRooms.add(room);
-            }
+                }*/
+
         }
 
-        // Henter alle avtaler som er koblet på en rom-id
 
+        // Henter alle avtaler som er koblet på en rom-id
         int[] allCalendarIds;
         ArrayList<List<String>> allRowsFromAppointment = server.database.Logic.getAllRows("Appointment");
+        ArrayList<Appointment> collidingAppointments = new ArrayList<>();
+        ArrayList<Integer> allRoomIdsWithConflict = new ArrayList<>();
 
         for (List<String> appointments : allRowsFromAppointment){
             Appointment app = new Appointment();
             int count = 0;
-            for (String appointmentAttribute : appointments){
-                for (int i = 0; i < appointments.size(); i++){
+            /*for (String appointmentAttribute : appointments){
+                for (int i = 0; i < appointments.size(); i++){*/
                     // Legger kun til rommene med bra nok kapasitet
-                    if (! appointments.get(11).equalsIgnoreCase("null") || appointments.get(11).length() < 1) {
-                        switch (i) {
-                            case 0: app.setId(Integer.valueOf(appointments.get(0)));
-                            case 1:
-                                app.setName(rooms.get(1));
-                            case 2:
-                                app.setCapacity(Integer.valueOf(rooms.get(2)));
-                            case 3:
-                                app.setOpensAt(Integer.valueOf(rooms.get(3)));
-                            case 4:
-                                app.setClosesAt(Integer.valueOf(rooms.get(4)));
-                        }
-                    }
-
+            if (! appointments.get(11).equalsIgnoreCase("null") || appointments.get(11).length() < 1) {
+                Appointment newAppointment = new Appointment(appointments.get(0), appointments.get(1),
+                        appointments.get(2), appointments.get(3), appointments.get(4), appointments.get(5),
+                        appointments.get(6), appointments.get(7), appointments.get(8), appointments.get(9),
+                        appointments.get(10), appointments.get(11));
+                if (checkIfAppointmentsCollide(appointment, newAppointment)){
+                    collidingAppointments.add(newAppointment);
+                    allRoomIdsWithConflict.add(newAppointment.getId());
+                    System.out.println("Conflict with appointment '" + newAppointment.getTitle() + "' [ID=" + newAppointment.getId() + "]");
                 }
-                allCapableRooms.add(room);
             }
+                //}
+            //}
+        }
+
+        for (Room room : allCapableRooms){
+            if (allRoomIdsWithConflict.contains(room.getId())){
+                allCapableRooms.remove(room);
+            }
+        }
+
+        System.out.println("Room selection done. Available rooms are: ");
+        for (Room room : allCapableRooms){
+            System.out.println("[ID=" + room.getId() + "] " + room.getName());
         }
 
 
 
-        return new Query("roomLogic", roomList)
+        return new Query("roomLogic", allCapableRooms);
     }
 
     public static boolean checkIfAppointmentsCollide(Appointment app1, Appointment app2){
