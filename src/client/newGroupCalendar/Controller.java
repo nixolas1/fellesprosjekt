@@ -1,6 +1,7 @@
 package client.newGroupCalendar;
 
 //import calendar.Appointment;
+import calendar.Calendar;
 import calendar.UserModel;
 import client.newAppointment.FxUtil;
 import javafx.beans.value.ChangeListener;
@@ -48,12 +49,13 @@ public class Controller implements Initializable {
     private ObservableList<String> userInfo;
     private ObservableList<String> groupmembers;
     private ArrayList<UserModel> groupmembersUserModel;
-    UserModel user = new UserModel();
+    UserModel user;
     boolean nameValid = false, descriptionValid = false, groupValid = false;
 
     @FXML
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        user = Main.getLoggedUser();
 
         add.setDisable(true);
         remove.setDisable(true);
@@ -96,7 +98,7 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 String s = description.getText();
-                if (s.length() > 0 && s.length() < 100) {
+                if (s.length() > 0 && s.length() < 1000) {
                     description.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
                     descriptionValid = true;
                 } else {
@@ -110,6 +112,7 @@ public class Controller implements Initializable {
         create.setDisable(true);
         groupmembers = FXCollections.observableArrayList();
         groupList.setItems(groupmembers);
+        groupmembers.add(user.getFirstName() + " " + user.getLastName() + ", " + user.getEmail()); // SELF
         allUsers = calendar.UserModel.getAllUsers();
         userInfo = displayUserInfo(allUsers);
         usersComboBox.setItems(userInfo);
@@ -167,8 +170,15 @@ public class Controller implements Initializable {
             groupmembersUserModel.add(usr);
         }
         System.out.println(groupmembersUserModel);
-        Group group = new Group(100, groupname, groupmembersUserModel);
-        //toDo - må addes i database, sondreeeee
+        Calendar cal = new Calendar(groupname, groupmembersUserModel);
+        cal.setDescription(description.getText());
+        Boolean res = Main.createGroup(cal).get("reply");
+        if(res) {
+            System.out.println("Group '" + groupname + "' created.");
+        } else {
+            System.out.println("Error occured. Group not created");
+        }
+
     }
 
     @FXML

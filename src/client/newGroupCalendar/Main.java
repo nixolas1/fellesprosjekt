@@ -1,5 +1,6 @@
 package client.newGroupCalendar;
 
+import calendar.Calendar;
 import calendar.UserModel;
 import client.newAppointment.Controller;
 import javafx.application.Application;
@@ -8,6 +9,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import network.Query;
+
+import java.util.Hashtable;
 
 public class Main extends Application {
     private static Stage groupParent;
@@ -43,6 +47,15 @@ public class Main extends Application {
             System.out.println("Exception found in newGroup");
             ex.printStackTrace();
         }
+    }
+
+    public static UserModel getLoggedUser() {
+        return user;
+    }
+
+    public static Hashtable<String, Boolean> createGroup(Calendar cal) {
+        Query reply = client.Main.socket.send(new Query("createGroup", cal));
+        return reply.data;
     }
 
     public static void closeStage() {
