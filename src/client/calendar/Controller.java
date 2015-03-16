@@ -120,14 +120,14 @@ public class Controller {
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 UserModel user = getUserModelFromEmail(findUserCalendar.getValue().toString().split(",")[1].trim());
                 System.out.println("Viewing " + user.getFirstName() + "'s calendar");
-                /*clearAppointments(); //todo
-                cals = new Integer[]{};
+                clearAppointments(); //todo
                 ArrayList<Calendar> userCal = calendar.Calendar.getMyCalendarsFromDB(user);
+                cals = new Integer[userCal.size()];
                 for (int i = 0; i < userCal.size(); i++) {
                     cals[i] = userCal.get(i).getId();
                 }
                 appointments = getAppointments(cals);
-                populateCalendars(cals);*/
+                populateCalendars(cals);
             }
         });
 
