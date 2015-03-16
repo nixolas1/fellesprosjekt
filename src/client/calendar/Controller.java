@@ -69,7 +69,7 @@ public class Controller {
     @FXML private Text satDate;
     @FXML private Text sunDate;
     @FXML private GridPane calendarGrid;
-    @FXML public ComboBox notifCombo, findUserCalendar, findCalendar;
+    @FXML public ComboBox notifCombo, findUserCalendar, myCals;
     @FXML public Text notifCount;
 
 
@@ -88,7 +88,7 @@ public class Controller {
         allUsersUM = getAllUserModels();
         findUserCalendar.setItems(FXCollections.observableArrayList(userModelsToString(allUsersUM)));
         FxUtil.autoCompleteComboBox(findUserCalendar, FxUtil.AutoCompleteMode.CONTAINING); // AutoComplete ON
-        FxUtil.autoCompleteComboBox(findCalendar, FxUtil.AutoCompleteMode.CONTAINING);
+        FxUtil.autoCompleteComboBox(myCals, FxUtil.AutoCompleteMode.CONTAINING);
         calDate = getLastMonday(calDate);
         updateYear();
         updateMonth();
