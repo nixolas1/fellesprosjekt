@@ -262,7 +262,7 @@ public class Logic {
             for(Attendee a : app.getAttendees()){
                 String q = attQuery + a.getUser().getEmail()+s+app.getId()+s+LocalDateTime.now()+s+n+s+"1"+s+"0"+s+n+");";
                 System.out.println(attQuery + q);
-                stmt.executeUpdate(attQuery + q);
+                //stmt.executeUpdate(attQuery + q);
             }
 
             System.out.println("Appointment [Title='" + app.getTitle() + "'] successfully created in database");
