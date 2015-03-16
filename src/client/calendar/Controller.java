@@ -53,24 +53,10 @@ public class Controller {
 
 
     //@FXML private ComboBox chooseCalendar;
-    @FXML private Text name;
-    @FXML private Button logOff;
-    @FXML private Button userSettings;
-    @FXML private Button yourCalendar;
-    @FXML private Button today;
-    @FXML private Text year;
-    @FXML private Text month;
-    @FXML private Text weekNum;
-    @FXML private Text monDate;
-    @FXML private Text tueDate;
-    @FXML private Text wedDate;
-    @FXML private Text thuDate;
-    @FXML private Text friDate;
-    @FXML private Text satDate;
-    @FXML private Text sunDate;
+    @FXML private Text name, year, month, weekNum, monDate, tueDate, wedDate, thuDate, friDate, satDate, sunDate, notifCount;
+    @FXML private Button logOff, userSettings, yourCalendar, today;
     @FXML private GridPane calendarGrid;
     @FXML public ComboBox notifCombo, findUserCalendar, myCals;
-    @FXML public Text notifCount;
 
 
     protected static Stage primaryStage;
