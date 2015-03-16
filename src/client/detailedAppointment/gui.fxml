@@ -199,12 +199,12 @@
         </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="13">
             <children>
-                <Button maxHeight="36.0" maxWidth="100.0" minHeight="36.0" minWidth="80.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="80.0" text="Avbryt" />
+                <Button fx:id="cancel" maxHeight="36.0" maxWidth="100.0" minHeight="36.0" minWidth="80.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="80.0" text="Avbryt" />
             </children>
         </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="13">
             <children>
-                <Button fx:id="create" maxHeight="36.0" maxWidth="370.0" minHeight="36.0" minWidth="370.0" mnemonicParsing="false" onAction="#createAppointment" prefHeight="36.0" prefWidth="370.0" stylesheets="@gui.css" text="Endre avtale" textFill="WHITE">
+                <Button fx:id="editApp" maxHeight="36.0" maxWidth="370.0" minHeight="36.0" minWidth="370.0" mnemonicParsing="false" onAction="#createAppointment" prefHeight="36.0" prefWidth="370.0" stylesheets="@gui.css" text="Endre avtale" textFill="WHITE">
                     <padding>
                         <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
                     </padding>

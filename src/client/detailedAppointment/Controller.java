@@ -41,7 +41,7 @@ public class Controller implements Initializable{
     @FXML private RadioButton work, personal;
 
     @FXML
-    private Button create, add, remove, addGroup, removeGroup;
+    private Button editApp, add, remove, addGroup, removeGroup, cancel;
 
     @FXML
     private ResourceBundle resources;
@@ -211,7 +211,7 @@ public class Controller implements Initializable{
             }
         });*/
 
-        create.setDisable(true);
+        editApp.setDisable(true);
         attendees = FXCollections.observableArrayList(); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
         allUsers = getUsersFromDB();
@@ -376,6 +376,10 @@ public class Controller implements Initializable{
 
     }
 
+    public void cancel(ActionEvent event) {
+        
+    }
+
     public ArrayList<Room> getRooms() {
         // todo: Get all rooms from server
         return new ArrayList<Room>(Arrays.asList(new Room(1,"Rom1",3,1,12), new Room(2,"Room321",5,9,15), new Room(3,"R1",500,8,20)));
@@ -460,7 +464,7 @@ public class Controller implements Initializable{
             }
         }
 
-        create.setDisable(!ret);
+        editApp.setDisable(!ret);
         System.out.println("checkIfAllValid() ret = " +ret);
         return ret;
     }
