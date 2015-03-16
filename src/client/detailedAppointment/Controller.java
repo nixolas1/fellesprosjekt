@@ -240,7 +240,7 @@ public class Controller implements Initializable{
 
     public void initializeFields() {
         ObservableList<Attendee> attendeeObservableList = FXCollections.observableArrayList(app.attendees);
-        ObservableList<Group> groupObservableList = FXCollections.observableArrayList(app.ca);
+        //ObservableList<Group> groupObservableList = FXCollections.observableArrayList(app.);
 
         headTitle.setText(app.getTitle());
         //work or private
@@ -255,7 +255,7 @@ public class Controller implements Initializable{
         //if repeat > 0 stoprepeat.visible
         stoprepeat.setValue(app.getEndRepeatDate());
         attendeeList.setItems(attendeeObservableList);
-        groupList.setItems(groupObservableList);
+        //groupList.setItems(groupObservableList);
         //roomOrLocation.setText(app.);
         locationDescription.setText(app.getLocation());
         room.setValue(app.getRoom());
