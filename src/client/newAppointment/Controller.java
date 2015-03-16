@@ -304,7 +304,14 @@ public class Controller implements Initializable{
             }
             calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
             app.setAttendees(getAttendees(cal));
-            app.setCals(getGroups()); // GROUPS = CALENDARS
+            ArrayList<Calendar> grps = getGroups();
+            if(grps.size() > 0) {
+                app.setCals(getGroups()); // GROUPS = CALENDARS
+            } else {
+                for (Attendee a : app.getAttendees()) {
+                    app.addCalender(new Calendar("id her"));
+                }
+            }
             System.out.println(app.displayInfo());
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
             if(response.get("reply"))
@@ -331,10 +338,9 @@ public class Controller implements Initializable{
             hrEnd = Integer.parseInt((to.getText().split(":")[0]));
             minEnd = Integer.parseInt(to.getText().split(":")[1]);
         }
-        LocalDate endRepeatDate = null;
+        LocalDate endRepeatDate = stoprepeat.getValue() != null && Integer.parseInt(this.repeat.getText()) > 0 ? stoprepeat.getValue() : null;
         LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
         LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
-        endRepeatDate = stoprepeat.getValue() != null && Integer.parseInt(this.repeat.getText()) > 0 ? stoprepeat.getValue() : null;
         Room room = null;
         String location = null;
         int repeat = this.repeat.getText() != null && this.repeat.getText().length() > 0 ? Integer.parseInt(this.repeat.getText()) : 0;
@@ -370,7 +376,7 @@ public class Controller implements Initializable{
     public ArrayList<Calendar> getGroups() {
         ArrayList<Calendar> cals = new ArrayList<>();
         for (String grp : addedGroups) {
-            int id = Integer.parseInt(grp.split(",")[1]);
+            int id = Integer.parseInt(grp.split(",")[1].trim());
             Calendar cal = getCalFromId(id);
             if(!cal.equals(null)) cals.add(cal);
         }
