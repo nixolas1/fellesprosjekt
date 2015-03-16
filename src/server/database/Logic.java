@@ -252,7 +252,7 @@ public class Logic {
 
             String calHasAppQuery = "INSERT INTO `nixo_fp`.`Calendar_has_Appointment` (`Appointment_appointmentid`, `Calendar_calendarid`) VALUES ('"+app.getId()+"', '";
             for(Calendar c : app.getCals()){
-                //System.out.println(calHasAppQuery + c.getId() + "');");
+                System.out.println(calHasAppQuery + c.getId() + "');");
                 stmt.executeUpdate(calHasAppQuery + c.getId() + "');");
             }
 
@@ -299,9 +299,11 @@ public class Logic {
     }
 
     public static Query createRoom(Hashtable<String, Room> data) {
-        Room room = data.get("data");
+        Room room = data.get("reply");
+        System.out.println(data.get("reply"));
         int roomId = getLastRoomIdUsed() + 1;
         System.out.println(roomId);
+        System.out.println(room.getName());
         Statement stmt = null;
         String query = "INSERT INTO Room (roomid, name, capacity, opensAt, closesAt) VALUES (" + roomId + ", '" + room.getName() + "', " + room.getCapacity() + ", " + room.getOpensAt() + ", " + room.getClosesAt() + ");";
         try {
@@ -312,18 +314,21 @@ public class Logic {
             System.out.println("SQLException triggered in createRoom(), 1. try block: " + e);
             return new Query("createRoom", false);
         }
-        for (int i = 0; i < room.getUtilities().size() - 1; i++) {
-            try {
-                String utilityQuery = "INSERT INTO Room_has_Utility (Room_roomid, Utility_utilityid) VALUES (" + roomId + ", " + room.getUtilities().get(i).getId() + ");";
-                stmt = conn.createStatement();
-                stmt.executeUpdate(utilityQuery);
-            } catch(SQLException e) {
-                System.out.println("SQLException triggered in createRoom(), 2. try block: " + e);
-                return new Query("createRoom", false);
-            } catch(Exception f) {
-                System.out.println("Exception triggered in createRoom(): " + f);
+        if(room.getUtilities()!= null) {
+            for (int i = 0; i < room.getUtilities().size(); i++) {
+                try {
+                    String utilityQuery = "INSERT INTO Room_has_Utility (Room_roomid, Utility_utilityid) VALUES (" + roomId + ", " + room.getUtilities().get(i).getId() + ");";
+                    stmt = conn.createStatement();
+                    stmt.executeUpdate(utilityQuery);
+                } catch (SQLException e) {
+                    System.out.println("SQLException triggered in createRoom(), 2. try block: " + e);
+                    return new Query("createRoom", false);
+                } catch (Exception f) {
+                    System.out.println("Exception triggered in createRoom(): " + f);
+                }
             }
-        } closeDB(stmt);
+        }
+        closeDB(stmt);
         System.out.println(String.format("Room '%s' successfully added to Room with id = %s", room.getName(), roomId));
         return new Query("createRoom", true);
     }
@@ -527,14 +532,14 @@ public class Logic {
                 firstName = result.getString("firstName");
                 lastName = result.getString("lastName");
                 phone = result.getString("phone");
-                System.out.println("\nFROM DATABASE: ");
+                /*System.out.println("\nFROM DATABASE: ");
                 System.out.println("email: + '" + email + "'");
                 System.out.println("passwordHash: '" + passwordHash + "'");
                 System.out.println("username: '" + username + "'");
                 System.out.println("domain: '" + domain + "'");
                 System.out.println("firstName: '" + firstName + "'");
                 System.out.println("lastName: '" + lastName + "'");
-                System.out.println("phone: '" + phone + "'\n");
+                System.out.println("phone: '" + phone + "'\n");*/
 
             } else {
                 throw new NullPointerException("User "+ mail + " has no entry in table = 'User");
