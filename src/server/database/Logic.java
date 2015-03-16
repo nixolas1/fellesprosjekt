@@ -260,9 +260,9 @@ public class Logic {
             String s = "', '";
             String n = "NULL";
             for(Attendee a : app.getAttendees()){
-                String q = attQuery + a.getUser().getEmail()+s+app.getId()+s+LocalDateTime.now()+s+n+s+"1"+s+"0"+n+"');";
+                String q = attQuery + a.getUser().getEmail()+s+app.getId()+s+LocalDateTime.now()+s+n+s+"1"+s+"0"+s+n+");";
                 System.out.println(attQuery + q);
-                //TODO stmt.executeUpdate(attQuery + q);
+                stmt.executeUpdate(attQuery + q);
             }
 
             System.out.println("Appointment [Title='" + app.getTitle() + "'] successfully created in database");
