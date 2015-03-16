@@ -271,11 +271,11 @@ public class Controller {
 
 
             if(isThisWeek || isRepeat){
-                System.out.println(app.getTitle() +
+/*                System.out.println(app.getTitle() +
                                 ": den " + start+
                                 " i kalender "+app.getCals()+
                                 " i rom "+app.getRoom().getName()
-                );
+                );*/
 
                 AnchorPane pane = generateAppointmentPane(app, apps);
                 insertPane(pane, start, app.getEndDate());
