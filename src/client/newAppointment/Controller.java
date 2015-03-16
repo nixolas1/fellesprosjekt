@@ -334,10 +334,10 @@ public class Controller implements Initializable{
         LocalDate endRepeatDate = null;
         LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
         LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
-        if(Integer.parseInt(repeat.getText()) > 0 && stoprepeat.getValue() != null) endRepeatDate = stoprepeat.getValue();
+        endRepeatDate = stoprepeat.getValue() != null && Integer.parseInt(this.repeat.getText()) > 0 ? stoprepeat.getValue() : null;
         Room room = null;
         String location = null;
-        int repeat = Integer.parseInt(this.repeat.getText());
+        int repeat = this.repeat.getText() != null && this.repeat.getText().length() > 0 ? Integer.parseInt(this.repeat.getText()) : 0;
         Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null,repeat,endRepeatDate,location);
         return app;
 
