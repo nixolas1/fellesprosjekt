@@ -185,6 +185,7 @@ public class Controller implements Initializable{
                 System.out.println("an error occured");
             }
         }
+        Main.close();
     }
 
     public ArrayList<Utility> makeUtilityObjects() {
