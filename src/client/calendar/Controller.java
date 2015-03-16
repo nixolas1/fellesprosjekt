@@ -77,7 +77,8 @@ public class Controller {
 
     private LocalDate calDate = LocalDate.now();
     private ThreadClient socket = client.Main.socket;
-    private Integer[] cals = new Integer[]{1,2,3,4};
+    private int privCal = Main.user.getPrivateCalendar();
+    private Integer[] cals = new Integer[]{privCal};
     private Notifications notifs;
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
     private ArrayList<UserModel> allUsersUM;
