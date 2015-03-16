@@ -708,7 +708,7 @@
             </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                <children>
-                  <Text fx:id="name" layoutX="10.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fornavn Etternavn" wrappingWidth="159.3587646484375">
+                  <Text fx:id="name" layoutX="24.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fornavn Etternavn" wrappingWidth="159.3587646484375">
                      <font>
                         <Font name="Helvetica Neue" size="13.0" />
                      </font></Text>
@@ -716,7 +716,7 @@
             </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
                <children>
-                  <Button fx:id="logOff" layoutX="10.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#logOff" prefHeight="20.0" text="Logg av">
+                  <Button fx:id="logOff" layoutX="24.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logOff" prefHeight="20.0" prefWidth="122.0" text="Logg av">
                      <font>
                         <Font name="Helvetica Neue" size="10.0" />
                      </font></Button>
@@ -724,7 +724,7 @@
             </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
                <children>
-                  <Button fx:id="userSettings" layoutX="10.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#showUserSettings" prefHeight="20.0" prefWidth="122.0" text="Brukerinnstillinger">
+                  <Button fx:id="userSettings" layoutX="24.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#showUserSettings" prefHeight="20.0" prefWidth="122.0" text="Brukerinnstillinger">
                      <font>
                         <Font name="Helvetica Neue" size="10.0" />
                      </font></Button>
@@ -732,7 +732,7 @@
             </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
                <children>
-                  <Button fx:id="createApp" layoutX="10.0" maxWidth="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onBtnShowNewAppointment" prefHeight="20.0" prefWidth="122.0" stylesheets="@main-gui.css" text="Opprett avtale" textFill="WHITE">
+                  <Button fx:id="createApp" layoutX="24.0" maxWidth="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onBtnShowNewAppointment" prefHeight="20.0" prefWidth="122.0" stylesheets="@main-gui.css" text="Opprett avtale" textFill="WHITE">
                      <font>
                         <Font name="Helvetica Neue" size="10.0" />
                      </font></Button>
@@ -740,7 +740,7 @@
             </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="8">
                  <children>
-                  <Button fx:id="createRoom" layoutX="10.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onBtnShowNewRoom" prefHeight="20.0" prefWidth="122.0" stylesheets="@main-gui.css" text="Opprett rom" textFill="WHITE">
+                  <Button fx:id="createRoom" layoutX="24.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onBtnShowNewRoom" prefHeight="20.0" prefWidth="122.0" stylesheets="@main-gui.css" text="Opprett rom" textFill="WHITE">
                      <font>
                         <Font name="Helvetica Neue" size="10.0" />
                      </font>
@@ -773,7 +773,7 @@
             </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="7">
                <children>
-                     <Button fx:id="createGroup" layoutX="10.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onBtnShowNewGroup" prefHeight="20.0" prefWidth="122.0" stylesheets="@main-gui.css" text="Opprett gruppe" textFill="WHITE">
+                     <Button fx:id="createGroup" layoutX="24.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onBtnShowNewGroup" prefHeight="20.0" prefWidth="122.0" stylesheets="@main-gui.css" text="Opprett gruppe" textFill="WHITE">
                          <font>
                              <Font name="Helvetica Neue" size="10.0" />
                          </font>
@@ -784,12 +784,12 @@
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="10">
                <children>
                   <ListView fx:id="shownCals" layoutX="10.0" layoutY="18.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: #ebebeb;" />
-                  <Label layoutX="10.0" text="Kalendere som vises">
+                  <Label layoutX="24.0" text="Kalendere som vises">
                      <font>
                         <Font name="Helvetica Neue" size="12.0" />
                      </font>
                   </Label>
-                  <Button fx:id="removeCal" layoutX="10.0" layoutY="169.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="20.0" text="Fjern">
+                  <Button fx:id="removeCal" layoutX="24.0" layoutY="169.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="20.0" text="Fjern">
                      <font>
                         <Font size="10.0" />
                      </font>
