@@ -1,6 +1,7 @@
 package calendar;
 
 import client.*;
+import client.Main;
 import javafx.scene.paint.Color;
 import network.ClientDB;
 import network.Query;
@@ -115,6 +116,24 @@ public class Calendar implements Serializable {
             if(Boolean.parseBoolean(li.get(4))) cals.add(new Calendar(Integer.parseInt(li.get(0)), li.get(1)));
         }
         return cals;
+    }
+
+    public static ArrayList<Calendar> getMyCalendarsFromDB(UserModel user) {
+        ArrayList<Calendar> cals = new ArrayList<>();
+        ArrayList<List<String>> calendars = network.ClientDB.getAllTableRowsWhere("User_has_Calendar", "User_email = '" + user.getEmail() + "'", Main.socket);
+        for (List<String> li : calendars) {
+            String calName = network.ClientDB.getAllTableRowsWhere("Calendar", "calendarid = " + li.get(1), Main.socket).get(0).get(1);
+            cals.add(new Calendar(Integer.parseInt(li.get(1)), calName));
+        }
+        return cals;
+    }
+
+    public static ArrayList<String> convertCalendarsToStringArrayList(ArrayList<Calendar> cals) {
+        ArrayList<String> calendars = new ArrayList<>();
+        for (Calendar cal : cals) {
+            calendars.add(cal.getName() + ", " + cal.getId());
+        }
+        return calendars;
     }
 
     public static int createGroupInDatabase(Calendar groupCalendar, ThreadClient socket){

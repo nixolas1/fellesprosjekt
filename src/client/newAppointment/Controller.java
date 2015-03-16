@@ -174,16 +174,6 @@ public class Controller implements Initializable{
             }
         });
 
-        attendeeList.selectionModelProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if(attendeeList.getSelectionModel().getSelectedItem().toString().equals(loggedUser.getFirstName() + " " + loggedUser.getLastName() + ", " + loggedUser.getEmail())) {
-                    remove.setDisable(true);
-                } else {
-                    remove.setDisable(false);
-                }
-            }
-        });
 
 
 
@@ -245,6 +235,7 @@ public class Controller implements Initializable{
     public static ArrayList<Calendar> getCalsFromDB() {
         return calendar.Calendar.getAllCalendarsFromDB();
     }
+
 
 
     @FXML
