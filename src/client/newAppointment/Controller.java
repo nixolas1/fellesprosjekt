@@ -174,16 +174,6 @@ public class Controller implements Initializable{
             }
         });
 
-        attendeeList.selectionModelProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if(attendeeList.getSelectionModel().getSelectedItem().toString().equals(loggedUser.getFirstName() + " " + loggedUser.getLastName() + ", " + loggedUser.getEmail())) {
-                    remove.setDisable(true);
-                } else {
-                    remove.setDisable(false);
-                }
-            }
-        });
 
 
 
@@ -245,6 +235,7 @@ public class Controller implements Initializable{
     public static ArrayList<Calendar> getCalsFromDB() {
         return calendar.Calendar.getAllCalendarsFromDB();
     }
+
 
 
     @FXML
@@ -333,7 +324,12 @@ public class Controller implements Initializable{
         } else {
             System.out.println("One or more fields are INVALID. Data not sent to server.");
         }
+        Main.closeStage();
 
+    }
+
+    public void cancel(ActionEvent event) {
+        Main.closeStage();
     }
 
     public Appointment createAppointmentObject() { // Without room / location

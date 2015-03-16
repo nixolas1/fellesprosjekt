@@ -59,6 +59,9 @@ public class Main extends Application {
         return new Hashtable<String,Boolean>();
     }
 
+    public static void closeStage() {
+        newAppointmentStage.close();
+    }
 
 	public static void main(String[] args) { launch(args); }
 }

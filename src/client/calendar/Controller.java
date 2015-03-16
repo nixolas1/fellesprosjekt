@@ -1,6 +1,7 @@
 package client.calendar;
 
 import calendar.Appointment;
+import calendar.Calendar;
 import calendar.UserModel;
 import client.newAppointment.FxUtil;
 import com.sun.org.apache.xpath.internal.operations.Bool;
@@ -28,7 +29,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ThreadClient;
 import server.User;
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +42,6 @@ import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Locale;
 
@@ -82,10 +81,13 @@ public class Controller {
     private Notifications notifs;
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
     private ArrayList<UserModel> allUsersUM;
+    private ArrayList<calendar.Calendar> myCalendars;
 
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
+        myCalendars = getMyCalsFromDB();
+        myCals.setItems(FXCollections.observableArrayList(calendarsToString(myCalendars)));
         allUsersUM = getAllUserModels();
         findUserCalendar.setItems(FXCollections.observableArrayList(userModelsToString(allUsersUM)));
         FxUtil.autoCompleteComboBox(findUserCalendar, FxUtil.AutoCompleteMode.CONTAINING); // AutoComplete ON
@@ -109,6 +111,12 @@ public class Controller {
     public ArrayList<String> userModelsToString(ArrayList<UserModel> users) {
         return UserModel.convertUserModelsToStringArrayList(users);
     }
+
+    public ArrayList<String> calendarsToString(ArrayList<calendar.Calendar> cals) {
+        return calendar.Calendar.convertCalendarsToStringArrayList(cals);
+    }
+
+    public static ArrayList<calendar.Calendar> getMyCalsFromDB() { return calendar.Calendar.getMyCalendarsFromDB(Main.getLoggedUser()); }
 
     public void importFont() {
         try {
@@ -139,9 +147,9 @@ public class Controller {
     }
 
     private LocalDate getLastMonday(LocalDate d) {
-        Calendar c = Calendar.getInstance(Locale.ENGLISH);
+        java.util.Calendar c = java.util.Calendar.getInstance(Locale.ENGLISH);
         c.setTime(Date.valueOf(d));
-        int day = c.get(Calendar.DAY_OF_WEEK);
+        int day = c.get(java.util.Calendar.DAY_OF_WEEK);
         return d.minusDays(day-2);
     }
 
