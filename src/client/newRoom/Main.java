@@ -56,6 +56,7 @@ public class Main extends Application {
     }
 
     public static Hashtable<String, Boolean> createRoom(Room room) {
+        System.out.println("client " + room.getName());
         Query reply = client.Main.socket.send(new Query("createRoom", room));
         return reply.data;
     }
