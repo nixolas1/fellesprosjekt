@@ -130,6 +130,10 @@ public class Calendar implements Serializable {
         }
     }
 
+    public void setDescription(String desc) {
+        this.description = desc;
+    }
+
     public String displayInfo() {
         return name + ", " + id;
     }

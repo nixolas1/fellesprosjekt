@@ -1,6 +1,7 @@
 package client.newGroupCalendar;
 
 //import calendar.Appointment;
+import calendar.Calendar;
 import calendar.UserModel;
 import client.newAppointment.FxUtil;
 import javafx.beans.value.ChangeListener;
@@ -111,6 +112,7 @@ public class Controller implements Initializable {
         create.setDisable(true);
         groupmembers = FXCollections.observableArrayList();
         groupList.setItems(groupmembers);
+        groupmembers.add(user.getFirstName() + " " + user.getLastName() + ", " + user.getEmail()); // SELF
         allUsers = calendar.UserModel.getAllUsers();
         userInfo = displayUserInfo(allUsers);
         usersComboBox.setItems(userInfo);
@@ -168,8 +170,15 @@ public class Controller implements Initializable {
             groupmembersUserModel.add(usr);
         }
         System.out.println(groupmembersUserModel);
-        Group group = new Group(100, groupname, groupmembersUserModel);
-        //toDo - må addes i database, sondreeeee
+        Calendar cal = new Calendar(groupname, groupmembersUserModel);
+        cal.setDescription(description.getText());
+        Boolean res = Main.createGroup(cal).get("reply");
+        if(res) {
+            System.out.println("Group '" + groupname + "' created.");
+        } else {
+            System.out.println("Error occured. Group not created");
+        }
+
     }
 
     @FXML
