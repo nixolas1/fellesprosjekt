@@ -252,7 +252,7 @@ public class Logic {
 
             String calHasAppQuery = "INSERT INTO `nixo_fp`.`Calendar_has_Appointment` (`Appointment_appointmentid`, `Calendar_calendarid`) VALUES ('"+app.getId()+"', '";
             for(Calendar c : app.getCals()){
-                System.out.println(calHasAppQuery + c.getId() + "');");
+                //System.out.println(calHasAppQuery + c.getId() + "');");
                 stmt.executeUpdate(calHasAppQuery + c.getId() + "');");
             }
 
@@ -261,7 +261,7 @@ public class Logic {
             String n = "NULL";
             for(Attendee a : app.getAttendees()){
                 String q = attQuery + a.getUser().getEmail()+s+app.getId()+s+LocalDateTime.now()+"', NULL, '1', '0', NULL);";
-                System.out.println(q);
+                //System.out.println(q);
                 stmt.executeUpdate(q);
             }
 
@@ -335,7 +335,7 @@ public class Logic {
 
 
     public static Query createGroup(Hashtable<String, Calendar> data){
-        Calendar groupCalendar = data.get("data");
+        Calendar groupCalendar = data.get("reply");
         int groupId = getLastGroupIdUsed() + 1;
         //int groupId = groupCalendar.getId();
         String memberQuery = "INSERT INTO User_has_Calendar (Calendar_calendarid, User_email, isVisible, notifications) VALUES (" + groupId + ", ";
