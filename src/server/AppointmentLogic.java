@@ -1,6 +1,7 @@
 package server;
 
 import calendar.Appointment;
+import calendar.Notification;
 import calendar.UserModel;
 import network.Query;
 
@@ -18,8 +19,11 @@ public class AppointmentLogic {
     public static Query newAppointment(Hashtable<String, Appointment> data){
         try {
             Appointment app = data.get("reply");
-            if(server.database.Logic.createAppointment(app))
+            if(server.database.Logic.createAppointment(app)) {
+                //Notification notif = new Notification(app, app.ca)
+                //NotificationLogic.newNotifications();
                 return new Query("newAppointment", true);
+            }
         }
         catch (Exception e) {
             e.printStackTrace();

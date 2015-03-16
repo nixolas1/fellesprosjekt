@@ -23,8 +23,11 @@ public class NotificationLogic {
         return new Query("getNotifications", false);
     }
 
-    public static boolean newNotification(Notification notif){
-        //TODO store notification in db
+    public static boolean newNotifications(Notification notif, ArrayList<UserModel> users){
+        for(UserModel u : users) {
+            notif.user = u;
+            server.database.Logic.storeNotification(notif);
+        }
         return true;
     }
 

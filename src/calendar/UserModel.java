@@ -128,6 +128,10 @@ public class UserModel implements Serializable {
         }
     }
 
+    public String getFullName(){
+        return getFirstName()+" "+getLastName();
+    }
+
     public static UserModel getUserFromServer(final String user, final String domain){
 
         System.out.println("Getting user: "+user+", "+domain);
