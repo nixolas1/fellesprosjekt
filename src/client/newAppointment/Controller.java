@@ -316,8 +316,11 @@ public class Controller implements Initializable{
             }
             System.out.println(app.displayInfo());
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
-            if(response.get("reply"))
-                System.out.println("Appointment created\n"+app.displayInfo());
+            if(response.get("reply")) {
+                System.out.println("Appointment created\n" + app.displayInfo());
+                Main.closeStage();
+                // todo refresh cal view
+            }
             else
                 System.out.println("Server could not create the appointment.");
 
