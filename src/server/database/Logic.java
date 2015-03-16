@@ -332,6 +332,29 @@ public class Logic {
         System.out.println(String.format("Room '%s' successfully added to Room with id = %s", room.getName(), roomId));
         return new Query("createRoom", true);
     }
+//INSERT INTO `nixo_fp`.`Notification` (`Appointment_appointmentid`, `User_email`, `text`, `seen`, `sent`) VALUES
+// ('1', 'admin@stud.ntnu.no', 'Invitert til Gruppemøte med gruppe 19', NULL, '2015-03-16 14:00:00');
+
+
+    public static Boolean storeNotification(Notification n){
+        String query = "INSERT INTO `nixo_fp`.`Notification` (`Appointment_appointmentid`, `User_email`, `text`, `seen`, `sent`) VALUES ('"+
+                n.app.getId() + "', '" +
+                n.user.getEmail() + "', '" +
+                n.text + "', '" +
+                "0', '" +
+                LocalDateTime.now() + "');";
+        System.out.println("query: " + query);
+        Statement stmt = null;
+
+        try {
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+            return true;
+        } catch (SQLException f) {
+            System.out.println("SQLException triggered in createUser(): " + f);
+        }
+        return false;
+    }
 
 
     public static Query createGroup(Hashtable<String, Calendar> data){
@@ -469,7 +492,7 @@ public class Logic {
                 } finally {
                     System.out.println("User '" + user.getEmail() + "' successfully created in database. Creating private calendar now...");
                     Calendar cal = new Calendar(user.getFullName(), new ArrayList<UserModel>(){{add(user);}});
-                    cal.setDescription(user.getEmail()+" sin private kalender");
+                    cal.setDescription("Min kalender");
                     createGroup(new Hashtable<String, Calendar>(){{put("reply", cal); put("private", new Calendar(-1));}});
                     closeDB(stmt);
                     return true;
