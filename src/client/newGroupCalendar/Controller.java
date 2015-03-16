@@ -178,6 +178,7 @@ public class Controller implements Initializable {
         } else {
             System.out.println("Error occured. Group not created");
         }
+        Main.closeStage();
 
     }
 

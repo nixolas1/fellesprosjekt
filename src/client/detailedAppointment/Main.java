@@ -57,4 +57,10 @@ public class Main extends Application {
         }
     }
 
+    public static void closeStage() {
+        detAppointmentStage.close();
+    }
+
+    public static void main(String[] args) { launch(args); }
+
 }

@@ -201,6 +201,6 @@ public class Controller{
     }
 
     public void toCalendar(ActionEvent event) {
-        client.calendar.Main.show(Main.stage);
+        client.calendar.Main.show(Main.stage, Main.user);
     }
 }

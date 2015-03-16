@@ -333,7 +333,12 @@ public class Controller implements Initializable{
         } else {
             System.out.println("One or more fields are INVALID. Data not sent to server.");
         }
+        Main.closeStage();
 
+    }
+
+    public void cancel(ActionEvent event) {
+        Main.closeStage();
     }
 
     public Appointment createAppointmentObject() { // Without room / location
