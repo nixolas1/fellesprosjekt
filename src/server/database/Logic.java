@@ -252,7 +252,7 @@ public class Logic {
 
             String calHasAppQuery = "INSERT INTO `nixo_fp`.`Calendar_has_Appointment` (`Appointment_appointmentid`, `Calendar_calendarid`) VALUES ('"+app.getId()+"', '";
             for(Calendar c : app.getCals()){
-                System.out.println(calHasAppQuery + c.getId() + "');");
+                //System.out.println(calHasAppQuery + c.getId() + "');");
                 stmt.executeUpdate(calHasAppQuery + c.getId() + "');");
             }
 
@@ -260,9 +260,9 @@ public class Logic {
             String s = "', '";
             String n = "NULL";
             for(Attendee a : app.getAttendees()){
-                String q = attQuery + a.getUser().getEmail()+s+app.getId()+s+LocalDateTime.now()+s+n+s+"1"+s+"0"+s+n+");";
-                System.out.println(attQuery + q);
-                //stmt.executeUpdate(attQuery + q);
+                String q = attQuery + a.getUser().getEmail()+s+app.getId()+s+LocalDateTime.now()+"', NULL, '1', '0', NULL);";
+                System.out.println(q);
+                stmt.executeUpdate(q);
             }
 
             System.out.println("Appointment [Title='" + app.getTitle() + "'] successfully created in database");
