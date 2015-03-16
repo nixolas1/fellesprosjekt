@@ -27,12 +27,12 @@ public class Main {
         server.database.Logic.setConn(connectDB.connect());
 
         //test stuff
-        Hashtable<String, ArrayList<Appointment>> hore= AppointmentLogic.getCalendarAppointments(new Hashtable<String, String>() {{put("id", "1");}}).data;
+        /*Hashtable<String, ArrayList<Appointment>> hore= AppointmentLogic.getCalendarAppointments(new Hashtable<String, String>() {{put("id", "1");}}).data;
         ArrayList<Appointment> appList = hore.get("reply");
         Appointment app = appList.get(0);
         System.out.println(app.toString());
         System.out.println("yes?");
-        server.database.Logic.createAppointment(app);
+        server.database.Logic.createAppointment(app);*/
 
         //Start sockets
         ThreadServer socket = new ThreadServer(7777);

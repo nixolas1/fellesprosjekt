@@ -357,7 +357,9 @@ public class Controller implements Initializable{
     public ArrayList<Attendee> getAttendees(Calendar cal) {
         ArrayList<Attendee> attendeeObjects = new ArrayList<>();
         for(String user : attendees) {
-            UserModel usr = getUserModel(user.split(",")[1]);
+            System.out.println(user);
+            UserModel usr = getUserModel(user.split(", ")[1]);
+            System.out.println(usr.getEmail());
             boolean isOwner = false;
             if(usr.equals(loggedUser)) isOwner = true;
             attendeeObjects.add(new Attendee(usr, LocalDateTime.now(), isOwner));
