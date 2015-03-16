@@ -25,9 +25,9 @@ public class Appointment implements Serializable {
     int repeatEvery=0;
     Room room;
     UserModel owner;
-
-    Boolean isPrivate;
-    Boolean allDay; //if work is chosen
+    Boolean isVisible=true;
+    Boolean isPrivate=false;
+    Boolean allDay=false; //if work is chosen
     ArrayList<Calendar> cals = new ArrayList<>();
     public ArrayList<Attendee> attendees = new ArrayList<Attendee>();
 
@@ -36,7 +36,7 @@ public class Appointment implements Serializable {
 
     public Appointment(String id, String title, String description, String location, String startDate,
                        String endDate, String endRepeatDate, String repeatEveryXDays,
-                       String isPrivate, String isAllDay, String roomID){
+                       String isVisible, String isAllDay, String isPrivate, String roomID){
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -47,7 +47,7 @@ public class Appointment implements Serializable {
         this.endDate = LocalDateTime.parse(endDate, format);
         this.isPrivate = Boolean.parseBoolean(isPrivate);
         this.allDay = Boolean.parseBoolean(isAllDay);
-
+        this.isVisible = Boolean.parseBoolean(isVisible);
         this.cals = Calendar.getAllCalendarsInAppointment(this.id);
         this.attendees = Attendee.getAllAttendeesForAppointment(this.id);
         if(roomID != null) {
@@ -96,7 +96,7 @@ public class Appointment implements Serializable {
 
     public static Appointment getAppointmentFromDB(String id){ //Server side only!
         String[] a = server.database.Logic.getRow("Appointment", "appointmentid", id);
-        return new Appointment(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10]);
+        return new Appointment(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], a[11]);
     }
 
     public ArrayList<Appointment> getCollisions(ArrayList<Appointment> appointments){
@@ -192,10 +192,16 @@ public class Appointment implements Serializable {
     public void setCals(ArrayList<Calendar> cals) {
         this.cals = cals;
     }
+    public Boolean getIsVisible() {return isVisible;}
+    public void setIsVisible(Boolean isVisible) {this.isVisible = isVisible;}
+    public Boolean getIsPrivate() {return isPrivate;}
+    public void setIsPrivate(Boolean isPrivate) {this.isPrivate = isPrivate;}
+    public Boolean getAllDay() {return allDay;}
+    public void setAllDay(Boolean allDay) {this.allDay = allDay;}
 
-public String displayInfo() {
-    return "Appointment ["+id+"]\nTitle: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
-            "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo();
+    public String displayInfo() {
+        return "Appointment ["+id+"]\nTitle: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
+                "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo();
 }
 
 

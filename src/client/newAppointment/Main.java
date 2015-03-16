@@ -32,6 +32,10 @@ public class Main extends Application {
 		}
 	}
 
+    public static UserModel getLoggedUser() {
+        return user;
+    }
+
     public static void showNewAppointment(Stage parentStage, UserModel loggedUser) {
         appParent = parentStage;
         user = loggedUser;

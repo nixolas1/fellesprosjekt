@@ -1,9 +1,6 @@
 package server.database;
 
-import calendar.Appointment;
-import calendar.Calendar;
-import calendar.Group;
-import calendar.UserModel;
+import calendar.*;
 import network.Query;
 import com.sun.org.apache.regexp.internal.RESyntaxException;
 //import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
@@ -12,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -82,10 +80,12 @@ public class Logic {
     public static ArrayList<List<String>> getAllRows(String table) {
         return getAllRowsWhere(table, null);
     }
-
     public static ArrayList<List<String>> getAllRowsWhere(String table, String where){
         String whereText = where != null ? " WHERE "+where : "";
-        String getRow = "SELECT * FROM " + table + whereText + ";";
+        return getAllRowsQuery(table, whereText);
+    }
+    public static ArrayList<List<String>> getAllRowsQuery(String table, String query){
+        String getRow = "SELECT * FROM " + table + " " + query + ";";
         String[] row = new String[getNumberOfColumns(table)];
         Statement stmt = null;
         ResultSet result = null;
@@ -204,31 +204,67 @@ public class Logic {
     }
 
     public static boolean createAppointment(Appointment app){
-        //String query = "INSERT INTO Appointment (title, description, location, starttime, endtime, repeatEndDate, repeat, Calendar_calendarid, Room_roomid) VALUES ";
-        // title	description	location	starttime	endtime	repeatEndDate	repeat	Calendar_calendarid	Room_roomid
-        String query = "INSERT INTO nixo_fp.Appointment (appointmentid, title, description, location, starttime, endtime, repeatEndDate, repeat, Calendar_calendarid, Room_roomid) VALUES ";
-        String location = app.getLocation() != null && app.getLocation().length() > 0 ? ( "'" + app.getLocation() + "'" ) : "NULL" ;
-        String description = app.getPurpose() != null && app.getPurpose().length() > 0 ? ("'" + app.getPurpose() + "'") : "NULL";
-        String repeatEndDate = app.getEndRepeatDate() != null ? ("'" + app.getEndRepeatDate() + "'" ) : "NULL";
+
+        String q1 = "INSERT INTO `nixo_fp`.`Appointment` (`appointmentid`, `title`, `description`, `location`, `startTime`, `endTime`, `repeatEndDate`, `repeat`, `isVisible`, `isAllDay`, `isPrivate`, `Room_roomid1`) VALUES ";
+
+        String location = app.getLocation() != null && app.getLocation().length() > 0 ?
+                ( "'" + app.getLocation() + "'" ) : "NULL" ;
+        String description = app.getPurpose() != null && app.getPurpose().length() > 0 ?
+                ("'" + app.getPurpose() + "'") : "NULL";
+        String repeatEndDate = app.getEndRepeatDate() != null ?
+                ("'" + app.getEndRepeatDate() + "'" ) : "NULL";
         String repeat = app.getRepeatEvery() > 0 ? String.valueOf(app.getRepeatEvery()) : "NULL";
         String roomId = app.getRoom() != null ? String.valueOf(app.getRoom().getId()) : "NULL";
-        //System.out.println("String location = '" + location + "'");
-        //System.out.println("int roomId = " + roomId);
+        String isPrivate = app.getIsPrivate().toString();
+        String allDay = app.getAllDay().toString();
+        String isVisible = app.getIsVisible().toString();
+        /*
+        this.cals = Calendar.getAllCalendarsInAppointment(this.id);
+        this.attendees = Attendee.getAllAttendeesForAppointment(this.id);
+         */
+
+
         Statement stmt = null;
-        //app.getStartDate();
+
         try {
             stmt = conn.createStatement();
-            /*query += String.format("('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",
-                    app.getTitle(), app.getPurpose(), app.getRoom(), app.getStartDate(),
-                    app.getEndDate(), app.getEndRepeatDate(), app.getRepeatEvery(), app.getCal().getID(), roomId);
-                    */
-            //String q = "INSERT INTO Appointment (appointmentid, title, description, location, starttime, endtime, repeatEndDate, repeat, Calendar_calendarid, Room_roomid) VALUES (NULL, 'testmoete', 'for aa teste vel', 'IT bygget', '2015-04-04 10:00:00', '2015-04-04 16:00:00', NULL, NULL, '5', '0');";
-            //String q2 = "VALUES ('null', 'Testmøte3', 'blablabla', 'ITbygg', '2015-04-04 10:00:00', '2015-04-04 16:00:00', 'null', 'null', '6', '13');";
-            //String query3 = "(`appointmentid`, `title`, `description`, `location`, `starttime`, `endtime`, `repeatEndDate`, `repeat`, `Calendar_calendarid`, `Room_roomid`) VALUES ";
-            String query2 = "(NULL, '"+app.getTitle()+"', "+description+", "+location+", '"+app.getStartDate()+"', '"+app.getEndDate()+"', "+repeatEndDate+", "+repeat+", "+", "+roomId+");";
-            System.out.println("QUERY: " + query + query2);
-            //System.out.println("QUERY: " + query);
-            stmt.executeUpdate(query + query2);
+                   //appointmentid 	   title                description 	location        startTime	              endTime                repeatEndDate	   repeat	 isVisible	    isAllDay	isPrivate	Room_roomid1
+            String q2 = "(NULL, '"
+                    +app.getTitle()+"', "
+                    +description+", "
+                    +location+", '"
+                    +app.getStartDate()+"', '"
+                    +app.getEndDate()+"', "
+                    +repeatEndDate+", "
+                    +repeat+", "
+                    +isVisible+", "
+                    +allDay+", "
+                    +isPrivate+", "
+                    +roomId+") ";
+
+            //String q3 = "RETURNING Appointment.appointmentid INTO ?;";
+            System.out.println(q1+q2);
+            stmt.executeUpdate(q1 + q2, Statement.RETURN_GENERATED_KEYS);
+
+            ResultSet result = stmt.getGeneratedKeys();
+            if(result.next())
+                app.setId(result.getInt(1));
+
+            String calHasAppQuery = "INSERT INTO `nixo_fp`.`Calendar_has_Appointment` (`Appointment_appointmentid`, `Calendar_calendarid`) VALUES ('"+app.getId()+"', '";
+            for(Calendar c : app.getCals()){
+                //System.out.println(calHasAppQuery + c.getId() + "');");
+                stmt.executeUpdate(calHasAppQuery + c.getId() + "');");
+            }
+
+            String attQuery = "INSERT INTO `nixo_fp`.`Attendee` (`User_email`, `Appointment_appointmentid`, `timeInvited`, `timeAnswered`, `willAttend`, `isOwner`, `alarm`) VALUES ('";
+            String s = "', '";
+            String n = "NULL";
+            for(Attendee a : app.getAttendees()){
+                String q = attQuery + a.getUser().getEmail()+s+app.getId()+s+LocalDateTime.now()+"', NULL, '1', '0', NULL);";
+                System.out.println(q);
+                stmt.executeUpdate(q);
+            }
+
             System.out.println("Appointment [Title='" + app.getTitle() + "'] successfully created in database");
         } catch (SQLException e) {
             System.out.println("SQLException triggered in createAppointment(): " + e);
@@ -237,6 +273,59 @@ public class Logic {
             closeDB(stmt);
         }
         return true;
+    }
+
+    public static int getLastRoomIdUsed(){
+        String query = "SELECT roomid FROM Room ORDER BY roomid DESC LIMIT 1;";
+        ResultSet result = null;
+        Statement stmt = null;
+        int lastIdUsed = 0;
+
+        try{
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(query);
+        } catch (SQLException e){
+            System.out.println("SQLException triggered in getLastRoomIdUsed(), 1. catch block: " + e);
+        } try {
+            if (result.next()){
+                lastIdUsed = result.getInt(1);
+                //System.out.println("lastIdUsed: " + lastIdUsed);
+            }
+        } catch (SQLException f){
+            System.out.println("SQLException triggered in getLastRoomIdUsed(), 2. catch block: " + f);
+        } finally {
+            closeDB(stmt);
+        } return lastIdUsed;
+    }
+
+    public static Query createRoom(Hashtable<String, Room> data) {
+        Room room = data.get("data");
+        int roomId = getLastRoomIdUsed() + 1;
+        System.out.println(roomId);
+        Statement stmt = null;
+        String query = "INSERT INTO Room (roomid, name, capacity, opensAt, closesAt) VALUES (" + roomId + ", '" + room.getName() + "', " + room.getCapacity() + ", " + room.getOpensAt() + ", " + room.getClosesAt() + ");";
+        try {
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+            System.out.println(String.format("Room '%s' successfully added to Room with id = %s", room.getName(), roomId));
+        } catch (SQLException e) {
+            System.out.println("SQLException triggered in createRoom(), 1. try block: " + e);
+            return new Query("createRoom", false);
+        }
+        for (int i = 0; i < room.getUtilities().size() - 1; i++) {
+            try {
+                String utilityQuery = "INSERT INTO Room_has_Utility (Room_roomid, Utility_utilityid) VALUES (" + roomId + ", " + room.getUtilities().get(i).getId() + ");";
+                stmt = conn.createStatement();
+                stmt.executeUpdate(utilityQuery);
+            } catch(SQLException e) {
+                System.out.println("SQLException triggered in createRoom(), 2. try block: " + e);
+                return new Query("createRoom", false);
+            } catch(Exception f) {
+                System.out.println("Exception triggered in createRoom(): " + f);
+            }
+        } closeDB(stmt);
+        System.out.println(String.format("Room '%s' successfully added to Room with id = %s", room.getName(), roomId));
+        return new Query("createRoom", true);
     }
 
 

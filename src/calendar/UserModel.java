@@ -107,8 +107,12 @@ public class UserModel implements Serializable {
     }
 
     public static UserModel getUserFromServer(final String email){
-        String[] split = email.split("@");
-        return getUserFromServer(split[0], split[1]);
+        try {
+            String[] split = email.split("@");
+            return getUserFromServer(split[0], split[1]);
+        }catch (NullPointerException e){
+            return server.database.Logic.getUser(email);
+        }
     }
 
     public static UserModel getUserFromServer(final String user, final String domain){
@@ -130,6 +134,14 @@ public class UserModel implements Serializable {
         System.out.println(reply.function);
         Hashtable<String, ArrayList<UserModel>> response = reply.data;
         return response.get("reply");
+    }
+
+    public static ArrayList<String> convertUserModelsToStringArrayList(ArrayList<UserModel> users) {
+        ArrayList<String> converted = new ArrayList<>();
+        for (UserModel user : users) {
+            converted.add(user.getFirstName() + " " + user.getLastName() + ", " + user.getEmail());
+        }
+        return converted;
     }
 
 
