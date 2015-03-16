@@ -292,7 +292,7 @@ public class Controller implements Initializable{
         }
     }
 
-
+//app.addCalender(new Calendar(loggedUser.getPrivateCalendar()));
     @FXML
     public void createAppointment(ActionEvent event) {
         if(checkIfAllValid()) {
