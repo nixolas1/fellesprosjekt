@@ -42,6 +42,7 @@ import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Locale;
 
@@ -85,6 +86,7 @@ public class Controller {
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
+        name.setText(Main.getLoggedUser().getFirstName() + " " + Main.getLoggedUser().getLastName());
         myCalendars = getMyCalsFromDB();
         myCals.setItems(FXCollections.observableArrayList(calendarsToString(myCalendars)));
         allUsersUM = getAllUserModels();
@@ -100,6 +102,34 @@ public class Controller {
         populateCalendars(cals);
         importFont();
         notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
+
+        myCals.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                Calendar cal = new Calendar(Integer.parseInt(myCals.getValue().toString().split(",")[1].trim()), myCals.getValue().toString().split(",")[0].trim());
+                System.out.println("Viewing calendar " + cal.getName());
+                clearAppointments();
+                cals = new Integer[]{cal.getId()};
+                appointments = getAppointments(cals);
+                populateCalendars(cals);
+            }
+        });
+
+        findUserCalendar.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                UserModel user = getUserModelFromEmail(findUserCalendar.getValue().toString().split(",")[1].trim());
+                System.out.println("Viewing " + user.getFirstName() + "'s calendar");
+                /*clearAppointments(); //todo
+                cals = new Integer[]{};
+                ArrayList<Calendar> userCal = calendar.Calendar.getMyCalendarsFromDB(user);
+                for (int i = 0; i < userCal.size(); i++) {
+                    cals[i] = userCal.get(i).getId();
+                }
+                appointments = getAppointments(cals);
+                populateCalendars(cals);*/
+            }
+        });
 
     }
 
@@ -382,6 +412,13 @@ public class Controller {
 
     public double getColWidth(){
         return calendarGrid.getColumnConstraints().get(1).getPrefWidth();
+    }
+
+    public UserModel getUserModelFromEmail(String email) {
+        for (UserModel user : allUsersUM) {
+            if(user.getEmail().equals(email)) return user;
+        }
+        return null;
     }
 
 }
