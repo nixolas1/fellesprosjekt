@@ -192,6 +192,12 @@ public class Appointment implements Serializable {
     public void setCals(ArrayList<Calendar> cals) {
         this.cals = cals;
     }
+    public Boolean getIsVisible() {return isVisible;}
+    public void setIsVisible(Boolean isVisible) {this.isVisible = isVisible;}
+    public Boolean getIsPrivate() {return isPrivate;}
+    public void setIsPrivate(Boolean isPrivate) {this.isPrivate = isPrivate;}
+    public Boolean getAllDay() {return allDay;}
+    public void setAllDay(Boolean allDay) {this.allDay = allDay;}
 
     public String displayInfo() {
         return "Appointment ["+id+"]\nTitle: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+

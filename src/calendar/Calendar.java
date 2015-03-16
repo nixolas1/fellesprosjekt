@@ -42,7 +42,7 @@ public class Calendar implements Serializable {
         ArrayList<List<String>> rows= server.database.Logic.getAllRowsWhere("Calendar_has_Appointment", "Appointment_appointmentid = " + id);
         ArrayList<Calendar> ret = new ArrayList<>();
         for(List<String> c : rows){
-            ret.add(new Calendar(c.get(1))); //TODO check that it is correct index
+            ret.add(new Calendar(Integer.parseInt(c.get(1))));
         }
         return ret;
     }
