@@ -5,9 +5,11 @@ import client.calendar.Controller.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -19,12 +21,12 @@ import java.util.TimerTask;
 public class Notifications {
     public ArrayList<Notification> notifications = new ArrayList<>();
     Text label = null;
-    ComboBox list = null;
+    ComboBox<Notification> list = null;
     public int every = 10;
     public int unreadCount = 0;
     String email;
 
-    public Notifications(String email, Text unreadCountLabel, ComboBox notificationList){
+    public Notifications(String email, Text unreadCountLabel, ComboBox<Notification> notificationList){
         notifications = Notification.getUserNotifications(email, client.Main.socket);
         label = unreadCountLabel;
         list = notificationList;
@@ -52,11 +54,28 @@ public class Notifications {
             unreadCount = getNumberOfUnreadNotifications();
             label.setText("" + unreadCount);
             list.getItems().clear();
-            ObservableList<String> notiInfo = FXCollections.observableArrayList();
-            for (Notification n : notifications) {
-                notiInfo.add(n.text);           //TODO change to cellfactory
-            }
-            list.setItems(notiInfo);
+            list.getItems().addAll(notifications);
+            list.setCellFactory(new Callback<ListView<Notification>, ListCell<Notification>>() {
+                @Override
+                public ListCell<Notification> call(ListView<Notification> p) {
+                    return new ListCell<Notification>() {
+                        @Override
+                        protected void updateItem(Notification item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (item != null) {
+                                setText(item.text);
+                                if (!item.seen) {
+                                    setTextFill(Color.RED);
+                                }
+                            }
+                            else {
+                                setText(null);
+                            }
+
+                        }
+                    };
+                }
+            });
         });
     }
 

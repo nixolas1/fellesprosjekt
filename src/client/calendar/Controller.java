@@ -55,7 +55,8 @@ public class Controller {
     @FXML private Text name, year, month, weekNum, monDate, tueDate, wedDate, thuDate, friDate, satDate, sunDate, notifCount;
     @FXML private Button logOff, userSettings, yourCalendar, today;
     @FXML private GridPane calendarGrid;
-    @FXML public ComboBox notifCombo, findUserCalendar, myCals;
+    @FXML public ComboBox<Notification> notifCombo;
+    @FXML public ComboBox findUserCalendar, myCals;
 
 
     protected static Stage primaryStage;
