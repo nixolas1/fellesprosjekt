@@ -209,16 +209,14 @@ public class Controller implements Initializable{
         attendees = FXCollections.observableArrayList(); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
         allUsers = getUsersFromDB();
-        rooms = getRooms();
-        roomsString = new ArrayList<>();
-        for (Room r : rooms) {
-            roomsString.add(r.getName() + " (" + r.getCapacity() + ")");
-        }
-        room.setItems(FXCollections.observableArrayList(roomsString));
+        room.setItems(FXCollections.observableArrayList("Du må velge dato, tidspunkt og deltakere først"));
+        room.setValue("Du må velge dato, tidspunkt og deltakere først");
+        room.setDisable(true);
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
 
         allGroups = getCalsFromDB();
+        System.out.println(allGroups);
         addedGroups = FXCollections.observableArrayList();
         groupList.setItems(addedGroups);
         groupInfo = displayCalInfo(allGroups);
@@ -235,9 +233,8 @@ public class Controller implements Initializable{
     }
 
     public static ArrayList<Calendar> getCalsFromDB() {
-        return calendar.Calendar.getAllCalendarsFromDB();
+        return calendar.Calendar.getGroupCalendarsFromDB();
     }
-
 
 
     @FXML
@@ -253,6 +250,7 @@ public class Controller implements Initializable{
         //FxUtil.resetSelection(usersComboBox);
         usersComboBox.getEditor().setText("");
         System.out.println(attendees);
+        setupRoomList();
     }
 
     // Get UserModel from email
@@ -272,6 +270,7 @@ public class Controller implements Initializable{
         if (attendees.contains(usr)) {
             attendees.remove(usr);
             userInfo.add(usr);
+            setupRoomList();
         }
     }
 
@@ -281,6 +280,7 @@ public class Controller implements Initializable{
         if(groupInfo.contains(grp)) {
             addedGroups.add(grp);
             groupInfo.remove(grp);
+            setupRoomList();
         }
         groupComboBox.getEditor().setText("");
         System.out.println(addedGroups);
@@ -294,6 +294,7 @@ public class Controller implements Initializable{
             addedGroups.remove(grp);
             groupInfo.add(grp);
             System.out.println("Group " + grp + " removed.");
+            setupRoomList();
         }
     }
 
@@ -308,11 +309,6 @@ public class Controller implements Initializable{
                 app.setRoom(new Room(1, "test", 1, 0, 23, new ArrayList<Utility>())); // TEST ROOM! TODO get rooms from DB
             }
             calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
-            app.setAttendees(getAttendees());
-            ArrayList<Calendar> grps = getGroups();
-            if(grps.size() > 0) {
-                app.setCals(grps); // GROUPS = CALENDARS
-            }
             for (Attendee a : app.getAttendees()) {
                 app.addCalender(new Calendar(a.getUser().getPrivateCalendar()));
             }
@@ -337,6 +333,16 @@ public class Controller implements Initializable{
         Main.closeStage();
     }
 
+    public void setupRoomList() {
+        rooms = getRooms();
+        roomsString = new ArrayList<>();
+        for (Room r: rooms) {
+            roomsString.add(r.getName() + " (" + r.getCapacity() + " plasser)");
+        }
+        room.setItems(FXCollections.observableArrayList(roomsString));
+        room.setDisable(false);
+    }
+
     public Appointment createAppointmentObject() { // Without room / location
         String title = this.title.getText() != null && this.title.getText().length() > 0 ? this.title.getText() : null;
         String description = this.description.getText() != null && this.description.getText().length() > 0 ? this.description.getText() : null;
@@ -357,6 +363,12 @@ public class Controller implements Initializable{
         String location = null;
         int repeat = this.repeat.getText() != null && this.repeat.getText().length() > 0 ? Integer.parseInt(this.repeat.getText()) : 0;
         Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null,repeat,endRepeatDate,location);
+        app.setAttendees(getAttendees());
+        ArrayList<Calendar> grps = getGroups();
+        if(grps.size() > 0) {
+            app.setCals(grps); // GROUPS = CALENDARS
+        }
+        System.out.println(app.getAttendees());
         return app;
 
     }
@@ -406,12 +418,9 @@ public class Controller implements Initializable{
 
 
     public ArrayList<Room> getRooms() {
-        // todo: Get all rooms from server
-        Room r1 = new Room(1,"r1",50,7,20,null);
-        System.out.println(r1.getName() + " " + r1.getCapacity());
-        Room r2 = new Room(2,"r2",50,8,20,null);
-        return new ArrayList<Room>(Arrays.asList(r1,r2));
+        return Main.getRooms(createAppointmentObject());
     }
+
     public int getAppointmentId() {
         // todo: Get ID from server
         return -1;
