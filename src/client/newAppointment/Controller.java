@@ -58,6 +58,7 @@ public class Controller implements Initializable{
     private ArrayList<Calendar> allGroups;
     private ObservableList<String> groupInfo;
     private ObservableList<String> addedGroups;
+    private ArrayList<String> roomsString;
     private ArrayList<Room> rooms;
     private UserModel loggedUser;
     private String timeRegex = "[\\d]{2}:[\\d]{2}";
@@ -175,8 +176,6 @@ public class Controller implements Initializable{
         });
 
 
-
-
         //createValidationListener(room, 0, "[\\w- ]+ [\\d]+", 50);
         createValidationListener(from, 0, "[\\d]{2}:[\\d]{2}", 5);
         createValidationListener(to,   2,   "[\\d]{2}:[\\d]{2}", 5);
@@ -209,10 +208,13 @@ public class Controller implements Initializable{
         create.setDisable(true);
         attendees = FXCollections.observableArrayList(); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
-        //attendees.add(loggedUser.getFirstName() + " " + loggedUser.getLastName() + ", " + loggedUser.getEmail());
         allUsers = getUsersFromDB();
         rooms = getRooms();
-        room.setItems(FXCollections.observableArrayList(rooms));
+        roomsString = new ArrayList<>();
+        for (Room r : rooms) {
+            roomsString.add(r.getName() + " (" + r.getCapacity() + ")");
+        }
+        room.setItems(FXCollections.observableArrayList(roomsString));
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
 
@@ -405,7 +407,10 @@ public class Controller implements Initializable{
 
     public ArrayList<Room> getRooms() {
         // todo: Get all rooms from server
-        return new ArrayList<Room>(Arrays.asList(new Room(1,"Rom1",3,1,12), new Room(2,"Room321",5,9,15), new Room(3,"R1",500,8,20)));
+        Room r1 = new Room(1,"r1",50,7,20,null);
+        System.out.println(r1.getName() + " " + r1.getCapacity());
+        Room r2 = new Room(2,"r2",50,8,20,null);
+        return new ArrayList<Room>(Arrays.asList(r1,r2));
     }
     public int getAppointmentId() {
         // todo: Get ID from server
