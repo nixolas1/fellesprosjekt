@@ -55,11 +55,14 @@ public class Main {
         Logic.createGroup(foo);
         */
 
-        /*
+
         Hashtable<String, ArrayList<Appointment>> hore= AppointmentLogic.getCalendarAppointments(new Hashtable<String, String>() {{put("id", "1");}}).data;
         ArrayList<Appointment> appList = hore.get("reply");
         Appointment app1 = appList.get(0);
-        */
+        System.out.println("STARTING ROOM LOGIC");
+        RoomLogic.initiateRoomLogicObject(app1);
+
+
 
       /*  Hashtable<String, ArrayList<Room>> foo = RoomLogic.getRooms().data;
         ArrayList<Room> roomList = foo.get("reply");

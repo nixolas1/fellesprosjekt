@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Sondre on 06.03.15.
  */
-public class RoomLogic {
+public class RoomLogic implements Comparable<Room>{
 
     public static Query getRooms(){
         try {
@@ -158,17 +158,22 @@ public class RoomLogic {
             /*for (String appointmentAttribute : appointments){
                 for (int i = 0; i < appointments.size(); i++){*/
                     // Legger kun til rommene med bra nok kapasitet
-            if (! appointments.get(11).equalsIgnoreCase("null") || appointments.get(11).length() < 1) {
-                Appointment newAppointment = new Appointment(appointments.get(0), appointments.get(1),
-                        appointments.get(2), appointments.get(3), appointments.get(4), appointments.get(5),
-                        appointments.get(6), appointments.get(7), appointments.get(8), appointments.get(9),
-                        appointments.get(10), appointments.get(11));
-                if (checkIfAppointmentsCollide(appointment, newAppointment)){
-                    collidingAppointments.add(newAppointment);
-                    allRoomIdsWithConflict.add(newAppointment.getId());
-                    System.out.println("Conflict with appointment '" + newAppointment.getTitle() + "' [ID=" + newAppointment.getId() + "]");
+            try{
+                if (appointments.get(11) != null || ! appointments.get(11).equalsIgnoreCase("null") || appointments.get(11).length() < 1) {
+                    Appointment newAppointment = new Appointment(appointments.get(0), appointments.get(1),
+                            appointments.get(2), appointments.get(3), appointments.get(4), appointments.get(5),
+                            appointments.get(6), appointments.get(7), appointments.get(8), appointments.get(9),
+                            appointments.get(10), appointments.get(11));
+                    if (checkIfAppointmentsCollide(appointment, newAppointment)){
+                        collidingAppointments.add(newAppointment);
+                        allRoomIdsWithConflict.add(newAppointment.getId());
+                        System.out.println("Conflict with appointment '" + newAppointment.getTitle() + "' [ID=" + newAppointment.getId() + "]");
+                    }
                 }
+            } catch (NullPointerException e){
+                System.out.println("NullPointerException triggered in initiateRoomLogic(). Appointment [ID=" + appointments.get(0) + "] has no roomid");
             }
+
                 //}
             //}
         }
@@ -181,7 +186,7 @@ public class RoomLogic {
 
         System.out.println("Room selection done. Available rooms are: ");
         for (Room room : allCapableRooms){
-            System.out.println("[ID=" + room.getId() + "] " + room.getName());
+            System.out.println("[CAP=" + room.getCapacity() + "] [ID=" + room.getId() + "] " + room.getName());
         }
 
 
@@ -203,4 +208,8 @@ public class RoomLogic {
         return false;
     }
 
+    @Override
+    public int compareTo(Room room) {
+        return room.;
+    }
 }
