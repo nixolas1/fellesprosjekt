@@ -312,7 +312,8 @@ public class Controller implements Initializable{
                 app.setCals(grps); // GROUPS = CALENDARS
             }
             for (Attendee a : app.getAttendees()) {
-                app.addCalender(new Calendar(a.getUser().getPrivateCalendar()));
+                if(a.getUser().getPrivateCalendar() != -1)
+                    app.addCalender(new Calendar(a.getUser().getPrivateCalendar()));
             }
             System.out.println(app.displayInfo());
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;

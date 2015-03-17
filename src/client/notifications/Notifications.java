@@ -1,6 +1,8 @@
 package client.notifications;
 
 import calendar.Notification;
+import client.calendar.Controller.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
@@ -15,23 +17,24 @@ import java.util.TimerTask;
  * Created by nixo on 2/23/15.
  */
 public class Notifications {
-    ArrayList<Notification> notifications = new ArrayList<>();
+    public ArrayList<Notification> notifications = new ArrayList<>();
     Text label = null;
     ComboBox list = null;
-    int every = 60;
+    public int every = 10;
+    public int unreadCount = 0;
+    String email;
 
     public Notifications(String email, Text unreadCountLabel, ComboBox notificationList){
         notifications = Notification.getUserNotifications(email, client.Main.socket);
         label = unreadCountLabel;
         list = notificationList;
+        this.email=email;
 
-        Timer timer = new Timer();
-        timer.schedule( new TimerTask() {
-            public void run() {
-                notifications = Notification.getUserNotifications(email, client.Main.socket);
-                updateList();
-            }
-        }, 0, every*1000);
+    }
+
+    public void refresh(){
+        notifications = Notification.getUserNotifications(email, client.Main.socket);
+        updateList();
     }
 
     public int getNumberOfUnreadNotifications(){
@@ -42,14 +45,19 @@ public class Notifications {
         return count;
     }
 
+
+
     public void updateList(){
-       label.setText(""+getNumberOfUnreadNotifications());
-        list.getItems().clear();
-        ObservableList<String> notiInfo = FXCollections.observableArrayList();
-        for(Notification n : notifications){
-            notiInfo.add(n.text);           //TODO change to cellfactory
-        }
-        list.setItems(notiInfo);
+        Platform.runLater(() -> {
+            unreadCount = getNumberOfUnreadNotifications();
+            label.setText("" + unreadCount);
+            list.getItems().clear();
+            ObservableList<String> notiInfo = FXCollections.observableArrayList();
+            for (Notification n : notifications) {
+                notiInfo.add(n.text);           //TODO change to cellfactory
+            }
+            list.setItems(notiInfo);
+        });
     }
 
 

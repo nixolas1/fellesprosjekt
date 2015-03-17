@@ -49,6 +49,13 @@ public class Notification implements Serializable {
             this.created=LocalDateTime.parse(created, format);
     }
 
+    public Notification(Appointment app, String text){
+
+        this.app=app;
+        this.text=text;
+
+    }
+
     public static ArrayList<Notification> getUserNotifications(String email, ThreadClient socket){
         System.out.println("Trying to get all notifications from user "+email);
         try {

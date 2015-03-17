@@ -2,9 +2,11 @@ package client.calendar;
 
 import calendar.Appointment;
 import calendar.Calendar;
+import calendar.Notification;
 import calendar.UserModel;
 import client.newAppointment.FxUtil;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import client.notifications.Notifications;
@@ -41,10 +43,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by jonaslochsen on 02.03.15.
@@ -69,6 +68,8 @@ public class Controller {
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
     private ArrayList<UserModel> allUsersUM;
     private ArrayList<calendar.Calendar> myCalendars;
+    Timer timer = new Timer();
+    Integer numUnread = 0;
 
     @FXML
     void initialize() {
@@ -89,6 +90,22 @@ public class Controller {
         populateCalendars(cals);
         importFont();
         notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
+
+
+        timer.schedule( new TimerTask() {
+            public void run() {
+                notifs.refresh();
+                if(notifs.unreadCount>numUnread){
+                    Platform.runLater(() -> {
+                        clearAppointments();
+                        appointments = getAppointments(cals);
+                        populateCalendars(cals);
+                    });
+                }
+            }
+        }, 0, notifs.every*1000);
+
+
 
         myCals.valueProperty().addListener(new ChangeListener() {
             @Override
@@ -390,6 +407,7 @@ public class Controller {
         int col = startDate.getDayOfYear()-calDate.getDayOfYear();
         int row = startDate.getHour();
         int rowspan = endDate.getHour()-startDate.getHour();
+        if(rowspan == 0)rowspan = 1;
         insertPane(pane, col, row, 1, rowspan);
     }
 

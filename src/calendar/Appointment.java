@@ -34,6 +34,10 @@ public class Appointment implements Serializable {
     public Appointment() {
     }
 
+    public Appointment(int id) {
+        this.id = id;
+    }
+
     public Appointment(String id, String title, String description, String location, String startDate,
                        String endDate, String endRepeatDate, String repeatEveryXDays,
                        String isVisible, String isAllDay, String isPrivate, String roomID){
@@ -133,6 +137,13 @@ public class Appointment implements Serializable {
     public ArrayList<Attendee> getAttendees() {
         return attendees;
     }
+    public ArrayList<UserModel> getUsers() {
+        ArrayList<UserModel> ret = new ArrayList<>();
+        for(Attendee a : attendees)
+            ret.add(a.getUser());
+        return ret;
+    }
+
     public int getRepeatEvery(){return repeatEvery;}
 
     public int getId() {
