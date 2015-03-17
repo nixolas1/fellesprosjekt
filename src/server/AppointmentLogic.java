@@ -20,8 +20,8 @@ public class AppointmentLogic {
         try {
             Appointment app = data.get("reply");
             if(server.database.Logic.createAppointment(app)) {
-                //Notification notif = new Notification(app, app.ca)
-                //NotificationLogic.newNotifications();
+                Notification notif = new Notification(app, "Invitert til nytt møte: "+app.getTitle());
+                NotificationLogic.newNotifications(notif, app.getUsers());
                 return new Query("newAppointment", true);
             }
         }

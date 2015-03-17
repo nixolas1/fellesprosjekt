@@ -1,5 +1,6 @@
 package server;
 
+import calendar.Notification;
 import calendar.UserModel;
 import network.Email;
 import network.Query;
@@ -36,6 +37,8 @@ public class CreateUser {
                 String subject = "New TimeTo user registration for "+user.getUsername();
                 String message = "Your password is "+ pass+" \nPlease change it in your settings after logging in.";
                 Email.sendEmail(user.getEmail(), subject, message);
+                server.database.Logic.storeNotification(
+                        new Notification("Velkommen, "+user.getFirstName()+"!", user, false));
                 return new Query("create", true);
             }
 

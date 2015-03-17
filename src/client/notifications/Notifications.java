@@ -1,11 +1,15 @@
 package client.notifications;
 
 import calendar.Notification;
+import client.calendar.Controller.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -15,23 +19,24 @@ import java.util.TimerTask;
  * Created by nixo on 2/23/15.
  */
 public class Notifications {
-    ArrayList<Notification> notifications = new ArrayList<>();
+    public ArrayList<Notification> notifications = new ArrayList<>();
     Text label = null;
-    ComboBox list = null;
-    int every = 60;
+    ComboBox<Notification> list = null;
+    public int every = 10;
+    public int unreadCount = 0;
+    String email;
 
-    public Notifications(String email, Text unreadCountLabel, ComboBox notificationList){
+    public Notifications(String email, Text unreadCountLabel, ComboBox<Notification> notificationList){
         notifications = Notification.getUserNotifications(email, client.Main.socket);
         label = unreadCountLabel;
         list = notificationList;
+        this.email=email;
 
-        Timer timer = new Timer();
-        timer.schedule( new TimerTask() {
-            public void run() {
-                notifications = Notification.getUserNotifications(email, client.Main.socket);
-                updateList();
-            }
-        }, 0, every*1000);
+    }
+
+    public void refresh(){
+        notifications = Notification.getUserNotifications(email, client.Main.socket);
+        updateList();
     }
 
     public int getNumberOfUnreadNotifications(){
@@ -42,14 +47,36 @@ public class Notifications {
         return count;
     }
 
+
+
     public void updateList(){
-       label.setText(""+getNumberOfUnreadNotifications());
-        list.getItems().clear();
-        ObservableList<String> notiInfo = FXCollections.observableArrayList();
-        for(Notification n : notifications){
-            notiInfo.add(n.text);           //TODO change to cellfactory
-        }
-        list.setItems(notiInfo);
+        Platform.runLater(() -> {
+            unreadCount = getNumberOfUnreadNotifications();
+            label.setText("" + unreadCount);
+            list.getItems().clear();
+            list.getItems().addAll(notifications);
+            list.setCellFactory(new Callback<ListView<Notification>, ListCell<Notification>>() {
+                @Override
+                public ListCell<Notification> call(ListView<Notification> p) {
+                    return new ListCell<Notification>() {
+                        @Override
+                        protected void updateItem(Notification item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (item != null) {
+                                setText(item.text);
+                                if (!item.seen) {
+                                    setTextFill(Color.RED);
+                                }
+                            }
+                            else {
+                                setText(null);
+                            }
+
+                        }
+                    };
+                }
+            });
+        });
     }
 
 

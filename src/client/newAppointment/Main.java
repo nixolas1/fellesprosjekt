@@ -1,5 +1,7 @@
 package client.newAppointment;
 
+import calendar.Appointment;
+import calendar.Room;
 import calendar.UserModel;
 import com.sun.deploy.util.SessionState;
 import javafx.application.Application;
@@ -11,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import network.Query;
 import network.ThreadClient;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -53,6 +56,10 @@ public class Main extends Application {
             System.out.println("Exception found in newAppointment");
             ex.printStackTrace();
         }
+    }
+    public static ArrayList<Room> getRooms(Appointment data) {
+        Hashtable<String, ArrayList<Room>> reply = client.Main.socket.send(new Query("roomLogic",data)).data;
+        return reply.get("reply");
     }
 
     public static Hashtable<String, Boolean> sendAppointment() {

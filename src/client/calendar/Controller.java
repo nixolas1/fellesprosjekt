@@ -2,9 +2,11 @@ package client.calendar;
 
 import calendar.Appointment;
 import calendar.Calendar;
+import calendar.Notification;
 import calendar.UserModel;
 import client.newAppointment.FxUtil;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import client.notifications.Notifications;
@@ -41,10 +43,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by jonaslochsen on 02.03.15.
@@ -56,7 +55,8 @@ public class Controller {
     @FXML private Text name, year, month, weekNum, monDate, tueDate, wedDate, thuDate, friDate, satDate, sunDate, notifCount;
     @FXML private Button logOff, userSettings, yourCalendar, today;
     @FXML private GridPane calendarGrid;
-    @FXML public ComboBox notifCombo, findUserCalendar, myCals;
+    @FXML public ComboBox<Notification> notifCombo;
+    @FXML public ComboBox findUserCalendar, myCals;
 
 
     protected static Stage primaryStage;
@@ -69,6 +69,8 @@ public class Controller {
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
     private ArrayList<UserModel> allUsersUM;
     private ArrayList<calendar.Calendar> myCalendars;
+    Timer timer = new Timer();
+    Integer numUnread = 0;
 
     @FXML
     void initialize() {
@@ -90,9 +92,26 @@ public class Controller {
         importFont();
         notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
 
+        timer.schedule( new TimerTask() {
+            public void run() {
+                notifs.refresh();
+                if(notifs.unreadCount>numUnread){
+                    numUnread=notifs.unreadCount;
+                    Platform.runLater(() -> {
+                        clearAppointments();
+                        appointments = getAppointments(cals);
+                        populateCalendars(cals);
+                    });
+                }
+            }
+        }, 0, notifs.every*1000);
+
+
+
         myCals.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                findUserCalendar.getEditor().setText("");
                 Calendar cal = new Calendar(Integer.parseInt(myCals.getValue().toString().split(",")[1].trim()), myCals.getValue().toString().split(",")[0].trim());
                 System.out.println("Viewing calendar " + cal.getName());
                 clearAppointments();
@@ -105,6 +124,7 @@ public class Controller {
         findUserCalendar.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                myCals.getEditor().setText("");
                 UserModel user = getUserModelFromEmail(findUserCalendar.getValue().toString().split(",")[1].trim());
                 System.out.println("Viewing " + user.getFirstName() + "'s calendar");
                 clearAppointments(); //todo
@@ -390,6 +410,7 @@ public class Controller {
         int col = startDate.getDayOfYear()-calDate.getDayOfYear();
         int row = startDate.getHour();
         int rowspan = endDate.getHour()-startDate.getHour();
+        if(rowspan == 0)rowspan = 1;
         insertPane(pane, col, row, 1, rowspan);
     }
 
