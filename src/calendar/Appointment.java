@@ -203,4 +203,19 @@ public class Appointment implements Serializable {
     */
     public void setAppType() {}
 
+    public static boolean checkIfAppointmentsCollide(Appointment app1, Appointment app2){
+        // Skal sjekke om to appointments kolliderer
+        LocalDateTime start1 = app1.getStartDate();
+        LocalDateTime end1 = app1.getEndDate();
+        LocalDateTime start2 = app2.getStartDate();
+        LocalDateTime end2 = app2.getEndDate();
+        if (start1.isBefore(start2) && end1.isAfter(start2)) return true;
+        if (start1.isAfter(start2) && start1.isBefore(end2)) return true;
+        if (start2.isBefore(start1) && end2.isAfter(start1)) return true;
+        if (start2.isAfter(start1) && start2.isBefore(end1)) return true;
+
+        return false;
+    }
+
+
 }

@@ -43,6 +43,10 @@ public class Room implements Serializable {
         this.name = name;
     }
 
+    public Room(){
+        // New room object
+    }
+
     public Room(int id, String name, int capacity, int opensAt, int closesAt) {
         new Room(id, name, capacity, opensAt, closesAt, null);
     }
@@ -83,6 +87,25 @@ public class Room implements Serializable {
         return utilities;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void setOpensAt(int opensAt) {
+        this.opensAt = opensAt;
+    }
+
+    public void setClosesAt(int closesAt) {
+        this.closesAt = closesAt;
+    }
+
+    public void setUtilities(ArrayList<Utility> utilities) {
+        this.utilities = utilities;
+    }
 
     public String toString() {
         return this.name;
