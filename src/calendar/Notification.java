@@ -56,6 +56,11 @@ public class Notification implements Serializable {
 
     }
 
+    public Notification(String text){
+        this.app=new Appointment(0);
+        this.text=text;
+    }
+
     public static ArrayList<Notification> getUserNotifications(String email, ThreadClient socket){
         System.out.println("Trying to get all notifications from user "+email);
         try {

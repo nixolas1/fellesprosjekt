@@ -91,11 +91,11 @@ public class Controller {
         importFont();
         notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
 
-
         timer.schedule( new TimerTask() {
             public void run() {
                 notifs.refresh();
                 if(notifs.unreadCount>numUnread){
+                    numUnread=notifs.unreadCount;
                     Platform.runLater(() -> {
                         clearAppointments();
                         appointments = getAppointments(cals);

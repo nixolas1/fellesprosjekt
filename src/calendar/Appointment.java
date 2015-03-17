@@ -131,7 +131,12 @@ public class Appointment implements Serializable {
     public ArrayList<Attendee> getAttendees() {
         return attendees;
     }
-
+    public ArrayList<UserModel> getUsers() {
+        ArrayList<UserModel> ret = new ArrayList<>();
+        for(Attendee a : attendees)
+            ret.add(a.getUser());
+        return ret;
+    }
     public int getId() {
         return id;
     }

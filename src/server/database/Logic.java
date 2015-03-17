@@ -104,7 +104,7 @@ public class Logic {
                     allRows.get(count).add(result.getString(i + 1));
                     //TODO fuck System.out.println(table + "[" + count + "][" + i + "]: " + result.getString(i + 1));
                 } count ++;
-                System.out.println("");
+                //System.out.println("");
             }
         } catch (SQLException e){
             System.out.println("SQLException triggered in getRows(), 2. try block: " + e);
@@ -135,12 +135,12 @@ public class Logic {
                                             result.getString("firstName"),
                                             result.getString("lastName"),
                                             result.getString("phone")));
-                System.out.println("\nUSER\nusername: " + result.getString("username") + "\npasswordHash: " +
+                /*System.out.println("\nUSER\nusername: " + result.getString("username") + "\npasswordHash: " +
                         result.getString("passwordHash") + "\ndomain: " +
                         result.getString("domain") + "\nfirstName: " +
                         result.getString("firstName") + "\nlastName: " +
                         result.getString("lastName") + "\nphone: " +
-                        result.getString("phone"));
+                        result.getString("phone"));*/
             }
         } catch (SQLException e) {
             System.out.println("SQLException triggered in getRows(), 2. try block: " + e);
@@ -238,7 +238,7 @@ public class Logic {
                     +roomId+") ";
 
             //String q3 = "RETURNING Appointment.appointmentid INTO ?;";
-            System.out.println(q1+q2);
+            //System.out.println(q1+q2);
             stmt.executeUpdate(q1 + q2, Statement.RETURN_GENERATED_KEYS);
 
             ResultSet result = stmt.getGeneratedKeys();
@@ -260,7 +260,7 @@ public class Logic {
                 stmt.executeUpdate(q);
             }
 
-            System.out.println("Appointment [Title='" + app.getTitle() + "'] successfully created in database");
+            //System.out.println("Appointment [Title='" + app.getTitle() + "'] successfully created in database");
         } catch (SQLException e) {
             System.out.println("SQLException triggered in createAppointment(): " + e);
             return false;
@@ -338,12 +338,13 @@ public class Logic {
                 n.text + "', '" +
                 "0', '" +
                 LocalDateTime.now() + "');";
-        System.out.println("query: " + query);
+        //System.out.println("query: " + query);
         Statement stmt = null;
 
         try {
             stmt = conn.createStatement();
             stmt.executeUpdate(query);
+            System.out.println("Stored notification "+n.text+" for "+n.user.getEmail());
             return true;
         } catch (SQLException f) {
             System.out.println("SQLException triggered in createUser(): " + f);
@@ -374,6 +375,7 @@ public class Logic {
                 //System.out.println("QUERY: " + memberQuery + "'" + user.getEmail() + "', 1, 1);");
                 stmt.executeUpdate(memberQuery + "'" + user.getEmail() + "', 1, 1, "+isPrivate+");");
                 System.out.println(String.format("User '%s' successfully added to GroupCalendar with id = %s", user.getEmail(), groupId));
+
             } catch (SQLException e) {
                 System.out.println("SQLExeption triggered in createGroup(): " + e);
                 System.out.println("This happend during inserting user '" + user.getEmail() + "' into GroupCalendar");
@@ -383,6 +385,9 @@ public class Logic {
                 return new Query("createGroup", false);
             }
         } closeDB(stmt);
+        server.NotificationLogic.newNotifications(
+                new Notification("Du er nå medlem av gruppen: "+groupCalendar.getName()),
+                groupCalendar.getMembers());
         System.out.println(String.format("Group '%s' successfully created in database with id = %s ", groupCalendar.getName(), groupId));
         return new Query("createGroup", true);
     }
@@ -436,10 +441,10 @@ public class Logic {
         }
 
         if (queryResult != null && queryResult.equalsIgnoreCase(identifyingValue)){
-            System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' exists in table '" + table + "'");
+            //System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' exists in table '" + table + "'");
             return true;
         } else {
-            System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' does not exist in table '" + table + "'");
+            //System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' does not exist in table '" + table + "'");
             return false;
         }
     }
