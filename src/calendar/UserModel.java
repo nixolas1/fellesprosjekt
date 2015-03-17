@@ -24,9 +24,14 @@ public class UserModel implements Serializable {
 
     public int getPrivateCalendar() {
         int ret = -1;
-        ArrayList<List<String>> rows = ClientDB.getAllTableRowsWhere("User_has_Calendar",
-                "User_email = '"+this.getEmail()+"' AND isPrivate = 1", Main.socket);
-        ret = Integer.parseInt(rows.get(0).get(1));
+        try {
+            ArrayList<List<String>> rows = ClientDB.getAllTableRowsWhere("User_has_Calendar",
+                    "User_email = '" + this.getEmail() + "' AND isPrivate = 1", Main.socket);
+            ret = Integer.parseInt(rows.get(0).get(1));
+        }
+        catch(IndexOutOfBoundsException e){
+            System.out.println(this.getEmail()+" has no private calendar.");
+        }
         return ret;
 
     }

@@ -115,8 +115,7 @@ public class RoomLogic {
                 if (appointments.get(11) != null || ! appointments.get(11).equalsIgnoreCase("null") || appointments.get(11).length() < 1) {
                     Appointment newAppointment = new Appointment(appointments.get(0), appointments.get(1),
                             appointments.get(2), appointments.get(3), appointments.get(4), appointments.get(5),
-                            appointments.get(6), appointments.get(7), appointments.get(8), appointments.get(9),
-                            appointments.get(10), appointments.get(11));
+                            appointments.get(6), appointments.get(7), appointments.get(8), appointments.get(11));
                     if (checkIfAppointmentsCollide(appointment, newAppointment)){
                         collidingAppointments.add(newAppointment);
                         allRoomIdsWithConflict.add(newAppointment.getId());

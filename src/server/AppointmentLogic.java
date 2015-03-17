@@ -20,8 +20,8 @@ public class AppointmentLogic {
         try {
             Appointment app = data.get("reply");
             if(server.database.Logic.createAppointment(app)) {
-                //Notification notif = new Notification(app, app.ca)
-                //NotificationLogic.newNotifications();
+                Notification notif = new Notification(app, "Invitert til nytt møte: "+app.getTitle());
+                NotificationLogic.newNotifications(notif, app.getUsers());
                 return new Query("newAppointment", true);
             }
         }
@@ -58,7 +58,7 @@ public class AppointmentLogic {
         ArrayList<Appointment> appList = new ArrayList<>();
         for (List<String>a : list){
             //System.out.println(a.toString());
-            appList.add(new Appointment(a.get(0), a.get(1), a.get(2), a.get(3), a.get(4), a.get(5), a.get(6), a.get(7), a.get(8), a.get(9), a.get(10), a.get(11)));
+            appList.add(new Appointment(a.get(0), a.get(1), a.get(2), a.get(3), a.get(4), a.get(5), a.get(6), a.get(7), a.get(8), a.get(11)));
         }
 
         return appList;

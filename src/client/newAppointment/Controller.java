@@ -25,16 +25,16 @@ public class Controller implements Initializable{
 
 
     @FXML
-    private TextField title, from, to, description, repeat, locationDescription;
+    private TextField title, from, to, description, locationDescription;
 
     @FXML
-    private DatePicker date, endDate, stoprepeat;
+    private DatePicker date, endDate;
 
     @FXML
     private ComboBox usersComboBox, room, groupComboBox;
 
     @FXML
-    private Label stoplabel, roomOrLocation, timeLabel, toLabel;
+    private Label roomOrLocation, timeLabel, toLabel;
 
     @FXML private CheckBox allDay, otherLocation;
 
@@ -162,34 +162,21 @@ public class Controller implements Initializable{
             }
         });
 
-        stoprepeat.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if(dateIsAfter(date,stoprepeat) && dateIsAfter(endDate,stoprepeat)) {
-                    stoprepeat.setStyle("-fx-text-inner-color: green;");
-                    stoprepeat.setOpacity(2.0);
-                } else {
-                    stoprepeat.setStyle("-fx-text-inner-color: red;");
-                    stoprepeat.setOpacity(3.0);
-                }
-            }
-        });
+
+
+
 
 
         //createValidationListener(room, 0, "[\\w- ]+ [\\d]+", 50);
         createValidationListener(from, 0, "[\\d]{2}:[\\d]{2}", 5);
         createValidationListener(to,   2,   "[\\d]{2}:[\\d]{2}", 5);
-        createValidationListener(description, 1, ".*", 50);
-        createValidationListener(repeat,  3, "[0-9]*", 3);
+        createValidationListener(description, 1, ".*", 150);
         createValidationListener(title, 0, ".{0,50}", 50);
         createValidationListener(locationDescription, 0, ".{0,50}", 50);
 
        dateValidation(date);
        dateValidation(endDate);
-       // dateValidation(stoprepeat);
 
-        stoprepeat.setVisible(false);
-        stoplabel.setVisible(false);
 
        /* create.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -310,7 +297,8 @@ public class Controller implements Initializable{
             }
             calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
             for (Attendee a : app.getAttendees()) {
-                app.addCalender(new Calendar(a.getUser().getPrivateCalendar()));
+                if(a.getUser().getPrivateCalendar() != -1)
+                    app.addCalender(new Calendar(a.getUser().getPrivateCalendar()));
             }
             System.out.println(app.displayInfo());
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
@@ -356,13 +344,12 @@ public class Controller implements Initializable{
             hrEnd = Integer.parseInt((to.getText().split(":")[0]));
             minEnd = Integer.parseInt(to.getText().split(":")[1]);
         }
-        LocalDate endRepeatDate = stoprepeat.getValue() != null && Integer.parseInt(this.repeat.getText()) > 0 ? stoprepeat.getValue() : null;
         LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
         LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
         Room room = null;
         String location = null;
-        int repeat = this.repeat.getText() != null && this.repeat.getText().length() > 0 ? Integer.parseInt(this.repeat.getText()) : 0;
-        Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null,repeat,endRepeatDate,location);
+        Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null,location);
+        
         app.setAttendees(getAttendees());
         ArrayList<Calendar> grps = getGroups();
         if(grps.size() > 0) {
@@ -457,7 +444,7 @@ public class Controller implements Initializable{
         if(endDate.getValue()==null || endDate.getValue().toString().equals("")) {
             endDate.setValue(date.getValue());
         }
-        if(dateIsAfter(endDate, date) || dateIsAfter(stoprepeat, date)) {
+        if(dateIsAfter(endDate, date)) {
             ret = false;
             System.out.println("date shit in checkIfAllValid()");
         }
@@ -489,10 +476,7 @@ public class Controller implements Initializable{
             ret = false;
             System.out.println("Date problem");
         }
-        if(stoprepeat.getOpacity()==3.0) {
-            ret = false;
-            System.out.println("stoprepeat problem");
-        }
+
         // todo room
         if (description.getText().equals("")) ret = false;
         /*if(work.isSelected() && !otherLocation.isSelected()) {
@@ -564,7 +548,6 @@ public class Controller implements Initializable{
                     checkIfAllValid();
                 }
                 else{
-                    if(forceCorrect==3)updateRepeatVisibility(field);
                     System.out.println("VALID: "+ newValue);
                     field.setOpacity(2.0);
                     checkIfAllValid();
@@ -596,15 +579,5 @@ public class Controller implements Initializable{
         return true;
     }
 
-
-    public void updateRepeatVisibility(TextField field){
-        if("".equals(field.getText()) || field.getText().equals("0")) {
-            stoprepeat.setVisible(false);
-            stoplabel.setVisible(false);
-        }else{
-            stoprepeat.setVisible(true);
-            stoplabel.setVisible(true);
-        }
-    }
 
 }
