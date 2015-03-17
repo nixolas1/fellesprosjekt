@@ -176,6 +176,7 @@ public class Controller implements Initializable{
 
 
 
+
         //createValidationListener(room, 0, "[\\w- ]+ [\\d]+", 50);
         createValidationListener(from, 0, "[\\d]{2}:[\\d]{2}", 5);
         createValidationListener(to,   2,   "[\\d]{2}:[\\d]{2}", 5);
@@ -224,6 +225,7 @@ public class Controller implements Initializable{
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.CONTAINING); // AutoCompleteMode ON
         FxUtil.autoCompleteComboBox(groupComboBox, FxUtil.AutoCompleteMode.CONTAINING);
 
+        attendees.add(loggedUser.getFirstName() + " " + loggedUser.getLastName() + ", " + loggedUser.getEmail());
     }
 
     public static ArrayList<UserModel> getUsersFromDB() {
@@ -233,6 +235,8 @@ public class Controller implements Initializable{
     public static ArrayList<Calendar> getCalsFromDB() {
         return calendar.Calendar.getAllCalendarsFromDB();
     }
+
+
 
     @FXML
     public void addUser(ActionEvent event) {
@@ -291,7 +295,7 @@ public class Controller implements Initializable{
         }
     }
 
-
+//app.addCalender(new Calendar(loggedUser.getPrivateCalendar()));
     @FXML
     public void createAppointment(ActionEvent event) {
         if(checkIfAllValid()) {
@@ -302,19 +306,33 @@ public class Controller implements Initializable{
                 app.setRoom(new Room(1, "test", 1, 0, 23, new ArrayList<Utility>())); // TEST ROOM! TODO get rooms from DB
             }
             calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
-            app.setAttendees(getAttendees(cal));
-            app.setCals(getGroups()); // GROUPS = CALENDARS
+            app.setAttendees(getAttendees());
+            ArrayList<Calendar> grps = getGroups();
+            if(grps.size() > 0) {
+                app.setCals(grps); // GROUPS = CALENDARS
+            }
+            for (Attendee a : app.getAttendees()) {
+                app.addCalender(new Calendar(a.getUser().getPrivateCalendar()));
+            }
             System.out.println(app.displayInfo());
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
-            if(response.get("reply"))
-                System.out.println("Appointment created\n"+app.displayInfo());
+            if(response.get("reply")) {
+                System.out.println("Appointment created\n" + app.displayInfo());
+                Main.closeStage();
+                // todo refresh cal view
+            }
             else
                 System.out.println("Server could not create the appointment.");
 
         } else {
             System.out.println("One or more fields are INVALID. Data not sent to server.");
         }
+        Main.closeStage();
 
+    }
+
+    public void cancel(ActionEvent event) {
+        Main.closeStage();
     }
 
     public Appointment createAppointmentObject() { // Without room / location
@@ -330,13 +348,12 @@ public class Controller implements Initializable{
             hrEnd = Integer.parseInt((to.getText().split(":")[0]));
             minEnd = Integer.parseInt(to.getText().split(":")[1]);
         }
-        LocalDate endRepeatDate = null;
+        LocalDate endRepeatDate = stoprepeat.getValue() != null && Integer.parseInt(this.repeat.getText()) > 0 ? stoprepeat.getValue() : null;
         LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
         LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
-        if(Integer.parseInt(repeat.getText()) > 0 && stoprepeat.getValue() != null) endRepeatDate = stoprepeat.getValue();
         Room room = null;
         String location = null;
-        int repeat = Integer.parseInt(this.repeat.getText());
+        int repeat = this.repeat.getText() != null && this.repeat.getText().length() > 0 ? Integer.parseInt(this.repeat.getText()) : 0;
         Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null,repeat,endRepeatDate,location);
         return app;
 
@@ -353,10 +370,12 @@ public class Controller implements Initializable{
 
     }*/
 
-    public ArrayList<Attendee> getAttendees(Calendar cal) {
+    public ArrayList<Attendee> getAttendees() {
         ArrayList<Attendee> attendeeObjects = new ArrayList<>();
         for(String user : attendees) {
-            UserModel usr = getUserModel(user.split(",")[1]);
+            System.out.println(user);
+            UserModel usr = getUserModel(user.split(", ")[1]);
+            System.out.println(usr.getEmail());
             boolean isOwner = false;
             if(usr.equals(loggedUser)) isOwner = true;
             attendeeObjects.add(new Attendee(usr, LocalDateTime.now(), isOwner));
@@ -367,7 +386,7 @@ public class Controller implements Initializable{
     public ArrayList<Calendar> getGroups() {
         ArrayList<Calendar> cals = new ArrayList<>();
         for (String grp : addedGroups) {
-            int id = Integer.parseInt(grp.split(",")[1]);
+            int id = Integer.parseInt(grp.split(",")[1].trim());
             Calendar cal = getCalFromId(id);
             if(!cal.equals(null)) cals.add(cal);
         }
@@ -416,7 +435,8 @@ public class Controller implements Initializable{
 
     public boolean checkIfAllValid(){
         Boolean ret = true;
-        if(title.getText()==null || title.getText()=="") ret = false;
+
+        if(title.getText()==null || title.getText().equals("")) ret = false;
         if(description.getText()==null || description.getText()=="") ret = false;
         if(locationDescription.getText()==null || locationDescription.getText()=="") ret = false;
         if(date.getValue()==null || date.getValue().toString().equals("")) ret=false;
@@ -432,6 +452,10 @@ public class Controller implements Initializable{
                 ret = false;
                 System.out.println("Room problem [WORK only]");
             }
+          /*  if(!otherLocation.isSelected() && (room.getValue.equals(null) || room.getValue().equals(""))) {
+                ret = false;
+            }*/
+
         }
         if(personal.isSelected() && (locationDescription.getText().equals("") || locationDescription.getText().equals(null))) {
             ret = false;
@@ -440,20 +464,20 @@ public class Controller implements Initializable{
         if(!allDay.isSelected()) {
             if (from.getOpacity() != 2.0) {
                 ret = false;
-                System.out.println("From invalid");
+                System.out.println("From problem");
             }
             if (to.getOpacity() != 2.0) {
                 ret = false;
-                System.out.println("To invalid");
+                System.out.println("To problem");
             }
         }
         if(date.getOpacity()!=2.0) {
             ret = false;
-            System.out.println("Date invalid");
+            System.out.println("Date problem");
         }
         if(stoprepeat.getOpacity()==3.0) {
             ret = false;
-            System.out.println("stoprepeat invalid");
+            System.out.println("stoprepeat problem");
         }
         // todo room
         if (description.getText().equals("")) ret = false;

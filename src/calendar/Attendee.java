@@ -63,9 +63,66 @@ public class Attendee implements Serializable {
             this.alarm=LocalDateTime.parse(alarm, format);
     }
 
+    public UserModel getUser() {
+        return user;
+    }
+
+    public void setUser(UserModel user) {
+        this.user = user;
+    }
+
+    public int getAppointmentid() {
+        return appointmentid;
+    }
+
+    public void setAppointmentid(int appointmentid) {
+        this.appointmentid = appointmentid;
+    }
+
+    public LocalDateTime getInvited() {
+        return invited;
+    }
+
+    public void setInvited(LocalDateTime invited) {
+        this.invited = invited;
+    }
+
+    public LocalDateTime getAnswered() {
+        return answered;
+    }
+
+    public void setAnswered(LocalDateTime answered) {
+        this.answered = answered;
+    }
+
+    public LocalDateTime getAlarm() {
+        return alarm;
+    }
+
+    public void setAlarm(LocalDateTime alarm) {
+        this.alarm = alarm;
+    }
+
+    public Boolean getAttending() {
+        return attending;
+    }
+
+    public void setAttending(Boolean attending) {
+        this.attending = attending;
+    }
+
+    public Boolean getIsOwner() {
+        return isOwner;
+    }
+
+    public void setIsOwner(Boolean isOwner) {
+        this.isOwner = isOwner;
+    }
+
     public static ArrayList<Attendee> getAllAttendeesForAppointment(int id) {
         ArrayList<List<String>> rows = server.database.Logic.getAllRowsWhere("Attendee", "Appointment_appointmentid = " + id);
         return getAppAttFromRows(rows);
+
     }
 
     public static ArrayList<Attendee> getAllAttendeesForAppointmentClientside(int id, ThreadClient socket) {
@@ -79,10 +136,6 @@ public class Attendee implements Serializable {
             ret.add(new Attendee(c.get(0), c.get(1), c.get(2), c.get(3), c.get(4), c.get(5), c.get(6)));
         }
         return ret;
-    }
-
-    public UserModel getUser(){
-        return this.user;
     }
 
 }

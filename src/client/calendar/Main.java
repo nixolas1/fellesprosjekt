@@ -35,6 +35,10 @@ public class Main extends Application {
     static Stage stage;
     static UserModel user;
 
+    public static UserModel getLoggedUser() {
+        return user;
+    }
+
     public static void show(Stage primaryStage, UserModel loggedUser) {
         try {
             stage = primaryStage;

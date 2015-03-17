@@ -2,6 +2,7 @@ package network;
 
 import calendar.Appointment;
 import calendar.Calendar;
+import calendar.Room;
 import calendar.UserModel;
 
 import java.io.Serializable;
@@ -62,5 +63,8 @@ public class Query implements Serializable{
         this.data = new Hashtable<String, Calendar>(){{put("reply",data);}};
     }
 
-
+    public Query(String function, final Room data) {
+        this.function = function;
+        this.data = new Hashtable<String, Room>(){{put("reply",data);}};
+    }
 }

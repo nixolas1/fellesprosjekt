@@ -17,7 +17,7 @@ import security.Crypto;
 public class Controller{
 
 
-    @FXML private Text loginErrorText;
+    @FXML private Text confirmText;
     @FXML private PasswordField password;
     @FXML private ChoiceBox domain;
 
@@ -131,6 +131,7 @@ public class Controller{
                 System.out.println("One og more fields are not correct");
             }
         }
+        confirmText.setVisible(true);
     }
 
 
@@ -201,6 +202,6 @@ public class Controller{
     }
 
     public void toCalendar(ActionEvent event) {
-        client.calendar.Main.show(Main.stage);
+        client.calendar.Main.show(Main.stage, Main.user);
     }
 }

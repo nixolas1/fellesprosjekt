@@ -39,12 +39,7 @@
                         </LinearGradient>
                      </fill>
                   </Rectangle>
-                  <Button fx:id="yourCalendar" layoutX="175.0" layoutY="6.0" mnemonicParsing="false" text="Hovedkalender">
-                     <font>
-                        <Font name="Helvetica Neue" size="13.0" />
-                     </font>
-                  </Button>
-                  <ComboBox fx:id="notifCombo" layoutX="851.0" layoutY="8.0" prefWidth="165.0" promptText="Varsler" />
+                  <ComboBox fx:id="notifCombo" layoutX="851.0" layoutY="8.0" prefWidth="165.0" promptText="varsler" />
                   <Text fx:id="notifCount" fill="RED" layoutX="784.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="RIGHT" wrappingWidth="57.12890625">
                      <font>
                         <Font name="Open Sans" size="20.0" />
@@ -689,16 +684,21 @@
             <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="170.0" minHeight="170.0" prefHeight="170.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="40.0" minHeight="100.0" prefHeight="40.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="190.0" minHeight="190.0" prefHeight="190.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="15.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="15.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="200.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="15.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="180.0" minHeight="180.0" prefHeight="180.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="10.0" layoutY="10.0">
+                  <ImageView fitHeight="140.0" fitWidth="140.0" layoutX="15.0" layoutY="10.0">
                      <image>
                         <Image url="@placeholder.png" />
                      </image>
@@ -708,7 +708,7 @@
             </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                <children>
-                  <Text fx:id="name" layoutX="10.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fornavn Etternavn" wrappingWidth="159.3587646484375">
+                  <Text fx:id="name" layoutX="24.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fornavn Etternavn" wrappingWidth="159.3587646484375">
                      <font>
                         <Font name="Helvetica Neue" size="13.0" />
                      </font></Text>
@@ -716,35 +716,35 @@
             </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
                <children>
-                  <Button fx:id="logOff" layoutX="10.0" layoutY="7.0" mnemonicParsing="false" onAction="#logOff" text="Logg av">
+                  <Button fx:id="logOff" layoutX="24.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#logOff" prefHeight="20.0" prefWidth="122.0" text="Logg av">
                      <font>
-                        <Font name="Helvetica Neue" size="13.0" />
+                        <Font name="Helvetica Neue" size="10.0" />
                      </font></Button>
                </children>
             </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
                <children>
-                  <Button fx:id="userSettings" layoutX="10.0" layoutY="7.0" mnemonicParsing="false" onAction="#showUserSettings" text="Brukerinnstillinger">
+                  <Button fx:id="userSettings" layoutX="24.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#showUserSettings" prefHeight="20.0" prefWidth="122.0" text="Brukerinnstillinger">
                      <font>
-                        <Font name="Helvetica Neue" size="13.0" />
-                     </font></Button>
-               </children>
-            </Pane>
-            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
-               <children>
-                  <Button fx:id="createApp" layoutX="10.0" layoutY="7.0" mnemonicParsing="false" onAction="#onBtnShowNewAppointment" text="Opprett hendelse">
-                     <font>
-                        <Font name="Helvetica Neue" size="13.0" />
+                        <Font name="Helvetica Neue" size="10.0" />
                      </font></Button>
                </children>
             </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
+               <children>
+                  <Button fx:id="createApp" layoutX="24.0" maxWidth="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onBtnShowNewAppointment" prefHeight="20.0" prefWidth="122.0" stylesheets="@main-gui.css" text="Opprett avtale" textFill="WHITE">
+                     <font>
+                        <Font name="Helvetica Neue" size="10.0" />
+                     </font></Button>
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="8">
                  <children>
-                     <Button fx:id="createGroup" layoutX="10.0" layoutY="7.0" mnemonicParsing="false" onAction="#onBtnShowNewGroup" text="Opprett gruppe">
-                         <font>
-                             <Font name="Helvetica Neue" size="13.0" />
-                         </font>
-                     </Button>
+                  <Button fx:id="createRoom" layoutX="24.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onBtnShowNewRoom" prefHeight="20.0" prefWidth="122.0" stylesheets="@main-gui.css" text="Opprett rom" textFill="WHITE">
+                     <font>
+                        <Font name="Helvetica Neue" size="10.0" />
+                     </font>
+                  </Button>
                  </children>
              </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #a1a1a1;">
@@ -759,11 +759,41 @@
                         </LinearGradient>
                      </fill>
                   </Rectangle>
-                  <ComboBox fx:id="findCalendar" layoutX="10.0" layoutY="6.0" prefWidth="150.0" promptText="Dine kalendere" />
+                  <ComboBox fx:id="myCals" layoutX="10.0" layoutY="6.0" prefWidth="150.0" promptText="Mine kalendere" />
+                  <Button fx:id="myCalendar" layoutX="10.0" layoutY="6.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Til min kalender" visible="false">
+                     <font>
+                        <Font name="Helvetica Neue" size="13.0" />
+                     </font>
+                  </Button>
                </children></Pane>
-            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #c9c9c9; -fx-border-width: 1 0 0px 0;" GridPane.rowIndex="7">
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #c9c9c9; -fx-border-width: 1 0 0px 0;" GridPane.rowIndex="12">
                <children>
                   <DatePicker fx:id="monthView" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" promptText="Finn måned" />
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="7">
+               <children>
+                     <Button fx:id="createGroup" layoutX="24.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onBtnShowNewGroup" prefHeight="20.0" prefWidth="122.0" stylesheets="@main-gui.css" text="Opprett gruppe" textFill="WHITE">
+                         <font>
+                             <Font name="Helvetica Neue" size="10.0" />
+                         </font>
+                     </Button>
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5" />
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="10">
+               <children>
+                  <ListView fx:id="shownCals" layoutX="10.0" layoutY="18.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: #ebebeb;" />
+                  <Label layoutX="24.0" text="Kalendere som vises">
+                     <font>
+                        <Font name="Helvetica Neue" size="12.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="removeCal" layoutX="24.0" layoutY="169.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="20.0" text="Fjern">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
                </children>
             </Pane>
          </children>

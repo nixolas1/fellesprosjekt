@@ -1,6 +1,7 @@
 package calendar;
 
 import client.*;
+import client.Main;
 import javafx.scene.paint.Color;
 import network.ClientDB;
 import network.Query;
@@ -42,7 +43,7 @@ public class Calendar implements Serializable {
         ArrayList<List<String>> rows= server.database.Logic.getAllRowsWhere("Calendar_has_Appointment", "Appointment_appointmentid = " + id);
         ArrayList<Calendar> ret = new ArrayList<>();
         for(List<String> c : rows){
-            ret.add(new Calendar(c.get(1))); //TODO check that it is correct index
+            ret.add(new Calendar(Integer.parseInt(c.get(1))));
         }
         return ret;
     }
@@ -121,7 +122,26 @@ public class Calendar implements Serializable {
         return cals;
     }
 
+    public static ArrayList<Calendar> getMyCalendarsFromDB(UserModel user) {
+        ArrayList<Calendar> cals = new ArrayList<>();
+        ArrayList<List<String>> calendars = network.ClientDB.getAllTableRowsWhere("User_has_Calendar", "User_email = '" + user.getEmail() + "'", Main.socket);
+        for (List<String> li : calendars) {
+            String calName = network.ClientDB.getAllTableRowsWhere("Calendar", "calendarid = " + li.get(1), Main.socket).get(0).get(1);
+            cals.add(new Calendar(Integer.parseInt(li.get(1)), calName));
+        }
+        return cals;
+    }
+
+    public static ArrayList<String> convertCalendarsToStringArrayList(ArrayList<Calendar> cals) {
+        ArrayList<String> calendars = new ArrayList<>();
+        for (Calendar cal : cals) {
+            calendars.add(cal.getName() + ", " + cal.getId());
+        }
+        return calendars;
+    }
+
     public static int createGroupInDatabase(Calendar groupCalendar, ThreadClient socket){
+        System.out.println("createGroupInDatabase()");
         try {
             Query reply = socket.send(new Query("createGroup", groupCalendar));
             Hashtable<String, String> response = reply.data;
@@ -131,6 +151,10 @@ public class Calendar implements Serializable {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    public void setDescription(String desc) {
+        this.description = desc;
     }
 
     public String displayInfo() {

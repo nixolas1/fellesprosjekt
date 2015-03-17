@@ -1,11 +1,15 @@
 package calendar;
 
+import client.*;
+import client.Main;
+import network.ClientDB;
 import network.Query;
 import network.ThreadClient;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.io.Serializable;
+import java.util.List;
 
 public class UserModel implements Serializable {
 
@@ -17,6 +21,15 @@ public class UserModel implements Serializable {
     private String domain = "";
     private String email = "";
     private ArrayList<Calendar> calendar = new ArrayList<Calendar>();
+
+    public int getPrivateCalendar() {
+        int ret = -1;
+        ArrayList<List<String>> rows = ClientDB.getAllTableRowsWhere("User_has_Calendar",
+                "User_email = '"+this.getEmail()+"' AND isPrivate = 1", Main.socket);
+        ret = Integer.parseInt(rows.get(0).get(1));
+        return ret;
+
+    }
 
     public UserModel(){};
 
@@ -115,6 +128,10 @@ public class UserModel implements Serializable {
         }
     }
 
+    public String getFullName(){
+        return getFirstName()+" "+getLastName();
+    }
+
     public static UserModel getUserFromServer(final String user, final String domain){
 
         System.out.println("Getting user: "+user+", "+domain);
@@ -134,6 +151,14 @@ public class UserModel implements Serializable {
         System.out.println(reply.function);
         Hashtable<String, ArrayList<UserModel>> response = reply.data;
         return response.get("reply");
+    }
+
+    public static ArrayList<String> convertUserModelsToStringArrayList(ArrayList<UserModel> users) {
+        ArrayList<String> converted = new ArrayList<>();
+        for (UserModel user : users) {
+            converted.add(user.getFirstName() + " " + user.getLastName() + ", " + user.getEmail());
+        }
+        return converted;
     }
 
 

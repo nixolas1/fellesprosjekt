@@ -1,7 +1,9 @@
 package client.calendar;
 
 import calendar.Appointment;
+import calendar.Calendar;
 import calendar.UserModel;
+import client.newAppointment.FxUtil;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,10 +28,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ThreadClient;
-
+import server.User;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -39,7 +42,7 @@ import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Locale;
 
@@ -50,37 +53,33 @@ public class Controller {
 
 
     //@FXML private ComboBox chooseCalendar;
-    @FXML private Text name;
-    @FXML private Button logOff;
-    @FXML private Button userSettings;
-    @FXML private Button yourCalendar;
-    @FXML private Button today;
-    @FXML private Text year;
-    @FXML private Text month;
-    @FXML private Text weekNum;
-    @FXML private Text monDate;
-    @FXML private Text tueDate;
-    @FXML private Text wedDate;
-    @FXML private Text thuDate;
-    @FXML private Text friDate;
-    @FXML private Text satDate;
-    @FXML private Text sunDate;
+    @FXML private Text name, year, month, weekNum, monDate, tueDate, wedDate, thuDate, friDate, satDate, sunDate, notifCount;
+    @FXML private Button logOff, userSettings, yourCalendar, today;
     @FXML private GridPane calendarGrid;
-    @FXML public ComboBox notifCombo;
-    @FXML public Text notifCount;
+    @FXML public ComboBox notifCombo, findUserCalendar, myCals;
 
 
     protected static Stage primaryStage;
 
     private LocalDate calDate = LocalDate.now();
     private ThreadClient socket = client.Main.socket;
-    private Integer[] cals = new Integer[]{1,2,3,4};
+    private int privCal = Main.user.getPrivateCalendar();
+    private Integer[] cals = new Integer[]{privCal};
     private Notifications notifs;
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
+    private ArrayList<UserModel> allUsersUM;
+    private ArrayList<calendar.Calendar> myCalendars;
 
     @FXML
     void initialize() {
         //chooseCalendar.setItems(FXCollections.observableArrayList("Gunnar Greve"));
+        name.setText(Main.getLoggedUser().getFirstName() + " " + Main.getLoggedUser().getLastName());
+        myCalendars = getMyCalsFromDB();
+        myCals.setItems(FXCollections.observableArrayList(calendarsToString(myCalendars)));
+        allUsersUM = getAllUserModels();
+        findUserCalendar.setItems(FXCollections.observableArrayList(userModelsToString(allUsersUM)));
+        FxUtil.autoCompleteComboBox(findUserCalendar, FxUtil.AutoCompleteMode.CONTAINING); // AutoComplete ON
+        FxUtil.autoCompleteComboBox(myCals, FxUtil.AutoCompleteMode.CONTAINING);
         calDate = getLastMonday(calDate);
         updateYear();
         updateMonth();
@@ -91,7 +90,49 @@ public class Controller {
         importFont();
         notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
 
+        myCals.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                Calendar cal = new Calendar(Integer.parseInt(myCals.getValue().toString().split(",")[1].trim()), myCals.getValue().toString().split(",")[0].trim());
+                System.out.println("Viewing calendar " + cal.getName());
+                clearAppointments();
+                cals = new Integer[]{cal.getId()};
+                appointments = getAppointments(cals);
+                populateCalendars(cals);
+            }
+        });
+
+        findUserCalendar.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                UserModel user = getUserModelFromEmail(findUserCalendar.getValue().toString().split(",")[1].trim());
+                System.out.println("Viewing " + user.getFirstName() + "'s calendar");
+                clearAppointments(); //todo
+                ArrayList<Calendar> userCal = calendar.Calendar.getMyCalendarsFromDB(user);
+                cals = new Integer[userCal.size()];
+                for (int i = 0; i < userCal.size(); i++) {
+                    cals[i] = userCal.get(i).getId();
+                }
+                appointments = getAppointments(cals);
+                populateCalendars(cals);
+            }
+        });
+
     }
+
+    public ArrayList<UserModel> getAllUserModels() {
+        return UserModel.getAllUsers();
+    }
+
+    public ArrayList<String> userModelsToString(ArrayList<UserModel> users) {
+        return UserModel.convertUserModelsToStringArrayList(users);
+    }
+
+    public ArrayList<String> calendarsToString(ArrayList<calendar.Calendar> cals) {
+        return calendar.Calendar.convertCalendarsToStringArrayList(cals);
+    }
+
+    public static ArrayList<calendar.Calendar> getMyCalsFromDB() { return calendar.Calendar.getMyCalendarsFromDB(Main.getLoggedUser()); }
 
     public void importFont() {
         try {
@@ -122,9 +163,9 @@ public class Controller {
     }
 
     private LocalDate getLastMonday(LocalDate d) {
-        Calendar c = Calendar.getInstance(Locale.ENGLISH);
+        java.util.Calendar c = java.util.Calendar.getInstance(Locale.ENGLISH);
         c.setTime(Date.valueOf(d));
-        int day = c.get(Calendar.DAY_OF_WEEK);
+        int day = c.get(java.util.Calendar.DAY_OF_WEEK);
         return d.minusDays(day-2);
     }
 
@@ -168,6 +209,15 @@ public class Controller {
         client.newAppointment.Main newApp = new client.newAppointment.Main();
         try {
             newApp.showNewAppointment(primaryStage, Main.user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onBtnShowNewRoom(ActionEvent event) {
+        client.newRoom.Main newRoom = new client.newRoom.Main();
+        try {
+            newRoom.showNewRoom(primaryStage, Main.user);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -246,11 +296,11 @@ public class Controller {
 
 
             if(isThisWeek || isRepeat){
-                System.out.println(app.getTitle() +
+/*                System.out.println(app.getTitle() +
                                 ": den " + start+
                                 " i kalender "+app.getCals()+
                                 " i rom "+app.getRoom().getName()
-                );
+                );*/
 
                 AnchorPane pane = generateAppointmentPane(app, apps);
                 insertPane(pane, start, app.getEndDate());
@@ -349,6 +399,13 @@ public class Controller {
 
     public double getColWidth(){
         return calendarGrid.getColumnConstraints().get(1).getPrefWidth();
+    }
+
+    public UserModel getUserModelFromEmail(String email) {
+        for (UserModel user : allUsersUM) {
+            if(user.getEmail().equals(email)) return user;
+        }
+        return null;
     }
 
 }

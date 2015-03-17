@@ -64,6 +64,13 @@ public class Room implements Serializable {
         }
     }
 
+    public int getOpensAt() {
+        return opensAt;
+    }
+    public int getClosesAt() {
+        return closesAt;
+    }
+
     public String getName() {
         return name;
     }
@@ -74,6 +81,10 @@ public class Room implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public ArrayList<Utility> getUtilities() {
+        return utilities;
     }
 
     public void setName(String name) {
