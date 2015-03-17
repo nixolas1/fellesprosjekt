@@ -211,9 +211,6 @@ public class Logic {
                 ( "'" + app.getLocation() + "'" ) : "NULL" ;
         String description = app.getPurpose() != null && app.getPurpose().length() > 0 ?
                 ("'" + app.getPurpose() + "'") : "NULL";
-        String repeatEndDate = app.getEndRepeatDate() != null ?
-                ("'" + app.getEndRepeatDate() + "'" ) : "NULL";
-        String repeat = app.getRepeatEvery() > 0 ? String.valueOf(app.getRepeatEvery()) : "NULL";
         String roomId = app.getRoom() != null ? String.valueOf(app.getRoom().getId()) : "NULL";
         String isPrivate = app.getIsPrivate().toString();
         String allDay = app.getAllDay().toString();
@@ -235,8 +232,6 @@ public class Logic {
                     +location+", '"
                     +app.getStartDate()+"', '"
                     +app.getEndDate()+"', "
-                    +repeatEndDate+", "
-                    +repeat+", "
                     +isVisible+", "
                     +allDay+", "
                     +isPrivate+", "

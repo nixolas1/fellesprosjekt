@@ -22,12 +22,24 @@
       <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: rgba(0,0,0,0.4); -fx-border-width: 0 0 1px 0;" GridPane.columnSpan="2" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ny gruppe" textAlignment="CENTER" wrappingWidth="460.35498046875">
-         <font>
-            <Font name="Helvetica Neue" size="37.0" />
-         </font>
-      </Text>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <children>
+            <TextField id="name" fx:id="name" prefHeight="26.0" prefWidth="370.0" promptText="Navn på gruppen" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+         <children>
+            <TextArea fx:id="description" prefHeight="120.0" prefWidth="370.0" promptText="Beskrivelse av gruppen" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+         <children>
+            <ComboBox id="usersComboBox" fx:id="usersComboBox" prefHeight="26.0" prefWidth="160.0" promptText="Finn deltaker" />
+            <Button id="add" fx:id="add" layoutX="164.0" mnemonicParsing="false" onAction="#addUser" text="&gt;" />
+            <ListView id="attendeeList" fx:id="groupList" layoutX="195.0" prefHeight="130.0" prefWidth="175.0" />
+            <Button id="remove" fx:id="remove" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUser" text="&lt;" />
+         </children>
+      </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
          <children>
             <Button id="cancel" fx:id="cancel" maxHeight="36.0" maxWidth="100.0" minHeight="36.0" minWidth="80.0" mnemonicParsing="false" onAction="#cancel" prefHeight="36.0" prefWidth="80.0" text="Avbryt" />
@@ -45,16 +57,12 @@
             </Button>
          </children>
       </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-         <children>
-            <TextArea fx:id="description" prefHeight="120.0" prefWidth="370.0" promptText="Beskrivelse av gruppen" />
-         </children>
-      </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-         <children>
-            <TextField id="name" fx:id="name" prefHeight="26.0" prefWidth="370.0" promptText="Navn på gruppen" />
-         </children>
-      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: rgba(0,0,0,0.4); -fx-border-width: 0 0 1px 0;" GridPane.columnSpan="2" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ny gruppe" textAlignment="CENTER" wrappingWidth="460.35498046875">
+         <font>
+            <Font name="Helvetica Neue" size="37.0" />
+         </font>
+      </Text>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
          <children>
             <Label prefHeight="25.0" prefWidth="82.0" text="Beskrivelse">
@@ -72,14 +80,6 @@
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
          <children>
             <Label text="Deltakere" />
-         </children>
-      </Pane>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-         <children>
-            <ComboBox id="usersComboBox" fx:id="usersComboBox" prefHeight="26.0" prefWidth="160.0" promptText="Finn deltaker" />
-            <Button id="remove" fx:id="remove" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUser" text="&lt;" />
-            <Button id="add" fx:id="add" layoutX="164.0" mnemonicParsing="false" onAction="#addUser" text="&gt;" />
-            <ListView id="attendeeList" fx:id="groupList" layoutX="195.0" prefHeight="130.0" prefWidth="175.0" />
          </children>
       </Pane>
    </children>
