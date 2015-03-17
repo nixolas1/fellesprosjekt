@@ -38,7 +38,7 @@ public class RoomLogic {
     }
 
     public static void initiateRoomLogicObject(Appointment appointment) {
-        System.out.println("initiateRoomLogicObject()");
+        //System.out.println("initiateRoomLogicObject()");
         Hashtable<String, Appointment> hashTable = new Hashtable<String, Appointment>() {{
             put("data", appointment);
         }};
@@ -46,7 +46,7 @@ public class RoomLogic {
     }
 
     public static Query initiateRoomLogic(Hashtable<String, Appointment> data){
-        System.out.println("initiateRoomLogic()");
+        //System.out.println("initiateRoomLogic()");
         ArrayList<String> attendeeList = new ArrayList<>();
         int numberOfConflicts = 0;                           // Teller for hvor mange overlapp man vil få når flere folk er med i flere grupper på samme arrangement
         int numberOfDistinctAttendees;                      // Det endelig antallet personer som deltar, uten overlapp
@@ -136,12 +136,15 @@ public class RoomLogic {
 
         allCapableRooms.sort(new RoomComparator());
 
-        System.out.println("Room selection done. Available rooms are: ");
+        System.out.println("\nRoom selection done. Available rooms are: ");
         for (Room room : allCapableRooms){
             System.out.println("[CAP=" + room.getCapacity() + "] [ID=" + room.getId() + "] " + room.getName());
         }
 
-
+        /*System.out.println("\nColliding appointments: ");
+        for (Appointment app: collidingAppointments){
+            System.out.println(app.displayInfo());
+        }*/
 
         return new Query("roomLogic", allCapableRooms);
     }
