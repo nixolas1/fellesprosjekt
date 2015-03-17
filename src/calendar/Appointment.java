@@ -21,8 +21,6 @@ public class Appointment implements Serializable {
     String location;
     LocalDateTime startDate;
     LocalDateTime endDate;
-    LocalDate endRepeatDate;
-    int repeatEvery=0;
     Room room;
     UserModel owner;
     Boolean isVisible=true;
@@ -35,7 +33,7 @@ public class Appointment implements Serializable {
     }
 
     public Appointment(String id, String title, String description, String location, String startDate,
-                       String endDate, String endRepeatDate, String repeatEveryXDays,
+                       String endDate,
                        String isVisible, String isAllDay, String isPrivate, String roomID){
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -59,11 +57,9 @@ public class Appointment implements Serializable {
             this.room = new Room(Integer.parseInt(roomID), name, capacity, opensAt, closesAt, new ArrayList<Utility>());
         }
         if(location != null) this.location = location;
-        if(repeatEveryXDays != null) this.repeatEvery = Integer.parseInt(repeatEveryXDays);
-        if(endRepeatDate != null) this.endRepeatDate = LocalDate.parse(endRepeatDate, dateFormat);
     }
 
-    public Appointment(int id, String title, String purpose, LocalDateTime startDate, LocalDateTime endDate, Room room, UserModel owner, Calendar cal, int repeatEvery, LocalDate endRepeatDate, String location){
+    public Appointment(int id, String title, String purpose, LocalDateTime startDate, LocalDateTime endDate, Room room, UserModel owner, Calendar cal, String location){
         this.title=title;
         this.id=id;
         this.purpose=purpose;
@@ -74,8 +70,6 @@ public class Appointment implements Serializable {
         this.cals = Calendar.getAllCalendarsInAppointmentClientside(this.id, client.Main.socket);
         this.attendees = Attendee.getAllAttendeesForAppointmentClientside(this.id, client.Main.socket);
         this.location = location;
-        this.repeatEvery = repeatEvery;
-        this.endRepeatDate=endRepeatDate;
     }
 
     public static ArrayList<Appointment> getAppointmentsInCalendar(int calID, ThreadClient socket){
@@ -96,7 +90,7 @@ public class Appointment implements Serializable {
 
     public static Appointment getAppointmentFromDB(String id){ //Server side only!
         String[] a = server.database.Logic.getRow("Appointment", "appointmentid", id);
-        return new Appointment(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], a[11]);
+        return new Appointment(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[11]);
     }
 
     public ArrayList<Appointment> getCollisions(ArrayList<Appointment> appointments){
@@ -133,7 +127,6 @@ public class Appointment implements Serializable {
     public ArrayList<Attendee> getAttendees() {
         return attendees;
     }
-    public int getRepeatEvery(){return repeatEvery;}
 
     public int getId() {
         return id;
@@ -149,18 +142,6 @@ public class Appointment implements Serializable {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public LocalDate getEndRepeatDate() {
-        return endRepeatDate;
-    }
-
-    public void setEndRepeatDate(LocalDate endRepeatDate) {
-        this.endRepeatDate = endRepeatDate;
-    }
-
-    public void setRepeatEvery(int repeatEvery) {
-        this.repeatEvery = repeatEvery;
     }
 
     public void setAttendees(ArrayList<Attendee> attendees) {
@@ -214,7 +195,7 @@ public class Appointment implements Serializable {
     }
 
     public String ohString(){
-        // todo id, title, purpose, location, startDate, endDate, endRepeatDate, repeatEveryXDays, calID, roomID
+        // todo id, title, purpose, location, startDate, endDate, calID, roomID
         return "Appointment ["+id+"] Title: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
                 "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo()+ "";
 
