@@ -26,6 +26,7 @@ public class Logic {
             case "createGroup": return server.database.Logic.createGroup(data);
             case "createRoom": return server.database.Logic.createRoom(data);
             case "getNotifications": return NotificationLogic.getNotifications(data);
+            case "roomLogic": return server.RoomLogic.initiateRoomLogic(data);
             //case "getAvailableRooms": return RoomLogic.initiateRoomLogic(data);
             //case "getLastGroupIdUsed": return server.database.Logic.getId();
 

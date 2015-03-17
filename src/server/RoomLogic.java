@@ -50,7 +50,7 @@ public class RoomLogic {
         ArrayList<String> attendeeList = new ArrayList<>();
         int numberOfConflicts = 0;                           // Teller for hvor mange overlapp man vil få når flere folk er med i flere grupper på samme arrangement
         int numberOfDistinctAttendees;                      // Det endelig antallet personer som deltar, uten overlapp
-        Appointment appointment = data.get("data");        // Henter data'en fra Hashtable
+        Appointment appointment = data.get("reply");        // Henter data'en fra Hashtable
 
         // Løper gjennom alle inviterte til en arrangement
         for (Attendee attendee : appointment.getAttendees()){

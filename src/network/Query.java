@@ -58,6 +58,7 @@ public class Query implements Serializable{
         this.data = data;
     }
 
+
     public Query(String function, final Calendar data) {
         this.function = function;
         this.data = new Hashtable<String, Calendar>(){{put("reply",data);}};

@@ -111,6 +111,7 @@ public class Controller {
         myCals.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                findUserCalendar.getEditor().setText("");
                 Calendar cal = new Calendar(Integer.parseInt(myCals.getValue().toString().split(",")[1].trim()), myCals.getValue().toString().split(",")[0].trim());
                 System.out.println("Viewing calendar " + cal.getName());
                 clearAppointments();
@@ -123,6 +124,7 @@ public class Controller {
         findUserCalendar.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                myCals.getEditor().setText("");
                 UserModel user = getUserModelFromEmail(findUserCalendar.getValue().toString().split(",")[1].trim());
                 System.out.println("Viewing " + user.getFirstName() + "'s calendar");
                 clearAppointments(); //todo

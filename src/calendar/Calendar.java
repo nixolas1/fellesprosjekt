@@ -123,7 +123,18 @@ public class Calendar implements Serializable {
         for(List<String> li : calendars) {
             if(Boolean.parseBoolean(li.get(4))) cals.add(new Calendar(Integer.parseInt(li.get(0)), li.get(1)));
         }
+        System.out.println("ALL CALS RECEIVED FROM DB: " + cals);
         return cals;
+    }
+
+    public static ArrayList<Calendar> getGroupCalendarsFromDB() {
+        ArrayList<List<String>> cals = network.ClientDB.getAllTableRowsWhere("Calendar","isGroup = 1", Main.socket);
+        ArrayList<Calendar> calendars = new ArrayList<>();
+        for (List<String> li : cals) {
+            calendars.add(new Calendar(Integer.parseInt(li.get(0)), li.get(1)));
+        }
+        System.out.println("Calendars received from DB: " + calendars);
+        return calendars;
     }
 
     public static ArrayList<Calendar> getMyCalendarsFromDB(UserModel user) {
