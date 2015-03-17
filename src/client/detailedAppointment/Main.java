@@ -20,20 +20,24 @@ public class Main extends Application {
 
     private static Stage detAppParent;
     private static Stage detAppointmentStage;
-    private static UserModel user;
+    public static UserModel user;
     static Appointment appointment;
 
     @Override
     public void start(Stage primaryStage) {
         try {
             GridPane root = (GridPane) FXMLLoader.load(Main.class.getResource("gui.fxml"));
-            Scene scene = new Scene(root, 500, 680);
+            Scene scene = new Scene(root, 500, 660);
             //scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static UserModel getLoggedUser() {
+        return user;
     }
 
 

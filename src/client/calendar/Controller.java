@@ -355,7 +355,7 @@ public class Controller {
                 System.out.println("Pressed "+app.getTitle());
                 client.detailedAppointment.Main detApp = new client.detailedAppointment.Main();
                 try {
-                    detApp.showDetAppointment(primaryStage, Main.user, app);
+                    detApp.showDetAppointment(primaryStage, Main.getLoggedUser(), app);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
