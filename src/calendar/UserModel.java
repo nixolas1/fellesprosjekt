@@ -139,7 +139,7 @@ public class UserModel implements Serializable {
 
     public static UserModel getUserFromServer(final String user, final String domain){
 
-        System.out.println("Getting user: "+user+", "+domain);
+        //System.out.println("Getting user: "+user+", "+domain);
         Hashtable<String, String> data = new Hashtable<String, String>(){{
             put("username",user);
             put("domain", domain);
@@ -153,7 +153,7 @@ public class UserModel implements Serializable {
     public static ArrayList<UserModel> getAllUsers() {
         ThreadClient socket = new ThreadClient();
         Query reply = socket.send(new Query("getAllUsers",new ArrayList<UserModel>()));
-        System.out.println(reply.function);
+        //System.out.println(reply.function);
         Hashtable<String, ArrayList<UserModel>> response = reply.data;
         return response.get("reply");
     }
