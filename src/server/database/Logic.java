@@ -441,7 +441,7 @@ public class Logic {
         }
 
         if (queryResult != null && queryResult.equalsIgnoreCase(identifyingValue)){
-            System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' already exists in table '" + table + "'");
+            System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' exists in table '" + table + "'");
             return true;
         } else {
             System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' does not exist in table '" + table + "'");
