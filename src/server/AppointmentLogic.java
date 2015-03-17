@@ -64,4 +64,26 @@ public class AppointmentLogic {
         return appList;
     }
 
+    public static ArrayList<Appointment> getCalendarAppointments(String calendarId){
+        try {
+            String cal_id = calendarId;
+            System.out.println("Getting appointments for cal: "+cal_id);
+            if(server.database.Logic.inDatabase("Calendar", "calendarid", cal_id)){
+                String sqlQuery = "INNER JOIN Calendar_has_Appointment on " +
+                        "Appointment.appointmentid = Calendar_has_Appointment.Appointment_appointmentid " +
+                        "WHERE Calendar_has_Appointment.Calendar_calendarid=" + cal_id;
+                ArrayList<List<String>>rows = server.database.Logic.getAllRowsQuery("Appointment", sqlQuery);
+                ArrayList<Appointment> apps = getModelsFromDBOutput(rows);
+                System.out.println(apps.toString());
+                return apps;
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<Appointment>();
+    }
+
 }
