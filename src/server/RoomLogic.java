@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Sondre on 06.03.15.
  */
-public class RoomLogic implements Comparable<Room>{
+public class RoomLogic {
 
     public static Query getRooms(){
         try {
@@ -35,19 +35,6 @@ public class RoomLogic implements Comparable<Room>{
         }
 
         return roomList;
-    }
-
-    public static ArrayList<Room> availableRooms(){
-        //Hashtable<String, ArrayList<Appointment>> hore= AppointmentLogic.getCalendarAppointments(new Hashtable<String, String>() {{put("id", "1");}}).data;
-        Hashtable<String, ArrayList<Room>> foo = getRooms().data;
-        ArrayList<Room> appList = foo.get("reply");
-        System.out.println(appList.toString());
-
-        /*Query query = getRooms();
-        Appointment app = appList.get(0);
-        Hashtable<String, ArrayList<Room>> allRooms = query.data;
-        ArrayList*/
-        return appList;
     }
 
     public static void initiateRoomLogicObject(Appointment appointment) {
@@ -109,55 +96,21 @@ public class RoomLogic implements Comparable<Room>{
                 room.setCapacity(Integer.valueOf(rooms.get(2)));
                 room.setOpensAt(Integer.valueOf(rooms.get(3)));
                 room.setClosesAt(Integer.valueOf(rooms.get(4)));
-                new Room(Integer.valueOf(rooms.get(0)), rooms.get(1), Integer.valueOf(rooms.get(2)), Integer.valueOf(rooms.get(3)), Integer.valueOf(rooms.get(4)));
                 allRoomIds.add(Integer.valueOf(rooms.get(0)));
                 allCapableRooms.add(room);
             }
-            /*for (String roomAttribute : rooms){
-                /*for (int e = 0; e < rooms.size(); e++) {
-                    if (numberOfDistinctAttendees <= Integer.parseInt(rooms.get(2)))
-                }
-
-                for (int i = 0; i <rooms.size(); i++){
-                    // Legger kun til rommene med bra nok kapasitet
-                    if (numberOfDistinctAttendees <= Integer.parseInt(rooms.get(2))) {
-                        switch (i) {
-                            case 0:
-                                room.setId(Integer.valueOf(rooms.get(0)));
-                                allRoomIds.add(Integer.valueOf(rooms.get(0)));
-                                break;
-                            case 1:
-                                room.setName(rooms.get(1));
-                                break;
-                            case 2:
-                                room.setCapacity(Integer.valueOf(rooms.get(2)));
-                                break;
-                            case 3:
-                                room.setOpensAt(Integer.valueOf(rooms.get(3)));
-                                break;
-                            case 4:
-                                room.setClosesAt(Integer.valueOf(rooms.get(4)));
-                                break;
-                        }
-                    }
-
-                }*/
 
         }
 
 
-        // Henter alle avtaler som er koblet på en rom-id
-        int[] allCalendarIds;
         ArrayList<List<String>> allRowsFromAppointment = server.database.Logic.getAllRows("Appointment");
         ArrayList<Appointment> collidingAppointments = new ArrayList<>();
         ArrayList<Integer> allRoomIdsWithConflict = new ArrayList<>();
 
+        // Henter alle avtaler som er koblet på en rom-id
         for (List<String> appointments : allRowsFromAppointment){
             Appointment app = new Appointment();
             int count = 0;
-            /*for (String appointmentAttribute : appointments){
-                for (int i = 0; i < appointments.size(); i++){*/
-                    // Legger kun til rommene med bra nok kapasitet
             try{
                 if (appointments.get(11) != null || ! appointments.get(11).equalsIgnoreCase("null") || appointments.get(11).length() < 1) {
                     Appointment newAppointment = new Appointment(appointments.get(0), appointments.get(1),
@@ -173,9 +126,6 @@ public class RoomLogic implements Comparable<Room>{
             } catch (NullPointerException e){
                 System.out.println("NullPointerException triggered in initiateRoomLogic(). Appointment [ID=" + appointments.get(0) + "] has no roomid");
             }
-
-                //}
-            //}
         }
 
         for (Room room : allCapableRooms){
@@ -183,6 +133,8 @@ public class RoomLogic implements Comparable<Room>{
                 allCapableRooms.remove(room);
             }
         }
+
+        allCapableRooms.sort(new RoomComparator());
 
         System.out.println("Room selection done. Available rooms are: ");
         for (Room room : allCapableRooms){
@@ -195,7 +147,6 @@ public class RoomLogic implements Comparable<Room>{
     }
 
     public static boolean checkIfAppointmentsCollide(Appointment app1, Appointment app2){
-        // Skal sjekke om to appointments kolliderer
         LocalDateTime start1 = app1.getStartDate();
         LocalDateTime end1 = app1.getEndDate();
         LocalDateTime start2 = app2.getStartDate();
@@ -206,10 +157,5 @@ public class RoomLogic implements Comparable<Room>{
         if (start2.isAfter(start1) && start2.isBefore(end1)) return true;
 
         return false;
-    }
-
-    @Override
-    public int compareTo(Room room) {
-        return room.;
     }
 }
