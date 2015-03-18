@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
+import network.ClientDB;
 import network.Query;
 
 public class Controller implements Initializable{
@@ -219,19 +220,10 @@ public class Controller implements Initializable{
         attendees.add(loggedUser.getFirstName() + " " + loggedUser.getLastName() + ", " + loggedUser.getEmail());
     }
 
-    /*private boolean isOwner() {
-        for (String attendee : attendees) {
-            if ()
-        }
-        return false;
-    }*/
 
     public void initializeFields() {
         editApp.setVisible(false);
         cancelApp.setVisible(false);
-        ObservableList<Attendee> attendeeObservableList = FXCollections.observableArrayList(app.attendees);
-        //ObservableList<Group> groupObservableList = FXCollections.observableArrayList(app.);
-
         headTitle.setText(app.getTitle());
         //work or private
         title.setText(app.getTitle());
@@ -241,7 +233,7 @@ public class Controller implements Initializable{
         to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
         endDate.setValue(app.getEndDate().toLocalDate());
         description.setText(app.getPurpose());
-        attendeeList.setItems(attendeeObservableList);
+        //attendeeList.setItems(attendees);
         //groupList.setItems(groupObservableList);
         //roomOrLocation.setText(app.);
         locationDescription.setText(app.getLocation());
@@ -250,11 +242,21 @@ public class Controller implements Initializable{
     }
 
     public void acceptInvite(ActionEvent event) {
-
+        ClientDB.updateRow("Attendee",
+                "User_email = '" + loggedUser.getEmail() + "' AND Appointment_appointmentid = " + app.getId(),
+                "willAttend = 1",
+                client.Main.socket
+        );
+        Main.closeStage();
     }
 
     public void declineInvite(ActionEvent event) {
-
+        ClientDB.updateRow("Attendee",
+                "User_email = '" + loggedUser.getEmail() + "' AND Appointment_appointmentid = " + app.getId(),
+                "willAttend = 0",
+                client.Main.socket
+        );
+        Main.closeStage();
     }
 
     public static ArrayList<UserModel> getUsersFromDB() {
