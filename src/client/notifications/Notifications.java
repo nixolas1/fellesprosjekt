@@ -1,7 +1,9 @@
 package client.notifications;
 
+import calendar.Appointment;
 import calendar.Notification;
 import client.calendar.Controller.*;
+import client.calendar.Main;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,7 +33,6 @@ public class Notifications {
         label = unreadCountLabel;
         list = notificationList;
         this.email=email;
-
     }
 
     public void refresh(){

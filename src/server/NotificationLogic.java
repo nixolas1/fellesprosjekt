@@ -5,6 +5,7 @@ import calendar.Room;
 import calendar.UserModel;
 import network.Query;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class NotificationLogic {
             String email = data.get("reply");
             ArrayList<Notification> notifs = getModelsFromDBOutput(
                     server.database.Logic.getAllRowsWhere("Notification", "User_email = '"+email+"'"));
+            Collections.reverse(notifs);
             return new Query("getNotifications", notifs);
         } catch (Exception e) {
             e.printStackTrace();

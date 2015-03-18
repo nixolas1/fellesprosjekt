@@ -31,4 +31,22 @@ public class ClientDB {
             return new ArrayList<>();
         }
     }
+
+    public static Boolean updateRow(String table, String where, String set, ThreadClient socket) {
+        Hashtable<String, String> data = new Hashtable<String, String>() {{
+            put("table", table);
+            put("where", where);
+            put("set", set);
+        }};
+
+        try {
+            Query reply = socket.send(new Query("updateRow", data));
+            Hashtable<String, Boolean> response = reply.data;
+            return response.get("reply");
+        } catch (Exception e) {
+            System.err.println("Could not update row:");
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

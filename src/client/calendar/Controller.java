@@ -22,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
@@ -29,6 +30,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import network.ClientDB;
 import network.ThreadClient;
 import server.User;
 import java.awt.*;
@@ -57,18 +59,21 @@ public class Controller {
     @FXML private GridPane calendarGrid;
     @FXML public ComboBox<Notification> notifCombo;
     @FXML public ComboBox findUserCalendar, myCals;
-
+    @FXML private ListView shownCals;
 
     protected static Stage primaryStage;
 
     private LocalDate calDate = LocalDate.now();
     private ThreadClient socket = client.Main.socket;
     private int privCal = Main.user.getPrivateCalendar();
-    private Integer[] cals = new Integer[]{privCal};
+    //private Integer[] cals = new Integer[]{privCal};
+    private ArrayList<Integer> cals = new ArrayList<Integer>(Arrays.asList(privCal));
     private Notifications notifs;
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
     private ArrayList<UserModel> allUsersUM;
     private ArrayList<calendar.Calendar> myCalendars;
+    private ObservableList<String> displayedCals = FXCollections.observableArrayList();
+    private ArrayList<Integer> calendarsAtisplay = new ArrayList<Integer>();
     Timer timer = new Timer();
     Integer numUnread = 0;
 
@@ -90,8 +95,29 @@ public class Controller {
         appointments = getAppointments(cals);
         populateCalendars(cals);
         importFont();
-        notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
 
+        //Notification stuff
+        notifCombo.setOnAction((event) -> {
+            Notification cell = notifCombo.getSelectionModel().getSelectedItem();
+            if(cell != null) {
+                System.out.println("ComboBox Action (selected: " + cell.text + ")");
+                // Set at seen
+                ClientDB.updateRow("Notification",
+                        "User_email = '" + Main.user.getEmail() + "' AND Appointment_appointmentid = " + cell.app.getId(),
+                        "seen = 1",
+                        client.Main.socket
+                );
+                if (cell.app.getId() != 0) {
+                    client.detailedAppointment.Main detApp = new client.detailedAppointment.Main();
+                    try {
+                        detApp.showDetAppointment(primaryStage, Main.user, cell.app);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
         timer.schedule( new TimerTask() {
             public void run() {
                 notifs.refresh();
@@ -111,11 +137,21 @@ public class Controller {
         myCals.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                //System.out.println("Calendar cal = new Calendar(Integer.parseInt(myCals.getValue().toString().split(,)[1].trim()), myCals.getValue().toString().split',)[0].trim())");
+                //System.out.println(myCals.getValue().toString().split(",")[1].trim() + "        " + myCals.getValue().toString().split(",")[0].trim());
                 findUserCalendar.getEditor().setText("");
                 Calendar cal = new Calendar(Integer.parseInt(myCals.getValue().toString().split(",")[1].trim()), myCals.getValue().toString().split(",")[0].trim());
                 System.out.println("Viewing calendar " + cal.getName());
                 clearAppointments();
-                cals = new Integer[]{cal.getId()};
+                //System.out.println("CALS: length = " + cals.length);
+                /*for (Integer in : cals){
+                    System.out.println(in);
+                }*/
+                //displayedCals.add(cal.getName());
+                //shownCals.setItems(displayedCals);
+                //cals.add(cal.getId());
+                cals = new ArrayList<Integer>(Arrays.asList(cal.getId()));
+                //cals = new Integer[]{cal.getId()};
                 appointments = getAppointments(cals);
                 populateCalendars(cals);
             }
@@ -129,14 +165,20 @@ public class Controller {
                 System.out.println("Viewing " + user.getFirstName() + "'s calendar");
                 clearAppointments(); //todo
                 ArrayList<Calendar> userCal = calendar.Calendar.getMyCalendarsFromDB(user);
-                cals = new Integer[userCal.size()];
+                cals = new ArrayList<Integer>(userCal.size());
+                //cals = new Integer[userCal.size()];
                 for (int i = 0; i < userCal.size(); i++) {
-                    cals[i] = userCal.get(i).getId();
+                    cals.add(userCal.get(i).getId());
                 }
                 appointments = getAppointments(cals);
                 populateCalendars(cals);
             }
         });
+
+    }
+
+    public void getMainCalendar(){
+        ArrayList<Calendar> asd = Calendar.getAllCalendarsFromDB();
 
     }
 
@@ -265,7 +307,7 @@ public class Controller {
         calendarGrid.getChildren().removeIf(AnchorPane.class::isInstance);
     }
 
-    public void populateCalendars(Integer[] id){
+    public void populateCalendars(ArrayList<Integer> id){
         ArrayList<Appointment> apps = new ArrayList<>();
         for(int i : id){
             apps.addAll(appointments.get(i));
@@ -273,7 +315,7 @@ public class Controller {
         populateCalendar(apps);
     }
 
-    public Hashtable<Integer, ArrayList<Appointment>> getAppointments(Integer[] id){
+    public Hashtable<Integer, ArrayList<Appointment>> getAppointments(ArrayList<Integer> id){
         Hashtable<Integer, ArrayList<Appointment>> apps = new Hashtable<>();
         for(Integer i : id){
             apps.put(i, Appointment.getAppointmentsInCalendar(i, socket));

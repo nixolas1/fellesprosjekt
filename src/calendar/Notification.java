@@ -42,9 +42,10 @@ public class Notification implements Serializable {
         this.app=Appointment.getAppointmentFromDB(appid);
         this.user=server.database.Logic.getUser(email);
         this.text=text;
-
+        System.out.println("Notifs: "+seen);
         if(seen != null)
-            this.seen=Boolean.parseBoolean(seen);
+            this.seen=!seen.equals("0");
+        System.out.println(this.seen);
         if(created != null)
             this.created=LocalDateTime.parse(created, format);
     }
