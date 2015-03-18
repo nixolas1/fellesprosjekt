@@ -219,14 +219,16 @@ public class Controller implements Initializable{
         attendees.add(loggedUser.getFirstName() + " " + loggedUser.getLastName() + ", " + loggedUser.getEmail());
     }
 
-    private boolean isOwner() {
-        if (app.getOwner() == loggedUser) {
-            return true;
+    /*private boolean isOwner() {
+        for (String attendee : attendees) {
+            if ()
         }
         return false;
-    }
+    }*/
 
     public void initializeFields() {
+        editApp.setVisible(false);
+        cancelApp.setVisible(false);
         ObservableList<Attendee> attendeeObservableList = FXCollections.observableArrayList(app.attendees);
         //ObservableList<Group> groupObservableList = FXCollections.observableArrayList(app.);
 
@@ -244,9 +246,14 @@ public class Controller implements Initializable{
         //roomOrLocation.setText(app.);
         locationDescription.setText(app.getLocation());
         room.setValue(app.getRoom());
-        if (isOwner())
-            title.setDisable(true);
-        System.out.println(app.getOwner() + " " + loggedUser);
+
+    }
+
+    public void acceptInvite(ActionEvent event) {
+
+    }
+
+    public void declineInvite(ActionEvent event) {
 
     }
 
