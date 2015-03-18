@@ -46,11 +46,11 @@ public class RoomLogic {
     }
 
     public static Query initiateRoomLogic(Hashtable<String, Appointment> data){
-        //System.out.println("initiateRoomLogic()");
-        ArrayList<String> attendeeList = new ArrayList<>();
-        int numberOfConflicts = 0;                           // Teller for hvor mange overlapp man vil få når flere folk er med i flere grupper på samme arrangement
-        int numberOfDistinctAttendees;                      // Det endelig antallet personer som deltar, uten overlapp
-        Appointment appointment = data.get("reply");        // Henter data'en fra Hashtable
+        System.out.println("initiateRoomLogic()");
+        ArrayList<String> attendeeList = new ArrayList<String>();
+        int numberOfConflicts = 0;                               // Teller for hvor mange overlapp man vil få når flere folk er med i flere grupper på samme arrangement
+        int numberOfDistinctAttendees;                          // Det endelig antallet personer som deltar, uten overlapp
+        Appointment appointment = data.get("reply");           // Henter data'en fra Hashtable
 
         // Løper gjennom alle inviterte til en arrangement
         for (Attendee attendee : appointment.getAttendees()){
@@ -67,20 +67,19 @@ public class RoomLogic {
 
         // Løper gjennom alle medlemmene i alle gruppekalenderene i appointment objektet
         for (Calendar groupCalendar : appointment.getCals()){
-            ArrayList<UserModel> memberList= groupCalendar.getMembers();
-            for (UserModel member : memberList){
-                System.out.println("Member in group: " + member.displayInfo());
-                if (! attendeeList.contains(member.getEmail())){
-                    attendeeList.add(member.getEmail());
+            ArrayList<String> memberList= server.database.Logic.getUsersInGroupCalendar(groupCalendar.getId());
+            System.out.println("\n\nGROUPID ADDED: " + groupCalendar.getId() + "\n\n");
+            for (String email : memberList){
+                System.out.println("Member in group: " + email);
+                if (! attendeeList.contains(email)){
+                    attendeeList.add(email);
                     //System.out.println("Added user '" + email + "'");
                 } else {
                     numberOfConflicts += 1;
                     System.out.println("numberOfConflicts: " + numberOfConflicts);
                 }
             }
-
         }
-
 
         numberOfDistinctAttendees = attendeeList.size();
         System.out.println("numberOfConflicts: " + numberOfConflicts);
@@ -127,7 +126,7 @@ public class RoomLogic {
                     }
                 }
             } catch (NullPointerException e){
-                System.out.println("NullPointerException triggered in initiateRoomLogic(). Appointment [ID=" + appointments.get(0) + "] has no roomid");
+                //System.out.println("NullPointerException triggered in initiateRoomLogic(). Appointment [ID=" + appointments.get(0) + "] has no roomid");
             }
         }
 

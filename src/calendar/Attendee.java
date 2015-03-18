@@ -47,7 +47,7 @@ public class Attendee implements Serializable {
     public Attendee(String email, String appid, String timeInvited, String timeAnswered, String willAttend, String isOwner, String alarm) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        System.out.println(email);
+        //System.out.println(email);
         this.user=UserModel.getUserFromServer(email);
         this.appointmentid=Integer.parseInt(appid);
 
