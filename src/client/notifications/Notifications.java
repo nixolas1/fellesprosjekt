@@ -29,14 +29,14 @@ public class Notifications {
     String email;
 
     public Notifications(String email, Text unreadCountLabel, ComboBox<Notification> notificationList){
-        notifications = Notification.getUserNotifications(email, client.Main.socket);
+        notifications = new ArrayList<>();//Notification.getUserNotifications(email, client.Main.socket);
         label = unreadCountLabel;
         list = notificationList;
         this.email=email;
     }
 
     public void refresh(){
-        notifications = Notification.getUserNotifications(email, client.Main.socket);
+        notifications = new ArrayList<>();//Notification.getUserNotifications(email, client.Main.socket);
         updateList();
     }
 

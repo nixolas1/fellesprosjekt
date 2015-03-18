@@ -354,12 +354,12 @@ public class Logic {
                 n.text + "', '" +
                 "0', '" +
                 LocalDateTime.now() + "');";
-        //System.out.println("query: " + query);
+        System.out.println("query: " + query);
         Statement stmt = null;
 
         try {
             stmt = conn.createStatement();
-            stmt.executeUpdate(query);
+            //stmt.executeUpdate(query);
             System.out.println("Stored notification "+n.text+" for "+n.user.getEmail());
             return true;
         } catch (SQLException f) {
@@ -375,7 +375,7 @@ public class Logic {
         int isPrivate = data.get("private") == null ? 0 : 1;
         //int groupId = groupCalendar.getId();
         String memberQuery = "INSERT INTO User_has_Calendar (Calendar_calendarid, User_email, isVisible, notifications, isPrivate) VALUES (" + groupId + ", ";
-        String calendarQuery = "INSERT INTO Calendar (calendarid, name, description) VALUES (" + groupId + ", '" + groupCalendar.getName() + "', '" + groupCalendar.getDescription() + "');";
+        String calendarQuery = "INSERT INTO Calendar (calendarid, name, description, isGroup) VALUES (" + groupId + ", '" + groupCalendar.getName() + "', '" + groupCalendar.getDescription() + "', "+isPrivate+");";
         Statement stmt = null;
         try {
             stmt = conn.createStatement();

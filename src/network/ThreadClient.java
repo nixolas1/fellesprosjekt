@@ -53,7 +53,7 @@ public class ThreadClient {
     public Query send(Query query) {
         try {
 
-            System.out.println("Sending "+query.function);
+            System.out.println("Sending "+query.function+" with data: "+query.data);
 
             ObjectOutputStream oos = new ObjectOutputStream(os);
             oos.writeObject(query);
