@@ -296,6 +296,8 @@ public class Controller implements Initializable{
             }
             calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL!
             for (Attendee a : app.getAttendees()) {
+                if(a.getUser().getEmail().equals(loggedUser.getEmail()))
+                    a.setIsOwner(true);
                 if(a.getUser().getPrivateCalendar() != -1)
                     app.addCalender(new Calendar(a.getUser().getPrivateCalendar()));
             }
