@@ -36,7 +36,7 @@ public class NotificationLogic {
     public static ArrayList<Notification> getModelsFromDBOutput(ArrayList<List<String>> list){
         ArrayList<Notification> notiList = new ArrayList<>();
         for (List<String>a : list){
-            System.out.println(a.toString());
+            //System.out.println(a.toString());
             notiList.add(new Notification(a.get(0), a.get(1), a.get(2), a.get(3), a.get(4)));
         }
 
