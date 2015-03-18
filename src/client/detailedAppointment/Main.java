@@ -36,10 +36,6 @@ public class Main extends Application {
         }
     }
 
-    public static UserModel getLoggedUser() {
-        return user;
-    }
-
 
     public static void showDetAppointment(Stage parentStage, UserModel loggedUser, Appointment app) {
         detAppParent = parentStage;
@@ -59,6 +55,10 @@ public class Main extends Application {
             System.out.println("Exception found in detAppointment");
             ex.printStackTrace();
         }
+    }
+
+    public static UserModel getLoggedUser() {
+        return user;
     }
 
     public static void closeStage() {

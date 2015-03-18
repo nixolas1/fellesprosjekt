@@ -60,12 +60,14 @@ public class Controller implements Initializable{
     private ObservableList<String> userInfo;
     private ObservableList<String> attendees;
     private ArrayList<Calendar> allGroups;
+    private ObservableList<Attendee> attendeeObjects;
     private ObservableList<String> groupInfo;
     private ObservableList<String> addedGroups;
     private ArrayList<Room> rooms;
     private UserModel loggedUser;
     private String timeRegex = "[\\d]{2}:[\\d]{2}";
     private Appointment app;
+    private boolean isOwner;
 
 
 
@@ -170,9 +172,6 @@ public class Controller implements Initializable{
 
 
 
-
-
-
         //createValidationListener(room, 0, "[\\w- ]+ [\\d]+", 50);
         createValidationListener(from, 0, "[\\d]{2}:[\\d]{2}", 5);
         createValidationListener(to,   2,   "[\\d]{2}:[\\d]{2}", 5);
@@ -199,14 +198,21 @@ public class Controller implements Initializable{
         });*/
 
         editApp.setDisable(true);
-        attendees = FXCollections.observableArrayList(); // Listview items
+        attendeeObjects = getAttendeesFromDB();
+        attendees = displayAttendeeInfo(attendeeObjects); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
-        //attendees.add(loggedUser.getFirstName() + " " + loggedUser.getLastName() + ", " + loggedUser.getEmail());
         allUsers = getUsersFromDB();
         rooms = getRooms();
         room.setItems(FXCollections.observableArrayList(rooms));
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
+        if(checkOwner()) {
+            isOwner = true;
+            //todo view appointment as owner
+        } else {
+            isOwner = false;
+            //todo view appointment as attendee
+        }
 
         allGroups = getCalsFromDB();
         addedGroups = FXCollections.observableArrayList();
@@ -217,7 +223,6 @@ public class Controller implements Initializable{
         FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.CONTAINING); // AutoCompleteMode ON
         FxUtil.autoCompleteComboBox(groupComboBox, FxUtil.AutoCompleteMode.CONTAINING);
 
-        attendees.add(loggedUser.getFirstName() + " " + loggedUser.getLastName() + ", " + loggedUser.getEmail());
     }
 
 
@@ -229,11 +234,12 @@ public class Controller implements Initializable{
         title.setText(app.getTitle());
         date.setValue(app.getStartDate().toLocalDate());
         //allday
+        allDay.selectedProperty().setValue(app.getAllDay());
         from.setText(app.getStartDate().getHour() + ":" + app.getStartDate().getMinute());
         to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
         endDate.setValue(app.getEndDate().toLocalDate());
         description.setText(app.getPurpose());
-        //attendeeList.setItems(attendees);
+        attendeeList.setItems(attendees);
         //groupList.setItems(groupObservableList);
         //roomOrLocation.setText(app.);
         locationDescription.setText(app.getLocation());
@@ -259,6 +265,29 @@ public class Controller implements Initializable{
         Main.closeStage();
     }
 
+    public ObservableList<Attendee> getAttendeesFromDB() {
+       /* ArrayList<List<String>> arr = ClientDB.getAllTableRowsWhere("Attendee","Appointment_appointmendid = " + app.getId(), client.Main.socket);
+        ObservableList<Attendee> atts = FXCollections.observableArrayList();
+        for (List<String> a : arr) {
+            Attendee at = new Attendee(new UserModel(a.get(0)),Integer.parseInt(a.get(1)), LocalDateTime.parse(a.get(2)), LocalDateTime.parse(a.get(3)), Boolean.parseBoolean(a.get(4)), Boolean.parseBoolean(a.get(5)));
+            atts.add(at);
+        }
+        return atts;*/
+        System.out.println(app.getId());
+        return FXCollections.observableArrayList(Attendee.getAllAttendeesForAppointmentClientside(app.getId(), client.Main.socket));
+    }
+
+    public boolean checkOwner() {
+        for (Attendee a : attendeeObjects) {
+            if(a.getIsOwner() && a.getUser().getEmail().toString().equals(Main.getLoggedUser().getEmail().toString())) {
+                System.out.println("LoggedUser (" + Main.getLoggedUser().getEmail() + ") is the owner");
+                return true;
+            }
+        }
+        System.out.println("LoggedUser (" + Main.getLoggedUser().getEmail() + ") is not the owner");
+        return false;
+    }
+
     public static ArrayList<UserModel> getUsersFromDB() {
         return calendar.UserModel.getAllUsers();
     }
@@ -266,8 +295,6 @@ public class Controller implements Initializable{
     public static ArrayList<Calendar> getCalsFromDB() {
         return calendar.Calendar.getAllCalendarsFromDB();
     }
-
-
 
     @FXML
     public void addUser(ActionEvent event) {
@@ -453,6 +480,14 @@ public class Controller implements Initializable{
         return userInfo;
     }
 
+    public ObservableList<String> displayAttendeeInfo(ObservableList<Attendee> attendees) {
+        ObservableList<String> atts = FXCollections.observableArrayList();
+        for(Attendee a : attendees) {
+            atts.add(a.getUser().displayInfo());
+        }
+        return atts;
+    }
+
     public ObservableList<String> displayCalInfo(ArrayList<Calendar> groups) {
         ObservableList<String> groupInfo = FXCollections.observableArrayList();
         for (Calendar grp : groups) {
@@ -605,6 +640,7 @@ public class Controller implements Initializable{
         }
         return true;
     }
+
 
 
 }

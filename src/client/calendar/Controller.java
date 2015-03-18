@@ -364,13 +364,13 @@ public class Controller {
                                 " i rom "+app.getRoom().getName()
                 );*/
 
-                AnchorPane pane = generateAppointmentPane(app, apps);
+                Node pane = generateAppointmentPane(app, apps);
                 insertPane(pane, start, app.getEndDate());
             }
         }
     }
 
-    private AnchorPane generateAppointmentPane(Appointment app, ArrayList<Appointment> apps){
+    private Node generateAppointmentPane(Appointment app, ArrayList<Appointment> apps){
 
         ArrayList<Appointment> collisions = app.getCollisions(apps);
         int numCollisions = collisions.size();
@@ -426,7 +426,9 @@ public class Controller {
         });
 
         if(numCollisions>0) {
-         //todo add padding to collided items
+            /*GridPane grid = new GridPane();
+            grid.add(pane, collisions.indexOf(app), 0);
+            return grid;*/
         }
 
         return pane;
@@ -448,7 +450,7 @@ public class Controller {
             AnchorPane.setBottomAnchor(label, padding + pos);
     }
 
-    private void insertPane(AnchorPane pane, LocalDateTime startDate, LocalDateTime endDate) {
+    private void insertPane(Node pane, LocalDateTime startDate, LocalDateTime endDate) {
         int col = startDate.getDayOfYear()-calDate.getDayOfYear();
         int row = startDate.getHour();
         int rowspan = endDate.getHour()-startDate.getHour();
@@ -456,7 +458,7 @@ public class Controller {
         insertPane(pane, col, row, 1, rowspan);
     }
 
-    private void insertPane(AnchorPane pane, int col, int row, int colspan, int rowspan) {
+    private void insertPane(Node pane, int col, int row, int colspan, int rowspan) {
         calendarGrid.add(pane, col, row, colspan, rowspan);
     }
 
