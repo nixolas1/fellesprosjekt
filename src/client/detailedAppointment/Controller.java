@@ -197,6 +197,13 @@ public class Controller implements Initializable{
             }
         });*/
 
+        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.CONTAINING); // AutoCompleteMode ON
+        FxUtil.autoCompleteComboBox(groupComboBox, FxUtil.AutoCompleteMode.CONTAINING);
+
+    }
+
+
+    public void initializeFields() {
         editApp.setDisable(true);
         attendeeObjects = getAttendeesFromDB();
         attendees = displayAttendeeInfo(attendeeObjects); // Listview items
@@ -211,6 +218,19 @@ public class Controller implements Initializable{
             //todo view appointment as owner
         } else {
             isOwner = false;
+            title.setDisable(true);
+            date.setDisable(true);
+            allDay.setDisable(true);
+            from.setDisable(true);
+            to.setDisable(true);
+            endDate.setDisable(true);
+            description.setDisable(true);
+            attendeeList.setDisable(true);
+            usersComboBox.setDisable(true);
+            groupList.setDisable(true);
+            groupComboBox.setDisable(true);
+            locationDescription.setDisable(true);
+            room.setDisable(true);
             //todo view appointment as attendee
         }
 
@@ -220,13 +240,6 @@ public class Controller implements Initializable{
         groupInfo = displayCalInfo(allGroups);
         groupComboBox.setItems(groupInfo);
 
-        FxUtil.autoCompleteComboBox(usersComboBox, FxUtil.AutoCompleteMode.CONTAINING); // AutoCompleteMode ON
-        FxUtil.autoCompleteComboBox(groupComboBox, FxUtil.AutoCompleteMode.CONTAINING);
-
-    }
-
-
-    public void initializeFields() {
         editApp.setVisible(false);
         cancelApp.setVisible(false);
         headTitle.setText(app.getTitle());
@@ -240,7 +253,7 @@ public class Controller implements Initializable{
         endDate.setValue(app.getEndDate().toLocalDate());
         description.setText(app.getPurpose());
         attendeeList.setItems(attendees);
-        //groupList.setItems(groupObservableList);
+        //groupList.setItems();
         //roomOrLocation.setText(app.);
         locationDescription.setText(app.getLocation());
         room.setValue(app.getRoom());
