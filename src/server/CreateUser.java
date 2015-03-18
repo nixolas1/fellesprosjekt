@@ -46,7 +46,7 @@ public class CreateUser {
         }
         catch(Exception e){
             System.out.print("Invalid create-user data given: ");
-            System.err.println(e);
+            e.printStackTrace();
         }
         return new Query("create", false);
     }
