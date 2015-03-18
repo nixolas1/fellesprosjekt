@@ -532,8 +532,6 @@ public class Logic {
         }
     }
 
-
-
     public static UserModel getUser(String mail) {
         String query = "SELECT * FROM User WHERE email = '" + mail + "';";
         Statement stmt = null;
@@ -575,6 +573,41 @@ public class Logic {
         }
 
         return new UserModel(username, passwordHash, domain, firstName, lastName, phone);
+
+    }
+
+
+
+
+    public static ArrayList<String> getUsersInGroupCalendar(int calendarId) {
+        String query = "SELECT User_email FROM User_has_Calendar WHERE Calendar_calendarid = " + calendarId+ ";";
+        ArrayList<String> emailsInCalendar = new ArrayList<String>();
+        Statement stmt = null;
+        ResultSet result = null;
+        String email = null;
+
+        try {
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(query);
+        } catch (SQLException e) {
+            System.out.println("SQLExeption triggered in getUsersInGroupCalendar(): " + e);
+        }
+        try {
+            if (result.next()) {
+                //emailsInCalendar.add(result.getString("User_email"));
+                emailsInCalendar.add(result.getString(1));
+
+            } else {
+                System.out.println("Something happened in getUsersInGroupCalendar. result.next() is not defined.");
+            }
+        } catch (SQLException e){
+            System.out.println("SQLExeption triggered in getUsersInGroupCalendar(), 2. try block: " + e);
+        }
+        finally {
+            closeDB(stmt);
+        }
+
+        return emailsInCalendar;
 
     }
 
