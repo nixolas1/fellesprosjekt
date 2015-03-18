@@ -271,7 +271,7 @@ public class Logic {
             String s = "', '";
             String n = "NULL";
             for(Attendee a : app.getAttendees()){
-                String q = attQuery + a.getUser().getEmail()+s+app.getId()+s+LocalDateTime.now()+"', NULL, '1', '0', NULL);";
+                String q = attQuery + a.getUser().getEmail()+s+app.getId()+s+LocalDateTime.now()+"', NULL, '1', "+(a.getIsOwner()? 1:0)+", NULL);";
                 //System.out.println(q);
                 stmt.executeUpdate(q);
             }

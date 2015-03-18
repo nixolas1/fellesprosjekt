@@ -428,6 +428,7 @@ public class Controller {
         if(numCollisions>0) {
             /*GridPane grid = new GridPane();
             grid.add(pane, collisions.indexOf(app), 0);
+            grid.setMaxWidth(paneWidth);
             return grid;*/
         }
 
