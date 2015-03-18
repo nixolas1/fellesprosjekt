@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
+import network.ClientDB;
 import network.Query;
 
 public class Controller implements Initializable{
@@ -57,22 +58,27 @@ public class Controller implements Initializable{
     private ArrayList<UserModel> allUsers;
     private ObservableList<String> userInfo;
     private ObservableList<String> attendees;
+    private ObservableList<Attendee> attendeeObjects;
     private ArrayList<Group> allGroups;
     private ObservableList<String> groupInfo;
     private ObservableList<String> addedGroups;
     private ArrayList<Room> rooms;
-    UserModel user = new UserModel(); // todo loggedUser?
+    private static UserModel user = new UserModel(); // todo loggedUser?
     private String timeRegex = "[\\d]{2}:[\\d]{2}";
     private Appointment app;
+    private boolean isOwner;
 
 
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
 
+
+
         add.setDisable(true);
         remove.setDisable(true);
         locationDescription.setVisible(false);
+        user = Main.getLoggedUser();
 
         ToggleGroup tg = new ToggleGroup();
         work.setToggleGroup(tg);
@@ -195,13 +201,19 @@ public class Controller implements Initializable{
         });*/
 
         editApp.setDisable(true);
-        attendees = FXCollections.observableArrayList(); // Listview items
+        attendeeObjects = getAttendeesFromDB();
+        attendees = displayAttendeeInfo(attendeeObjects); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
         allUsers = getUsersFromDB();
         rooms = getRooms();
         room.setItems(FXCollections.observableArrayList(rooms));
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
+        if(checkOwner()) {
+            //todo view appointment as owner
+        } else {
+            //todo view appointment as attendee
+        }
 
         //allGroups = getGroupsFromDB();
         allGroups = new ArrayList<>();
@@ -230,6 +242,7 @@ public class Controller implements Initializable{
         title.setText(app.getTitle());
         date.setValue(app.getStartDate().toLocalDate());
         //allday
+        allDay.selectedProperty().setValue(app.getAllDay());
         from.setText(app.getStartDate().getHour() + ":" + app.getStartDate().getMinute());
         to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
         endDate.setValue(app.getEndDate().toLocalDate());
@@ -240,6 +253,27 @@ public class Controller implements Initializable{
         locationDescription.setText(app.getLocation());
         room.setValue(app.getRoom());
 
+    }
+
+    public ObservableList<Attendee> getAttendeesFromDB() {
+        ArrayList<List<String>> arr = ClientDB.getAllTableRowsWhere("Attendee","Appointment_appointmendid = " + app.getId(), client.Main.socket);
+        ObservableList<Attendee> atts = FXCollections.observableArrayList();
+        for (List<String> a : arr) {
+            Attendee at = new Attendee(new UserModel(a.get(0)),Integer.parseInt(a.get(1)), LocalDateTime.parse(a.get(2)), LocalDateTime.parse(a.get(3)), Boolean.parseBoolean(a.get(4)), Boolean.parseBoolean(a.get(5)));
+            atts.add(at);
+        }
+        return atts;
+    }
+
+    public boolean checkOwner() {
+        for (Attendee a : attendeeObjects) {
+            if(a.getIsOwner() && a.getUser().equals(Main.getLoggedUser())) {
+                System.out.println("LoggedUser (" + Main.getLoggedUser().getEmail() + ") is the owner");
+                return true;
+            }
+        }
+        System.out.println("LoggedUser (" + Main.getLoggedUser().getEmail() + ") is not the owner");
+        return false;
     }
 
     public static ArrayList<UserModel> getUsersFromDB() {
@@ -379,6 +413,14 @@ public class Controller implements Initializable{
             userInfo.add(user.displayInfo());
         }
         return userInfo;
+    }
+
+    public ObservableList<String> displayAttendeeInfo(ObservableList<Attendee> attendees) {
+        ObservableList<String> atts = FXCollections.observableArrayList();
+        for(Attendee a : attendees) {
+            atts.add(a.getUser().displayInfo());
+        }
+        return atts;
     }
 
     public ObservableList<String> displayGroupInfo(ArrayList<Group> groups) {

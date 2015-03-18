@@ -43,6 +43,10 @@ public class UserModel implements Serializable {
         setPassword(password);
     }
 
+    public UserModel(String email) {
+        setEmail((email));
+    }
+
     public UserModel(String username, String password, String domain, String firstName, String lastName, String phone){
         setPassword(password);
         setUsername(username);
@@ -160,7 +164,7 @@ public class UserModel implements Serializable {
     public static ArrayList<String> convertUserModelsToStringArrayList(ArrayList<UserModel> users) {
         ArrayList<String> converted = new ArrayList<>();
         for (UserModel user : users) {
-            converted.add(user.getFirstName() + " " + user.getLastName() + ", " + user.getEmail());
+            converted.add(user.displayInfo());
         }
         return converted;
     }

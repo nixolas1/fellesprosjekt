@@ -57,6 +57,10 @@ public class Main extends Application {
         }
     }
 
+    public static UserModel getLoggedUser() {
+        return user;
+    }
+
     public static void closeStage() {
         detAppointmentStage.close();
     }
