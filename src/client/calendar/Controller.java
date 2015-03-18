@@ -30,6 +30,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import network.ClientDB;
 import network.ThreadClient;
 import server.User;
 import java.awt.*;
@@ -94,8 +95,29 @@ public class Controller {
         appointments = getAppointments(cals);
         populateCalendars(cals);
         importFont();
-        notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
 
+        //Notification stuff
+        notifCombo.setOnAction((event) -> {
+            Notification cell = notifCombo.getSelectionModel().getSelectedItem();
+            if(cell != null) {
+                System.out.println("ComboBox Action (selected: " + cell.text + ")");
+                // Set at seen
+                ClientDB.updateRow("Notification",
+                        "User_email = '" + Main.user.getEmail() + "' AND Appointment_appointmentid = " + cell.app.getId(),
+                        "seen = 1",
+                        client.Main.socket
+                );
+                if (cell.app.getId() != 0) {
+                    client.detailedAppointment.Main detApp = new client.detailedAppointment.Main();
+                    try {
+                        detApp.showDetAppointment(primaryStage, Main.user, cell.app);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
         timer.schedule( new TimerTask() {
             public void run() {
                 notifs.refresh();

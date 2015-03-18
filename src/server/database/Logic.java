@@ -77,6 +77,21 @@ public class Logic {
         return new Query("getRows", false);
     }
 
+    public static Query updateRow(Hashtable<String, String> data){
+        try {
+            String table = data.get("table");
+            String where = data.get("where");
+            String set = data.get("set");
+            Boolean reply = updateRowField(table, where, set);
+            return new Query("getRows", reply);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new Query("getRows", false);
+    }
+
     public static ArrayList<List<String>> getAllRows(String table) {
         return getAllRowsWhere(table, null);
     }
@@ -205,7 +220,7 @@ public class Logic {
 
     public static boolean createAppointment(Appointment app){
 
-        String q1 = "INSERT INTO `nixo_fp`.`Appointment` (`appointmentid`, `title`, `description`, `location`, `startTime`, `endTime`, `repeatEndDate`, `repeat`, `isVisible`, `isAllDay`, `isPrivate`, `Room_roomid1`) VALUES ";
+        String q1 = "INSERT INTO `nixo_fp`.`Appointment` (`appointmentid`, `title`, `description`, `location`, `startTime`, `endTime`, `isVisible`, `isAllDay`, `isPrivate`, `Room_roomid1`) VALUES ";
 
         String location = app.getLocation() != null && app.getLocation().length() > 0 ?
                 ( "'" + app.getLocation() + "'" ) : "NULL" ;
@@ -226,6 +241,7 @@ public class Logic {
         try {
             stmt = conn.createStatement();
                    //appointmentid 	   title                description 	location        startTime	              endTime                repeatEndDate	   repeat	 isVisible	    isAllDay	isPrivate	Room_roomid1
+            //`appointmentid`, `title`, `description`, `location`, `startTime`, `endTime`, `repeatEndDate`, `repeat`, `isVisible`, `isAllDay`, `isPrivate`, `Room_roomid1`
             String q2 = "(NULL, '"
                     +app.getTitle()+"', "
                     +description+", "
@@ -531,6 +547,24 @@ public class Logic {
             return false;
         }
     }
+
+    public static boolean updateRowField(String table, String where, String set){
+        String query = "UPDATE "+table+" SET "+set+" WHERE " + where+";";
+        System.out.println("query: " + query);
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+            return true;
+        } catch (SQLException f) {
+            System.out.println("SQLException triggered in updateUser(): " + f);
+        } finally {
+            closeDB(stmt);
+        }
+        return false;
+    }
+
+
 
     public static UserModel getUser(String mail) {
         String query = "SELECT * FROM User WHERE email = '" + mail + "';";
