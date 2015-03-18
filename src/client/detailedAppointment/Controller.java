@@ -210,8 +210,10 @@ public class Controller implements Initializable{
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
         if(checkOwner()) {
+            isOwner = true;
             //todo view appointment as owner
         } else {
+            isOwner = false;
             //todo view appointment as attendee
         }
 
@@ -247,7 +249,8 @@ public class Controller implements Initializable{
         to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
         endDate.setValue(app.getEndDate().toLocalDate());
         description.setText(app.getPurpose());
-        attendeeList.setItems(attendeeObservableList);
+        //attendeeList.setItems(attendeeObservableList);
+        attendeeList.setItems(attendees);
         //groupList.setItems(groupObservableList);
         //roomOrLocation.setText(app.);
         locationDescription.setText(app.getLocation());
@@ -256,18 +259,20 @@ public class Controller implements Initializable{
     }
 
     public ObservableList<Attendee> getAttendeesFromDB() {
-        ArrayList<List<String>> arr = ClientDB.getAllTableRowsWhere("Attendee","Appointment_appointmendid = " + app.getId(), client.Main.socket);
+       /* ArrayList<List<String>> arr = ClientDB.getAllTableRowsWhere("Attendee","Appointment_appointmendid = " + app.getId(), client.Main.socket);
         ObservableList<Attendee> atts = FXCollections.observableArrayList();
         for (List<String> a : arr) {
             Attendee at = new Attendee(new UserModel(a.get(0)),Integer.parseInt(a.get(1)), LocalDateTime.parse(a.get(2)), LocalDateTime.parse(a.get(3)), Boolean.parseBoolean(a.get(4)), Boolean.parseBoolean(a.get(5)));
             atts.add(at);
         }
-        return atts;
+        return atts;*/
+        System.out.println(app.getId());
+        return FXCollections.observableArrayList(Attendee.getAllAttendeesForAppointmentClientside(app.getId(), client.Main.socket));
     }
 
     public boolean checkOwner() {
         for (Attendee a : attendeeObjects) {
-            if(a.getIsOwner() && a.getUser().equals(Main.getLoggedUser())) {
+            if(a.getIsOwner() && a.getUser().getEmail().toString().equals(Main.getLoggedUser().getEmail().toString())) {
                 System.out.println("LoggedUser (" + Main.getLoggedUser().getEmail() + ") is the owner");
                 return true;
             }
