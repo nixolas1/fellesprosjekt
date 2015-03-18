@@ -55,6 +55,7 @@ public class RoomLogic {
         // Løper gjennom alle inviterte til en arrangement
         for (Attendee attendee : appointment.getAttendees()){
             String email = attendee.getUser().getEmail();
+            System.out.println("Attendee invited: " + attendee.toString());
             if (! attendeeList.contains(email)){
                 attendeeList.add(email);
                 //System.out.println("Added user '" + email + "'");
@@ -68,6 +69,7 @@ public class RoomLogic {
         for (Calendar groupCalendar : appointment.getCals()){
             ArrayList<UserModel> memberList= groupCalendar.getMembers();
             for (UserModel member : memberList){
+                System.out.println("Member in group: " + member.displayInfo());
                 if (! attendeeList.contains(member.getEmail())){
                     attendeeList.add(member.getEmail());
                     //System.out.println("Added user '" + email + "'");
@@ -79,7 +81,9 @@ public class RoomLogic {
 
         }
 
+
         numberOfDistinctAttendees = attendeeList.size();
+        System.out.println("numberOfConflicts: " + numberOfConflicts);
         System.out.println("numberOfDistinctAttendees: " + numberOfDistinctAttendees);
 
         ArrayList<List<String>> allRowsFromRoom = server.database.Logic.getAllRows("Room");

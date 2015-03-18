@@ -45,9 +45,19 @@ public class Main {
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
 
-
-
-
+        /*
+        Prioriteringsliste:
+        Detaljert avtale
+            Sjekke om brukeren er eieren
+            Lage logikk for å oppdatere databasen
+        Notifications
+            Gjør mer her
+        Rooms
+        Lage nytt rom
+        Vise/fjerne gruppekalendere
+        Repeating appointments
+        Endre gruppe
+        */
     }
 
 }
