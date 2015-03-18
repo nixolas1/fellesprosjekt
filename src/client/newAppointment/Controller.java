@@ -198,7 +198,6 @@ public class Controller implements Initializable{
         allUsers = getUsersFromDB();
         room.setItems(FXCollections.observableArrayList("Du må velge dato, tidspunkt og deltakere først"));
         room.setValue("Du må velge dato, tidspunkt og deltakere først");
-        room.setDisable(true);
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
 
@@ -227,7 +226,7 @@ public class Controller implements Initializable{
     @FXML
     public void addUser(ActionEvent event) {
         String usr = (String) FxUtil.getComboBoxValue(usersComboBox);
-        if (userInfo.contains(usr)) {
+        if (userInfo.contains(usr) && !attendees.contains(usr)) {
            // String email = usr.split(",")[1].trim();
            // UserModel user = getUserModel(email);
             attendees.add(usr);
@@ -293,9 +292,9 @@ public class Controller implements Initializable{
             if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
                 app.setLocation(locationDescription.getText());
             } else {
-                app.setRoom(new Room(1, "test", 1, 0, 23, new ArrayList<Utility>())); // TEST ROOM! TODO get rooms from DB
+                app.setRoom(new Room(1, "test", 1, 0, 23, new ArrayList<Utility>())); // TEST ROOM!
             }
-            calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
+            calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL!
             for (Attendee a : app.getAttendees()) {
                 if(a.getUser().getPrivateCalendar() != -1)
                     app.addCalender(new Calendar(a.getUser().getPrivateCalendar()));
@@ -408,14 +407,6 @@ public class Controller implements Initializable{
         return Main.getRooms(createAppointmentObject());
     }
 
-    public int getAppointmentId() {
-        // todo: Get ID from server
-        return -1;
-    }
-    public void updateRoomList() {
-        // todo: Oppdaterer romlisten som inneholder aktuelle rom, dvs rom med riktig antall plasser ift. deltakere
-
-    }
 
     public ObservableList<String> displayUserInfo(ArrayList<UserModel> users) {
         ObservableList<String> userInfo = FXCollections.observableArrayList();
@@ -446,7 +437,7 @@ public class Controller implements Initializable{
         }
         if(dateIsAfter(endDate, date)) {
             ret = false;
-            System.out.println("date shit in checkIfAllValid()");
+            System.out.println("date in checkIfAllValid()");
         }
         if(work.isSelected()) {
             if (otherLocation.isSelected() && locationDescription.getOpacity() != 2.0) {
