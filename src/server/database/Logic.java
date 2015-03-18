@@ -392,10 +392,6 @@ public class Logic {
         return new Query("createGroup", true);
     }
 
-
-
-
-
     public static int getNumberOfColumns(String table) {
         String getNumberOfColumns = "SELECT COUNT(*) totalColumns FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name =  '" + table + "' AND TABLE_SCHEMA=(SELECT DATABASE())";
         ResultSet result = null;

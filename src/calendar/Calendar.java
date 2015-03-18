@@ -66,12 +66,16 @@ public class Calendar implements Serializable {
         return getColor(1.0);
     }
 
-    public String getColor(double opacity){
+    public Color getColorObject(double opacity){
         Random random = new Random(this.id*13379001);
         final int hue = random.nextInt(360);
         final double saturation = 0.7;
         final double luminance = 0.9;
-        Color c =  Color.hsb(hue, saturation, luminance, opacity);
+        return   Color.hsb(hue, saturation, luminance, opacity);
+    }
+
+    public String getColor(double opacity){
+        Color c = getColorObject(opacity);
         return "rgba("+ c.getRed()*255+", "+c.getGreen()*255+", "+c.getBlue()*255+", "+c.getOpacity()+");";
     }
 
