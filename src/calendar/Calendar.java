@@ -66,12 +66,16 @@ public class Calendar implements Serializable {
         return getColor(1.0);
     }
 
-    public String getColor(double opacity){
+    public Color getColorObject(double opacity){
         Random random = new Random(this.id*13379001);
         final int hue = random.nextInt(360);
         final double saturation = 0.7;
         final double luminance = 0.9;
-        Color c =  Color.hsb(hue, saturation, luminance, opacity);
+        return   Color.hsb(hue, saturation, luminance, opacity);
+    }
+
+    public String getColor(double opacity){
+        Color c = getColorObject(opacity);
         return "rgba("+ c.getRed()*255+", "+c.getGreen()*255+", "+c.getBlue()*255+", "+c.getOpacity()+");";
     }
 
@@ -119,7 +123,18 @@ public class Calendar implements Serializable {
         for(List<String> li : calendars) {
             if(Boolean.parseBoolean(li.get(4))) cals.add(new Calendar(Integer.parseInt(li.get(0)), li.get(1)));
         }
+        System.out.println("ALL CALS RECEIVED FROM DB: " + cals);
         return cals;
+    }
+
+    public static ArrayList<Calendar> getGroupCalendarsFromDB() {
+        ArrayList<List<String>> cals = network.ClientDB.getAllTableRowsWhere("Calendar","isGroup = 1", Main.socket);
+        ArrayList<Calendar> calendars = new ArrayList<>();
+        for (List<String> li : cals) {
+            calendars.add(new Calendar(Integer.parseInt(li.get(0)), li.get(1)));
+        }
+        System.out.println("Calendars received from DB: " + calendars);
+        return calendars;
     }
 
     public static ArrayList<Calendar> getMyCalendarsFromDB(UserModel user) {

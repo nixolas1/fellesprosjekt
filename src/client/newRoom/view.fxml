@@ -76,8 +76,8 @@
          <children>
             <ComboBox fx:id="utilityComboBox" prefHeight="26.0" prefWidth="160.0" promptText="Finn utstyr" />
             <Button fx:id="add" layoutX="164.0" mnemonicParsing="false" onAction="#addUtility" text="&gt;" />
-            <Button fx:id="remove" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUtility" text="&lt;" />
             <ListView fx:id="utilityList" layoutX="195.0" prefHeight="130.0" prefWidth="175.0" />
+            <Button fx:id="remove" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUtility" text="&lt;" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="10">
