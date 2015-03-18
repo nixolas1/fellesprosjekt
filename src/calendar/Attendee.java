@@ -56,9 +56,9 @@ public class Attendee implements Serializable {
         if(timeAnswered != null)
             this.answered=LocalDateTime.parse(timeAnswered, format);
         if(willAttend != null)
-            this.attending=Boolean.parseBoolean(willAttend);
+            this.attending=!willAttend.equals("0");
         if(isOwner != null)
-            this.isOwner=Boolean.parseBoolean(isOwner);
+            this.isOwner=!isOwner.equals("0");
         if(alarm != null)
             this.alarm=LocalDateTime.parse(alarm, format);
     }
