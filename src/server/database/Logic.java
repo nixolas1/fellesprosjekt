@@ -627,12 +627,9 @@ public class Logic {
             System.out.println("SQLExeption triggered in getUsersInGroupCalendar(): " + e);
         }
         try {
-            if (result.next()) {
+            while (result.next()) {
                 //emailsInCalendar.add(result.getString("User_email"));
                 emailsInCalendar.add(result.getString(1));
-
-            } else {
-                System.out.println("Something happened in getUsersInGroupCalendar. result.next() is not defined.");
             }
         } catch (SQLException e){
             System.out.println("SQLExeption triggered in getUsersInGroupCalendar(), 2. try block: " + e);
