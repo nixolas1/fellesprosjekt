@@ -125,10 +125,10 @@ public class Controller {
                 /*for (Integer in : cals){
                     System.out.println(in);
                 }*/
-                displayedCals.add(cal.getName());
-                shownCals.setItems(displayedCals);
-                cals.add(cal.getId());
-                //cals = new ArrayList<Integer>(Arrays.asList(cal.getId()));
+                //displayedCals.add(cal.getName());
+                //shownCals.setItems(displayedCals);
+                //cals.add(cal.getId());
+                cals = new ArrayList<Integer>(Arrays.asList(cal.getId()));
                 //cals = new Integer[]{cal.getId()};
                 appointments = getAppointments(cals);
                 populateCalendars(cals);
