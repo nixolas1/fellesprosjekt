@@ -84,7 +84,7 @@ public class AppointmentLogic {
         return new ArrayList<Appointment>();
     }
 
-    public static ArrayList<String> getNumberOfDistinctAttendees(Appointment appointment){
+    public static ArrayList<String> getListOfDistinctAttendees(Appointment appointment){
         System.out.println("getNumberOfDistinctAttendees()");
         ArrayList<String> attendeeList = new ArrayList<String>();
         int numberOfConflicts = 0;                               // Teller for hvor mange overlapp man vil få når flere folk er med i flere grupper på samme arrangement
