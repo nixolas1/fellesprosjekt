@@ -44,9 +44,10 @@ public class Controller {
 
     //@FXML private ComboBox chooseCalendar;
     @FXML private Text name, year, month, weekNum, monDate, tueDate, wedDate, thuDate, friDate, satDate, sunDate, notifCount;
-    @FXML private Button logOff, userSettings, yourCalendar, today;
+    @FXML private Button logOff, userSettings, yourCalendar, today, myCalendar;
     @FXML private GridPane calendarGrid;
-    @FXML public ComboBox notifCombo, findUserCalendar, myCals;
+    @FXML public ComboBox<Notification> notifCombo;
+    @FXML public ComboBox findUserCalendar, myCals;
     @FXML private ListView shownCals;
 
     protected static Stage primaryStage;
@@ -67,6 +68,7 @@ public class Controller {
     private ArrayList<String> userCalendarsAtDisplay = new ArrayList<>();
     Timer timer = new Timer();
     Integer numUnread = 0;
+    UserModel viewedUser = client.Main.user;
 
     @FXML
     void initialize() {
@@ -89,13 +91,52 @@ public class Controller {
         appointments = getAppointments(cals);
         populateCalendars(cals);
         importFont();
+
+        //Notification stuff
+        notifCombo.setOnAction((event) -> {
+            Notification cell = notifCombo.getSelectionModel().getSelectedItem();
+            if(cell != null) {
+                System.out.println("ComboBox Action (selected: " + cell.text + ")");
+                // Set at seen
+                ClientDB.updateRow("Notification",
+                        "User_email = '" + Main.user.getEmail() + "' AND Appointment_appointmentid = " + cell.app.getId(),
+                        "seen = 1",
+                        client.Main.socket
+                );
+                if (cell.app.getId() != 0) {
+                    client.detailedAppointment.Main detApp = new client.detailedAppointment.Main();
+                    try {
+                        detApp.showDetAppointment(primaryStage, Main.user, cell.app);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
         notifs = new Notifications(Main.user.getEmail(), notifCount, notifCombo);
+        timer.schedule( new TimerTask() {
+            public void run() {
+                notifs.refresh();
+                if(notifs.unreadCount>numUnread){
+                    numUnread=notifs.unreadCount;
+                    Platform.runLater(() -> {
+                        clearAppointments();
+                        appointments = getAppointments(cals);
+                        populateCalendars(cals);
+                    });
+                }
+            }
+        }, 0, notifs.every*1000);
+
+
 
         myCals.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 //System.out.println("Calendar cal = new Calendar(Integer.parseInt(myCals.getValue().toString().split(,)[1].trim()), myCals.getValue().toString().split',)[0].trim())");
                 //System.out.println(myCals.getValue().toString().split(",")[1].trim() + "        " + myCals.getValue().toString().split(",")[0].trim());
+                findUserCalendar.getEditor().setText("");
+                viewedUser = client.Main.user;
                 Calendar cal = new Calendar(Integer.parseInt(myCals.getValue().toString().split(",")[1].trim()), myCals.getValue().toString().split(",")[0].trim());
                 System.out.println("Viewing calendar " + cal.getName());
                 clearAppointments();
@@ -125,6 +166,7 @@ public class Controller {
         findUserCalendar.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                myCals.getEditor().setText("");
                 UserModel user = getUserModelFromEmail(findUserCalendar.getValue().toString().split(",")[1].trim());
                 if (! userCalendars.contains(user.getFullName())){
                     int userPrivateCalendarId = user.getPrivateCalendar();
@@ -153,11 +195,40 @@ public class Controller {
                             populateCalendar(calendarId);
                         }
                     }
+                viewedUser = user;
+                System.out.println("Viewing " + user.getFirstName() + "'s calendar");
+                clearAppointments(); //todo
+                ArrayList<Calendar> userCal = calendar.Calendar.getMyCalendarsFromDB(user);
+                cals = new ArrayList<Integer>(userCal.size());
+                //cals = new Integer[userCal.size()];
+                for (int i = 0; i < userCal.size(); i++) {
+                    cals.add(userCal.get(i).getId());
                 }
                 appointments = getAppointments(cals);
                 populateCalendars(cals);
+                myCals.setVisible(false);
+                myCalendar.setVisible(true);
             }
         });
+
+    }
+
+    public void goToMyCal(ActionEvent event) {
+        myCalendar.setVisible(false);
+        myCals.setVisible(true);
+        clearAppointments();
+        ArrayList<Calendar> userCal = calendar.Calendar.getMyCalendarsFromDB(Main.getLoggedUser());
+        cals = new ArrayList<Integer>();
+        for (int i = 0; i < userCal.size(); i++) {
+            cals.add(userCal.get(i).getId());
+        }
+        appointments = getAppointments(cals);
+        populateCalendars(cals);
+        findUserCalendar.getEditor().setText("");
+    }
+
+    public void getMainCalendar(){
+        ArrayList<Calendar> asd = Calendar.getAllCalendarsFromDB();
 
     }
 
@@ -349,11 +420,11 @@ public class Controller {
 
             Boolean attending = true;
             for(Attendee a : app.getAttendees()){
-                if(a.getUser().getEmail().equals(Main.user.getEmail()))
+                if(a.getUser().getEmail().equals(viewedUser.getEmail()))
                     attending = a.getAttending();
             }
 
-            if(isThisWeek && attending){
+            if(isThisWeek && attending && app.getIsVisible()){
                 Node pane = generateAppointmentPane(app, apps);
                 insertPane(pane, start, app.getEndDate());
             }
@@ -447,9 +518,11 @@ public class Controller {
     private void insertPane(Node pane, LocalDateTime startDate, LocalDateTime endDate) {
         int col = startDate.getDayOfYear()-calDate.getDayOfYear();
         int row = startDate.getHour();
-        int rowspan = endDate.getHour()-startDate.getHour();
+        int minspan = Math.round((endDate.getMinute()-startDate.getMinute())/59.0f);
+        double rowspan = endDate.getHour() - startDate.getHour()+minspan;
+        System.out.println(rowspan);
         if(rowspan == 0)rowspan = 1;
-        insertPane(pane, col, row, 1, rowspan);
+        insertPane(pane, col, row, 1, (int)rowspan);
     }
 
     private void insertPane(Node pane, int col, int row, int colspan, int rowspan) {
