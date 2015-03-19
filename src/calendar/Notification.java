@@ -14,7 +14,7 @@ import java.util.Hashtable;
  * Created by nixo on 3/4/15.
  */
 public class Notification implements Serializable {
-    public Appointment app;
+    public Appointment app = new Appointment(0);
     public UserModel user;
     public String text="";
     public boolean seen=false;
@@ -42,17 +42,29 @@ public class Notification implements Serializable {
         this.app=Appointment.getAppointmentFromDB(appid);
         this.user=server.database.Logic.getUser(email);
         this.text=text;
-
         if(seen != null)
-            this.seen=Boolean.parseBoolean(seen);
+            this.seen=!seen.equals("0");
         if(created != null)
             this.created=LocalDateTime.parse(created, format);
+    }
+
+    public Notification(Appointment app, String text){
+
+        this.app=app;
+        this.text=text;
+
+    }
+
+    public Notification(String text){
+        this.app=new Appointment(0);
+        this.text=text;
     }
 
     public static ArrayList<Notification> getUserNotifications(String email, ThreadClient socket){
         System.out.println("Trying to get all notifications from user "+email);
         try {
             Query reply = socket.send(new Query("getNotifications", email));
+            System.out.println(reply.function+ " "+reply.data);
             Hashtable<String, ArrayList<Notification>> response = reply.data;
             System.out.println("Got notifications: "+response.get("reply").toString());
             return response.get("reply");

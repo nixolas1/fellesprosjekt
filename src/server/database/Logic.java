@@ -3,6 +3,7 @@ package server.database;
 import calendar.*;
 import network.Query;
 import com.sun.org.apache.regexp.internal.RESyntaxException;
+import server.AppointmentLogic;
 //import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 import java.sql.Connection;
@@ -77,6 +78,21 @@ public class Logic {
         return new Query("getRows", false);
     }
 
+    public static Query updateRow(Hashtable<String, String> data){
+        try {
+            String table = data.get("table");
+            String where = data.get("where");
+            String set = data.get("set");
+            Boolean reply = updateRowField(table, where, set);
+            return new Query("getRows", reply);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new Query("getRows", false);
+    }
+
     public static ArrayList<List<String>> getAllRows(String table) {
         return getAllRowsWhere(table, null);
     }
@@ -104,7 +120,7 @@ public class Logic {
                     allRows.get(count).add(result.getString(i + 1));
                     //TODO fuck System.out.println(table + "[" + count + "][" + i + "]: " + result.getString(i + 1));
                 } count ++;
-                System.out.println("");
+                //System.out.println("");
             }
         } catch (SQLException e){
             System.out.println("SQLException triggered in getRows(), 2. try block: " + e);
@@ -135,12 +151,12 @@ public class Logic {
                                             result.getString("firstName"),
                                             result.getString("lastName"),
                                             result.getString("phone")));
-                System.out.println("\nUSER\nusername: " + result.getString("username") + "\npasswordHash: " +
+                /*System.out.println("\nUSER\nusername: " + result.getString("username") + "\npasswordHash: " +
                         result.getString("passwordHash") + "\ndomain: " +
                         result.getString("domain") + "\nfirstName: " +
                         result.getString("firstName") + "\nlastName: " +
                         result.getString("lastName") + "\nphone: " +
-                        result.getString("phone"));
+                        result.getString("phone"));*/
             }
         } catch (SQLException e) {
             System.out.println("SQLException triggered in getRows(), 2. try block: " + e);
@@ -205,18 +221,15 @@ public class Logic {
 
     public static boolean createAppointment(Appointment app){
 
-        String q1 = "INSERT INTO `nixo_fp`.`Appointment` (`appointmentid`, `title`, `description`, `location`, `startTime`, `endTime`, `repeatEndDate`, `repeat`, `isVisible`, `isAllDay`, `isPrivate`, `Room_roomid1`) VALUES ";
+        String q1 = "INSERT INTO `nixo_fp`.`Appointment` (`appointmentid`, `title`, `description`, `location`, `startTime`, `endTime`, `isVisible`, `isAllDay`, `isPrivate`, `Room_roomid1`) VALUES ";
 
         String location = app.getLocation() != null && app.getLocation().length() > 0 ?
                 ( "'" + app.getLocation() + "'" ) : "NULL" ;
         String description = app.getPurpose() != null && app.getPurpose().length() > 0 ?
                 ("'" + app.getPurpose() + "'") : "NULL";
-        String repeatEndDate = app.getEndRepeatDate() != null ?
-                ("'" + app.getEndRepeatDate() + "'" ) : "NULL";
-        String repeat = app.getRepeatEvery() > 0 ? String.valueOf(app.getRepeatEvery()) : "NULL";
         String roomId = app.getRoom() != null ? String.valueOf(app.getRoom().getId()) : "NULL";
         String isPrivate = app.getIsPrivate().toString();
-        String allDay = app.getAllDay().toString();
+        String allDay = app.getAllDay() ? "1" : "0";
         String isVisible = app.getIsVisible().toString();
         /*
         this.cals = Calendar.getAllCalendarsInAppointment(this.id);
@@ -229,21 +242,20 @@ public class Logic {
         try {
             stmt = conn.createStatement();
                    //appointmentid 	   title                description 	location        startTime	              endTime                repeatEndDate	   repeat	 isVisible	    isAllDay	isPrivate	Room_roomid1
+            //`appointmentid`, `title`, `description`, `location`, `startTime`, `endTime`, `repeatEndDate`, `repeat`, `isVisible`, `isAllDay`, `isPrivate`, `Room_roomid1`
             String q2 = "(NULL, '"
                     +app.getTitle()+"', "
                     +description+", "
                     +location+", '"
                     +app.getStartDate()+"', '"
                     +app.getEndDate()+"', "
-                    +repeatEndDate+", "
-                    +repeat+", "
                     +isVisible+", "
                     +allDay+", "
                     +isPrivate+", "
                     +roomId+") ";
 
             //String q3 = "RETURNING Appointment.appointmentid INTO ?;";
-            System.out.println(q1+q2);
+            //System.out.println(q1+q2);
             stmt.executeUpdate(q1 + q2, Statement.RETURN_GENERATED_KEYS);
 
             ResultSet result = stmt.getGeneratedKeys();
@@ -259,13 +271,25 @@ public class Logic {
             String attQuery = "INSERT INTO `nixo_fp`.`Attendee` (`User_email`, `Appointment_appointmentid`, `timeInvited`, `timeAnswered`, `willAttend`, `isOwner`, `alarm`) VALUES ('";
             String s = "', '";
             String n = "NULL";
+            String ownerEmail = "";
+
             for(Attendee a : app.getAttendees()){
-                String q = attQuery + a.getUser().getEmail()+s+app.getId()+s+LocalDateTime.now()+"', NULL, '1', '0', NULL);";
+                if(a.getIsOwner()) {
+                    ownerEmail = a.getUser().getEmail();
+                    break;
+                }
+
+            }
+
+            for(String email : AppointmentLogic.getListOfDistinctAttendees(app)){
+                String isOwner = "0";
+                if(email.equals(ownerEmail))isOwner="1";
+                String q = attQuery + email+s+app.getId()+s+LocalDateTime.now()+"', NULL, '1', "+isOwner+", NULL);";
                 //System.out.println(q);
                 stmt.executeUpdate(q);
             }
 
-            System.out.println("Appointment [Title='" + app.getTitle() + "'] successfully created in database");
+            //System.out.println("Appointment [Title='" + app.getTitle() + "'] successfully created in database");
         } catch (SQLException e) {
             System.out.println("SQLException triggered in createAppointment(): " + e);
             return false;
@@ -349,6 +373,7 @@ public class Logic {
         try {
             stmt = conn.createStatement();
             stmt.executeUpdate(query);
+            System.out.println("Stored notification "+n.text+" for "+n.user.getEmail());
             return true;
         } catch (SQLException f) {
             System.out.println("SQLException triggered in createUser(): " + f);
@@ -361,9 +386,10 @@ public class Logic {
         Calendar groupCalendar = data.get("reply");
         int groupId = getLastGroupIdUsed() + 1;
         int isPrivate = data.get("private") == null ? 0 : 1;
+        int isGroup = isPrivate == 1 ? 0:1;
         //int groupId = groupCalendar.getId();
         String memberQuery = "INSERT INTO User_has_Calendar (Calendar_calendarid, User_email, isVisible, notifications, isPrivate) VALUES (" + groupId + ", ";
-        String calendarQuery = "INSERT INTO Calendar (calendarid, name, description) VALUES (" + groupId + ", '" + groupCalendar.getName() + "', '" + groupCalendar.getDescription() + "');";
+        String calendarQuery = "INSERT INTO Calendar (calendarid, name, description, isGroup) VALUES (" + groupId + ", '" + groupCalendar.getName() + "', '" + groupCalendar.getDescription() + "', "+isGroup+");";
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
@@ -379,6 +405,7 @@ public class Logic {
                 //System.out.println("QUERY: " + memberQuery + "'" + user.getEmail() + "', 1, 1);");
                 stmt.executeUpdate(memberQuery + "'" + user.getEmail() + "', 1, 1, "+isPrivate+");");
                 System.out.println(String.format("User '%s' successfully added to GroupCalendar with id = %s", user.getEmail(), groupId));
+
             } catch (SQLException e) {
                 System.out.println("SQLExeption triggered in createGroup(): " + e);
                 System.out.println("This happend during inserting user '" + user.getEmail() + "' into GroupCalendar");
@@ -388,13 +415,12 @@ public class Logic {
                 return new Query("createGroup", false);
             }
         } closeDB(stmt);
+        server.NotificationLogic.newNotifications(
+                new Notification("Du er nå medlem av gruppen: "+groupCalendar.getName()),
+                groupCalendar.getMembers());
         System.out.println(String.format("Group '%s' successfully created in database with id = %s ", groupCalendar.getName(), groupId));
         return new Query("createGroup", true);
     }
-
-
-
-
 
     public static int getNumberOfColumns(String table) {
         String getNumberOfColumns = "SELECT COUNT(*) totalColumns FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name =  '" + table + "' AND TABLE_SCHEMA=(SELECT DATABASE())";
@@ -441,10 +467,10 @@ public class Logic {
         }
 
         if (queryResult != null && queryResult.equalsIgnoreCase(identifyingValue)){
-            System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' exists in table '" + table + "'");
+            //System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' exists in table '" + table + "'");
             return true;
         } else {
-            System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' does not exist in table '" + table + "'");
+            //System.out.println("'" + identifyingAttribute + "' = '" + identifyingValue + "' does not exist in table '" + table + "'");
             return false;
         }
     }
@@ -491,8 +517,8 @@ public class Logic {
                     System.out.println("SQLException triggered in createUser(): " + f);
                 } finally {
                     System.out.println("User '" + user.getEmail() + "' successfully created in database. Creating private calendar now...");
-                    Calendar cal = new Calendar(user.getFullName(), new ArrayList<UserModel>(){{add(user);}});
-                    cal.setDescription("Min kalender");
+                    Calendar cal = new Calendar("Min kalender", new ArrayList<UserModel>(){{add(user);}});
+                    cal.setDescription(user.getFullName());
                     createGroup(new Hashtable<String, Calendar>(){{put("reply", cal); put("private", new Calendar(-1));}});
                     closeDB(stmt);
                     return true;
@@ -534,6 +560,22 @@ public class Logic {
         } else {
             return false;
         }
+    }
+
+    public static boolean updateRowField(String table, String where, String set){
+        String query = "UPDATE "+table+" SET "+set+" WHERE " + where+";";
+        System.out.println("query: " + query);
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+            return true;
+        } catch (SQLException f) {
+            System.out.println("SQLException triggered in updateUser(): " + f);
+        } finally {
+            closeDB(stmt);
+        }
+        return false;
     }
 
 
@@ -579,6 +621,38 @@ public class Logic {
         }
 
         return new UserModel(username, passwordHash, domain, firstName, lastName, phone);
+
+    }
+
+
+
+
+    public static ArrayList<String> getUsersInGroupCalendar(int calendarId) {
+        String query = "SELECT User_email FROM User_has_Calendar WHERE Calendar_calendarid = " + calendarId+ ";";
+        ArrayList<String> emailsInCalendar = new ArrayList<String>();
+        Statement stmt = null;
+        ResultSet result = null;
+        String email = null;
+
+        try {
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(query);
+        } catch (SQLException e) {
+            System.out.println("SQLExeption triggered in getUsersInGroupCalendar(): " + e);
+        }
+        try {
+            while (result.next()) {
+                //emailsInCalendar.add(result.getString("User_email"));
+                emailsInCalendar.add(result.getString(1));
+            }
+        } catch (SQLException e){
+            System.out.println("SQLExeption triggered in getUsersInGroupCalendar(), 2. try block: " + e);
+        }
+        finally {
+            closeDB(stmt);
+        }
+
+        return emailsInCalendar;
 
     }
 

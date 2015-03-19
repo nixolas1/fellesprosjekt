@@ -24,9 +24,14 @@ public class UserModel implements Serializable {
 
     public int getPrivateCalendar() {
         int ret = -1;
-        ArrayList<List<String>> rows = ClientDB.getAllTableRowsWhere("User_has_Calendar",
-                "User_email = '"+this.getEmail()+"' AND isPrivate = 1", Main.socket);
-        ret = Integer.parseInt(rows.get(0).get(1));
+        try {
+            ArrayList<List<String>> rows = ClientDB.getAllTableRowsWhere("User_has_Calendar",
+                    "User_email = '" + this.getEmail() + "' AND isPrivate = 1", Main.socket);
+            ret = Integer.parseInt(rows.get(0).get(1));
+        }
+        catch(IndexOutOfBoundsException e){
+            System.out.println(this.getEmail()+" has no private calendar.");
+        }
         return ret;
 
     }
@@ -36,6 +41,10 @@ public class UserModel implements Serializable {
     public UserModel(String email, String password){
         setEmail(email);
         setPassword(password);
+    }
+
+    public UserModel(String email) {
+        setEmail((email));
     }
 
     public UserModel(String username, String password, String domain, String firstName, String lastName, String phone){
@@ -134,7 +143,7 @@ public class UserModel implements Serializable {
 
     public static UserModel getUserFromServer(final String user, final String domain){
 
-        System.out.println("Getting user: "+user+", "+domain);
+        //System.out.println("Getting user: "+user+", "+domain);
         Hashtable<String, String> data = new Hashtable<String, String>(){{
             put("username",user);
             put("domain", domain);
@@ -146,9 +155,8 @@ public class UserModel implements Serializable {
         return response.get("reply");
     }
     public static ArrayList<UserModel> getAllUsers() {
-        ThreadClient socket = new ThreadClient();
-        Query reply = socket.send(new Query("getAllUsers",new ArrayList<UserModel>()));
-        System.out.println(reply.function);
+        Query reply = client.Main.socket.send(new Query("getAllUsers",new ArrayList<UserModel>()));
+        //System.out.println(reply.function);
         Hashtable<String, ArrayList<UserModel>> response = reply.data;
         return response.get("reply");
     }
@@ -156,7 +164,7 @@ public class UserModel implements Serializable {
     public static ArrayList<String> convertUserModelsToStringArrayList(ArrayList<UserModel> users) {
         ArrayList<String> converted = new ArrayList<>();
         for (UserModel user : users) {
-            converted.add(user.getFirstName() + " " + user.getLastName() + ", " + user.getEmail());
+            converted.add(user.displayInfo());
         }
         return converted;
     }

@@ -46,15 +46,16 @@ public class RoomLogic {
     }
 
     public static Query initiateRoomLogic(Hashtable<String, Appointment> data){
-        //System.out.println("initiateRoomLogic()");
-        ArrayList<String> attendeeList = new ArrayList<>();
-        int numberOfConflicts = 0;                           // Teller for hvor mange overlapp man vil få når flere folk er med i flere grupper på samme arrangement
-        int numberOfDistinctAttendees;                      // Det endelig antallet personer som deltar, uten overlapp
-        Appointment appointment = data.get("data");        // Henter data'en fra Hashtable
+        System.out.println("initiateRoomLogic()");
+        ArrayList<String> attendeeList = new ArrayList<String>();
+        int numberOfConflicts = 0;                               // Teller for hvor mange overlapp man vil få når flere folk er med i flere grupper på samme arrangement
+        int numberOfDistinctAttendees;                          // Det endelig antallet personer som deltar, uten overlapp
+        Appointment appointment = data.get("reply");           // Henter data'en fra Hashtable
 
         // Løper gjennom alle inviterte til en arrangement
         for (Attendee attendee : appointment.getAttendees()){
             String email = attendee.getUser().getEmail();
+            System.out.println("Attendee invited: " + email);
             if (! attendeeList.contains(email)){
                 attendeeList.add(email);
                 //System.out.println("Added user '" + email + "'");
@@ -66,20 +67,22 @@ public class RoomLogic {
 
         // Løper gjennom alle medlemmene i alle gruppekalenderene i appointment objektet
         for (Calendar groupCalendar : appointment.getCals()){
-            ArrayList<UserModel> memberList= groupCalendar.getMembers();
-            for (UserModel member : memberList){
-                if (! attendeeList.contains(member.getEmail())){
-                    attendeeList.add(member.getEmail());
-                    //System.out.println("Added user '" + email + "'");
+            ArrayList<String> memberList= server.database.Logic.getUsersInGroupCalendar(groupCalendar.getId());
+            System.out.println("\n\nGROUPID ADDED: " + groupCalendar.getId() + "\n\n");
+            for (String email : memberList){
+                if (! attendeeList.contains(email)){
+                    attendeeList.add(email);
+                    System.out.println("Member in group " + groupCalendar.getId() + " added: " + email);
                 } else {
                     numberOfConflicts += 1;
-                    System.out.println("numberOfConflicts: " + numberOfConflicts);
+                    System.out.println("Member '" + email + "' in group " + groupCalendar.getId() + " is already in attendee-list");
+                    //System.out.println("numberOfConflicts: " + numberOfConflicts);
                 }
             }
-
         }
 
         numberOfDistinctAttendees = attendeeList.size();
+        System.out.println("numberOfConflicts: " + numberOfConflicts);
         System.out.println("numberOfDistinctAttendees: " + numberOfDistinctAttendees);
 
         ArrayList<List<String>> allRowsFromRoom = server.database.Logic.getAllRows("Room");
@@ -99,13 +102,12 @@ public class RoomLogic {
                 allRoomIds.add(Integer.valueOf(rooms.get(0)));
                 allCapableRooms.add(room);
             }
-
         }
 
 
         ArrayList<List<String>> allRowsFromAppointment = server.database.Logic.getAllRows("Appointment");
-        ArrayList<Appointment> collidingAppointments = new ArrayList<>();
-        ArrayList<Integer> allRoomIdsWithConflict = new ArrayList<>();
+        ArrayList<Appointment> collidingAppointments = new ArrayList<Appointment>();
+        ArrayList<Integer> allRoomIdsWithConflict = new ArrayList<Integer>();
 
         // Henter alle avtaler som er koblet på en rom-id
         for (List<String> appointments : allRowsFromAppointment){
@@ -115,25 +117,32 @@ public class RoomLogic {
                 if (appointments.get(11) != null || ! appointments.get(11).equalsIgnoreCase("null") || appointments.get(11).length() < 1) {
                     Appointment newAppointment = new Appointment(appointments.get(0), appointments.get(1),
                             appointments.get(2), appointments.get(3), appointments.get(4), appointments.get(5),
-                            appointments.get(6), appointments.get(7), appointments.get(8), appointments.get(9),
-                            appointments.get(10), appointments.get(11));
+                            appointments.get(6), appointments.get(7), appointments.get(8), appointments.get(11));
                     if (checkIfAppointmentsCollide(appointment, newAppointment)){
                         collidingAppointments.add(newAppointment);
-                        allRoomIdsWithConflict.add(newAppointment.getId());
-                        System.out.println("Conflict with appointment '" + newAppointment.getTitle() + "' [ID=" + newAppointment.getId() + "]");
+                        allRoomIdsWithConflict.add(newAppointment.getRoom().getId());
+                        System.out.println("Conflict with appointment '" + newAppointment.getTitle() + "' [ID=" + newAppointment.getId() + "] at room [ID=" + appointments.get(11) + "]");
                     }
                 }
             } catch (NullPointerException e){
-                System.out.println("NullPointerException triggered in initiateRoomLogic(). Appointment [ID=" + appointments.get(0) + "] has no roomid");
+                //System.out.println("NullPointerException triggered in initiateRoomLogic(). Appointment [ID=" + appointments.get(0) + "] has no roomid");
+            }
+        }
+        System.out.println("\nRunning through all room ID's busy at the time");
+        if (allRoomIdsWithConflict.size() > 0){
+            for (Integer id : allRoomIdsWithConflict){
+                System.out.println("Room ID=" + id);
             }
         }
 
-        for (Room room : allCapableRooms){
-            if (allRoomIdsWithConflict.contains(room.getId())){
-                allCapableRooms.remove(room);
+        //for (Room room : allCapableRooms){
+        for (int i = 0; i < allCapableRooms.size(); i++){
+            if (allRoomIdsWithConflict.contains(allCapableRooms.get(i).getId())){
+                System.out.println("Room '" + allCapableRooms.get(i).getName() + "' [ID=" + allCapableRooms.get(i).getId() + "] is busy at the time of this appointment");
+                allCapableRooms.remove(i);
             }
         }
-
+        allCapableRooms.add(new Room(0, numberOfDistinctAttendees));
         allCapableRooms.sort(new RoomComparator());
 
         System.out.println("\nRoom selection done. Available rooms are: ");
@@ -141,13 +150,9 @@ public class RoomLogic {
             System.out.println("[CAP=" + room.getCapacity() + "] [ID=" + room.getId() + "] " + room.getName());
         }
 
-        /*System.out.println("\nColliding appointments: ");
-        for (Appointment app: collidingAppointments){
-            System.out.println(app.displayInfo());
-        }*/
-
         return new Query("roomLogic", allCapableRooms);
     }
+
 
     public static boolean checkIfAppointmentsCollide(Appointment app1, Appointment app2){
         LocalDateTime start1 = app1.getStartDate();

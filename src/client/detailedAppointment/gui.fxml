@@ -6,72 +6,48 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="500.0" style="-fx-background-color: #ebebeb;" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.detailedAppointment.Controller">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="500.0" style="-fx-background-color: #ebebeb;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.detailedAppointment.Controller">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="370.0" minWidth="370.0" prefWidth="370.0" />
         <ColumnConstraints maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="60.0" minHeight="60.0" prefHeight="60.0" valignment="CENTER" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" valignment="CENTER" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" valignment="CENTER" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="134.0" minHeight="118.0" prefHeight="131.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="137.0" minHeight="30.0" prefHeight="124.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="66.0" minHeight="0.0" prefHeight="25.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="30.0" minHeight="4.0" prefHeight="20.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="134.0" minHeight="134.0" prefHeight="134.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="144.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <Pane prefHeight="130.0" prefWidth="360.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
             <children>
-                <Button fx:id="remove" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUser" text="&lt;" />
-                <Button fx:id="add" layoutX="164.0" mnemonicParsing="false" onAction="#addUser" text="&gt;" />
-                <ComboBox fx:id="usersComboBox" prefHeight="26.0" prefWidth="160.0" promptText="Finn deltaker" />
-                <ListView fx:id="attendeeList" layoutX="195.0" prefHeight="130.0" prefWidth="175.0" />
+                <RadioButton fx:id="work" layoutY="15.0" mnemonicParsing="false" selected="true" text="Jobb">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="type" />
+                    </toggleGroup></RadioButton>
             </children>
         </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="11">
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <children>
-                <Label layoutY="6.0" text="Grupper" />
+                <RadioButton fx:id="personal" layoutY="15.0" mnemonicParsing="false" text="Privat" toggleGroup="$type" />
             </children>
         </Pane>
-        <Pane prefHeight="112.0" prefWidth="370.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
             <children>
-                <ListView fx:id="groupList" layoutX="195.0" prefHeight="130.0" prefWidth="175.0" />
-                <ComboBox fx:id="groupComboBox" layoutY="1.0" prefHeight="26.0" prefWidth="160.0" promptText="Finn gruppe" />
-                <Button fx:id="addGroup" layoutX="164.0" mnemonicParsing="false" onAction="#addGroup" text="&gt;" />
-                <Button fx:id="removeGroup" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeGroup" text="&lt;" />
-                <CheckBox fx:id="otherLocation" layoutY="105.0" mnemonicParsing="false" text="Annen lokasjon" />
+                <Label prefHeight="25.0" text="Tittel" />
             </children>
         </Pane>
-        <Pane prefHeight="67.0" prefWidth="467.0" style="-fx-border-color: rgba(0,0,0,0.4); -fx-border-width: 0 0 1px 0;" GridPane.columnIndex="1">
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <children>
-                <Text fx:id="headTitle" layoutX="-90.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ny avtale" textAlignment="CENTER" wrappingWidth="460.35498046875">
-                    <font>
-                        <Font name="Helvetica Neue" size="37.0" />
-                    </font>
-                </Text>
-            </children>
-        </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="7">
-            <children>
-                <Label prefHeight="25.0" prefWidth="82.0" text="Beskrivelse">
-                    <font>
-                        <Font name="Helvetica Neue" size="13.0" />
-                    </font>
-                </Label>
-            </children>
-        </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
-            <children>
-                <Label prefHeight="25.0" text="Heldags" />
+                <TextField fx:id="title" prefHeight="26.0" prefWidth="370.0" />
             </children>
         </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
@@ -82,6 +58,11 @@
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <children>
                 <DatePicker fx:id="date" promptText="mm/dd/åå" />
+            </children>
+        </Pane>
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+            <children>
+                <Label prefHeight="25.0" text="Heldags" />
             </children>
         </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
@@ -111,6 +92,15 @@
                 <DatePicker fx:id="endDate" promptText="mm/dd/åå" />
             </children>
         </Pane>
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="7">
+            <children>
+                <Label prefHeight="25.0" prefWidth="82.0" text="Beskrivelse">
+                    <font>
+                        <Font name="Helvetica Neue" size="13.0" />
+                    </font>
+                </Label>
+            </children>
+        </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
             <children>
                 <TextField fx:id="description" prefHeight="25.0" prefWidth="370.0" />
@@ -118,93 +108,60 @@
         </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="8">
             <children>
-                <Label prefHeight="25.0" prefWidth="102.0" text="Gjenta hver" textAlignment="RIGHT">
-                    <font>
-                        <Font name="Helvetica Neue" size="13.0" />
-                    </font>
-                </Label>
+                <Label text="Deltakere" />
             </children>
         </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+        <Pane prefHeight="130.0" prefWidth="360.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
             <children>
-                <TextField fx:id="repeat" prefHeight="25.0" prefWidth="80.0" promptText="0 (aldri)">
-                    <font>
-                        <Font name="Helvetica Neue" size="13.0" />
-                    </font>
-                </TextField>
-                <Label layoutX="70.0" layoutY="4.0" prefHeight="15.0" prefWidth="62.0" text="dag" textAlignment="RIGHT">
-                    <padding>
-                        <Insets left="20.0" />
-                    </padding>
-                    <font>
-                        <Font name="Helvetica Neue" size="13.0" />
-                    </font>
-                </Label>
+                <ComboBox fx:id="usersComboBox" prefHeight="26.0" prefWidth="160.0" promptText="Finn deltaker" />
+                <Button fx:id="add" layoutX="164.0" mnemonicParsing="false" onAction="#addUser" text="&gt;" />
+                <ListView fx:id="attendeeList" layoutX="195.0" prefHeight="130.0" prefWidth="175.0" />
+                <Button fx:id="remove" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUser" text="&lt;" />
             </children>
         </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="9">
             <children>
-                <Label fx:id="stoplabel" prefHeight="25.0" prefWidth="131.0" text="Gjenta til" textAlignment="RIGHT">
-                    <font>
-                        <Font name="Helvetica Neue" size="13.0" />
-                    </font>
-                </Label>
+                <Label layoutY="6.0" text="Grupper" />
             </children>
         </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+        <Pane prefHeight="112.0" prefWidth="370.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
             <children>
-                <DatePicker fx:id="stoprepeat" promptText="1.1.2015" />
+                <ComboBox fx:id="groupComboBox" layoutY="1.0" prefHeight="26.0" prefWidth="160.0" promptText="Finn gruppe" />
+                <Button fx:id="addGroup" layoutX="164.0" mnemonicParsing="false" onAction="#addGroup" text="&gt;" />
+                <ListView fx:id="groupList" layoutX="195.0" prefHeight="130.0" prefWidth="175.0" />
+                <Button fx:id="removeGroup" layoutX="164.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeGroup" text="&lt;" />
+                <CheckBox fx:id="otherLocation" layoutY="120.0" mnemonicParsing="false" text="Annen lokasjon" />
             </children>
         </Pane>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="10">
             <children>
-                <Label text="Deltakere" />
-            </children>
-        </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: rgba(0,0,0,0.4); -fx-border-width: 0 0 1px 0;" />
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <children>
-                <RadioButton fx:id="personal" layoutY="6.0" mnemonicParsing="false" text="Privat">
-                    <toggleGroup>
-                        <ToggleGroup fx:id="type" />
-                    </toggleGroup>
-                </RadioButton>
-            </children>
-        </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-            <children>
-                <RadioButton fx:id="work" layoutY="6.0" mnemonicParsing="false" selected="true" text="Jobb" toggleGroup="$type" />
-            </children>
-        </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-            <children>
-                <Label prefHeight="25.0" text="Tittel" />
-            </children>
-        </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <children>
-                <TextField fx:id="title" prefHeight="26.0" prefWidth="370.0" />
-            </children>
-        </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="12">
-            <children>
                 <Label fx:id="roomOrLocation" prefHeight="25.0" prefWidth="82.0" text="Rom" />
             </children>
         </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="12">
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
             <children>
                 <TextField fx:id="locationDescription" prefWidth="370.0" />
                 <ComboBox fx:id="room" prefWidth="370.0" />
             </children>
         </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="13">
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="11">
             <children>
-                <Button fx:id="cancel" maxHeight="36.0" maxWidth="100.0" minHeight="36.0" minWidth="80.0" mnemonicParsing="false" onAction="#cancel" prefHeight="36.0" prefWidth="80.0" text="Avbryt" />
+                <Button maxHeight="36.0" maxWidth="80.0" minHeight="36.0" minWidth="80.0" mnemonicParsing="false" onAction="#cancel" prefHeight="36.0" prefWidth="80.0" text="Avbryt" />
             </children>
         </Pane>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="13">
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
             <children>
-                <Button fx:id="editApp" maxHeight="36.0" maxWidth="370.0" minHeight="36.0" minWidth="370.0" mnemonicParsing="false" onAction="#createAppointment" prefHeight="36.0" prefWidth="370.0" stylesheets="@gui.css" text="Endre avtale" textFill="WHITE">
+            <Button fx:id="decline" maxHeight="36.0" maxWidth="180.0" minHeight="36.0" minWidth="180.0" mnemonicParsing="false" onAction="#declineInvite" prefHeight="36.0" prefWidth="180.0" text="Avslå" />
+            <Button fx:id="cancelApp" maxHeight="36.0" maxWidth="180.0" minHeight="36.0" minWidth="180.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="180.0" text="Avlys avtale" />
+            <Button fx:id="accept" layoutX="190.0" maxHeight="36.0" maxWidth="180.0" minHeight="36.0" minWidth="180.0" mnemonicParsing="false" onAction="#acceptInvite" prefHeight="36.0" prefWidth="180.0" stylesheets="@gui.css" text="Godta" textFill="WHITE">
+               <font>
+                  <Font name="Helvetica Neue" size="13.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+               </padding>
+            </Button>
+                <Button fx:id="editApp" layoutX="190.0" maxHeight="36.0" maxWidth="180.0" minHeight="36.0" minWidth="180.0" mnemonicParsing="false" onAction="#createAppointment" prefHeight="36.0" prefWidth="180.0" stylesheets="@gui.css" text="Endre avtale" textFill="WHITE">
                     <padding>
                         <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
                     </padding>
@@ -214,6 +171,16 @@
                 </Button>
             </children>
         </Pane>
+        <Pane prefHeight="67.0" prefWidth="467.0" style="-fx-border-color: rgba(0,0,0,0.4); -fx-border-width: 0 0 1px 0;" GridPane.columnIndex="1">
+            <children>
+                <Text fx:id="headTitle" layoutX="-90.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ny avtale" textAlignment="CENTER" wrappingWidth="460.35498046875">
+                    <font>
+                        <Font name="Helvetica Neue" size="37.0" />
+                    </font>
+                </Text>
+            </children>
+        </Pane>
+        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: rgba(0,0,0,0.4); -fx-border-width: 0 0 1px 0;" />
     </children>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
