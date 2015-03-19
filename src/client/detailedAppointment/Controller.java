@@ -252,7 +252,7 @@ public class Controller implements Initializable{
 
         headTitle.setText(app.getTitle());
         if(app.getIsPrivate()) {
-            //personal.fire();
+            personal.setSelected(true);
             roomOrLocation.setText("Sted");
             room.setVisible(false);
             locationDescription.setVisible(true);
@@ -268,10 +268,14 @@ public class Controller implements Initializable{
             allDay.setSelected(true);
             from.setText("");
             to.setText("");
+            from.setDisable(true);
+            to.setDisable(true);
+            timeLabel.setDisable(true);
+            toLabel.setDisable(true);
+        }else {
+            from.setText(app.getStartDate().getHour() + ":" + app.getStartDate().getMinute());
+            to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
         }
-        allDay.selectedProperty().setValue(app.getAllDay());
-        from.setText(app.getStartDate().getHour() + ":" + app.getStartDate().getMinute());
-        to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
         endDate.setValue(app.getEndDate().toLocalDate());
         description.setText(app.getPurpose());
         attendeeList.setItems(attendees);
