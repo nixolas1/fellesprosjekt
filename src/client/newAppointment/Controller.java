@@ -323,10 +323,16 @@ public class Controller implements Initializable{
     }
 
     public void setupRoomList() {
+        int numberOfDistinctAttendees;
         rooms = getRooms();
         roomsString = new ArrayList<>();
         for (Room r: rooms) {
-            roomsString.add(r.getName() + " (" + r.getCapacity() + " plasser)");
+            if (r.getId() == 0) {
+                numberOfDistinctAttendees = r.getCapacity();
+                System.out.println("\nNUMBER OF DISTINCT ATTENDEES: " + numberOfDistinctAttendees + "\n");
+            } else {
+                roomsString.add(r.getName() + " (" + r.getCapacity() + " plasser)");
+            }
         }
         room.setItems(FXCollections.observableArrayList(roomsString));
         room.setDisable(false);

@@ -102,7 +102,6 @@ public class RoomLogic {
                 allRoomIds.add(Integer.valueOf(rooms.get(0)));
                 allCapableRooms.add(room);
             }
-
         }
 
 
@@ -136,24 +135,20 @@ public class RoomLogic {
             }
         }
 
-        for (Room room : allCapableRooms){
-            if (allRoomIdsWithConflict.contains(room.getId())){
-                System.out.println("Room '" + room.getName() + "' [ID=" + room.getId() + "] is busy at the time of this appointment");
-                allCapableRooms.remove(room);
+        //for (Room room : allCapableRooms){
+        for (int i = 0; i < allCapableRooms.size(); i++){
+            if (allRoomIdsWithConflict.contains(allCapableRooms.get(i).getId())){
+                System.out.println("Room '" + allCapableRooms.get(i).getName() + "' [ID=" + allCapableRooms.get(i).getId() + "] is busy at the time of this appointment");
+                allCapableRooms.remove(i);
             }
         }
-
+        allCapableRooms.add(new Room(0, numberOfDistinctAttendees));
         allCapableRooms.sort(new RoomComparator());
 
         System.out.println("\nRoom selection done. Available rooms are: ");
         for (Room room : allCapableRooms){
             System.out.println("[CAP=" + room.getCapacity() + "] [ID=" + room.getId() + "] " + room.getName());
         }
-
-        /*System.out.println("\nColliding appointments: ");
-        for (Appointment app: collidingAppointments){
-            System.out.println(app.displayInfo());
-        }*/
 
         return new Query("roomLogic", allCapableRooms);
     }
