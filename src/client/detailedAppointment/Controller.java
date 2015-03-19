@@ -1,5 +1,6 @@
 package client.detailedAppointment;
 
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -206,6 +207,7 @@ public class Controller implements Initializable{
     public void initializeFields() {
         editApp.setDisable(true);
         attendeeObjects = getAttendeesFromDB();
+        app.setCals(getGroupsFromDB());
         attendees = displayAttendeeInfo(attendeeObjects); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
         allUsers = getUsersFromDB();
@@ -235,9 +237,10 @@ public class Controller implements Initializable{
         }
 
         allGroups = getCalsFromDB();
-        addedGroups = FXCollections.observableArrayList();
-        groupList.setItems(addedGroups);
         groupInfo = displayCalInfo(allGroups);
+        addedGroups = displayCalInfo(app.getCals());
+        System.out.println("ADDED GROUPS: " + addedGroups);
+        groupList.setItems(FXCollections.observableArrayList(addedGroups));
         groupComboBox.setItems(groupInfo);
 
         editApp.setVisible(false);
@@ -290,6 +293,10 @@ public class Controller implements Initializable{
         return FXCollections.observableArrayList(Attendee.getAllAttendeesForAppointmentClientside(app.getId(), client.Main.socket));
     }
 
+    public ArrayList<Calendar> getGroupsFromDB() {
+        return Calendar.getCalendarsForAppointment(app.getId());
+    }
+
     public boolean checkOwner() {
         for (Attendee a : attendeeObjects) {
             if(a.getIsOwner() && a.getUser().getEmail().toString().equals(Main.getLoggedUser().getEmail().toString())) {
@@ -299,6 +306,13 @@ public class Controller implements Initializable{
         }
         System.out.println("LoggedUser (" + Main.getLoggedUser().getEmail() + ") is not the owner");
         return false;
+    }
+
+    public Attendee getOwner() {
+        for (Attendee a : attendeeObjects) {
+            if(a.getIsOwner()) return a;
+        }
+        return null;
     }
 
     public static ArrayList<UserModel> getUsersFromDB() {
