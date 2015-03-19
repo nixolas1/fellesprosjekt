@@ -33,6 +33,22 @@ public class AppointmentLogic {
         return new Query("newAppointment", false);
     }
 
+    public static Query updateAppointment(Hashtable<String, Appointment> data){
+        try {
+            Appointment app = data.get("reply");
+            if(true){//server.database.Logic.updateAppointment(app)) {
+                Notification notif = new Notification(app, "Møtet '"+app.getTitle()+"' har blitt endret");
+                NotificationLogic.newNotificationsFromEmail(notif, getListOfDistinctAttendees(app));
+                return new Query("updateAppointment", true);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new Query("newAppointment", false);
+    }
+
     public static Query getCalendarAppointments(Hashtable<String, String> data){
         try {
             String cal_id = data.get("id");
@@ -59,7 +75,7 @@ public class AppointmentLogic {
         ArrayList<Appointment> appList = new ArrayList<>();
         for (List<String>a : list){
             //System.out.println(a.toString());
-            appList.add(new Appointment(a.get(0), a.get(1), a.get(2), a.get(3), a.get(4), a.get(5), a.get(6), a.get(7), a.get(8), a.get(11)));
+            appList.add(new Appointment(a.get(0), a.get(1), a.get(2), a.get(3), a.get(4), a.get(5), a.get(8), a.get(9), a.get(10), a.get(11)));
         }
 
         return appList;
@@ -146,5 +162,7 @@ public class AppointmentLogic {
 
         return new Query("updateAttending", true);
     }
+
+
 
 }
