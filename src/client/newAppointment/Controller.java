@@ -294,7 +294,6 @@ public class Controller implements Initializable{
             } else {
                 app.setRoom(new Room(1, "test", 1, 0, 23, new ArrayList<Utility>())); // TEST ROOM!
             }
-            calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL!
             for (Attendee a : app.getAttendees()) {
                 if(a.getUser().getEmail().equals(loggedUser.getEmail()))
                     a.setIsOwner(true);
@@ -339,17 +338,15 @@ public class Controller implements Initializable{
         int minStart = 00;
         int hrEnd = 23;
         int minEnd = 59;
-        if(!allDay.isSelected()) {
+        if(!allDay.isSelected() && this.from.getText() != null && this.to.getText() != null) {
             hrStart = Integer.parseInt(from.getText().split(":")[0]);
             minStart = Integer.parseInt((from.getText().split(":")[1]));
             hrEnd = Integer.parseInt((to.getText().split(":")[0]));
             minEnd = Integer.parseInt(to.getText().split(":")[1]);
         }
-        LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
-        LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
-        Room room = null;
-        String location = null;
-        Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null,location);
+        LocalDateTime startDate = this.date.getValue() != null && this.date.getValue().toString().length() > 0 ? this.date.getValue().atTime(hrStart, minStart) : null;
+        LocalDateTime endDate = this.endDate.getValue() != null && this.endDate.getValue().toString().length() > 0 ? this.endDate.getValue().atTime(hrEnd, minEnd) : null;
+        Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null, null);
         
         app.setAttendees(getAttendees());
         ArrayList<Calendar> grps = getGroups();
@@ -505,7 +502,10 @@ public class Controller implements Initializable{
         field.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if(!(to.getText()==null || to.getText().equals(""))) {
+                if (from.getText() != null && from.getText().length() > 0 && to.getText() != null && to.getText().length() > 0) {
+                    setupRoomList();
+                }
+                if (!(to.getText() == null || to.getText().equals(""))) {
                     if (!updateTimeValid()) {
                         to.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
                     } else {
@@ -513,12 +513,11 @@ public class Controller implements Initializable{
                     }
                 }
                 LocalDate d = field.getValue();
-                if (d == null || d.isBefore(LocalDate.now()) || dateIsAfter(endDate,date)) {
+                if (d == null || d.isBefore(LocalDate.now()) || dateIsAfter(endDate, date)) {
                     field.setStyle("-fx-text-inner-color: red;");
                     field.setOpacity(3.0);
                     checkIfAllValid();
-                    }
-                else {
+                } else {
                     field.setStyle("-fx-text-inner-color: green;");
                     field.setOpacity(2.0);
                     checkIfAllValid();
@@ -560,13 +559,13 @@ public class Controller implements Initializable{
         int h = Integer.parseInt(from.getText(0, 2)), m = Integer.parseInt(from.getText(3, 5));
         int hh = Integer.parseInt(to.getText(0, 2)), mm = Integer.parseInt(to.getText(3, 5));
         if(h>=24 || hh>=24 || m>=60 || mm>=60) return false;
-        if(date.getValue().isBefore(endDate.getValue())) {
+        if(date.getValue() != null && endDate.getValue() != null && date.getValue().isBefore(endDate.getValue())) {
             return true;
         }
-        if (date.getValue().equals(endDate.getValue())) {
+        if (date.getValue() != null && endDate.getValue() != null && date.getValue().equals(endDate.getValue())) {
             if(h > hh) return false;
             if(h == hh) {
-                if(m > mm) return false;
+                if(m >= mm) return false;
             }
         }
         return true;
