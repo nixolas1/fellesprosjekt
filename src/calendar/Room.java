@@ -29,6 +29,11 @@ public class Room implements Serializable {
         this.utilities = utilities;
     }
 
+    public Room(int id, int capacity){
+        this.id = id;
+        this.capacity = capacity;
+    }
+
     public Room(int id) { //TODO fix. gives null.
         String[] roomRow = server.database.Logic.getRow("Room", "roomid", Integer.toString(id));
 
