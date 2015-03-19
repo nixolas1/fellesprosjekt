@@ -13,12 +13,10 @@ public class NotificationLogic {
 
     public static Query getNotifications(Hashtable<String, String> data){
         try {
-            System.out.println("Getting notifs...");
             String email = data.get("reply");
             ArrayList<Notification> notifs = getModelsFromDBOutput(
                     server.database.Logic.getAllRowsWhere("Notification", "User_email = '"+email+"'"));
             Collections.reverse(notifs);
-            System.out.println("Done sending notifs...");
             return new Query("getNotifications", notifs);
         } catch (Exception e) {
             e.printStackTrace();

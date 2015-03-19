@@ -22,7 +22,7 @@ public class AppointmentLogic {
             Appointment app = data.get("reply");
             if(server.database.Logic.createAppointment(app)) {
                 Notification notif = new Notification(app, "Invitert til nytt møte: "+app.getTitle());
-                NotificationLogic.newNotifications(notif, app.getUsers());
+                NotificationLogic.newNotificationsFromEmail(notif, getListOfDistinctAttendees(app));
                 return new Query("newAppointment", true);
             }
         }
@@ -134,15 +134,16 @@ public class AppointmentLogic {
         String email = data.get("email");
         String appid = data.get("appid");
         String going = data.get("going");
+        String goingText = going.equals("0") ? "ikke " : "";
         Appointment app = Appointment.getAppointmentFromDB(appid);
         server.database.Logic.updateRowField("Attendee",
                 "User_email = '" + email + "' AND Appointment_appointmentid = " + appid,
                 "willAttend = "+going
         );
-        if(going.equals("0")) {
-            Notification notif = new Notification(app, email + " kommer ikke på " + app.getTitle());
-            NotificationLogic.newNotificationsFromEmail(notif, getListOfDistinctAttendees(app));
-        }
+
+        Notification notif = new Notification(app, email + " kommer "+goingText+"på " + app.getTitle());
+        NotificationLogic.newNotificationsFromEmail(notif, getListOfDistinctAttendees(app));
+
         return new Query("updateAttending", true);
     }
 
