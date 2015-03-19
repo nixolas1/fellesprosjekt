@@ -153,6 +153,7 @@ public class RoomLogic {
         return new Query("roomLogic", allCapableRooms);
     }
 
+
     public static boolean checkIfAppointmentsCollide(Appointment app1, Appointment app2){
         LocalDateTime start1 = app1.getStartDate();
         LocalDateTime end1 = app1.getEndDate();

@@ -1,8 +1,6 @@
 package server;
 
-import calendar.Appointment;
-import calendar.Notification;
-import calendar.UserModel;
+import calendar.*;
 import network.Query;
 
 import java.time.LocalDate;
@@ -84,6 +82,49 @@ public class AppointmentLogic {
         }
 
         return new ArrayList<Appointment>();
+    }
+
+    public static ArrayList<String> getNumberOfDistinctAttendees(Appointment appointment){
+        System.out.println("getNumberOfDistinctAttendees()");
+        ArrayList<String> attendeeList = new ArrayList<String>();
+        int numberOfConflicts = 0;                               // Teller for hvor mange overlapp man vil få når flere folk er med i flere grupper på samme arrangement
+        int numberOfDistinctAttendees;                          // Det endelig antallet personer som deltar, uten overlapp
+        //Appointment appointment = data.get("reply");           // Henter data'en fra Hashtable
+
+        // Løper gjennom alle inviterte til en arrangement
+        for (Attendee attendee : appointment.getAttendees()){
+            String email = attendee.getUser().getEmail();
+            System.out.println("Attendee invited: " + email);
+            if (! attendeeList.contains(email)){
+                attendeeList.add(email);
+                //System.out.println("Added user '" + email + "'");
+            } else {
+                numberOfConflicts += 1;
+                System.out.println("numberOfConflicts: " + numberOfConflicts);
+            }
+        }
+
+        // Løper gjennom alle medlemmene i alle gruppekalenderene i appointment objektet
+        for (Calendar groupCalendar : appointment.getCals()){
+            ArrayList<String> memberList= server.database.Logic.getUsersInGroupCalendar(groupCalendar.getId());
+            System.out.println("\n\nGROUPID ADDED: " + groupCalendar.getId() + "\n\n");
+            for (String email : memberList){
+                if (! attendeeList.contains(email)){
+                    attendeeList.add(email);
+                    System.out.println("Member in group " + groupCalendar.getId() + " added: " + email);
+                } else {
+                    numberOfConflicts += 1;
+                    System.out.println("Member '" + email + "' in group " + groupCalendar.getId() + " is already in attendee-list");
+                    //System.out.println("numberOfConflicts: " + numberOfConflicts);
+                }
+            }
+        }
+
+        numberOfDistinctAttendees = attendeeList.size();
+        System.out.println("numberOfConflicts: " + numberOfConflicts);
+        System.out.println("numberOfDistinctAttendees: " + numberOfDistinctAttendees);
+
+        return attendeeList;
     }
 
 }
