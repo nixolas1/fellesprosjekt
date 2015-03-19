@@ -195,6 +195,8 @@ public class Controller {
                             populateCalendar(calendarId);
                         }
                     }
+                }
+                /*
                 viewedUser = user;
                 System.out.println("Viewing " + user.getFirstName() + "'s calendar");
                 clearAppointments(); //todo
@@ -208,10 +210,13 @@ public class Controller {
                 populateCalendars(cals);
                 myCals.setVisible(false);
                 myCalendar.setVisible(true);
+                */
             }
         });
 
     }
+
+
 
     public void goToMyCal(ActionEvent event) {
         myCalendar.setVisible(false);
