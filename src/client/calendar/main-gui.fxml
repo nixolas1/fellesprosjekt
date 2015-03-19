@@ -789,7 +789,7 @@
                         <Font name="Helvetica Neue" size="12.0" />
                      </font>
                   </Label>
-                  <Button fx:id="removeCal" layoutX="24.0" layoutY="169.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="20.0" text="Fjern">
+                  <Button fx:id="removeCal" layoutX="24.0" layoutY="169.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="20.0" text="Fjern" onAction="#removeCalendars">
                      <font>
                         <Font size="10.0" />
                      </font>
