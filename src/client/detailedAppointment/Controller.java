@@ -562,7 +562,8 @@ public class Controller implements Initializable{
 
     public boolean checkIfAllValid(){
         Boolean ret = true;
-
+        editApp.setDisable(!ret);
+        return ret;/*
         if(title.getText()==null || title.getText().equals("")) ret = false;
         if(description.getText()==null || description.getText()=="") ret = false;
         if(locationDescription.getText()==null || locationDescription.getText()=="") ret = false;
@@ -583,7 +584,7 @@ public class Controller implements Initializable{
                 ret = false;
             }*/
 
-        }
+       /* }
         if(personal.isSelected() && (locationDescription.getText().equals("") || locationDescription.getText().equals(null))) {
             ret = false;
             System.out.println("Location problem [PERSONAL only]");
@@ -610,7 +611,7 @@ public class Controller implements Initializable{
                 ret = false;
             }
         }*/
-        if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
+        /*if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
             if (locationDescription.getText().equals("")) {
                 ret = false;
             }
@@ -618,7 +619,7 @@ public class Controller implements Initializable{
 
         editApp.setDisable(!ret);
         System.out.println("checkIfAllValid() ret = " +ret);
-        return ret;
+        return ret;*/
     }
 
     public boolean valid(String text, String match, int max, int extra) {
