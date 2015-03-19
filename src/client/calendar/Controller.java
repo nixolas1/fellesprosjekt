@@ -1,21 +1,16 @@
 package client.calendar;
 
-import calendar.Appointment;
+import calendar.*;
 import calendar.Calendar;
-import calendar.Notification;
-import calendar.UserModel;
 import client.newAppointment.FxUtil;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import client.notifications.Notifications;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -25,26 +20,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.ClientDB;
 import network.ThreadClient;
-import server.User;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
-import java.time.DayOfWeek;
 import java.util.*;
 
 /**
@@ -332,24 +321,8 @@ public class Controller {
     public void populateCalendar(ArrayList<Appointment> apps){
         for(Appointment app : apps){
 
-            Boolean isRepeat=false, isThisWeek=false;
+            Boolean isThisWeek=false;
             LocalDateTime start = app.getStartDate();
-
-
-            //display is its a repeating event and repeats this week
-            /*if(app.getRepeatEvery()>0 && app.getEndRepeatDate().isAfter(calDate)){
-                LocalDateTime nextRepeat = start, now=calDate.atStartOfDay(), tempEnd=app.getEndDate();
-                while(nextRepeat.isBefore(now)){
-                    nextRepeat = nextRepeat.plusDays(app.getRepeatEvery());
-                    tempEnd = tempEnd.plusDays((app.getRepeatEvery()));
-                    System.out.println(nextRepeat);
-                }
-                if(nextRepeat.isBefore(now.plusDays(7))) {
-                    isRepeat = true;
-                    app.setStartDate(nextRepeat);
-                    app.setEndDate(tempEnd);
-                }
-            }*/
 
             //only display appointments this week
             if(start.toLocalDate().isBefore(calDate.plusDays(7))
@@ -357,14 +330,13 @@ public class Controller {
                 isThisWeek = true;
             }
 
+            Boolean attending = true;
+            for(Attendee a : app.getAttendees()){
+                if(a.getUser().getEmail().equals(Main.user.getEmail()))
+                    attending = a.getAttending();
+            }
 
-            if(isThisWeek || isRepeat){
-/*                System.out.println(app.getTitle() +
-                                ": den " + start+
-                                " i kalender "+app.getCals()+
-                                " i rom "+app.getRoom().getName()
-                );*/
-
+            if(isThisWeek && attending){
                 Node pane = generateAppointmentPane(app, apps);
                 insertPane(pane, start, app.getEndDate());
             }

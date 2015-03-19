@@ -3,6 +3,7 @@ package server.database;
 import calendar.*;
 import network.Query;
 import com.sun.org.apache.regexp.internal.RESyntaxException;
+import server.AppointmentLogic;
 //import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 import java.sql.Connection;
@@ -270,8 +271,20 @@ public class Logic {
             String attQuery = "INSERT INTO `nixo_fp`.`Attendee` (`User_email`, `Appointment_appointmentid`, `timeInvited`, `timeAnswered`, `willAttend`, `isOwner`, `alarm`) VALUES ('";
             String s = "', '";
             String n = "NULL";
+            String ownerEmail = "";
+
             for(Attendee a : app.getAttendees()){
-                String q = attQuery + a.getUser().getEmail()+s+app.getId()+s+LocalDateTime.now()+"', NULL, '1', "+(a.getIsOwner()? 1:0)+", NULL);";
+                if(a.getIsOwner()) {
+                    ownerEmail = a.getUser().getEmail();
+                    break;
+                }
+
+            }
+
+            for(String email : AppointmentLogic.getListOfDistinctAttendees(app)){
+                String isOwner = "0";
+                if(email.equals(ownerEmail))isOwner="1";
+                String q = attQuery + email+s+app.getId()+s+LocalDateTime.now()+"', NULL, '1', "+isOwner+", NULL);";
                 //System.out.println(q);
                 stmt.executeUpdate(q);
             }
@@ -504,8 +517,8 @@ public class Logic {
                     System.out.println("SQLException triggered in createUser(): " + f);
                 } finally {
                     System.out.println("User '" + user.getEmail() + "' successfully created in database. Creating private calendar now...");
-                    Calendar cal = new Calendar(user.getFullName(), new ArrayList<UserModel>(){{add(user);}});
-                    cal.setDescription("Min kalender");
+                    Calendar cal = new Calendar("Min kalender", new ArrayList<UserModel>(){{add(user);}});
+                    cal.setDescription(user.getFullName());
                     createGroup(new Hashtable<String, Calendar>(){{put("reply", cal); put("private", new Calendar(-1));}});
                     closeDB(stmt);
                     return true;
