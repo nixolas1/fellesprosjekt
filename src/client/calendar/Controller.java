@@ -44,7 +44,7 @@ public class Controller {
 
     //@FXML private ComboBox chooseCalendar;
     @FXML private Text name, year, month, weekNum, monDate, tueDate, wedDate, thuDate, friDate, satDate, sunDate, notifCount;
-    @FXML private Button logOff, userSettings, yourCalendar, today;
+    @FXML private Button logOff, userSettings, yourCalendar, today, myCalendar;
     @FXML private GridPane calendarGrid;
     @FXML public ComboBox<Notification> notifCombo;
     @FXML public ComboBox findUserCalendar, myCals;
@@ -161,9 +161,25 @@ public class Controller {
                 }
                 appointments = getAppointments(cals);
                 populateCalendars(cals);
+                myCals.setVisible(false);
+                myCalendar.setVisible(true);
             }
         });
 
+    }
+
+    public void goToMyCal(ActionEvent event) {
+        myCalendar.setVisible(false);
+        myCals.setVisible(true);
+        clearAppointments();
+        ArrayList<Calendar> userCal = calendar.Calendar.getMyCalendarsFromDB(Main.getLoggedUser());
+        cals = new ArrayList<Integer>();
+        for (int i = 0; i < userCal.size(); i++) {
+            cals.add(userCal.get(i).getId());
+        }
+        appointments = getAppointments(cals);
+        populateCalendars(cals);
+        findUserCalendar.getEditor().setText("");
     }
 
     public void getMainCalendar(){

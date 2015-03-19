@@ -760,7 +760,7 @@
                      </fill>
                   </Rectangle>
                   <ComboBox fx:id="myCals" layoutX="10.0" layoutY="6.0" prefWidth="150.0" promptText="Mine kalendere" />
-                  <Button fx:id="myCalendar" layoutX="10.0" layoutY="6.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Til min kalender" visible="false">
+                  <Button fx:id="myCalendar" layoutX="10.0" layoutY="6.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#goToMyCal" prefWidth="150.0" text="Til min kalender" visible="false">
                      <font>
                         <Font name="Helvetica Neue" size="13.0" />
                      </font>
