@@ -34,7 +34,7 @@ public class Controller implements Initializable{
     private ComboBox usersComboBox, room, groupComboBox;
 
     @FXML
-    private Label roomOrLocation, timeLabel, toLabel;
+    private Label roomOrLocation, timeLabel, toLabel, numberOfAttendees;
 
     @FXML private CheckBox allDay, otherLocation;
 
@@ -62,6 +62,7 @@ public class Controller implements Initializable{
     private ArrayList<Room> rooms;
     private UserModel loggedUser;
     private String timeRegex = "[\\d]{2}:[\\d]{2}";
+    private int numberOfDistinctAttendees = 1;
 
 
 
@@ -71,6 +72,7 @@ public class Controller implements Initializable{
         add.setDisable(true);
         remove.setDisable(true);
         locationDescription.setVisible(false);
+        numberOfAttendees.setText("Totalt antall deltakere: " + numberOfDistinctAttendees);
 
         ToggleGroup tg = new ToggleGroup();
         work.setToggleGroup(tg);
@@ -322,13 +324,13 @@ public class Controller implements Initializable{
     }
 
     public void setupRoomList() {
-        int numberOfDistinctAttendees;
         rooms = getRooms();
         roomsString = new ArrayList<>();
         for (Room r: rooms) {
             if (r.getId() == 0) {
                 numberOfDistinctAttendees = r.getCapacity();
                 System.out.println("\nNUMBER OF DISTINCT ATTENDEES: " + numberOfDistinctAttendees + "\n");
+                numberOfAttendees.setText("Totalt antall deltakere: " + numberOfDistinctAttendees);
             } else {
                 roomsString.add(r.getName() + " (" + r.getCapacity() + " plasser)");
             }
@@ -344,7 +346,8 @@ public class Controller implements Initializable{
         int minStart = 00;
         int hrEnd = 23;
         int minEnd = 59;
-        if(!allDay.isSelected() && this.from.getText() != null && this.to.getText() != null) {
+        if(!allDay.isSelected() && this.from.getText() != null && this.to.getText() != null &&
+                from.getText().length() > 0 && to.getText().length() > 0) {
             hrStart = Integer.parseInt(from.getText().split(":")[0]);
             minStart = Integer.parseInt((from.getText().split(":")[1]));
             hrEnd = Integer.parseInt((to.getText().split(":")[0]));
