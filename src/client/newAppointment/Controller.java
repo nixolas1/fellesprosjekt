@@ -356,7 +356,16 @@ public class Controller implements Initializable{
         LocalDateTime startDate = this.date.getValue() != null && this.date.getValue().toString().length() > 0 ? this.date.getValue().atTime(hrStart, minStart) : null;
         LocalDateTime endDate = this.endDate.getValue() != null && this.endDate.getValue().toString().length() > 0 ? this.endDate.getValue().atTime(hrEnd, minEnd) : null;
         Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null, null);
-        
+        if(allDay.isSelected()) {
+            app.setAllDay(true);
+        } else {
+            app.setAllDay(false);
+        }
+        if(personal.isSelected()) {
+            app.setIsPrivate(true);
+        } else {
+            app.setIsPrivate(false);
+        }
         app.setAttendees(getAttendees());
         ArrayList<Calendar> grps = getGroups();
         if(grps.size() > 0) {
