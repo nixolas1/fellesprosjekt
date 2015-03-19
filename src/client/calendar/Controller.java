@@ -42,10 +42,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by jonaslochsen on 02.03.15.
@@ -74,7 +71,9 @@ public class Controller {
     private ArrayList<Integer> cals = new ArrayList<Integer>(Arrays.asList(privCal));
     private ObservableList<String> displayedCals = FXCollections.observableArrayList();
     //private ArrayList<ArrayList<Integer>> calendarsAtDisplay = new ArrayList<Integer>();
-    Hashtable<String, Integer> calendarsAtDisplay = new Hashtable<String, Integer>();
+    private Hashtable<String, Integer> calendarsAtDisplay = new Hashtable<String, Integer>();
+    private Hashtable<String, ArrayList<Integer>> userCalendars = new Hashtable<>();
+    private ArrayList<String> userCalendarsAtDisplay = new ArrayList<>();
 
 
     @FXML
@@ -120,10 +119,14 @@ public class Controller {
                     calendarsAtDisplay.put(cal.getName(), cal.getId());
 
                 shownCals.setItems(displayedCals);
-                //cals = new ArrayList<Integer>(Arrays.asList(cal.getId()));
-                //cals = new Integer[]{cal.getId()};
                 appointments = getAppointments(cals);
                 populateCalendars(cals);
+                for (String userFullName : userCalendarsAtDisplay){
+                    appointments = getAppointments(userCalendars.get(userFullName));
+                    for (Integer calendarId : userCalendars.get(userFullName)){
+                        populateCalendar(calendarId);
+                    }
+                }
             }
         });
 
@@ -131,16 +134,34 @@ public class Controller {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 UserModel user = getUserModelFromEmail(findUserCalendar.getValue().toString().split(",")[1].trim());
-                System.out.println("Viewing " + user.getFirstName() + "'s calendar");
-                clearAppointments(); //todo
-                ArrayList<Calendar> userCal = calendar.Calendar.getMyCalendarsFromDB(user);
-                cals = new ArrayList<Integer>(userCal.size());
-                //cals = new Integer[userCal.size()];
-                for (int i = 0; i < userCal.size(); i++) {
-                    cals.add(userCal.get(i).getId());
+                if (! userCalendars.contains(user.getFullName())){
+                    int userPrivateCalendarId = user.getPrivateCalendar();
+                    System.out.println(user.getEmail() + " userPrivateCalendarId: " + userPrivateCalendarId);
+                    //System.out.println("findUserCalendar.getValue().toString().split(\",\")[1].trim(): " + findUserCalendar.getValue().toString().split(",")[1].trim());
+                    System.out.println("Viewing " + user.getFirstName() + "'s calendar");
+                    clearAppointments(); //todo
+                    ArrayList<Calendar> userCal = calendar.Calendar.getMyCalendarsFromDB(user);
+                    //userCalendars = new ArrayList<Integer>(userCal.size());
+                    //cals = new Integer[userCal.size()];
+
+                    userCalendars.put(user.getFullName(), new ArrayList<>());
+
+                    for (int i = 0; i < userCal.size(); i++) {
+                        userCalendars.get(user.getFullName()).add(userCal.get(i).getId());
+                        //userCalendendars.add(userCal.get(i).getId());
+                        System.out.println("User '"+user.getFullName()+"' has calendar '"+userCal.get(i).getName()+"' [ID="+userCal.get(i).getId()+"]");
+                    }
+                    userCalendarsAtDisplay.add(user.getFullName());
+                    displayedCals.add(user.getFullName());
+                    appointments = getAppointments(cals);
+                    populateCalendars(cals);
+                    for (String userFullName : userCalendarsAtDisplay){
+                        appointments = getAppointments(userCalendars.get(userFullName));
+                        for (Integer calendarId : userCalendars.get(userFullName)){
+                            populateCalendar(calendarId);
+                        }
+                    }
                 }
-                appointments = getAppointments(cals);
-                populateCalendars(cals);
             }
         });
 
@@ -167,13 +188,26 @@ public class Controller {
         if (! shownCals.getSelectionModel().isEmpty()){
             ObservableList<String> calendarList = shownCals.getSelectionModel().getSelectedItems();
             for (String calendarName : calendarList){
-                int calendarId = calendarsAtDisplay.get(calendarName);
-                displayedCals.remove(calendarName);
-                cals.remove(cals.indexOf(calendarId));
+                if (calendarsAtDisplay.containsKey(calendarName)){
+                    int calendarId = calendarsAtDisplay.get(calendarName);
+                    displayedCals.remove(calendarName);
+                    cals.remove(cals.indexOf(calendarId));
+                } else if (userCalendars.containsKey(calendarName)){
+                    displayedCals.remove(calendarName);
+                    userCalendarsAtDisplay.remove(calendarName);
+                }
             } shownCals.setItems(displayedCals);
             clearAppointments();
             appointments = getAppointments(cals);
+            //appointments += getAppointments(cals);
             populateCalendars(cals);
+            for (String user : userCalendarsAtDisplay){
+                appointments = getAppointments(userCalendars.get(user));
+                for (Integer calendarId : userCalendars.get(user)){
+                    populateCalendar(calendarId);
+                }
+            }
+
         }
     }
 
