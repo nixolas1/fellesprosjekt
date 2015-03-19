@@ -60,28 +60,19 @@
                         </TextField>
                     </children>
                 </Pane>
-                <Pane prefHeight="40.0" prefWidth="139.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                <Pane prefHeight="60.0" prefWidth="293.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>
-                        <Button fx:id="save" layoutY="10.0" maxHeight="40.0" maxWidth="-Infinity" minHeight="40.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#saveChanges" prefHeight="40.0" prefWidth="360.0" stylesheets="@gui.css" text="Lagre endringer" textFill="WHITE">
-                            <font>
-                                <Font name="Helvetica Neue" size="13.0" />
-                            </font>
-                        </Button>
+                  <ChoiceBox fx:id="domain" layoutX="5.0" layoutY="24.0" maxHeight="40.0" maxWidth="175.0" minHeight="40.0" minWidth="175.0" prefHeight="40.0" prefWidth="175.0" value="stud.ntnu.no" />
                </children>
                 </Pane>
-                <Pane prefHeight="66.0" prefWidth="347.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <children>
-                        <TextField fx:id="phone" layoutY="7.0" maxHeight="40.0" maxWidth="360.0" minHeight="40.0" minWidth="360.0" prefHeight="40.0" prefWidth="360.0" promptText="Telefonnummer">
+                        <TextField fx:id="firstName" layoutY="15.0" maxHeight="40.0" maxWidth="175.0" minHeight="40.0" minWidth="175.0" prefHeight="40.0" prefWidth="175.0" promptText="Fornavn">
                             <font>
                                 <Font name="Helvetica Neue" size="13.0" />
                             </font>
                         </TextField>
                     </children>
-                </Pane>
-                <Pane prefHeight="60.0" prefWidth="293.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-               <children>
-                  <ChoiceBox fx:id="domain" layoutX="5.0" layoutY="24.0" maxHeight="40.0" maxWidth="175.0" minHeight="40.0" minWidth="175.0" prefHeight="40.0" prefWidth="175.0" value="stud.ntnu.no" />
-               </children>
                 </Pane>
                 <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                     <children>
@@ -92,9 +83,9 @@
                         </TextField>
                     </children>
                 </Pane>
-                <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <Pane prefHeight="66.0" prefWidth="347.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
                     <children>
-                        <TextField fx:id="firstName" layoutY="15.0" maxHeight="40.0" maxWidth="175.0" minHeight="40.0" minWidth="175.0" prefHeight="40.0" prefWidth="175.0" promptText="Fornavn">
+                        <TextField fx:id="phone" layoutY="7.0" maxHeight="40.0" maxWidth="360.0" minHeight="40.0" minWidth="360.0" prefHeight="40.0" prefWidth="360.0" promptText="Telefonnummer">
                             <font>
                                 <Font name="Helvetica Neue" size="13.0" />
                             </font>
@@ -118,6 +109,15 @@
                             </font>
                         </PasswordField>
                     </children>
+                </Pane>
+                <Pane prefHeight="40.0" prefWidth="139.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6">
+               <children>
+                        <Button fx:id="save" layoutY="10.0" maxHeight="40.0" maxWidth="-Infinity" minHeight="40.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#saveChanges" prefHeight="40.0" prefWidth="360.0" stylesheets="@gui.css" text="Lagre endringer" textFill="WHITE">
+                            <font>
+                                <Font name="Helvetica Neue" size="13.0" />
+                            </font>
+                        </Button>
+               </children>
                 </Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7">
                <children>

@@ -238,6 +238,8 @@ public class Controller implements Initializable{
             usersComboBox.setDisable(true);
             groupList.setDisable(true);
             groupComboBox.setDisable(true);
+            addGroup.setDisable(true);
+            removeGroup.setDisable(true);
             otherLocation.setDisable(true);
             locationDescription.setDisable(true);
             room.setDisable(true);
