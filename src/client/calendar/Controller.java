@@ -66,14 +66,15 @@ public class Controller {
     private LocalDate calDate = LocalDate.now();
     private ThreadClient socket = client.Main.socket;
     private int privCal = Main.user.getPrivateCalendar();
-    //private Integer[] cals = new Integer[]{privCal};
-    private ArrayList<Integer> cals = new ArrayList<Integer>(Arrays.asList(privCal));
     private Notifications notifs;
     private Hashtable<Integer, ArrayList<Appointment>> appointments = new Hashtable<>();
     private ArrayList<UserModel> allUsersUM;
     private ArrayList<calendar.Calendar> myCalendars;
+    //private Integer[] cals = new Integer[]{privCal};
+    private ArrayList<Integer> cals = new ArrayList<Integer>(Arrays.asList(privCal));
     private ObservableList<String> displayedCals = FXCollections.observableArrayList();
-    private ArrayList<Integer> calendarsAtisplay = new ArrayList<Integer>();
+    //private ArrayList<ArrayList<Integer>> calendarsAtDisplay = new ArrayList<Integer>();
+    Hashtable<String, Integer> calendarsAtDisplay = new Hashtable<String, Integer>();
 
 
     @FXML
@@ -91,6 +92,9 @@ public class Controller {
         updateMonth();
         updateWeekNum();
         updateDate();
+        calendarsAtDisplay.put("Min kalender", privCal);
+        displayedCals.add("Min kalender");
+        shownCals.setItems(displayedCals);
         appointments = getAppointments(cals);
         populateCalendars(cals);
         importFont();
@@ -108,9 +112,14 @@ public class Controller {
                 /*for (Integer in : cals){
                     System.out.println(in);
                 }*/
-                displayedCals.add(cal.getName());
+                if (! displayedCals.contains(cal.getName()))
+                    displayedCals.add(cal.getName());
+                if (! cals.contains(cal.getId()))
+                    cals.add(cal.getId());
+                if (! calendarsAtDisplay.containsValue(cal.getId()))
+                    calendarsAtDisplay.put(cal.getName(), cal.getId());
+
                 shownCals.setItems(displayedCals);
-                cals.add(cal.getId());
                 //cals = new ArrayList<Integer>(Arrays.asList(cal.getId()));
                 //cals = new Integer[]{cal.getId()};
                 appointments = getAppointments(cals);
@@ -152,6 +161,20 @@ public class Controller {
 
     public ArrayList<String> calendarsToString(ArrayList<calendar.Calendar> cals) {
         return calendar.Calendar.convertCalendarsToStringArrayList(cals);
+    }
+
+    public void removeCalendars(){
+        if (! shownCals.getSelectionModel().isEmpty()){
+            ObservableList<String> calendarList = shownCals.getSelectionModel().getSelectedItems();
+            for (String calendarName : calendarList){
+                int calendarId = calendarsAtDisplay.get(calendarName);
+                displayedCals.remove(calendarName);
+                cals.remove(cals.indexOf(calendarId));
+            } shownCals.setItems(displayedCals);
+            clearAppointments();
+            appointments = getAppointments(cals);
+            populateCalendars(cals);
+        }
     }
 
     public static ArrayList<calendar.Calendar> getMyCalsFromDB() { return calendar.Calendar.getMyCalendarsFromDB(Main.getLoggedUser()); }
