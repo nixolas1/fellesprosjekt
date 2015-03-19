@@ -216,22 +216,6 @@ public class Controller {
 
     }
 
-
-
-    public void goToMyCal(ActionEvent event) {
-        myCalendar.setVisible(false);
-        myCals.setVisible(true);
-        clearAppointments();
-        ArrayList<Calendar> userCal = calendar.Calendar.getMyCalendarsFromDB(Main.getLoggedUser());
-        cals = new ArrayList<Integer>();
-        for (int i = 0; i < userCal.size(); i++) {
-            cals.add(userCal.get(i).getId());
-        }
-        appointments = getAppointments(cals);
-        populateCalendars(cals);
-        findUserCalendar.getEditor().setText("");
-    }
-
     public void getMainCalendar(){
         ArrayList<Calendar> asd = Calendar.getAllCalendarsFromDB();
 
