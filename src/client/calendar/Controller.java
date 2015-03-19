@@ -399,9 +399,12 @@ public class Controller {
         });
 
         if(numCollisions>0) {
-            /*GridPane grid = new GridPane();
+            /*
+            GridPane grid = new GridPane();
             grid.add(pane, collisions.indexOf(app), 0);
-            grid.setMaxWidth(paneWidth);
+            pane.setStyle(color);
+            pane.setCursor(Cursor.HAND);
+            pane.setMaxWidth(paneWidth);
             return grid;*/
         }
 
