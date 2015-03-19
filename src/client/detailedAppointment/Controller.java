@@ -205,6 +205,7 @@ public class Controller implements Initializable{
 
     public void initializeFields() {
         attendeeObjects = getAttendeesFromDB();
+        app.setCals(getGroupsFromDB());
         attendees = displayAttendeeInfo(attendeeObjects); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
         allUsers = getUsersFromDB();
@@ -243,9 +244,10 @@ public class Controller implements Initializable{
         }
 
         allGroups = getCalsFromDB();
-        addedGroups = FXCollections.observableArrayList();
-        groupList.setItems(addedGroups);
         groupInfo = displayCalInfo(allGroups);
+        addedGroups = displayCalInfo(app.getCals());
+        System.out.println("ADDED GROUPS: " + addedGroups);
+        groupList.setItems(FXCollections.observableArrayList(addedGroups));
         groupComboBox.setItems(groupInfo);
 
         headTitle.setText(app.getTitle());
@@ -283,6 +285,7 @@ public class Controller implements Initializable{
                 client.Main.socket
         );
         accept.setDisable(true);
+        ClientDB.updateAttendingStatus(loggedUser.getEmail(), app.getId(), 1, client.Main.socket);
         Main.closeStage();
     }
 
@@ -293,6 +296,7 @@ public class Controller implements Initializable{
                 client.Main.socket
         );
         decline.setDisable(true);
+        ClientDB.updateAttendingStatus(loggedUser.getEmail(), app.getId(), 0, client.Main.socket);
         Main.closeStage();
         //TODO --> appointment setVisible(false)
     }
@@ -311,6 +315,10 @@ public class Controller implements Initializable{
         return FXCollections.observableArrayList(Attendee.getAllAttendeesForAppointmentClientside(app.getId(), client.Main.socket));
     }
 
+    public ArrayList<Calendar> getGroupsFromDB() {
+        return Calendar.getCalendarsForAppointment(app.getId());
+    }
+
     public boolean checkOwner() {
         for (Attendee a : attendeeObjects) {
             if(a.getIsOwner() && a.getUser().getEmail().toString().equals(Main.getLoggedUser().getEmail().toString())) {
@@ -320,6 +328,13 @@ public class Controller implements Initializable{
         }
         System.out.println("LoggedUser (" + Main.getLoggedUser().getEmail() + ") is not the owner");
         return false;
+    }
+
+    public Attendee getOwner() {
+        for (Attendee a : attendeeObjects) {
+            if(a.getIsOwner()) return a;
+        }
+        return null;
     }
 
     public static ArrayList<UserModel> getUsersFromDB() {
@@ -434,17 +449,23 @@ public class Controller implements Initializable{
         int minStart = 00;
         int hrEnd = 23;
         int minEnd = 59;
-        if(!allDay.isSelected()) {
+        if(!allDay.isSelected() && this.from.getText() != null && this.to.getText() != null &&
+                from.getText().length() > 0 && to.getText().length() > 0) {
             hrStart = Integer.parseInt(from.getText().split(":")[0]);
             minStart = Integer.parseInt((from.getText().split(":")[1]));
             hrEnd = Integer.parseInt((to.getText().split(":")[0]));
             minEnd = Integer.parseInt(to.getText().split(":")[1]);
         }
-        LocalDateTime startDate = this.date.getValue().atTime(hrStart, minStart);
-        LocalDateTime endDate = this.endDate.getValue().atTime(hrEnd, minEnd);
-        Room room = null;
-        String location = null;
-        Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null,location);
+        LocalDateTime startDate = this.date.getValue() != null && this.date.getValue().toString().length() > 0 ? this.date.getValue().atTime(hrStart, minStart) : null;
+        LocalDateTime endDate = this.endDate.getValue() != null && this.endDate.getValue().toString().length() > 0 ? this.endDate.getValue().atTime(hrEnd, minEnd) : null;
+        Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null, null);
+
+        app.setAttendees(getAttendees());
+        ArrayList<Calendar> grps = getGroups();
+        if(grps.size() > 0) {
+            app.setCals(grps); // GROUPS = CALENDARS
+        }
+        System.out.println(app.getAttendees());
         return app;
 
     }
@@ -663,18 +684,17 @@ public class Controller implements Initializable{
         int h = Integer.parseInt(from.getText(0, 2)), m = Integer.parseInt(from.getText(3, 5));
         int hh = Integer.parseInt(to.getText(0, 2)), mm = Integer.parseInt(to.getText(3, 5));
         if(h>=24 || hh>=24 || m>=60 || mm>=60) return false;
-        if(date.getValue().isBefore(endDate.getValue())) {
+        if(date.getValue() != null && endDate.getValue() != null && date.getValue().isBefore(endDate.getValue())) {
             return true;
         }
-        if (date.getValue().equals(endDate.getValue())) {
+        if (date.getValue() != null && endDate.getValue() != null && date.getValue().equals(endDate.getValue())) {
             if(h > hh) return false;
             if(h == hh) {
-                if(m > mm) return false;
+                if(m >= mm) return false;
             }
         }
         return true;
     }
-
 
 
 }

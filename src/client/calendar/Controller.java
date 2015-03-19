@@ -286,6 +286,7 @@ public class Controller {
     }
 
     public void logOff(ActionEvent event) {
+        timer.cancel();
         client.login.Main.show(Main.stage);
     }
 

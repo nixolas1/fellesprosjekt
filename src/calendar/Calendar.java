@@ -137,6 +137,22 @@ public class Calendar implements Serializable {
         return calendars;
     }
 
+    public static ArrayList<Calendar> getCalendarsForAppointment(int id) {
+        ArrayList<List<String>> rows = ClientDB.getAllTableRowsWhere("Calendar_has_Appointment", "Appointment_appointmentid = " + id, Main.socket);
+        ArrayList<Integer> ids = new ArrayList<>();
+        for(List<String> li : rows) {
+            ids.add(Integer.parseInt(li.get(1)));
+        }
+        ArrayList<Calendar> calendars = new ArrayList<>();
+        for(int cid : ids) {
+            ArrayList<List<String>> cal = ClientDB.getAllTableRowsWhere("Calendar", "calendarid = " + cid, Main.socket);
+            for(List<String> li : cal) {
+                calendars.add(new Calendar(Integer.parseInt(li.get(0)), li.get(1)));
+            }
+        }
+        return calendars;
+    }
+
     public static ArrayList<Calendar> getMyCalendarsFromDB(UserModel user) {
         ArrayList<Calendar> cals = new ArrayList<>();
         ArrayList<List<String>> calendars = network.ClientDB.getAllTableRowsWhere("User_has_Calendar", "User_email = '" + user.getEmail() + "'", Main.socket);

@@ -32,6 +32,24 @@ public class ClientDB {
         }
     }
 
+    public static Boolean updateAttendingStatus(String email, int appid, int going, ThreadClient socket) {
+        Hashtable<String, String> data = new Hashtable<String, String>() {{
+            put("email", email);
+            put("appid", String.valueOf(appid));
+            put("going", String.valueOf(going));
+        }};
+
+        try {
+            Query reply = socket.send(new Query("updateAttending", data));
+            Hashtable<String, Boolean> response = reply.data;
+            return response.get("reply");
+        } catch (Exception e) {
+            System.err.println("Could not update Attending:");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static Boolean updateRow(String table, String where, String set, ThreadClient socket) {
         Hashtable<String, String> data = new Hashtable<String, String>() {{
             put("table", table);
