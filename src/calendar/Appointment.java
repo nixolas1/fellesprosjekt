@@ -36,9 +36,8 @@ public class Appointment implements Serializable {
         this.id = id;
     }
 
-    public Appointment(String id, String title, String description, String location, String startDate,
-                       String endDate,
-                       String isVisible, String isAllDay, String isPrivate, String roomID){
+    //            appointmentid0	         title1	        description2	3location  	4startTime	 v      5endTime	  6 repeatEndDate	7repeat	8isVisible	9isAllDay	10isPrivate	11Room_roomid1
+    public Appointment(String id, String title, String description, String location, String startDate, String endDate, String isVisible, String isAllDay, String isPrivate, String roomID){
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 

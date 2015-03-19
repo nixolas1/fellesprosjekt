@@ -393,14 +393,14 @@ public class Controller implements Initializable{
                 app.addCalender(new Calendar(a.getUser().getPrivateCalendar()));
             }
             System.out.println(app.displayInfo());
-            Hashtable<String, Boolean> response = client.Main.socket.send(new Query("newAppointment", app)).data;
+            Hashtable<String, Boolean> response = client.Main.socket.send(new Query("updateAppointment", app)).data;
             if(response.get("reply")) {
-                System.out.println("Appointment created\n" + app.displayInfo());
+                System.out.println("Appointment updated\n" + app.displayInfo());
                 Main.closeStage();
                 // todo refresh cal view
             }
             else
-                System.out.println("Server could not create the appointment.");
+                System.out.println("Server could not update the appointment.");
 
         } else {
             System.out.println("One or more fields are INVALID. Data not sent to server.");
