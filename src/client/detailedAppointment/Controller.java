@@ -251,20 +251,24 @@ public class Controller implements Initializable{
         groupComboBox.setItems(groupInfo);
 
         headTitle.setText(app.getTitle());
-        /*if(app.getIsPrivate()) {
-            personal.fire();
+        if(app.getIsPrivate()) {
+            //personal.fire();
             roomOrLocation.setText("Sted");
             room.setVisible(false);
             locationDescription.setVisible(true);
             otherLocation.setVisible(false);
-        }*/
+        }
         title.setText(app.getTitle());
         date.setValue(app.getStartDate().toLocalDate());
-        /*if(app.getAllDay()) {
+        System.out.println("HELDAGS?");
+        System.out.println(app.getAllDay());
+        System.out.println("PRIVAT?");
+        System.out.println(app.getIsPrivate());
+        if(app.getAllDay()) {
             allDay.setSelected(true);
-            //from.setText("");
-            //to.setText("");
-        }*/
+            from.setText("");
+            to.setText("");
+        }
         allDay.selectedProperty().setValue(app.getAllDay());
         from.setText(app.getStartDate().getHour() + ":" + app.getStartDate().getMinute());
         to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
