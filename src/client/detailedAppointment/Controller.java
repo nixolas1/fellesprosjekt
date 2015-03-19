@@ -311,7 +311,10 @@ public class Controller implements Initializable{
         //TODO --> appointment setVisible(false)
     }
 
-
+    public void cancelAppointment(ActionEvent event) {
+        ClientDB.updateRow("Appointment", "appointmentid = " + app.getId(), "isVisible = 0", client.Main.socket);
+        Main.closeStage();
+    }
 
     public ObservableList<Attendee> getAttendeesFromDB() {
        /* ArrayList<List<String>> arr = ClientDB.getAllTableRowsWhere("Attendee","Appointment_appointmendid = " + app.getId(), client.Main.socket);

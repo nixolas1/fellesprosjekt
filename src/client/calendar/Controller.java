@@ -352,7 +352,7 @@ public class Controller {
                     attending = a.getAttending();
             }
 
-            if(isThisWeek && attending){
+            if(isThisWeek && attending && app.getIsVisible()){
                 Node pane = generateAppointmentPane(app, apps);
                 insertPane(pane, start, app.getEndDate());
             }
