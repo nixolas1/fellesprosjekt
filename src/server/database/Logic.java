@@ -229,7 +229,7 @@ public class Logic {
                 ("'" + app.getPurpose() + "'") : "NULL";
         String roomId = app.getRoom() != null ? String.valueOf(app.getRoom().getId()) : "NULL";
         String isPrivate = app.getIsPrivate().toString();
-        String allDay = app.getAllDay().toString();
+        String allDay = app.getAllDay() ? "1" : "0";
         String isVisible = app.getIsVisible().toString();
         /*
         this.cals = Calendar.getAllCalendarsInAppointment(this.id);

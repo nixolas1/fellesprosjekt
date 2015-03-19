@@ -1,13 +1,11 @@
 package client.detailedAppointment;
 
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import calendar.*;
 import calendar.Calendar;
-import com.sun.deploy.util.SessionState;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -206,7 +204,6 @@ public class Controller implements Initializable{
 
 
     public void initializeFields() {
-        editApp.setDisable(true);
         attendeeObjects = getAttendeesFromDB();
         app.setCals(getGroupsFromDB());
         attendees = displayAttendeeInfo(attendeeObjects); // Listview items
@@ -218,9 +215,18 @@ public class Controller implements Initializable{
         usersComboBox.setItems(userInfo);
         if(checkOwner()) {
             isOwner = true;
-            //todo view appointment as owner
+            decline.setVisible(false);
+            accept.setVisible(false);
+            cancelApp.setVisible(true);
+            editApp.setVisible(true);
         } else {
             isOwner = false;
+            decline.setVisible(true);
+            accept.setVisible(true);
+            cancelApp.setVisible(false);
+            editApp.setVisible(false);
+            work.setDisable(true);
+            personal.setDisable(true);
             title.setDisable(true);
             date.setDisable(true);
             allDay.setDisable(true);
@@ -232,9 +238,9 @@ public class Controller implements Initializable{
             usersComboBox.setDisable(true);
             groupList.setDisable(true);
             groupComboBox.setDisable(true);
+            otherLocation.setDisable(true);
             locationDescription.setDisable(true);
             room.setDisable(true);
-            //todo view appointment as attendee
         }
 
         allGroups = getCalsFromDB();
@@ -244,16 +250,32 @@ public class Controller implements Initializable{
         groupList.setItems(FXCollections.observableArrayList(addedGroups));
         groupComboBox.setItems(groupInfo);
 
-        editApp.setVisible(false);
-        cancelApp.setVisible(false);
         headTitle.setText(app.getTitle());
-        //work or private
+        if(app.getIsPrivate()) {
+            personal.setSelected(true);
+            roomOrLocation.setText("Sted");
+            room.setVisible(false);
+            locationDescription.setVisible(true);
+            otherLocation.setVisible(false);
+        }
         title.setText(app.getTitle());
         date.setValue(app.getStartDate().toLocalDate());
-        //allday
-        allDay.selectedProperty().setValue(app.getAllDay());
-        from.setText(app.getStartDate().getHour() + ":" + app.getStartDate().getMinute());
-        to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
+        System.out.println("HELDAGS?");
+        System.out.println(app.getAllDay());
+        System.out.println("PRIVAT?");
+        System.out.println(app.getIsPrivate());
+        if(app.getAllDay()) {
+            allDay.setSelected(true);
+            from.setText("");
+            to.setText("");
+            from.setDisable(true);
+            to.setDisable(true);
+            timeLabel.setDisable(true);
+            toLabel.setDisable(true);
+        }else {
+            from.setText(app.getStartDate().getHour() + ":" + app.getStartDate().getMinute());
+            to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
+        }
         endDate.setValue(app.getEndDate().toLocalDate());
         description.setText(app.getPurpose());
         attendeeList.setItems(attendees);
@@ -265,14 +287,29 @@ public class Controller implements Initializable{
     }
 
     public void acceptInvite(ActionEvent event) {
+        ClientDB.updateRow("Attendee",
+                "User_email = '" + loggedUser.getEmail() + "' AND Appointment_appointmentid = " + app.getId(),
+                "willAttend = 1",
+                client.Main.socket
+        );
+        accept.setDisable(true);
         ClientDB.updateAttendingStatus(loggedUser.getEmail(), app.getId(), 1, client.Main.socket);
         Main.closeStage();
     }
 
     public void declineInvite(ActionEvent event) {
+        ClientDB.updateRow("Attendee",
+                "User_email = '" + loggedUser.getEmail() + "' AND Appointment_appointmentid = " + app.getId(),
+                "willAttend = 0",
+                client.Main.socket
+        );
+        decline.setDisable(true);
         ClientDB.updateAttendingStatus(loggedUser.getEmail(), app.getId(), 0, client.Main.socket);
         Main.closeStage();
+        //TODO --> appointment setVisible(false)
     }
+
+
 
     public ObservableList<Attendee> getAttendeesFromDB() {
        /* ArrayList<List<String>> arr = ClientDB.getAllTableRowsWhere("Attendee","Appointment_appointmendid = " + app.getId(), client.Main.socket);
