@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import calendar.*;
 import calendar.Calendar;
+import com.sun.deploy.util.SessionState;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -261,20 +262,12 @@ public class Controller implements Initializable{
     }
 
     public void acceptInvite(ActionEvent event) {
-        ClientDB.updateRow("Attendee",
-                "User_email = '" + loggedUser.getEmail() + "' AND Appointment_appointmentid = " + app.getId(),
-                "willAttend = 1",
-                client.Main.socket
-        );
+        ClientDB.updateAttendingStatus(loggedUser.getEmail(), app.getId(), 1, client.Main.socket);
         Main.closeStage();
     }
 
     public void declineInvite(ActionEvent event) {
-        ClientDB.updateRow("Attendee",
-                "User_email = '" + loggedUser.getEmail() + "' AND Appointment_appointmentid = " + app.getId(),
-                "willAttend = 0",
-                client.Main.socket
-        );
+        ClientDB.updateAttendingStatus(loggedUser.getEmail(), app.getId(), 0, client.Main.socket);
         Main.closeStage();
     }
 

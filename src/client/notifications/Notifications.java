@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import network.ThreadClient;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -27,16 +28,18 @@ public class Notifications {
     public int every = 10;
     public int unreadCount = 0;
     String email;
+    ThreadClient socket;
 
     public Notifications(String email, Text unreadCountLabel, ComboBox<Notification> notificationList){
-        notifications = new ArrayList<>();//Notification.getUserNotifications(email, client.Main.socket);
+        this.socket = new ThreadClient();
+        notifications = Notification.getUserNotifications(email, socket);
         label = unreadCountLabel;
         list = notificationList;
         this.email=email;
     }
 
     public void refresh(){
-        notifications = new ArrayList<>();//Notification.getUserNotifications(email, client.Main.socket);
+        notifications = Notification.getUserNotifications(email, socket);
         updateList();
     }
 

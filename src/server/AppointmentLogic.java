@@ -1,6 +1,9 @@
 package server;
 
 import calendar.*;
+import calendar.Appointment;
+import calendar.Notification;
+import calendar.UserModel;
 import network.Query;
 
 import java.time.LocalDate;
@@ -84,7 +87,7 @@ public class AppointmentLogic {
         return new ArrayList<Appointment>();
     }
 
-    public static ArrayList<String> getListOfDistinctAttendees(Appointment appointment){
+    public static ArrayList<String> getListOfDistinctAttendees(Appointment appointment) {
         System.out.println("getNumberOfDistinctAttendees()");
         ArrayList<String> attendeeList = new ArrayList<String>();
         int numberOfConflicts = 0;                               // Teller for hvor mange overlapp man vil få når flere folk er med i flere grupper på samme arrangement
@@ -92,10 +95,10 @@ public class AppointmentLogic {
         //Appointment appointment = data.get("reply");           // Henter data'en fra Hashtable
 
         // Løper gjennom alle inviterte til en arrangement
-        for (Attendee attendee : appointment.getAttendees()){
+        for (Attendee attendee : appointment.getAttendees()) {
             String email = attendee.getUser().getEmail();
             System.out.println("Attendee invited: " + email);
-            if (! attendeeList.contains(email)){
+            if (!attendeeList.contains(email)) {
                 attendeeList.add(email);
                 //System.out.println("Added user '" + email + "'");
             } else {
@@ -105,11 +108,11 @@ public class AppointmentLogic {
         }
 
         // Løper gjennom alle medlemmene i alle gruppekalenderene i appointment objektet
-        for (Calendar groupCalendar : appointment.getCals()){
-            ArrayList<String> memberList= server.database.Logic.getUsersInGroupCalendar(groupCalendar.getId());
+        for (Calendar groupCalendar : appointment.getCals()) {
+            ArrayList<String> memberList = server.database.Logic.getUsersInGroupCalendar(groupCalendar.getId());
             System.out.println("\n\nGROUPID ADDED: " + groupCalendar.getId() + "\n\n");
-            for (String email : memberList){
-                if (! attendeeList.contains(email)){
+            for (String email : memberList) {
+                if (!attendeeList.contains(email)) {
                     attendeeList.add(email);
                     System.out.println("Member in group " + groupCalendar.getId() + " added: " + email);
                 } else {
@@ -125,6 +128,22 @@ public class AppointmentLogic {
         System.out.println("numberOfDistinctAttendees: " + numberOfDistinctAttendees);
 
         return attendeeList;
+    }
+
+    public static Query updateAttending(Hashtable<String, String> data){
+        String email = data.get("email");
+        String appid = data.get("appid");
+        String going = data.get("going");
+        Appointment app = Appointment.getAppointmentFromDB(appid);
+        server.database.Logic.updateRowField("Attendee",
+                "User_email = '" + email + "' AND Appointment_appointmentid = " + appid,
+                "willAttend = "+going
+        );
+        if(going.equals("0")) {
+            Notification notif = new Notification(app, email + " kommer ikke på " + app.getTitle());
+            NotificationLogic.newNotificationsFromEmail(notif, getListOfDistinctAttendees(app));
+        }
+        return new Query("updateAttending", true);
     }
 
 }

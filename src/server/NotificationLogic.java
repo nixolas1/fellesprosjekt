@@ -35,11 +35,19 @@ public class NotificationLogic {
         return true;
     }
 
+    public static boolean newNotificationsFromEmail(Notification notif, ArrayList<String> emails){
+        for(String e : emails) {
+            notif.user = new UserModel(e);
+            server.database.Logic.storeNotification(notif);
+        }
+        return true;
+    }
+
     public static ArrayList<Notification> getModelsFromDBOutput(ArrayList<List<String>> list){
         ArrayList<Notification> notiList = new ArrayList<>();
         for (List<String>a : list){
             //System.out.println(a.toString());
-            notiList.add(new Notification(a.get(0), a.get(1), a.get(2), a.get(3), a.get(4)));
+            notiList.add(new Notification(a.get(1), a.get(2), a.get(3), a.get(4), a.get(5)));
         }
 
         return notiList;

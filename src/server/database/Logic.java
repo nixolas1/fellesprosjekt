@@ -359,7 +359,7 @@ public class Logic {
 
         try {
             stmt = conn.createStatement();
-            //stmt.executeUpdate(query);
+            stmt.executeUpdate(query);
             System.out.println("Stored notification "+n.text+" for "+n.user.getEmail());
             return true;
         } catch (SQLException f) {
@@ -373,9 +373,10 @@ public class Logic {
         Calendar groupCalendar = data.get("reply");
         int groupId = getLastGroupIdUsed() + 1;
         int isPrivate = data.get("private") == null ? 0 : 1;
+        int isGroup = isPrivate == 1 ? 0:1;
         //int groupId = groupCalendar.getId();
         String memberQuery = "INSERT INTO User_has_Calendar (Calendar_calendarid, User_email, isVisible, notifications, isPrivate) VALUES (" + groupId + ", ";
-        String calendarQuery = "INSERT INTO Calendar (calendarid, name, description, isGroup) VALUES (" + groupId + ", '" + groupCalendar.getName() + "', '" + groupCalendar.getDescription() + "', "+isPrivate+");";
+        String calendarQuery = "INSERT INTO Calendar (calendarid, name, description, isGroup) VALUES (" + groupId + ", '" + groupCalendar.getName() + "', '" + groupCalendar.getDescription() + "', "+isGroup+");";
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
