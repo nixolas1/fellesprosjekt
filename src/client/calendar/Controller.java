@@ -65,6 +65,7 @@ public class Controller {
     private ArrayList<Integer> calendarsAtisplay = new ArrayList<Integer>();
     Timer timer = new Timer();
     Integer numUnread = 0;
+    UserModel viewedUser = client.Main.user;
 
     @FXML
     void initialize() {
@@ -129,6 +130,7 @@ public class Controller {
                 //System.out.println("Calendar cal = new Calendar(Integer.parseInt(myCals.getValue().toString().split(,)[1].trim()), myCals.getValue().toString().split',)[0].trim())");
                 //System.out.println(myCals.getValue().toString().split(",")[1].trim() + "        " + myCals.getValue().toString().split(",")[0].trim());
                 findUserCalendar.getEditor().setText("");
+                viewedUser = client.Main.user;
                 Calendar cal = new Calendar(Integer.parseInt(myCals.getValue().toString().split(",")[1].trim()), myCals.getValue().toString().split(",")[0].trim());
                 System.out.println("Viewing calendar " + cal.getName());
                 clearAppointments();
@@ -151,6 +153,7 @@ public class Controller {
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 myCals.getEditor().setText("");
                 UserModel user = getUserModelFromEmail(findUserCalendar.getValue().toString().split(",")[1].trim());
+                viewedUser = user;
                 System.out.println("Viewing " + user.getFirstName() + "'s calendar");
                 clearAppointments(); //todo
                 ArrayList<Calendar> userCal = calendar.Calendar.getMyCalendarsFromDB(user);
@@ -171,6 +174,7 @@ public class Controller {
     public void goToMyCal(ActionEvent event) {
         myCalendar.setVisible(false);
         myCals.setVisible(true);
+        viewedUser = client.Main.user;
         clearAppointments();
         ArrayList<Calendar> userCal = calendar.Calendar.getMyCalendarsFromDB(Main.getLoggedUser());
         cals = new ArrayList<Integer>();
@@ -348,11 +352,11 @@ public class Controller {
 
             Boolean attending = true;
             for(Attendee a : app.getAttendees()){
-                if(a.getUser().getEmail().equals(Main.user.getEmail()))
+                if(a.getUser().getEmail().equals(viewedUser.getEmail()))
                     attending = a.getAttending();
             }
 
-            if(isThisWeek && attending){
+            if(isThisWeek && attending && app.getIsVisible()){
                 Node pane = generateAppointmentPane(app, apps);
                 insertPane(pane, start, app.getEndDate());
             }
@@ -446,9 +450,11 @@ public class Controller {
     private void insertPane(Node pane, LocalDateTime startDate, LocalDateTime endDate) {
         int col = startDate.getDayOfYear()-calDate.getDayOfYear();
         int row = startDate.getHour();
-        int rowspan = endDate.getHour()-startDate.getHour();
+        int minspan = Math.round((endDate.getMinute()-startDate.getMinute())/59.0f);
+        double rowspan = endDate.getHour() - startDate.getHour()+minspan;
+        System.out.println(rowspan);
         if(rowspan == 0)rowspan = 1;
-        insertPane(pane, col, row, 1, rowspan);
+        insertPane(pane, col, row, 1, (int)rowspan);
     }
 
     private void insertPane(Node pane, int col, int row, int colspan, int rowspan) {
