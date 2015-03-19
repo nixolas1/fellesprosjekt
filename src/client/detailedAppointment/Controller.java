@@ -204,7 +204,6 @@ public class Controller implements Initializable{
 
 
     public void initializeFields() {
-        editApp.setDisable(true);
         attendeeObjects = getAttendeesFromDB();
         attendees = displayAttendeeInfo(attendeeObjects); // Listview items
         attendeeList.setItems(attendees); // Adding items to ListView
@@ -215,9 +214,18 @@ public class Controller implements Initializable{
         usersComboBox.setItems(userInfo);
         if(checkOwner()) {
             isOwner = true;
-            //todo view appointment as owner
+            decline.setVisible(false);
+            accept.setVisible(false);
+            cancelApp.setVisible(true);
+            editApp.setVisible(true);
         } else {
             isOwner = false;
+            decline.setVisible(true);
+            accept.setVisible(true);
+            cancelApp.setVisible(false);
+            editApp.setVisible(false);
+            work.setDisable(true);
+            personal.setDisable(true);
             title.setDisable(true);
             date.setDisable(true);
             allDay.setDisable(true);
@@ -229,9 +237,9 @@ public class Controller implements Initializable{
             usersComboBox.setDisable(true);
             groupList.setDisable(true);
             groupComboBox.setDisable(true);
+            otherLocation.setDisable(true);
             locationDescription.setDisable(true);
             room.setDisable(true);
-            //todo view appointment as attendee
         }
 
         allGroups = getCalsFromDB();
@@ -240,13 +248,21 @@ public class Controller implements Initializable{
         groupInfo = displayCalInfo(allGroups);
         groupComboBox.setItems(groupInfo);
 
-        editApp.setVisible(false);
-        cancelApp.setVisible(false);
         headTitle.setText(app.getTitle());
-        //work or private
+        /*if(app.getIsPrivate()) {
+            personal.fire();
+            roomOrLocation.setText("Sted");
+            room.setVisible(false);
+            locationDescription.setVisible(true);
+            otherLocation.setVisible(false);
+        }*/
         title.setText(app.getTitle());
         date.setValue(app.getStartDate().toLocalDate());
-        //allday
+        /*if(app.getAllDay()) {
+            allDay.setSelected(true);
+            //from.setText("");
+            //to.setText("");
+        }*/
         allDay.selectedProperty().setValue(app.getAllDay());
         from.setText(app.getStartDate().getHour() + ":" + app.getStartDate().getMinute());
         to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
@@ -266,6 +282,7 @@ public class Controller implements Initializable{
                 "willAttend = 1",
                 client.Main.socket
         );
+        accept.setDisable(true);
         Main.closeStage();
     }
 
@@ -275,8 +292,12 @@ public class Controller implements Initializable{
                 "willAttend = 0",
                 client.Main.socket
         );
+        decline.setDisable(true);
         Main.closeStage();
+        //TODO --> appointment setVisible(false)
     }
+
+
 
     public ObservableList<Attendee> getAttendeesFromDB() {
        /* ArrayList<List<String>> arr = ClientDB.getAllTableRowsWhere("Attendee","Appointment_appointmendid = " + app.getId(), client.Main.socket);

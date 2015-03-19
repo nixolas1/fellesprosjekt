@@ -47,9 +47,11 @@ public class Appointment implements Serializable {
         this.purpose = description;
         this.startDate = LocalDateTime.parse(startDate, format);
         this.endDate = LocalDateTime.parse(endDate, format);
-        this.isPrivate = Boolean.parseBoolean(isPrivate);
-        this.allDay = Boolean.parseBoolean(isAllDay);
-        this.isVisible = Boolean.parseBoolean(isVisible);
+        this.isPrivate = !isPrivate.equals("0");
+        if (isAllDay != null)
+            this.allDay = !isAllDay.equals("0");
+        if (isVisible != null)
+            this.isVisible = !isVisible.equals("0");
         this.cals = Calendar.getAllCalendarsInAppointment(this.id);
         this.attendees = Attendee.getAllAttendeesForAppointment(this.id);
         if(roomID != null) {
