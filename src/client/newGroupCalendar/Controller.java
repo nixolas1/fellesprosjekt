@@ -83,6 +83,8 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 String s = name.getText();
+                if(s.contains(",")) {
+                }
                 if (s.length() > 0 && s.length() < 50) {
                     name.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");
                     nameValid = true;

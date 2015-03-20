@@ -280,8 +280,13 @@ public class Controller implements Initializable{
             timeLabel.setDisable(true);
             toLabel.setDisable(true);
         }else {
-            from.setText(app.getStartDate().getHour() + ":" + app.getStartDate().getMinute());
-            to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
+            System.out.println("FROM toString() : " + app.getStartDate().toString());
+            String fromHour = app.getStartDate().toString().split("T")[1].split(":")[0];
+            String fromMinute = app.getStartDate().toString().split("T")[1].split(":")[1];
+            String toHour = app.getEndDate().toString().split("T")[1].split(":")[0];
+            String toMinute = app.getEndDate().toString().split("T")[1].split(":")[1];
+            from.setText(fromHour + ":" + fromMinute);
+            to.setText(toHour + ":" + toMinute);
         }
         endDate.setValue(app.getEndDate().toLocalDate());
         description.setText(app.getPurpose());
@@ -294,7 +299,7 @@ public class Controller implements Initializable{
     }
 
     public boolean checkAttending() {
-        ArrayList<List<String>> qwe = ClientDB.getAllTableRowsWhere("Attendee", "User_email = " + Main.getLoggedUser().getEmail() + " AND Appointment_appointmentid = " + app.getId(), client.Main.socket);
+        ArrayList<List<String>> qwe = ClientDB.getAllTableRowsWhere("Attendee", "User_email = '" + Main.getLoggedUser().getEmail() + "' AND Appointment_appointmentid = " + app.getId(), client.Main.socket);
         for (List<String> li : qwe) {
             return !li.get(4).equals("0");
         }
