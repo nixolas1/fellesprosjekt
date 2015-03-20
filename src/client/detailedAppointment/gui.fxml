@@ -152,7 +152,7 @@
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
             <children>
             <Button fx:id="decline" maxHeight="36.0" maxWidth="180.0" minHeight="36.0" minWidth="180.0" mnemonicParsing="false" onAction="#declineInvite" prefHeight="36.0" prefWidth="180.0" text="Avslå" />
-            <Button fx:id="cancelApp" maxHeight="36.0" maxWidth="180.0" minHeight="36.0" minWidth="180.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="180.0" text="Avlys avtale" />
+            <Button fx:id="cancelApp" maxHeight="36.0" maxWidth="180.0" minHeight="36.0" minWidth="180.0" mnemonicParsing="false" onAction="#cancelAppointment" prefHeight="36.0" prefWidth="180.0" text="Avlys avtale" />
             <Button fx:id="accept" layoutX="190.0" maxHeight="36.0" maxWidth="180.0" minHeight="36.0" minWidth="180.0" mnemonicParsing="false" onAction="#acceptInvite" prefHeight="36.0" prefWidth="180.0" stylesheets="@gui.css" text="Godta" textFill="WHITE">
                <font>
                   <Font name="Helvetica Neue" size="13.0" />

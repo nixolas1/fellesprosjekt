@@ -299,6 +299,41 @@ public class Logic {
         return true;
     }
 
+    public static boolean updateAppointment(Appointment app){
+        System.out.println("updateAppointment()");
+        String location = app.getLocation() != null && app.getLocation().length() > 0 ?
+                ( "'" + app.getLocation() + "'" ) : "NULL" ;
+        String description = app.getPurpose() != null && app.getPurpose().length() > 0 ?
+                ("'" + app.getPurpose() + "'") : "NULL";
+        String roomId = app.getRoom() != null ? String.valueOf(app.getRoom().getId()) : "NULL";
+        String isPrivate = app.getIsPrivate() ? "1" : "0";
+        String isAllDay = app.getAllDay() ? "1" : "0";
+        String isVisible = app.getIsVisible() ? "1" : "0";
+
+        String qry ="UPDATE  `nixo_fp`.`Appointment` SET  `title` =  '"+app.getTitle()+"', `description` = "+description+", `location` = "+location+
+                    ", `startTime` = '"+app.getStartDate()+"', `endTime` = '"+app.getEndDate()+"', `isVisible` = "+isVisible+", `isPrivate` = "+isPrivate+
+                    ", `isAllDay` = "+isAllDay+", `Room_roomid1` = "+roomId+" WHERE  `Appointment`.`appointmentid` = "+app.getId()+";";
+
+        String query = "UPDATE Appointment SET title = '" + app.getTitle() + "', description = " + description + ", location = " + location
+                + ", startTime = '" + app.getStartDate() + "', endTime = '" + app.getEndDate() + "', repeatEndDate = NULL, repeat = NULL, isVisible = " +
+                isVisible + ", isAllDay = " + isAllDay + ", isPrivate = " + isPrivate + ", Room_roomid1 = " + roomId +
+                " WHERE appointmentid = " + app.getId() + ";";
+
+        Statement stmt = null;
+
+        try {
+            stmt = conn.createStatement();
+            System.out.println("\nQUERY: " + qry + "\n");
+            stmt.executeUpdate(qry);
+            System.out.println("Appointment '" + app.getTitle() + "' successfully updated in database");
+        } catch (SQLException e) {
+            System.out.println("SQLException triggered in createAppointment(): " + e);
+            return false;
+        } finally {
+            closeDB(stmt);
+        } return true;
+    }
+
     public static int getLastRoomIdUsed(){
         String query = "SELECT roomid FROM Room ORDER BY roomid DESC LIMIT 1;";
         ResultSet result = null;

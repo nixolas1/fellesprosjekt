@@ -36,7 +36,7 @@ public class AppointmentLogic {
     public static Query updateAppointment(Hashtable<String, Appointment> data){
         try {
             Appointment app = data.get("reply");
-            if(true){//server.database.Logic.updateAppointment(app)) {
+            if (server.database.Logic.updateAppointment(app)) {
                 Notification notif = new Notification(app, "Møtet '"+app.getTitle()+"' har blitt endret");
                 NotificationLogic.newNotificationsFromEmail(notif, getListOfDistinctAttendees(app));
                 return new Query("updateAppointment", true);
@@ -126,7 +126,7 @@ public class AppointmentLogic {
         // Løper gjennom alle medlemmene i alle gruppekalenderene i appointment objektet
         for (Calendar groupCalendar : appointment.getCals()) {
             ArrayList<String> memberList = server.database.Logic.getUsersInGroupCalendar(groupCalendar.getId());
-            System.out.println("\n\nGROUPID ADDED: " + groupCalendar.getId() + "\n\n");
+            //System.out.println("\n\nGROUPID ADDED: " + groupCalendar.getId() + "\n\n");
             for (String email : memberList) {
                 if (!attendeeList.contains(email)) {
                     attendeeList.add(email);
