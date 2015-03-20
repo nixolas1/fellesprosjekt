@@ -280,8 +280,13 @@ public class Controller implements Initializable{
             timeLabel.setDisable(true);
             toLabel.setDisable(true);
         }else {
-            from.setText(app.getStartDate().getHour() + ":" + app.getStartDate().getMinute());
-            to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
+            System.out.println("FROM toString() : " + app.getStartDate().toString());
+            String fromHour = app.getStartDate().toString().split("T")[1].split(":")[0];
+            String fromMinute = app.getStartDate().toString().split("T")[1].split(":")[1];
+            String toHour = app.getEndDate().toString().split("T")[1].split(":")[0];
+            String toMinute = app.getEndDate().toString().split("T")[1].split(":")[1];
+            from.setText(fromHour + ":" + fromMinute);
+            to.setText(toHour + ":" + toMinute);
         }
         endDate.setValue(app.getEndDate().toLocalDate());
         description.setText(app.getPurpose());
@@ -294,7 +299,7 @@ public class Controller implements Initializable{
     }
 
     public boolean checkAttending() {
-        ArrayList<List<String>> qwe = ClientDB.getAllTableRowsWhere("Attendee", "User_email = " + Main.getLoggedUser().getEmail() + " AND Appointment_appointmentid = " + app.getId(), client.Main.socket);
+        ArrayList<List<String>> qwe = ClientDB.getAllTableRowsWhere("Attendee", "User_email = '" + Main.getLoggedUser().getEmail() + "' AND Appointment_appointmentid = " + app.getId(), client.Main.socket);
         for (List<String> li : qwe) {
             return !li.get(4).equals("0");
         }
@@ -423,26 +428,23 @@ public class Controller implements Initializable{
             if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
                 app.setLocation(locationDescription.getText());
             } else {
-                app.setRoom(new Room(1, "test", 1, 0, 23, new ArrayList<Utility>())); // TEST ROOM! TODO get rooms from DB
-            }
-            calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
-            app.setAttendees(getAttendees());
-            ArrayList<Calendar> grps = getGroups();
-            if(grps.size() > 0) {
-                app.setCals(grps); // GROUPS = CALENDARS
+                app.setRoom(new Room(1, "test", 1, 0, 23, new ArrayList<Utility>())); // TEST ROOM!
             }
             for (Attendee a : app.getAttendees()) {
-                app.addCalender(new Calendar(a.getUser().getPrivateCalendar()));
+                if(a.getUser().getEmail().equals(loggedUser.getEmail()))
+                    a.setIsOwner(true);
+                if(a.getUser().getPrivateCalendar() != -1)
+                    app.addCalender(new Calendar(a.getUser().getPrivateCalendar()));
             }
             System.out.println(app.displayInfo());
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("updateAppointment", app)).data;
             if(response.get("reply")) {
-                System.out.println("Appointment updated\n" + app.displayInfo());
+                System.out.println("Appointment created\n" + app.displayInfo());
                 Main.closeStage();
                 // todo refresh cal view
             }
             else
-                System.out.println("Server could not update the appointment.");
+                System.out.println("Server could not create the appointment.");
 
         } else {
             System.out.println("One or more fields are INVALID. Data not sent to server.");
@@ -512,7 +514,7 @@ public class Controller implements Initializable{
         for (String grp : addedGroups) {
             int id = Integer.parseInt(grp.split(",")[1].trim());
             Calendar cal = getCalFromId(id);
-            if(!cal.equals(null)) cals.add(cal);
+            if(cal != null) cals.add(cal);
         }
         return cals;
     }
