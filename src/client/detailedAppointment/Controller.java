@@ -213,7 +213,9 @@ public class Controller implements Initializable{
         room.setItems(FXCollections.observableArrayList(rooms));
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
+        System.out.println("fUCKUP = TRUE");
         if(checkOwner()) {
+            System.out.println("Is owner: yes");
             isOwner = true;
             decline.setVisible(false);
             accept.setVisible(false);
@@ -223,12 +225,14 @@ public class Controller implements Initializable{
             isOwner = false;
             decline.setVisible(true);
             accept.setVisible(true);
-            if (checkAttending()) {
-                decline.setDisable(true);
-                accept.setDisable(false);
-            } else {
+            if (checkAttending(app)) {
                 decline.setDisable(false);
                 accept.setDisable(true);
+                //System.out.println("ATTENDING, SHOW UNATTEND BUTTON");
+            } else {
+                //System.out.println("NOT ATTENDING, SHOW ATTEND BUTTON");
+                decline.setDisable(true);
+                accept.setDisable(false);
             }
             cancelApp.setVisible(false);
             editApp.setVisible(false);
@@ -298,12 +302,13 @@ public class Controller implements Initializable{
 
     }
 
-    public boolean checkAttending() {
-        ArrayList<List<String>> qwe = ClientDB.getAllTableRowsWhere("Attendee", "User_email = '" + Main.getLoggedUser().getEmail() + "' AND Appointment_appointmentid = " + app.getId(), client.Main.socket);
-        for (List<String> li : qwe) {
-            return !li.get(4).equals("0");
+    public boolean checkAttending(Appointment app) {
+        Boolean attending = true;
+        for(Attendee a : app.getAttendees()){
+            if(a.getUser().getEmail().equals(client.Main.user.getEmail()))
+                attending = a.getAttending();
         }
-        return false;
+        return attending;
     }
 
     public void acceptInvite(ActionEvent event) {
