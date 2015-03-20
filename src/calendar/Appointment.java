@@ -191,8 +191,8 @@ public class Appointment implements Serializable {
     public void setAllDay(Boolean allDay) {this.allDay = allDay;}
 
     public String displayInfo() {
-        return "Appointment ["+id+"]\nTitle: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
-                "\nEnd: " +endDate.toString()+ "\nRoom: " +room+ "\nOwner: " +owner.displayInfo();
+        return "";//"Appointment ["+id+"]\nTitle: " +title+ "\nPurpose: " +purpose+ "\nLocation: " +location+ "\nStart: " +startDate.toString()+
+                //"\nEnd: " +endDate.toString()+ "\nRoom: " +"\nOwner: " +owner.displayInfo();
 }
 
 
