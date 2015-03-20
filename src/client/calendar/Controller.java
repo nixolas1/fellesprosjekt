@@ -98,6 +98,9 @@ public class Controller {
             if(cell != null) {
                 System.out.println("ComboBox Action (selected: " + cell.text + ")");
                 // Set at seen
+                if(!cell.seen){
+                    numUnread--;
+                }
                 ClientDB.updateRow("Notification",
                         "User_email = '" + Main.user.getEmail() + "' AND Appointment_appointmentid = " + cell.app.getId(),
                         "seen = 1",
@@ -117,8 +120,9 @@ public class Controller {
         timer.schedule( new TimerTask() {
             public void run() {
                 notifs.refresh();
+                //System.out.println("######### "+numUnread);
                 if(notifs.unreadCount>numUnread){
-                    numUnread=notifs.unreadCount;
+                    numUnread=notifs.getNumberOfUnreadNotifications();
                     Platform.runLater(() -> {
                         System.out.println("Updating appointments");
                         clearAppointments();
