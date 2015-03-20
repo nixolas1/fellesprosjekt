@@ -327,8 +327,13 @@ public class Controller implements Initializable{
     }
 
     public void cancelAppointment(ActionEvent event) {
-        ClientDB.updateRow("Appointment", "appointmentid = " + app.getId(), "isVisible = 0", client.Main.socket);
-        Main.closeStage();
+        System.out.println("cancel shit");
+        app.setIsVisible(false);
+        Hashtable<String, Boolean> response = client.Main.socket.send(new Query("updateAppointment", app)).data;
+        if(response.get("reply")) {
+            System.out.println("Appointment cancelled\n" + app.displayInfo());
+            Main.closeStage();
+        }
     }
 
     public ObservableList<Attendee> getAttendeesFromDB() {

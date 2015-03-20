@@ -36,9 +36,18 @@ public class AppointmentLogic {
     public static Query updateAppointment(Hashtable<String, Appointment> data){
         try {
             Appointment app = data.get("reply");
-            if (server.database.Logic.updateAppointment(app)) {
-                Notification notif = new Notification(app, "Møtet '"+app.getTitle()+"' har blitt endret");
-                NotificationLogic.newNotificationsFromEmail(notif, getListOfDistinctAttendees(app));
+            if(app.getIsVisible()) {
+                if (server.database.Logic.updateAppointment(app)) {
+                    Notification notif = new Notification(app, "Møtet " + app.getTitle() + " har blitt endret");
+                    ArrayList<String> atts = getListOfDistinctAttendees(app);
+                    NotificationLogic.newNotificationsFromEmail(notif, atts);
+                    return new Query("updateAppointment", true);
+                }
+            }else{
+                server.database.Logic.updateRowField("Appointment", "appointmentid = " + app.getId(), "isVisible = 0");
+                Notification notif = new Notification(app, "Møtet " + app.getTitle() + " har blitt avlyst");
+                ArrayList<String> atts = getListOfDistinctAttendees(app);
+                NotificationLogic.newNotificationsFromEmail(notif, atts);
                 return new Query("updateAppointment", true);
             }
         }
