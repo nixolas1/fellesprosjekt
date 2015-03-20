@@ -760,11 +760,6 @@
                      </fill>
                   </Rectangle>
                   <ComboBox fx:id="myCals" layoutX="10.0" layoutY="6.0" prefWidth="150.0" promptText="Mine kalendere" />
-                  <Button fx:id="myCalendar" layoutX="10.0" layoutY="6.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#goToMyCal" prefWidth="150.0" text="Til min kalender" visible="false">
-                     <font>
-                        <Font name="Helvetica Neue" size="13.0" />
-                     </font>
-                  </Button>
                </children></Pane>
             <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #c9c9c9; -fx-border-width: 1 0 0px 0;" GridPane.rowIndex="12">
                <children>
@@ -789,7 +784,7 @@
                         <Font name="Helvetica Neue" size="12.0" />
                      </font>
                   </Label>
-                  <Button fx:id="removeCal" layoutX="24.0" layoutY="169.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="20.0" text="Fjern" onAction="#removeCalendars">
+                  <Button fx:id="removeCal" layoutX="24.0" layoutY="169.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#removeCalendars" prefHeight="20.0" text="Fjern">
                      <font>
                         <Font size="10.0" />
                      </font>
