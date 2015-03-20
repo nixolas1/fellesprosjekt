@@ -223,6 +223,13 @@ public class Controller implements Initializable{
             isOwner = false;
             decline.setVisible(true);
             accept.setVisible(true);
+            if (checkAttending()) {
+                decline.setDisable(true);
+                accept.setDisable(false);
+            } else {
+                decline.setDisable(false);
+                accept.setDisable(true);
+            }
             cancelApp.setVisible(false);
             editApp.setVisible(false);
             work.setDisable(true);
@@ -284,6 +291,14 @@ public class Controller implements Initializable{
         locationDescription.setText(app.getLocation());
         room.setValue(app.getRoom());
 
+    }
+
+    public boolean checkAttending() {
+        ArrayList<List<String>> qwe = ClientDB.getAllTableRowsWhere("Attendee", "User_email = " + Main.getLoggedUser().getEmail() + " AND Appointment_appointmentid = " + app.getId(), client.Main.socket);
+        for (List<String> li : qwe) {
+            return !li.get(4).equals("0");
+        }
+        return false;
     }
 
     public void acceptInvite(ActionEvent event) {
