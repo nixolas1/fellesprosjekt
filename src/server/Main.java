@@ -35,11 +35,16 @@ public class Main {
         server.database.Logic.createAppointment(app);*/
             
         // Test romlogikk
-        /*Hashtable<String, ArrayList<Appointment>> hore= AppointmentLogic.getCalendarAppointments(new Hashtable<String, String>() {{put("id", "1");}}).data;
+        Hashtable<String, ArrayList<Appointment>> hore= AppointmentLogic.getCalendarAppointments(new Hashtable<String, String>() {{put("id", "1");}}).data;
         ArrayList<Appointment> appList = hore.get("reply");
         Appointment app1 = appList.get(0);
-        System.out.println("STARTING ROOM LOGIC");
-        RoomLogic.initiateRoomLogicObject(app1);*/
+        System.out.println("TITLE: " + app1.getTitle());
+        System.out.println("DESCRIPTION: " + app1.getPurpose());
+        app1.setTitle("Møte med Mester Sondre");
+        System.out.println(app1.getTitle());
+
+        Logic.updateAppointment(app1);
+
         
         //Start sockets
         ThreadServer socket = new ThreadServer(7777);

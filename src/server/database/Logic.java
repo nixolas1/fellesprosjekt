@@ -300,88 +300,38 @@ public class Logic {
     }
 
     public static boolean updateAppointment(Appointment app){
-
+        System.out.println("updateAppointment()");
         String location = app.getLocation() != null && app.getLocation().length() > 0 ?
                 ( "'" + app.getLocation() + "'" ) : "NULL" ;
         String description = app.getPurpose() != null && app.getPurpose().length() > 0 ?
                 ("'" + app.getPurpose() + "'") : "NULL";
         String roomId = app.getRoom() != null ? String.valueOf(app.getRoom().getId()) : "NULL";
-        String isPrivate = app.getIsPrivate().toString();
-        String allDay = app.getAllDay() ? "1" : "0";
-        String isVisible = app.getIsVisible().toString();
+        String isPrivate = app.getIsPrivate() ? "1" : "0";
+        String isAllDay = app.getAllDay() ? "1" : "0";
+        String isVisible = app.getIsVisible() ? "1" : "0";
 
-        String q1 = "UPDATE Appointment SET title = '" + app.getTitle() + "', description = '" + description + "', location = '" + location
-                + "', startTime = '" + app.getStartDate() + "', endTime = '" + app.getEndDate() + "', repeatEndDate = 'NULL', repeat = 'NULL', isVisible = '" +
-                app.getIsVisible() + "', isAllDay = '" + allDay + "', isPrivate = '" + isPrivate + "', Room_roomid1 = '" + roomId +
-                "' WHERE appointmentid = '" + app.getId() + "';";
+        String qry ="UPDATE  `nixo_fp`.`Appointment` SET  `title` =  '"+app.getTitle()+"', `description` = "+description+", `location` = "+location+
+                    ", `startTime` = '"+app.getStartDate()+"', `endTime` = '"+app.getEndDate()+"', `isVisible` = "+isVisible+", `isPrivate` = "+isPrivate+
+                    ", `isAllDay` = "+isAllDay+", `Room_roomid1` = "+roomId+" WHERE  `Appointment`.`appointmentid` = "+app.getId()+";";
 
-
-        /*
-        this.cals = Calendar.getAllCalendarsInAppointment(this.id);
-        this.attendees = Attendee.getAllAttendeesForAppointment(this.id);
-         */
-
+        String query = "UPDATE Appointment SET title = '" + app.getTitle() + "', description = " + description + ", location = " + location
+                + ", startTime = '" + app.getStartDate() + "', endTime = '" + app.getEndDate() + "', repeatEndDate = NULL, repeat = NULL, isVisible = " +
+                isVisible + ", isAllDay = " + isAllDay + ", isPrivate = " + isPrivate + ", Room_roomid1 = " + roomId +
+                " WHERE appointmentid = " + app.getId() + ";";
 
         Statement stmt = null;
 
         try {
             stmt = conn.createStatement();
-            //appointmentid 	   title                description 	location        startTime	              endTime                repeatEndDate	   repeat	 isVisible	    isAllDay	isPrivate	Room_roomid1
-            //`appointmentid`, `title`, `description`, `location`, `startTime`, `endTime`, `repeatEndDate`, `repeat`, `isVisible`, `isAllDay`, `isPrivate`, `Room_roomid1`
-           /* String q2 = "(NULL, '"
-                    +app.getTitle()+"', "
-                    +description+", "
-                    +location+", '"
-                    +app.getStartDate()+"', '"
-                    +app.getEndDate()+"', "
-                    +isVisible+", "
-                    +allDay+", "
-                    +isPrivate+", "
-                    +roomId+") ";*/
-
-            //String q3 = "RETURNING Appointment.appointmentid INTO ?;";
-            //System.out.println(q1+q2);
-            stmt.executeUpdate(q1 + q2, Statement.RETURN_GENERATED_KEYS);
-
-            ResultSet result = stmt.getGeneratedKeys();
-            if(result.next())
-                app.setId(result.getInt(1));
-
-            String calHasAppQuery = "INSERT INTO `nixo_fp`.`Calendar_has_Appointment` (`Appointment_appointmentid`, `Calendar_calendarid`) VALUES ('"+app.getId()+"', '";
-            for(Calendar c : app.getCals()){
-                //System.out.println(calHasAppQuery + c.getId() + "');");
-                stmt.executeUpdate(calHasAppQuery + c.getId() + "');");
-            }
-
-            String attQuery = "INSERT INTO `nixo_fp`.`Attendee` (`User_email`, `Appointment_appointmentid`, `timeInvited`, `timeAnswered`, `willAttend`, `isOwner`, `alarm`) VALUES ('";
-            String s = "', '";
-            String n = "NULL";
-            String ownerEmail = "";
-
-            for(Attendee a : app.getAttendees()){
-                if(a.getIsOwner()) {
-                    ownerEmail = a.getUser().getEmail();
-                    break;
-                }
-
-            }
-
-            for(String email : AppointmentLogic.getListOfDistinctAttendees(app)){
-                String isOwner = "0";
-                if(email.equals(ownerEmail))isOwner="1";
-                String q = attQuery + email+s+app.getId()+s+LocalDateTime.now()+"', NULL, '1', "+isOwner+", NULL);";
-                //System.out.println(q);
-                stmt.executeUpdate(q);
-            }
-
-            //System.out.println("Appointment [Title='" + app.getTitle() + "'] successfully created in database");
+            System.out.println("QUERY: " + qry);
+            stmt.executeUpdate(qry);
+            System.out.println("Appointment '" + app.getTitle() + "' successfullt updated in database");
         } catch (SQLException e) {
             System.out.println("SQLException triggered in createAppointment(): " + e);
             return false;
         } finally {
             closeDB(stmt);
-        }
-        return true;
+        } return true;
     }
 
     public static int getLastRoomIdUsed(){
