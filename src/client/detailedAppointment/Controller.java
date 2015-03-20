@@ -441,15 +441,16 @@ public class Controller implements Initializable{
                 app.setRoom(new Room(1, "test", 1, 0, 23, new ArrayList<Utility>())); // TEST ROOM! TODO get rooms from DB
             }
             calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
-            app.setAttendees(getAttendees());
-            ArrayList<Calendar> grps = getGroups();
+            //app.setAttendees(getAttendees());
+            /*ArrayList<Calendar> grps = getGroups();
             if(grps.size() > 0) {
                 app.setCals(grps); // GROUPS = CALENDARS
             }
             for (Attendee a : app.getAttendees()) {
                 app.addCalender(new Calendar(a.getUser().getPrivateCalendar()));
-            }
-            System.out.println(app.displayInfo());
+            }*/
+            //System.out.println(app.displayInfo());
+
             Hashtable<String, Boolean> response = client.Main.socket.send(new Query("updateAppointment", app)).data;
             if(response.get("reply")) {
                 System.out.println("Appointment updated\n" + app.displayInfo());
@@ -486,14 +487,18 @@ public class Controller implements Initializable{
         }
         LocalDateTime startDate = this.date.getValue() != null && this.date.getValue().toString().length() > 0 ? this.date.getValue().atTime(hrStart, minStart) : null;
         LocalDateTime endDate = this.endDate.getValue() != null && this.endDate.getValue().toString().length() > 0 ? this.endDate.getValue().atTime(hrEnd, minEnd) : null;
-        Appointment app = new Appointment(-1,title,description,startDate,endDate,null,loggedUser,null, null);
+        System.out.println("\nAppointment ID: " + this.getAppointmentId() + "\n");
+        int appId = String.valueOf(this.getAppointmentId()).length() > 0 ? this.getAppointmentId() : -1;
+        Appointment app = new Appointment(appId,title,description,startDate,endDate,null,loggedUser,null, null);
 
+        /*
         app.setAttendees(getAttendees());
         ArrayList<Calendar> grps = getGroups();
         if(grps.size() > 0) {
             app.setCals(grps); // GROUPS = CALENDARS
         }
         System.out.println(app.getAttendees());
+        */
         return app;
 
     }
@@ -548,7 +553,7 @@ public class Controller implements Initializable{
     }
     public int getAppointmentId() {
         // todo: Get ID from server
-        return -1;
+        return Main.appointment.getId();
     }
     public void updateRoomList() {
         // todo: Oppdaterer romlisten som inneholder aktuelle rom, dvs rom med riktig antall plasser ift. deltakere

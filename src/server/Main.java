@@ -35,6 +35,7 @@ public class Main {
         server.database.Logic.createAppointment(app);*/
             
         // Test romlogikk
+        /*
         Hashtable<String, ArrayList<Appointment>> hore= AppointmentLogic.getCalendarAppointments(new Hashtable<String, String>() {{put("id", "1");}}).data;
         ArrayList<Appointment> appList = hore.get("reply");
         Appointment app1 = appList.get(0);
@@ -44,25 +45,13 @@ public class Main {
         System.out.println(app1.getTitle());
 
         Logic.updateAppointment(app1);
+        */
 
         
         //Start sockets
         ThreadServer socket = new ThreadServer(7777);
         socket.startServer();
 
-        /*
-        Prioriteringsliste:
-        Detaljert avtale
-            Sjekke om brukeren er eieren
-            Lage logikk for å oppdatere databasen
-        Notifications
-            Gjør mer her
-        Rooms
-        Lage nytt rom
-        Vise/fjerne gruppekalendere
-        Repeating appointments
-        Endre gruppe
-        */
     }
 
 }

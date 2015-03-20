@@ -126,7 +126,7 @@ public class AppointmentLogic {
         // Løper gjennom alle medlemmene i alle gruppekalenderene i appointment objektet
         for (Calendar groupCalendar : appointment.getCals()) {
             ArrayList<String> memberList = server.database.Logic.getUsersInGroupCalendar(groupCalendar.getId());
-            System.out.println("\n\nGROUPID ADDED: " + groupCalendar.getId() + "\n\n");
+            //System.out.println("\n\nGROUPID ADDED: " + groupCalendar.getId() + "\n\n");
             for (String email : memberList) {
                 if (!attendeeList.contains(email)) {
                     attendeeList.add(email);

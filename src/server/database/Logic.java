@@ -323,9 +323,9 @@ public class Logic {
 
         try {
             stmt = conn.createStatement();
-            System.out.println("QUERY: " + qry);
+            System.out.println("\nQUERY: " + qry + "\n");
             stmt.executeUpdate(qry);
-            System.out.println("Appointment '" + app.getTitle() + "' successfullt updated in database");
+            System.out.println("Appointment '" + app.getTitle() + "' successfully updated in database");
         } catch (SQLException e) {
             System.out.println("SQLException triggered in createAppointment(): " + e);
             return false;

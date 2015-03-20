@@ -21,7 +21,7 @@ public class Main extends Application {
     private static Stage detAppParent;
     private static Stage detAppointmentStage;
     public static UserModel user;
-    static Appointment appointment;
+    protected static Appointment appointment;
 
     @Override
     public void start(Stage primaryStage) {
