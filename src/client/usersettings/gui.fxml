@@ -166,7 +166,7 @@
                 </Pane>
                 <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #c9c9c9; -fx-border-width: 0 1 0px 0;" GridPane.rowIndex="1">
                     <children>
-                        <Text layoutX="24.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fornavn Etternavn">
+                        <Text fx:id="nameText" layoutX="24.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fornavn Etternavn">
                             <font>
                                 <Font name="Helvetica Neue" size="14.0" />
                             </font>

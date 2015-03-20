@@ -17,7 +17,7 @@ import security.Crypto;
 public class Controller{
 
 
-    @FXML private Text confirmText;
+    @FXML private Text confirmText, nameText;
     @FXML private PasswordField password;
     @FXML private ChoiceBox domain;
 
@@ -39,6 +39,7 @@ public class Controller{
     @FXML
     void initialize() {
         model = Main.user;
+        nameText.setText(model.getFirstName() + " " + model.getLastName());
         createValidationListener(password1, passwordReg, 50);
         createPasswordValidationListener(password11, passwordReg, 50);
         createValidationListener(firstName, nameReg, 30);
