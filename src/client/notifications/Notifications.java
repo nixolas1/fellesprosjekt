@@ -25,7 +25,7 @@ public class Notifications {
     public ArrayList<Notification> notifications = new ArrayList<>();
     Text label = null;
     ComboBox<Notification> list = null;
-    public int every = 10;
+    public int every = 2;
     public int unreadCount = 0;
     String email;
     ThreadClient socket;

@@ -53,14 +53,16 @@ public class ThreadClient {
     public Query send(Query query) {
         try {
 
-            System.out.println("Sending "+query.function+" with data: "+query.data);
+            if(!query.function.equals("getNotifications"))
+                System.out.println("Sending "+query.function+" with data: "+query.data);
 
             ObjectOutputStream oos = new ObjectOutputStream(os);
             oos.writeObject(query);
 
             ObjectInputStream ois = new ObjectInputStream(is);
             Query response = (Query)ois.readObject();
-            System.out.println("Server replied: "+response.function+", "+response.data.toString());
+            if(!query.function.equals("getNotifications"))
+                System.out.println("Server replied: "+response.function+", "+response.data.toString());
             return response;
 
         } catch (UnknownHostException e) {

@@ -302,22 +302,12 @@ public class Controller implements Initializable{
     }
 
     public void acceptInvite(ActionEvent event) {
-        ClientDB.updateRow("Attendee",
-                "User_email = '" + loggedUser.getEmail() + "' AND Appointment_appointmentid = " + app.getId(),
-                "willAttend = 1",
-                client.Main.socket
-        );
         accept.setDisable(true);
         ClientDB.updateAttendingStatus(loggedUser.getEmail(), app.getId(), 1, client.Main.socket);
         Main.closeStage();
     }
 
     public void declineInvite(ActionEvent event) {
-        ClientDB.updateRow("Attendee",
-                "User_email = '" + loggedUser.getEmail() + "' AND Appointment_appointmentid = " + app.getId(),
-                "willAttend = 0",
-                client.Main.socket
-        );
         decline.setDisable(true);
         ClientDB.updateAttendingStatus(loggedUser.getEmail(), app.getId(), 0, client.Main.socket);
         Main.closeStage();

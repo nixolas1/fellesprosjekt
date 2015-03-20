@@ -92,7 +92,8 @@ class ServerConnection implements Runnable {
                 function = query.function;
                 Hashtable data = query.data;
 
-                System.out.println( "Received " + function + " query from Connection " + id + "." );
+                if(!function.equals("getNotifications"))
+                    System.out.println( "Received " + function + " query from Connection " + id + "." );
 
                 //Send function request and data to Server logic processing
                 Query reply = Logic.process(function, data);
@@ -101,7 +102,8 @@ class ServerConnection implements Runnable {
 
                 ObjectOutputStream oos = new ObjectOutputStream(os);
                 oos.writeObject(reply);
-                System.out.println( "Replied '" + reply.function+", "+reply.data.toString() + "' to query from Connection " + id + "." );
+                if(!function.equals("getNotifications"))
+                    System.out.println( "Replied '" + reply.function+", "+reply.data.toString() + "' to query from Connection " + id + "." );
 
                 if(reply==null)break;
             }
