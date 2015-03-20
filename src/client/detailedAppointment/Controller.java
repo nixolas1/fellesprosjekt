@@ -344,8 +344,12 @@ public class Controller implements Initializable{
             atts.add(at);
         }
         return atts;*/
-        System.out.println(app.getId());
-        return FXCollections.observableArrayList(Attendee.getAllAttendeesForAppointmentClientside(app.getId(), client.Main.socket));
+        ArrayList<Attendee> atts = Attendee.getAllAttendeesForAppointmentClientside(app.getId(), client.Main.socket);
+        ArrayList<Attendee> ret = new ArrayList<>();
+        for (Attendee a : atts) {
+            if (a.getAttending()) ret.add(a);
+        }
+        return FXCollections.observableArrayList(ret);
     }
 
     public ArrayList<Calendar> getGroupsFromDB() {
