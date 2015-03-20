@@ -213,7 +213,9 @@ public class Controller implements Initializable{
         room.setItems(FXCollections.observableArrayList(rooms));
         userInfo = displayUserInfo(allUsers); // ComboBox items
         usersComboBox.setItems(userInfo);
+        System.out.println("fUCKUP = TRUE");
         if(checkOwner()) {
+            System.out.println("Is owner: yes");
             isOwner = true;
             decline.setVisible(false);
             accept.setVisible(false);
@@ -223,12 +225,14 @@ public class Controller implements Initializable{
             isOwner = false;
             decline.setVisible(true);
             accept.setVisible(true);
-            if (checkAttending()) {
-                decline.setDisable(true);
-                accept.setDisable(false);
-            } else {
+            if (checkAttending(app)) {
                 decline.setDisable(false);
                 accept.setDisable(true);
+                //System.out.println("ATTENDING, SHOW UNATTEND BUTTON");
+            } else {
+                //System.out.println("NOT ATTENDING, SHOW ATTEND BUTTON");
+                decline.setDisable(true);
+                accept.setDisable(false);
             }
             cancelApp.setVisible(false);
             editApp.setVisible(false);
@@ -282,8 +286,13 @@ public class Controller implements Initializable{
             timeLabel.setDisable(true);
             toLabel.setDisable(true);
         }else {
-            from.setText(app.getStartDate().getHour() + ":" + app.getStartDate().getMinute());
-            to.setText(app.getEndDate().getHour() + ":" + app.getEndDate().getMinute());
+            System.out.println("FROM toString() : " + app.getStartDate().toString());
+            String fromHour = app.getStartDate().toString().split("T")[1].split(":")[0];
+            String fromMinute = app.getStartDate().toString().split("T")[1].split(":")[1];
+            String toHour = app.getEndDate().toString().split("T")[1].split(":")[0];
+            String toMinute = app.getEndDate().toString().split("T")[1].split(":")[1];
+            from.setText(fromHour + ":" + fromMinute);
+            to.setText(toHour + ":" + toMinute);
         }
         endDate.setValue(app.getEndDate().toLocalDate());
         description.setText(app.getPurpose());
@@ -295,31 +304,22 @@ public class Controller implements Initializable{
 
     }
 
-    public boolean checkAttending() {
-        ArrayList<List<String>> qwe = ClientDB.getAllTableRowsWhere("Attendee", "User_email = " + Main.getLoggedUser().getEmail() + " AND Appointment_appointmentid = " + app.getId(), client.Main.socket);
-        for (List<String> li : qwe) {
-            return !li.get(4).equals("0");
+    public boolean checkAttending(Appointment app) {
+        Boolean attending = true;
+        for(Attendee a : app.getAttendees()){
+            if(a.getUser().getEmail().equals(client.Main.user.getEmail()))
+                attending = a.getAttending();
         }
-        return false;
+        return attending;
     }
 
     public void acceptInvite(ActionEvent event) {
-        ClientDB.updateRow("Attendee",
-                "User_email = '" + loggedUser.getEmail() + "' AND Appointment_appointmentid = " + app.getId(),
-                "willAttend = 1",
-                client.Main.socket
-        );
         accept.setDisable(true);
         ClientDB.updateAttendingStatus(loggedUser.getEmail(), app.getId(), 1, client.Main.socket);
         Main.closeStage();
     }
 
     public void declineInvite(ActionEvent event) {
-        ClientDB.updateRow("Attendee",
-                "User_email = '" + loggedUser.getEmail() + "' AND Appointment_appointmentid = " + app.getId(),
-                "willAttend = 0",
-                client.Main.socket
-        );
         decline.setDisable(true);
         ClientDB.updateAttendingStatus(loggedUser.getEmail(), app.getId(), 0, client.Main.socket);
         Main.closeStage();
@@ -458,7 +458,7 @@ public class Controller implements Initializable{
                 // todo refresh cal view
             }
             else
-                System.out.println("Server could not update the appointment.");
+                System.out.println("Server could not create the appointment.");
 
         } else {
             System.out.println("One or more fields are INVALID. Data not sent to server.");
@@ -532,7 +532,7 @@ public class Controller implements Initializable{
         for (String grp : addedGroups) {
             int id = Integer.parseInt(grp.split(",")[1].trim());
             Calendar cal = getCalFromId(id);
-            if(!cal.equals(null)) cals.add(cal);
+            if(cal != null) cals.add(cal);
         }
         return cals;
     }

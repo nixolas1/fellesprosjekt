@@ -61,12 +61,12 @@ public class Notification implements Serializable {
     }
 
     public static ArrayList<Notification> getUserNotifications(String email, ThreadClient socket){
-        System.out.println("Trying to get all notifications from user "+email);
+       //System.out.println("Trying to get all notifications from user "+email);
         try {
             Query reply = socket.send(new Query("getNotifications", email));
-            System.out.println(reply.function+ " "+reply.data);
+            //System.out.println(reply.function+ " "+reply.data);
             Hashtable<String, ArrayList<Notification>> response = reply.data;
-            System.out.println("Got notifications: "+response.get("reply").toString());
+            //System.out.println("Got notifications: "+response.get("reply").toString());
             return response.get("reply");
         }catch(Exception e){
             System.err.println("Unable to send or recieve Notifications from server:");

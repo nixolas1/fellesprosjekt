@@ -50,6 +50,7 @@ public class Controller {
         }
         else{
             //error tekst her
+            errorText.setText("Bruker finnes ikke i databasen.");
             System.out.println("Failed to reset user password.");
         }
         } else {

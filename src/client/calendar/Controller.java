@@ -120,9 +120,12 @@ public class Controller {
                 if(notifs.unreadCount>numUnread){
                     numUnread=notifs.unreadCount;
                     Platform.runLater(() -> {
+                        System.out.println("Updating appointments");
                         clearAppointments();
                         appointments = getAppointments(cals);
                         populateCalendars(cals);
+                        myCalendars = getMyCalsFromDB();
+                        myCals.setItems(FXCollections.observableArrayList(calendarsToString(myCalendars)));
                     });
                 }
             }
@@ -509,7 +512,7 @@ public class Controller {
         int row = startDate.getHour();
         int minspan = Math.round((endDate.getMinute()-startDate.getMinute())/59.0f);
         double rowspan = endDate.getHour() - startDate.getHour()+minspan;
-        System.out.println(rowspan);
+        //System.out.println(rowspan);
         if(rowspan == 0)rowspan = 1;
         insertPane(pane, col, row, 1, (int)rowspan);
     }
