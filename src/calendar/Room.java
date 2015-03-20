@@ -48,6 +48,7 @@ public class Room implements Serializable {
         this.name = name;
     }
 
+
     public Room(){
         // New room object
     }

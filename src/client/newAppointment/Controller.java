@@ -294,7 +294,9 @@ public class Controller implements Initializable{
             if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
                 app.setLocation(locationDescription.getText());
             } else {
-                app.setRoom(new Room(1, "test", 1, 0, 23, new ArrayList<Utility>())); // TEST ROOM!
+                Room r = new Room();
+                r.setId(Integer.parseInt(room.getSelectionModel().getSelectedItem().toString().split(", ")[1]));
+                app.setRoom(r);
             }
             for (Attendee a : app.getAttendees()) {
                 if(a.getUser().getEmail().equals(loggedUser.getEmail()))
@@ -332,7 +334,7 @@ public class Controller implements Initializable{
                 System.out.println("\nNUMBER OF DISTINCT ATTENDEES: " + numberOfDistinctAttendees + "\n");
                 numberOfAttendees.setText("Totalt antall deltakere: " + numberOfDistinctAttendees);
             } else {
-                roomsString.add(r.getName() + " (" + r.getCapacity() + " plasser)");
+                roomsString.add(r.getName() + " (" + r.getCapacity() + " plasser), " + r.getId());
             }
         }
         room.setItems(FXCollections.observableArrayList(roomsString));
@@ -552,13 +554,12 @@ public class Controller implements Initializable{
             public void changed(ObservableValue<? extends String> arg0, String oldValue, String newValue) {
                 if (!valid(newValue, match, max, forceCorrect)) {
                     field.setStyle("-fx-text-inner-color: red; -fx-text-box-border: red; -fx-focus-color: red;");
-                    if(forceCorrect == 1 || forceCorrect==3) field.setText(oldValue);
-                    System.out.println("Invalid:"+ newValue);
+                    if (forceCorrect == 1 || forceCorrect == 3) field.setText(oldValue);
+                    System.out.println("Invalid:" + newValue);
                     field.setOpacity(3.0);
                     checkIfAllValid();
-                }
-                else{
-                    System.out.println("VALID: "+ newValue);
+                } else {
+                    System.out.println("VALID: " + newValue);
                     field.setOpacity(2.0);
                     checkIfAllValid();
                     field.setStyle("-fx-text-inner-color: black; -fx-text-box-border: lightgreen; -fx-focus-color: lightgreen;");

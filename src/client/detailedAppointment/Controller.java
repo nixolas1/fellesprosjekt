@@ -447,7 +447,7 @@ public class Controller implements Initializable{
             if((work.isSelected() && otherLocation.isSelected()) || personal.isSelected()) {
                 app.setLocation(locationDescription.getText());
             } else {
-                app.setRoom(new Room(1, "test", 1, 0, 23, new ArrayList<Utility>())); // TEST ROOM! TODO get rooms from DB
+                app.setRoom(Main.appointment.getRoom());
             }
             calendar.Calendar cal = new calendar.Calendar("test"); // TEST CAL! TODO get from DB
             //app.setAttendees(getAttendees());
